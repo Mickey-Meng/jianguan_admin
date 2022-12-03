@@ -1,0 +1,479 @@
+<template>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="标段编号" prop="bdbh">
+        <el-input
+          v-model="queryParams.bdbh"
+          placeholder="请输入标段编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="计量期次编号" prop="jlqsbh">
+        <el-input
+          v-model="queryParams.jlqsbh"
+          placeholder="请输入计量期次编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="台账分解编号" prop="tzfjbh">
+        <el-input
+          v-model="queryParams.tzfjbh"
+          placeholder="请输入台账分解编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="凭证编号" prop="pzbh">
+        <el-input
+          v-model="queryParams.pzbh"
+          placeholder="请输入凭证编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="计量类型" prop="jllx">
+        <el-input
+          v-model="queryParams.jllx"
+          placeholder="请输入计量类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="计量日期" prop="jlrq">
+        <el-date-picker clearable
+          v-model="queryParams.jlrq"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择计量日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="交工证书/变更令编号" prop="jgzs">
+        <el-input
+          v-model="queryParams.jgzs"
+          placeholder="请输入交工证书/变更令编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工程部位" prop="gcbw">
+        <el-input
+          v-model="queryParams.gcbw"
+          placeholder="请输入工程部位"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="计算式" prop="jss">
+        <el-input
+          v-model="queryParams.jss"
+          placeholder="请输入计算式"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="计量比例" prop="jlbl">
+        <el-input
+          v-model="queryParams.jlbl"
+          placeholder="请输入计量比例"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="附件地址" prop="fj">
+        <el-input
+          v-model="queryParams.fj"
+          placeholder="请输入附件地址"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+          <el-option
+            v-for="dict in dict.type.data_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['measurementDocuments:measurementDocuments:add']"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['measurementDocuments:measurementDocuments:export']"
+        >导出</el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
+
+    <el-table v-loading="loading" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+      <el-table-column label="标段编号" align="center" prop="bdbh" />
+      <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
+      <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
+      <el-table-column label="凭证编号" align="center" prop="pzbh" />
+      <el-table-column label="计量类型" align="center" prop="jllx" />
+      <el-table-column label="计量日期" align="center" prop="jlrq" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="交工证书/变更令编号" align="center" prop="jgzs" />
+      <el-table-column label="工程部位" align="center" prop="gcbw" />
+      <el-table-column label="计算式" align="center" prop="jss" />
+      <el-table-column label="计量比例" align="center" prop="jlbl" />
+      <el-table-column label="附件地址" align="center" prop="fj" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+    <!-- 添加或修改计量凭证，设计计量、变更计量共用一张凭证，明细分开。对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="标段编号" prop="bdbh">
+          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
+        </el-form-item>
+        <el-form-item label="计量期次编号" prop="jlqsbh">
+          <el-input v-model="form.jlqsbh" placeholder="请输入计量期次编号" />
+        </el-form-item>
+        <el-form-item label="台账分解编号" prop="tzfjbh">
+          <el-input v-model="form.tzfjbh" placeholder="请输入台账分解编号" />
+        </el-form-item>
+        <el-form-item label="凭证编号" prop="pzbh">
+          <el-input v-model="form.pzbh" placeholder="请输入凭证编号" />
+        </el-form-item>
+        <el-form-item label="计量类型" prop="jllx">
+          <el-input v-model="form.jllx" placeholder="请输入计量类型" />
+        </el-form-item>
+        <el-form-item label="计量日期" prop="jlrq">
+          <el-date-picker clearable
+            v-model="form.jlrq"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="请选择计量日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="交工证书/变更令编号" prop="jgzs">
+          <el-input v-model="form.jgzs" placeholder="请输入交工证书/变更令编号" />
+        </el-form-item>
+        <el-form-item label="工程部位" prop="gcbw">
+          <el-input v-model="form.gcbw" placeholder="请输入工程部位" />
+        </el-form-item>
+        <el-form-item label="计算式" prop="jss">
+          <el-input v-model="form.jss" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="计量比例" prop="jlbl">
+          <el-input v-model="form.jlbl" placeholder="请输入计量比例" />
+        </el-form-item>
+        <el-form-item label="附件地址" prop="fj">
+          <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in dict.type.data_status"
+              :key="dict.value"
+:label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { listMeasurementDocuments, getMeasurementDocuments, delMeasurementDocuments, addMeasurementDocuments, updateMeasurementDocuments } from "@/api/measurementDocuments/measurementDocuments";
+
+export default {
+  name: "MeasurementDocuments",
+  dicts: ['data_status'],
+  data() {
+    return {
+      // 按钮loading
+      buttonLoading: false,
+      // 遮罩层
+      loading: true,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 显示搜索条件
+      showSearch: true,
+      // 总条数
+      total: 0,
+      // 计量凭证，设计计量、变更计量共用一张凭证，明细分开。表格数据
+      measurementDocumentsList: [],
+      // 弹出层标题
+      title: "",
+      // 是否显示弹出层
+      open: false,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        bdbh: undefined,
+        jlqsbh: undefined,
+        tzfjbh: undefined,
+        pzbh: undefined,
+        jllx: undefined,
+        jlrq: undefined,
+        jgzs: undefined,
+        gcbw: undefined,
+        jss: undefined,
+        jlbl: undefined,
+        fj: undefined,
+        status: undefined,
+      },
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+        id: [
+          { required: true, message: "ID不能为空", trigger: "blur" }
+        ],
+        bdbh: [
+          { required: true, message: "标段编号不能为空", trigger: "blur" }
+        ],
+        jlqsbh: [
+          { required: true, message: "计量期次编号不能为空", trigger: "blur" }
+        ],
+        tzfjbh: [
+          { required: true, message: "台账分解编号不能为空", trigger: "blur" }
+        ],
+        pzbh: [
+          { required: true, message: "凭证编号不能为空", trigger: "blur" }
+        ],
+        jllx: [
+          { required: true, message: "计量类型不能为空", trigger: "blur" }
+        ],
+        jlrq: [
+          { required: true, message: "计量日期不能为空", trigger: "blur" }
+        ],
+        jgzs: [
+          { required: true, message: "交工证书/变更令编号不能为空", trigger: "blur" }
+        ],
+        gcbw: [
+          { required: true, message: "工程部位不能为空", trigger: "blur" }
+        ],
+        jss: [
+          { required: true, message: "计算式不能为空", trigger: "blur" }
+        ],
+        jlbl: [
+          { required: true, message: "计量比例不能为空", trigger: "blur" }
+        ],
+        fj: [
+          { required: true, message: "附件地址不能为空", trigger: "blur" }
+        ],
+        status: [
+          { required: true, message: "状态不能为空", trigger: "blur" }
+        ],
+      }
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    /** 查询计量凭证，设计计量、变更计量共用一张凭证，明细分开。列表 */
+    getList() {
+      this.loading = true;
+      listMeasurementDocuments(this.queryParams).then(response => {
+        this.measurementDocumentsList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        id: undefined,
+        bdbh: undefined,
+        jlqsbh: undefined,
+        tzfjbh: undefined,
+        pzbh: undefined,
+        jllx: undefined,
+        jlrq: undefined,
+        jgzs: undefined,
+        gcbw: undefined,
+        jss: undefined,
+        jlbl: undefined,
+        fj: undefined,
+        status: "0",
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined,
+        remark: undefined
+      };
+      this.resetForm("form");
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id)
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "添加计量凭证，设计计量、变更计量共用一张凭证，明细分开。";
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.loading = true;
+      this.reset();
+      const id = row.id || this.ids
+      getMeasurementDocuments(id).then(response => {
+        this.loading = false;
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改计量凭证，设计计量、变更计量共用一张凭证，明细分开。";
+      });
+    },
+    /** 提交按钮 */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          this.buttonLoading = true;
+          if (this.form.id != null) {
+            updateMeasurementDocuments(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            }).finally(() => {
+              this.buttonLoading = false;
+            });
+          } else {
+            addMeasurementDocuments(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            }).finally(() => {
+              this.buttonLoading = false;
+            });
+          }
+        }
+      });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否确认删除计量凭证，设计计量、变更计量共用一张凭证，明细分开。编号为"' + ids + '"的数据项？').then(() => {
+        this.loading = true;
+        return delMeasurementDocuments(ids);
+      }).then(() => {
+        this.loading = false;
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('measurementDocuments/measurementDocuments/export', {
+        ...this.queryParams
+      }, `measurementDocuments_${new Date().getTime()}.xlsx`)
+    }
+  }
+};
+</script>
