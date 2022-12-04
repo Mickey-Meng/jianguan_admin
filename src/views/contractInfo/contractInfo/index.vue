@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="90px">
       <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开工日期" prop="kgrq">
+      <!-- <el-form-item label="开工日期" prop="kgrq">
         <el-date-picker clearable
           v-model="queryParams.kgrq"
           type="date"
@@ -32,7 +32,7 @@
           value-format="yyyy-MM-dd"
           placeholder="请选择竣工日期">
         </el-date-picker>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="项目名称" prop="xmmc">
         <el-input
           v-model="queryParams.xmmc"
@@ -49,7 +49,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="合同段" prop="htd">
+      <!--<el-form-item label="合同段" prop="htd">
         <el-input
           v-model="queryParams.htd"
           placeholder="请输入合同段"
@@ -194,7 +194,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -212,7 +212,7 @@
           v-hasPermi="['contractInfo:contractInfo:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -222,7 +222,7 @@
           @click="handleUpdate"
           v-hasPermi="['contractInfo:contractInfo:edit']"
         >修改</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -234,7 +234,7 @@
           v-hasPermi="['contractInfo:contractInfo:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -243,16 +243,31 @@
           @click="handleExport"
           v-hasPermi="['contractInfo:contractInfo:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="contractInfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="合同编号" align="center" prop="htbh" />
-      <el-table-column label="合同总金额" align="center" prop="htzje" />
-      <el-table-column label="合同段" align="center" prop="htd" />
+      <el-table-column label="序号" align="center" width="60">
+        <template slot-scope="scope">
+          <div>
+            {{ (scope.$index)/queryParams.pageSize + 1  }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="标段编号" align="center" min-width="100" prop="bdbh" />
+      <el-table-column label="合同编号" align="center" min-width="100" prop="htbh" />
+      <el-table-column label="项目名称" align="center" min-width="120" prop="xmmc" />
+      <el-table-column label="合同总金额" align="center" min-width="100" prop="htzje">
+        <template slot-scope="scope">
+          <div>
+            {{ dealNumberFormat(scope.row.htzje) }}
+          </div>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="合同段" align="center" prop="htd" />
       <el-table-column label="工程量清单金额" align="center" prop="gclqdje" />
       <el-table-column label="开工预付款金额" align="center" prop="kgyfkje" />
       <el-table-column label="暂列金金额" align="center" prop="zljje" />
@@ -273,7 +288,7 @@
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -290,6 +305,13 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['contractInfo:contractInfo:remove']"
           >删除</el-button>
+          <!-- <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-lock"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['contractInfo:contractInfo:remove']"
+          >锁定</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -303,99 +325,156 @@
     />
 
     <!-- 添加或修改合同条款对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
-        <el-form-item label="合同编号" prop="htbh">
-          <el-input v-model="form.htbh" placeholder="请输入合同编号" />
-        </el-form-item>
-        <el-form-item label="开工日期" prop="kgrq">
-          <el-date-picker clearable
-            v-model="form.kgrq"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择开工日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="竣工日期" prop="jgrq">
-          <el-date-picker clearable
-            v-model="form.jgrq"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择竣工日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="项目名称" prop="xmmc">
-          <el-input v-model="form.xmmc" placeholder="请输入项目名称" />
-        </el-form-item>
-        <el-form-item label="合同总金额" prop="htzje">
-          <el-input v-model="form.htzje" placeholder="请输入合同总金额" />
-        </el-form-item>
-        <el-form-item label="合同段" prop="htd">
-          <el-input v-model="form.htd" placeholder="请输入合同段" />
-        </el-form-item>
-        <el-form-item label="工程量清单金额" prop="gclqdje">
-          <el-input v-model="form.gclqdje" placeholder="请输入工程量清单金额" />
-        </el-form-item>
-        <el-form-item label="开工预付款金额" prop="kgyfkje">
-          <el-input v-model="form.kgyfkje" placeholder="请输入开工预付款金额" />
-        </el-form-item>
-        <el-form-item label="暂列金金额" prop="zljje">
-          <el-input v-model="form.zljje" placeholder="请输入暂列金金额" />
-        </el-form-item>
-        <el-form-item label="合同工期)" prop="htgq">
-          <el-input v-model="form.htgq" placeholder="请输入合同工期)" />
-        </el-form-item>
-        <el-form-item label="开工预付款起扣比例" prop="kgyfkqkbl">
-          <el-input v-model="form.kgyfkqkbl" placeholder="请输入开工预付款起扣比例" />
-        </el-form-item>
-        <el-form-item label="开工预付款截止比例" prop="kgyfkjzbl">
-          <el-input v-model="form.kgyfkjzbl" placeholder="请输入开工预付款截止比例" />
-        </el-form-item>
-        <el-form-item label="质保金扣款比例" prop="zbjkkbl">
-          <el-input v-model="form.zbjkkbl" placeholder="请输入质保金扣款比例" />
-        </el-form-item>
-        <el-form-item label="农民工工资保证金扣款比例" prop="nmggzbzjkkbl">
-          <el-input v-model="form.nmggzbzjkkbl" placeholder="请输入农民工工资保证金扣款比例" />
-        </el-form-item>
-        <el-form-item label="质保金总额" prop="zbjze">
-          <el-input v-model="form.zbjze" placeholder="请输入质保金总额" />
-        </el-form-item>
-        <el-form-item label="计日工金额" prop="jrgje">
-          <el-input v-model="form.jrgje" placeholder="请输入计日工金额" />
-        </el-form-item>
-        <el-form-item label="标段长度(km)" prop="bdcd">
-          <el-input v-model="form.bdcd" placeholder="请输入标段长度(km)" />
-        </el-form-item>
-        <el-form-item label="起讫桩号" prop="qqzh">
-          <el-input v-model="form.qqzh" placeholder="请输入起讫桩号" />
-        </el-form-item>
-        <el-form-item label="开工预付款支付情况" prop="kgyjkzfqk">
-          <el-input v-model="form.kgyjkzfqk" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="开工预付款扣回规定" prop="kgyfkkhgd">
-          <el-input v-model="form.kgyfkkhgd" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="材料预付款支付情况" prop="clykfzfqk">
-          <el-input v-model="form.clykfzfqk" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="材料预付款扣回规定" prop="clyfkkhgd">
-          <el-input v-model="form.clyfkkhgd" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="标段编号" prop="bdbh">
+              <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同编号" prop="htbh">
+              <el-input v-model="form.htbh" placeholder="请输入合同编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同编号" prop="htbh">
+              <el-input v-model="form.htbh" placeholder="请输入合同编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开工日期" prop="kgrq">
+              <el-date-picker clearable
+                v-model="form.kgrq"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择开工日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="竣工日期" prop="jgrq">
+              <el-date-picker clearable
+                v-model="form.jgrq"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择竣工日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="项目名称" prop="xmmc">
+              <el-input v-model="form.xmmc" placeholder="请输入项目名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同总金额" prop="htzje">
+              <el-input v-model="form.htzje" placeholder="请输入合同总金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同段" prop="htd">
+              <el-input v-model="form.htd" placeholder="请输入合同段" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="工程量清单金额" prop="gclqdje">
+              <el-input v-model="form.gclqdje" placeholder="请输入工程量清单金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开工预付款金额" prop="kgyfkje">
+              <el-input v-model="form.kgyfkje" placeholder="请输入开工预付款金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="暂列金金额" prop="zljje">
+              <el-input v-model="form.zljje" placeholder="请输入暂列金金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同工期" prop="htgq">
+              <el-input v-model="form.htgq" placeholder="请输入合同工期" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开工预付款起扣比例" prop="kgyfkqkbl">
+              <el-input v-model="form.kgyfkqkbl" placeholder="请输入开工预付款起扣比例" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开工预付款截止比例" prop="kgyfkjzbl">
+              <el-input v-model="form.kgyfkjzbl" placeholder="请输入开工预付款截止比例" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="质保金扣款比例" prop="zbjkkbl">
+              <el-input v-model="form.zbjkkbl" placeholder="请输入质保金扣款比例" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="农民工工资保证金扣款比例" prop="nmggzbzjkkbl">
+              <el-input v-model="form.nmggzbzjkkbl" placeholder="请输入农民工工资保证金扣款比例" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="质保金总额" prop="zbjze">
+              <el-input v-model="form.zbjze" placeholder="请输入质保金总额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="计日工金额" prop="jrgje">
+              <el-input v-model="form.jrgje" placeholder="请输入计日工金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="标段长度(km)" prop="bdcd">
+              <el-input v-model="form.bdcd" placeholder="请输入标段长度(km)" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="起讫桩号" prop="qqzh">
+              <el-input v-model="form.qqzh" placeholder="请输入起讫桩号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开工预付款支付情况" prop="kgyjkzfqk">
+              <el-input v-model="form.kgyjkzfqk" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开工预付款扣回规定" prop="kgyfkkhgd">
+              <el-input v-model="form.kgyfkkhgd" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="材料预付款支付情况" prop="clykfzfqk">
+              <el-input v-model="form.clykfzfqk" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="材料预付款扣回规定" prop="clyfkkhgd">
+              <el-input v-model="form.clyfkkhgd" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+    :label="dict.value"
+                >{{dict.label}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -407,6 +486,7 @@
 
 <script>
 import { listContractInfo, getContractInfo, delContractInfo, addContractInfo, updateContractInfo } from "@/api/contractInfo/contractInfo";
+import { dealNumberFormat } from "@/plugins/utils.js";
 
 export default {
   name: "ContractInfo",
@@ -462,6 +542,7 @@ export default {
         clyfkkhgd: undefined,
         status: undefined,
       },
+      dealNumberFormat,
       // 表单参数
       form: {},
       // 表单校验
