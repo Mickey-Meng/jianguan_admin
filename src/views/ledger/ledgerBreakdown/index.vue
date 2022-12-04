@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标段编号" prop="bdbh">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
+      <!-- <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
           placeholder="请输入标段编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="台账分解编号" prop="tzfjbh">
         <el-input
           v-model="queryParams.tzfjbh"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="台账分解编号父节点" prop="tzfjbhParent">
+      <!-- <el-form-item label="台账分解编号父节点" prop="tzfjbhParent">
         <el-input
           v-model="queryParams.tzfjbhParent"
           placeholder="请输入台账分解编号父节点"
@@ -32,7 +32,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="台账分解名称" prop="tzfjmc">
         <el-input
           v-model="queryParams.tzfjmc"
@@ -41,7 +41,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="fjlx">
+      <!-- <el-form-item label="状态" prop="fjlx">
         <el-input
           v-model="queryParams.fjlx"
           placeholder="请输入状态"
@@ -58,9 +58,9 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
-	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+	      <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -95,25 +95,27 @@
       row-key="tzfjbh"
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      :header-cell-style="headercellStyle"
+      :cell-style="cellStyle"
     >
-      <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="标段编号" prop="bdbh" />
-      <el-table-column label="台账分解编号父节点" align="center" prop="tzfjbhParent" />
-      <el-table-column label="台账分解编号祖级列表" align="center" prop="tzfjbhAncestors" />
-      <el-table-column label="台账分解名称" align="center" prop="tzfjmc" />
-      <el-table-column label="状态" align="center" prop="fjlx">
+      <el-table-column label="台账分解编号" align="left" prop="tzfjbh" min-width="180"/>
+      <!-- <el-table-column label="标段编号" prop="bdbh" min-width="100"/> -->
+      <!-- <el-table-column label="台账分解编号父节点" align="center" prop="tzfjbhParent" min-width="160"/>
+      <el-table-column label="台账分解编号祖级列表" align="center" prop="tzfjbhAncestors" min-width="170"/> -->
+      <el-table-column label="台账分解名称" align="center" prop="tzfjmc" min-width="160" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="状态" align="center" prop="fjlx" min-width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.change_status" :value="scope.row.fjlx"/>
         </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      </el-table-column> -->
+      <el-table-column label="状态" align="center" prop="status" min-width="140">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="树id" align="center" prop="parentId" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
+      <!-- <el-table-column label="树id" align="center" prop="parentId" /> -->
+      <el-table-column label="操作" align="center" min-width="140" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -142,25 +144,29 @@
 
     <!-- 添加或修改台账分解对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="ID" prop="id">
+      <el-form ref="form" :model="form" :rules="rules" label-width="165px">
+        <!-- <el-form-item label="ID" prop="id">
           <el-input v-model="form.id" placeholder="请输入ID" />
         </el-form-item>
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
+        </el-form-item> -->
+        
         <el-form-item label="台账分解编号父节点" prop="tzfjbhParent">
           <treeselect v-model="form.tzfjbhParent" :options="ledgerBreakdownOptions" :normalizer="normalizer" placeholder="请选择台账分解编号父节点" />
         </el-form-item>
-        <el-form-item label="台账分解编号祖级列表" prop="tzfjbhAncestors">
+        <!-- <el-form-item label="台账分解编号祖级列表" prop="tzfjbhAncestors">
           <el-input v-model="form.tzfjbhAncestors" placeholder="请输入台账分解编号祖级列表" />
+        </el-form-item> -->
+        <el-form-item label="台账分解编号" prop="tzfjbh">
+          <el-input v-model="form.tzfjmc" placeholder="请输入台账分解编号" />
         </el-form-item>
         <el-form-item label="台账分解名称" prop="tzfjmc">
           <el-input v-model="form.tzfjmc" placeholder="请输入台账分解名称" />
         </el-form-item>
-        <el-form-item label="状态" prop="fjlx">
+        <!-- <el-form-item label="状态" prop="fjlx">
           <el-input v-model="form.fjlx" placeholder="请输入状态" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
@@ -173,9 +179,9 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="树id" prop="parentId">
+        <!-- <el-form-item label="树id" prop="parentId">
           <el-input v-model="form.parentId" placeholder="请输入树id" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -260,7 +266,23 @@ export default {
         parentId: [
           { required: true, message: "树id不能为空", trigger: "blur" }
         ]
-      }
+      },
+      headercellStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        background: '#F7F8FB',
+        color: '#12182A',
+        fontWeight: 600,
+        height: '44px',
+        padding: '0 14px',
+        fontSize: '14px',
+      },
+      cellStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        color: '#3A4566',
+        height: '44px',
+        padding: '0 14px',
+        fontSize: '14px',
+      },
     };
   },
   created() {
@@ -407,3 +429,12 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .app-container {
+    height: 100%;
+    .el-table {
+      height: calc(100vh - 205px);
+      overflow: auto;
+    }
+  }
+</style>

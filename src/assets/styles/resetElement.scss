@@ -9,3 +9,12 @@ label {
 .el-date-editor.el-input, .el-date-editor.el-input__inner {
     width: 100%;
 }
+#app .sidebar-container .theme-dark .nest-menu .el-submenu > .el-submenu__title, #app .sidebar-container .theme-dark .el-submenu .el-menu-item {
+    padding-left: 24px!important;
+}
+#app .sidebar-container .svg-icon {
+    margin-right: 6px!important;
+}
+#app .sidebar-container .nest-menu .el-submenu > .el-submenu__title, #app .sidebar-container .el-submenu .el-menu-item {
+    min-width: 260px !important;
+}

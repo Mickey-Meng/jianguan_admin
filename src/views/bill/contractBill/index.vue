@@ -25,128 +25,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="子目号父节点" prop="zmhParent">
-        <el-input
-          v-model="queryParams.zmhParent"
-          placeholder="请输入子目号父节点"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="子目号祖级列表" prop="zmhAncestors">
-        <el-input
-          v-model="queryParams.zmhAncestors"
-          placeholder="请输入子目号祖级列表"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="单位" prop="dw">
-        <el-input
-          v-model="queryParams.dw"
-          placeholder="请输入单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同单价" prop="htdj">
-        <el-input
-          v-model="queryParams.htdj"
-          placeholder="请输入合同单价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="新增单价" prop="xzdj">
-        <el-input
-          v-model="queryParams.xzdj"
-          placeholder="请输入新增单价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同数量" prop="htsl">
-        <el-input
-          v-model="queryParams.htsl"
-          placeholder="请输入合同数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同金额" prop="htje">
-        <el-input
-          v-model="queryParams.htje"
-          placeholder="请输入合同金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="审核数量" prop="shsl">
-        <el-input
-          v-model="queryParams.shsl"
-          placeholder="请输入审核数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="审核金额" prop="shje">
-        <el-input
-          v-model="queryParams.shje"
-          placeholder="请输入审核金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="修正数量" prop="xzsl">
-        <el-input
-          v-model="queryParams.xzsl"
-          placeholder="请输入修正数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="修正金额" prop="xzje">
-        <el-input
-          v-model="queryParams.xzje"
-          placeholder="请输入修正金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="总数量" prop="zsl">
-        <el-input
-          v-model="queryParams.zsl"
-          placeholder="请输入总数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="总金额" prop="zje">
-        <el-input
-          v-model="queryParams.zje"
-          placeholder="请输入总金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="树id" prop="parentId">
-        <el-input
-          v-model="queryParams.parentId"
-          placeholder="请输入树id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
 	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -182,32 +60,31 @@
       :data="contractBillList"
       row-key="zmh"
       :default-expand-all="isExpandAll"
+      :height="'cacl(100vh - 205px)'"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="标段编号" prop="bdbh" />
-      <el-table-column label="子目号" align="center" prop="zmh" />
-      <el-table-column label="子目名称" align="center" prop="zmmc" />
-      <el-table-column label="子目号父节点" align="center" prop="zmhParent" />
-      <el-table-column label="子目号祖级列表" align="center" prop="zmhAncestors" />
-      <el-table-column label="单位" align="center" prop="dw" />
-      <el-table-column label="合同单价" align="center" prop="htdj" />
-      <el-table-column label="新增单价" align="center" prop="xzdj" />
-      <el-table-column label="合同数量" align="center" prop="htsl" />
-      <el-table-column label="合同金额" align="center" prop="htje" />
-      <el-table-column label="审核数量" align="center" prop="shsl" />
-      <el-table-column label="审核金额" align="center" prop="shje" />
-      <el-table-column label="修正数量" align="center" prop="xzsl" />
-      <el-table-column label="修正金额" align="center" prop="xzje" />
-      <el-table-column label="总数量" align="center" prop="zsl" />
-      <el-table-column label="总金额" align="center" prop="zje" />
+      <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
+      <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh" />
+      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc" />
+      <el-table-column label="单位" align="center" min-width="80" prop="dw" />
+      <el-table-column label="合同单价" align="center" min-width="110" prop="htdj" />
+      <el-table-column label="新增单价" align="center" min-width="110" prop="xzdj" />
+      <el-table-column label="合同数量" align="center" min-width="110" prop="htsl" />
+      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl" />
+      <el-table-column label="审核数量" align="center" min-width="110" prop="shsl" />
+      <el-table-column label="合同金额" align="center" min-width="110" prop="htje" />
+      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje" />
+      <el-table-column label="审核金额" align="center" min-width="110" prop="shje" />
+      <!-- <el-table-column label="总数量" align="center" prop="zsl" />
+      <el-table-column label="总金额" align="center" prop="zje" /> -->
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="树id" align="center" prop="parentId" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="树id" align="center" prop="parentId" /> -->
+      <el-table-column fixed="right" label="操作" width="160" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -235,71 +112,96 @@
     </el-table>
 
     <!-- 添加或修改工程量清单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
-        <el-form-item label="子目号" prop="zmh">
-          <el-input v-model="form.zmh" placeholder="请输入子目号" />
-        </el-form-item>
-        <el-form-item label="子目名称" prop="zmmc">
-          <el-input v-model="form.zmmc" placeholder="请输入子目名称" />
-        </el-form-item>
-        <el-form-item label="子目号父节点" prop="zmhParent">
-          <treeselect v-model="form.zmhParent" :options="contractBillOptions" :normalizer="normalizer" placeholder="请选择子目号父节点" />
-        </el-form-item>
-        <el-form-item label="子目号祖级列表" prop="zmhAncestors">
-          <el-input v-model="form.zmhAncestors" placeholder="请输入子目号祖级列表" />
-        </el-form-item>
-        <el-form-item label="单位" prop="dw">
-          <el-input v-model="form.dw" placeholder="请输入单位" />
-        </el-form-item>
-        <el-form-item label="合同单价" prop="htdj">
-          <el-input v-model="form.htdj" placeholder="请输入合同单价" />
-        </el-form-item>
-        <el-form-item label="新增单价" prop="xzdj">
-          <el-input v-model="form.xzdj" placeholder="请输入新增单价" />
-        </el-form-item>
-        <el-form-item label="合同数量" prop="htsl">
-          <el-input v-model="form.htsl" placeholder="请输入合同数量" />
-        </el-form-item>
-        <el-form-item label="合同金额" prop="htje">
-          <el-input v-model="form.htje" placeholder="请输入合同金额" />
-        </el-form-item>
-        <el-form-item label="审核数量" prop="shsl">
-          <el-input v-model="form.shsl" placeholder="请输入审核数量" />
-        </el-form-item>
-        <el-form-item label="审核金额" prop="shje">
-          <el-input v-model="form.shje" placeholder="请输入审核金额" />
-        </el-form-item>
-        <el-form-item label="修正数量" prop="xzsl">
-          <el-input v-model="form.xzsl" placeholder="请输入修正数量" />
-        </el-form-item>
-        <el-form-item label="修正金额" prop="xzje">
-          <el-input v-model="form.xzje" placeholder="请输入修正金额" />
-        </el-form-item>
-        <el-form-item label="总数量" prop="zsl">
-          <el-input v-model="form.zsl" placeholder="请输入总数量" />
-        </el-form-item>
-        <el-form-item label="总金额" prop="zje">
-          <el-input v-model="form.zje" placeholder="请输入总金额" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="树id" prop="parentId">
-          <el-input v-model="form.parentId" placeholder="请输入树id" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="标段编号" prop="bdbh">
+              <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="子目号" prop="zmh">
+              <el-input v-model="form.zmh" placeholder="请输入子目号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="子目名称" prop="zmmc">
+              <el-input v-model="form.zmmc" placeholder="请输入子目名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="子目号父节点" prop="zmhParent">
+              <treeselect v-model="form.zmhParent" :options="contractBillOptions" :normalizer="normalizer" placeholder="请选择子目号父节点" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="子目号祖级列表" prop="zmhAncestors">
+              <el-input v-model="form.zmhAncestors" placeholder="请输入子目号祖级列表" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单位" prop="dw">
+              <el-input v-model="form.dw" placeholder="请输入单位" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同单价" prop="htdj">
+              <el-input v-model="form.htdj" placeholder="请输入合同单价" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="新增单价" prop="xzdj">
+              <el-input v-model="form.xzdj" placeholder="请输入新增单价" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同数量" prop="htsl">
+              <el-input v-model="form.htsl" placeholder="请输入合同数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同金额" prop="htje">
+              <el-input v-model="form.htje" placeholder="请输入合同金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="审核数量" prop="shsl">
+              <el-input v-model="form.shsl" placeholder="请输入审核数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="审核金额" prop="shje">
+              <el-input v-model="form.shje" placeholder="请输入审核金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修正数量" prop="xzsl">
+              <el-input v-model="form.xzsl" placeholder="请输入修正数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修正金额" prop="xzje">
+              <el-input v-model="form.xzje" placeholder="请输入修正金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -582,3 +484,12 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .app-container {
+    height: 100%;
+    .el-table {
+      height: calc(100% - 100px);
+      overflow: auto;
+    }
+  }
+</style>

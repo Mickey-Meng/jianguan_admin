@@ -247,10 +247,11 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="contractInfoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+    <el-table v-loading="loading" :header-cell-style="headercellStyle"
+            :cell-style="cellStyle" :data="contractInfoList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="left"/>
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="序号" align="center" width="60">
+      <el-table-column label="序号" align="center" width="80">
         <template slot-scope="scope">
           <div>
             {{ (scope.$index)/queryParams.pageSize + 1  }}
@@ -625,7 +626,21 @@ export default {
         remark: [
           { required: true, message: "备注不能为空", trigger: "blur" }
         ]
-      }
+      },
+      headercellStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        background: '#F7F8FB',
+        color: '#12182A',
+        fontWeight: 600,
+        height: '44px',
+        fontSize: '14px',
+      },
+      cellStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        color: '#3A4566',
+        height: '44px',
+        fontSize: '14px',
+      },
     };
   },
   created() {
