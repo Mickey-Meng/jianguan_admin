@@ -113,43 +113,51 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键id" align="center" prop="id" v-if="true"/>
-      <el-table-column label="标段编号" align="center" prop="bdbh" />
-      <el-table-column label="申请期次" align="center" prop="sqqc" />
-      <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
-      <el-table-column label="工程部位" align="center" prop="gcbw" />
-      <el-table-column label="数据状态" align="center" prop="dataStatus">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.dataStatus"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="申报状态" align="center" prop="spzt" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['ledgerapproval:ledgerApproval:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['ledgerapproval:ledgerApproval:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-row :gutter="10">
+      <el-col :span="4">
+        <div class="left-tree">
+        </div>
+      </el-col>
+      <el-col :span="20">
+        <el-table v-loading="loading" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="主键id" align="center" prop="id" v-if="true"/>
+          <el-table-column label="标段编号" align="center" prop="bdbh" />
+          <el-table-column label="申请期次" align="center" prop="sqqc" />
+          <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
+          <el-table-column label="工程部位" align="center" prop="gcbw" />
+          <el-table-column label="数据状态" align="center" prop="dataStatus">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.data_status" :value="scope.row.dataStatus"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="申报状态" align="center" prop="spzt" />
+          <el-table-column label="状态" align="center" prop="status">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['ledgerapproval:ledgerApproval:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['ledgerapproval:ledgerApproval:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
 
     <pagination
       v-show="total>0"
@@ -395,3 +403,18 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .app-container {
+    height: 100%;
+    .el-table {
+      height: calc(100vh - 205px);
+      overflow: auto;
+    }
+  }
+  .left-tree {
+    width: 100%;
+    height: calc(100vh - 205px);
+    background: rgb(247, 248, 251);
+    padding: 0 10px;
+  }
+</style>

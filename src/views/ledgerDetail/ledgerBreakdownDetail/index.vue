@@ -237,13 +237,13 @@
     </div>
    
 
-    <pagination
+    <!-- <pagination
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
-    />
+    /> -->
 
     <!-- 添加台账分解明细 -->
     <el-dialog :title="'添加清单'" :visible.sync="openAdd" width="1050px" append-to-body>
@@ -369,7 +369,7 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 总条数
-      total: 0,
+      // total: 0,
       // 台账分解明细表格数据
       ledgerBreakdownDetailList: [],
       // 弹出层标题
@@ -379,8 +379,8 @@ export default {
       openAdd: false,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
         bdbh: undefined,
         tzfjbh: undefined,
         zmh: undefined,
@@ -474,10 +474,10 @@ export default {
     /** 查询台账分解列表 */
     getLeftTree() {
       this.loading = true;
-      listLedgerBreakdown(this.queryParams).then(response => {
+      listLedgerBreakdown().then(response => {
         this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
-        this.loading = false;
       }).finally(() => {
+        // TODO
         // if (this.ledgerBreakdownList.length) {
         //   this.queryParams.tzfjbh = this.ledgerBreakdownList[0].tzfjbh;
         // }
@@ -526,7 +526,7 @@ export default {
         //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
         // ],"code":200,"msg":"查询成功"};
         this.ledgerBreakdownDetailList = response.rows;
-        this.total = response.total;
+        // this.total = response.total;
         this.loading = false;
       });
     },
@@ -640,6 +640,7 @@ export default {
     // 保存逻辑
     save () {
       // 保存成功后刷新表格数据
+      // TODO
     },
     /** 导出按钮操作 */
     handleExport() {
