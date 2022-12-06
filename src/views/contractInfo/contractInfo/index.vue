@@ -465,7 +465,7 @@
                 <el-radio
                   v-for="dict in dict.type.data_status"
                   :key="dict.value"
-    :label="dict.value"
+                  :label="dict.value"
                 >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>

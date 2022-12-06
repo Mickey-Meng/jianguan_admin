@@ -32,15 +32,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="info"
-          plain
-          icon="el-icon-sort"
-          size="mini"
-          @click="toggleExpandAll"
-        >展开/折叠</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -48,7 +39,7 @@
       v-if="refreshTable"
       v-loading="loading"
       :data="contractBillList"
-      :height="'calc(100vh - 350px)'"
+      :height="'calc(100vh - 455px)'"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="left"/>
@@ -70,6 +61,17 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="submitForm">确 定</el-button>
+      <el-button @click="close">取 消</el-button>
+    </div>
   </div>
 </template>
 
@@ -83,6 +85,12 @@ export default {
   dicts: ['data_status'],
   components: {
     Treeselect
+  },
+  props: {
+    close: {
+      type: Function,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -98,6 +106,7 @@ export default {
       isExpandAll: true,
       // 重新渲染表格状态
       refreshTable: true,
+      total: 0,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -121,6 +130,8 @@ export default {
         status: undefined,
         parentId: undefined
       },
+      // 选中的数据集合
+      selectionList: []
     };
   },
   created() {
@@ -132,6 +143,7 @@ export default {
       this.loading = true;
       listContractBillPage(this.queryParams).then(response => {
         this.contractBillList = response.rows;
+        this.total = response.total;
         this.loading = false;
       });
     },
@@ -172,6 +184,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
@@ -189,7 +202,26 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      console.error('selection', selection);
+      selection.forEach(row => {
+        const list = [];
+        if (this.selectionList.length) {
+          list = this.selectionList.filters(v => v.id === row.id);
+        }
+        if (list.length === 1) {
+          this.selectionList = this.selectionList.filters(v => v.id !== row.id);
+        } else {
+          row.action = 'add';
+          this.selectionList = [...this.selectionList, row];
+        }
+      })
+    },
+    submitForm () {
+      if (!this.selectionList.length) {
+        this.$message.warning('请选择台账分解清单数据后点击确定！');
+        return;
+      }
+      this.$emit('getSelectionData', this.selectionList); 
+      this.close();   
     },
   }
 };
@@ -197,5 +229,9 @@ export default {
 <style lang="scss" scoped>
   .app-container {
     height: 100%;
+    .dialog-footer {
+      text-align: right;
+      margin-top: 36px;
+    }
   }
 </style>

@@ -171,7 +171,7 @@
       <el-row :gutter="10">
         <el-col :span="4">
           <div class="left-tree">
-            <multilevel-tree ref="mulTree" :list="ledgerBreakdownList" :default-props="treeProps" @selectRow="selectRow"/>
+            <multilevel-tree ref="mulTree" :list="ledgerBreakdownList" :default-props="treeProps" @selectRow="selectTree"/>
           </div>
         </el-col>
         <el-col :span="20">
@@ -187,13 +187,13 @@
             <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120" :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
             <el-table-column label="单位" align="center" prop="dw" min-width="100"/>
-            <el-table-column label="合同单价" align="center" prop="htdj" min-width="120"/>
-            <el-table-column label="设计数量" align="center" prop="sjsl" min-width="120"/>
-            <el-table-column label="分解数量" align="center" prop="fjsl" min-width="120"/>
-            <el-table-column label="变更数量" align="center" prop="bgsl" min-width="120"/>
-            <el-table-column label="复核数量" align="center" prop="fhsl" min-width="120"/>
+            <el-table-column label="合同单价" align="center" prop="htdj" min-width="140"/>
+            <el-table-column label="设计数量" align="center" prop="sjsl" min-width="140"/>
+            <el-table-column label="分解数量" align="center" prop="fjsl" min-width="140"/>
+            <el-table-column label="变更数量" align="center" prop="bgsl" min-width="140"/>
+            <el-table-column label="复核数量" align="center" prop="fhsl" min-width="140"/>
             <el-table-column label="已计量数量" align="center" prop="yjlsl" min-width="120"/>
-            <el-table-column label="复核金额" align="center" prop="fhje" min-width="120"/>
+            <el-table-column label="复核金额" align="center" prop="fhje" min-width="140"/>
             <el-table-column label="分解类型" align="center" prop="fjlx" min-width="120">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.change_status" :value="scope.row.fjlx"/>
@@ -204,15 +204,8 @@
                 <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" fixed="right" class-name="small-padding fixed-width" min-width="200">
+            <el-table-column label="操作" align="left" fixed="right" class-name="small-padding fixed-width" min-width="200">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  type="text"
-                  icon="el-icon-edit"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-                >保存</el-button>
                 <el-button
                   size="mini"
                   type="text"
@@ -227,6 +220,14 @@
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:remove']"
                 >删除</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  v-show="scope.row.action === 'add'"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
+                >保存</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -244,8 +245,8 @@
     />
 
     <!-- 添加台账分解明细 -->
-    <el-dialog :title="title" :visible.sync="openAdd" width="1000px" append-to-body>
-      <ledger-list/>
+    <el-dialog :title="title" :visible.sync="openAdd" width="1050px" append-to-body>
+      <ledger-list v-if="openAdd" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
     </el-dialog>
     <!-- 修改台账分解明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -460,43 +461,43 @@ export default {
     getList() {
       this.loading = true;
       listLedgerBreakdownDetail(this.queryParams).then(response => {
-        response = {"total":3,"rows":[
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},{"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-          {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-          {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        ],"code":200,"msg":"查询成功"};
+        // response = {"total":3,"rows":[
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},{"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
+        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
+        // ],"code":200,"msg":"查询成功"};
         this.ledgerBreakdownDetailList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -613,10 +614,16 @@ export default {
         ...this.queryParams
       }, `ledgerBreakdownDetail_${new Date().getTime()}.xlsx`)
     },
-    selectRow (row) {
+    selectTree (row) {
       console.error('选中的数据', row);
       this.queryParams.tzfjbh = row.tzfjbh;
       this.getList();
+    },
+    getSelectionData (val) {
+      this.ledgerBreakdownDetailList = [...this.ledgerBreakdownDetailList, ...val];
+    },
+    closeOpenAdd () {
+      this.openAdd = false;
     }
   }
 };
