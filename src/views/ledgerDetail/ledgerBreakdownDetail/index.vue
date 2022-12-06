@@ -210,9 +210,18 @@
                   size="mini"
                   type="text"
                   icon="el-icon-edit"
+                  v-show="scope.row.action !== 'add'"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
                 >修改</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  v-show="scope.row.action === 'add'"
+                  @click="save(scope.row)"
+                  v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
+                >保存</el-button>
                 <el-button
                   size="mini"
                   type="text"
@@ -220,14 +229,6 @@
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:remove']"
                 >删除</el-button>
-                <el-button
-                  size="mini"
-                  type="text"
-                  icon="el-icon-edit"
-                  v-show="scope.row.action === 'add'"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-                >保存</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -245,64 +246,90 @@
     />
 
     <!-- 添加台账分解明细 -->
-    <el-dialog :title="title" :visible.sync="openAdd" width="1050px" append-to-body>
+    <el-dialog :title="'添加清单'" :visible.sync="openAdd" width="1050px" append-to-body>
       <ledger-list v-if="openAdd" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
     </el-dialog>
     <!-- 修改台账分解明细对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="20">
-          <el-col>
+          <el-col :span="12">
             <el-form-item label="ID" prop="id">
-              <el-input v-model="form.id" placeholder="请输入ID" />
+              <el-input :disabled="true" v-model="form.id" placeholder="请输入ID" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="标段编号" prop="bdbh">
+              <el-input :disabled="true" v-model="form.bdbh" placeholder="请输入标段编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="子目号" prop="zmh">
+              <el-input :disabled="true" v-model="form.zmh" placeholder="请输入子目号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="子目名称" prop="zmmc">
+              <el-input :disabled="true" v-model="form.zmmc" placeholder="请输入子目名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单位" prop="dw">
+              <el-input :disabled="true" v-model="form.dw" placeholder="请输入单位" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同单价" prop="htdj">
+              <el-input :disabled="true" v-model="form.htdj" placeholder="请输入合同单价" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="设计数量" prop="sjsl">
+              <el-input v-model="form.sjsl" placeholder="请输入设计数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="分解数量" prop="fjsl">
+              <el-input v-model="form.fjsl" placeholder="请输入分解数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="变更数量" prop="bgsl">
+              <el-input :disabled="true" v-model="form.bgsl" placeholder="请输入变更数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="复核数量" prop="fhsl">
+              <el-input :disabled="true" v-model="form.fhsl" placeholder="请输入复核数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="已计量数量" prop="yjlsl">
+              <el-input :disabled="true" v-model="form.yjlsl" placeholder="请输入已计量数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="复核金额" prop="fhje">
+              <el-input :disabled="true" v-model="form.fhje" placeholder="请输入复核金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="分解类型" prop="fjlx">
+              <el-input :disabled="true" v-model="form.fjlx" placeholder="请输入状态" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group :disabled="true" v-model="form.status">
+                <el-radio
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
-        <el-form-item label="子目号" prop="zmh">
-          <el-input v-model="form.zmh" placeholder="请输入子目号" />
-        </el-form-item>
-        <el-form-item label="子目名称" prop="zmmc">
-          <el-input v-model="form.zmmc" placeholder="请输入子目名称" />
-        </el-form-item>
-        <el-form-item label="单位" prop="dw">
-          <el-input v-model="form.dw" placeholder="请输入单位" />
-        </el-form-item>
-        <el-form-item label="合同单价" prop="htdj">
-          <el-input v-model="form.htdj" placeholder="请输入合同单价" />
-        </el-form-item>
-        <el-form-item label="设计数量" prop="sjsl">
-          <el-input v-model="form.sjsl" placeholder="请输入设计数量" />
-        </el-form-item>
-        <el-form-item label="分解数量" prop="fjsl">
-          <el-input v-model="form.fjsl" placeholder="请输入分解数量" />
-        </el-form-item>
-        <el-form-item label="变更数量" prop="bgsl">
-          <el-input v-model="form.bgsl" placeholder="请输入变更数量" />
-        </el-form-item>
-        <el-form-item label="复核数量" prop="fhsl">
-          <el-input v-model="form.fhsl" placeholder="请输入复核数量" />
-        </el-form-item>
-        <el-form-item label="已计量数量" prop="yjlsl">
-          <el-input v-model="form.yjlsl" placeholder="请输入已计量数量" />
-        </el-form-item>
-        <el-form-item label="复核金额" prop="fhje">
-          <el-input v-model="form.fhje" placeholder="请输入复核金额" />
-        </el-form-item>
-        <el-form-item label="状态" prop="fjlx">
-          <el-input v-model="form.fjlx" placeholder="请输入状态" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -558,6 +585,8 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.open = true;
+      this.title = "修改台账分解明细";
       this.loading = true;
       this.reset();
       const tzfjbh = row.tzfjbh || this.ids
@@ -607,6 +636,10 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    // 保存逻辑
+    save () {
+      // 保存成功后刷新表格数据
     },
     /** 导出按钮操作 */
     handleExport() {
