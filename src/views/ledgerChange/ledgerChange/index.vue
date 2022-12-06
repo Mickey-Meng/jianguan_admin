@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="变更事项" prop="bgsx">
+<!--      <el-form-item label="变更事项" prop="bgsx">
         <el-input
           v-model="queryParams.bgsx"
           placeholder="请输入变更事项"
@@ -106,7 +106,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -163,23 +163,23 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
       <el-table-column label="变更编号" align="center" prop="bgbh" />
-      <el-table-column label="变更事项" align="center" prop="bgsx" />
+      <el-table-column label="变更事项" align="center" prop="bgsx" v-if="false"/>
       <el-table-column label="变更等级" align="center" prop="bgdj" />
       <el-table-column label="变更类型" align="center" prop="bglx" />
       <el-table-column label="桩号" align="center" prop="zh" />
       <el-table-column label="子目号" align="center" prop="zmh" />
       <el-table-column label="工程部位" align="center" prop="gcbw" />
-      <el-table-column label="图号" align="center" prop="th" />
+      <el-table-column label="图号" align="center" prop="th" v-if="false"/>
       <el-table-column label="申请日期" align="center" prop="sqrq" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.sqrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="变更金额" align="center" prop="bgje" />
-      <el-table-column label="变更原因" align="center" prop="bgyy" />
-      <el-table-column label="计算式" align="center" prop="jss" />
-      <el-table-column label="数据状态" align="center" prop="dataStatus" />
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="变更原因" align="center" prop="bgyy" v-if="false"/>
+      <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
+      <el-table-column label="数据状态" align="center" prop="dataStatus" v-if="false"/>
+      <el-table-column label="状态" align="center" prop="status" v-if="false">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>

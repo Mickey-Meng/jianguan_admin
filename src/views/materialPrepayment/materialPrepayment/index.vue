@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="计量期次编号" prop="jlqsbh">
+      <el-form-item label="期次编号" prop="jlqsbh">
         <el-input
           v-model="queryParams.jlqsbh"
           placeholder="请输入计量期次编号"
@@ -17,10 +17,11 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="材料编号，预付款编号" prop="clbh">
+      <!--
+      <el-form-item label="编号" prop="clbh">
         <el-input
           v-model="queryParams.clbh"
-          placeholder="请输入材料编号，预付款编号"
+          placeholder="请输入材料编号/预付款编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -33,15 +34,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="材料名称" prop="dw">
-        <el-input
-          v-model="queryParams.dw"
-          placeholder="请输入材料名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="单价" prop="dj">
+    <el-form-item label="单价" prop="dj">
         <el-input
           v-model="queryParams.dj"
           placeholder="请输入单价"
@@ -123,6 +116,7 @@
           />
         </el-select>
       </el-form-item>
+      -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -177,21 +171,21 @@
 
     <el-table v-loading="loading" :data="materialPrepaymentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" v-if="true"/>
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
       <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
-      <el-table-column label="材料编号，预付款编号" align="center" prop="clbh" />
+      <el-table-column label="预付款编号" align="center" prop="clbh"  v-if="false"/>
       <el-table-column label="材料名称" align="center" prop="clmc" />
-      <el-table-column label="材料名称" align="center" prop="dw" />
+      <el-table-column label="单位" align="center" prop="dw" />
       <el-table-column label="单价" align="center" prop="dj" />
       <el-table-column label="数量" align="center" prop="sl" />
       <el-table-column label="金额" align="center" prop="je" />
-      <el-table-column label="预付比例" align="center" prop="yfbl" />
-      <el-table-column label="预付金额" align="center" prop="yfje" />
-      <el-table-column label="材料来源" align="center" prop="clly" />
-      <el-table-column label="单据编号" align="center" prop="djbh" />
-      <el-table-column label="质保书编号" align="center" prop="zbsbh" />
-      <el-table-column label=" 抽检报告编号" align="center" prop="cjbgbh" />
+      <el-table-column label="预付比例" align="center" prop="yfbl"  v-if="false"/>
+      <el-table-column label="预付金额" align="center" prop="yfje"  v-if="false"/>
+      <el-table-column label="材料来源" align="center" prop="clly"  v-if="false"/>
+      <el-table-column label="单据编号" align="center" prop="djbh"  v-if="false"/>
+      <el-table-column label="质保书编号" align="center" prop="zbsbh"  v-if="false"/>
+      <el-table-column label=" 抽检报告编号" align="center" prop="cjbgbh" v-if="false" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
