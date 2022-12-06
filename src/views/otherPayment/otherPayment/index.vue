@@ -25,7 +25,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="申请日期" prop="sqsj">
+<!--      <el-form-item label="申请日期" prop="sqsj">
         <el-date-picker clearable
           v-model="queryParams.sqsj"
           type="date"
@@ -74,7 +74,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -129,7 +129,7 @@
 
     <el-table v-loading="loading" :data="otherPaymentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" v-if="true"/>
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
       <el-table-column label="计量期次" align="center" prop="jlqsbh" />
       <el-table-column label="申请编号" align="center" prop="sqbh" />
@@ -138,11 +138,11 @@
           <span>{{ parseTime(scope.row.sqsj, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属单位" align="center" prop="ssdw" />
-      <el-table-column label="款项类型" align="center" prop="kxlx" />
+      <el-table-column label="所属单位" align="center" prop="ssdw" v-if="false" />
+      <el-table-column label="款项类型" align="center" prop="kxlx"  v-if="false"/>
       <el-table-column label="款项金额" align="center" prop="kxje" />
-      <el-table-column label="附件" align="center" prop="fj" />
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="附件" align="center" prop="fj"  v-if="false"/>
+      <el-table-column label="状态" align="center" prop="status"  v-if="false">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>

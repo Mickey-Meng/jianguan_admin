@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="计量期次编号" prop="jlqsbh">
+      <el-form-item label="期次编号" prop="jlqsbh">
         <el-input
           v-model="queryParams.jlqsbh"
           placeholder="请输入计量期次编号"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="台账分解编号" prop="tzfjbh">
+<!--      <el-form-item label="台账分解编号" prop="tzfjbh">
         <el-input
           v-model="queryParams.tzfjbh"
           placeholder="请输入台账分解编号"
@@ -88,7 +88,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
           <el-option
@@ -158,17 +158,17 @@
       <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
       <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
       <el-table-column label="凭证编号" align="center" prop="pzbh" />
-      <el-table-column label="计量类型" align="center" prop="jllx" />
+      <el-table-column label="计量类型" align="center" prop="jllx" v-if="false"/>
       <el-table-column label="计量日期" align="center" prop="jlrq" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交工证书/变更令编号" align="center" prop="jgzs" />
+      <el-table-column label="交工证书/变更令编号" align="center" prop="jgzs" v-if="false" />
       <el-table-column label="工程部位" align="center" prop="gcbw" />
-      <el-table-column label="计算式" align="center" prop="jss" />
-      <el-table-column label="计量比例" align="center" prop="jlbl" />
-      <el-table-column label="附件地址" align="center" prop="fj" />
+      <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
+      <el-table-column label="计量比例" align="center" prop="jlbl" v-if="false"/>
+      <el-table-column label="附件地址" align="center" prop="fj" v-if="false"/>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>

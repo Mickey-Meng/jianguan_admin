@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="计量期次编号" prop="jlqsbh">
+<!--      <el-form-item label="计量期次编号" prop="jlqsbh">
         <el-input
           v-model="queryParams.jlqsbh"
           placeholder="请输入计量期次编号"
@@ -72,7 +72,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -127,7 +127,7 @@
 
     <el-table v-loading="loading" :data="startupPrepaymentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" v-if="true"/>
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
       <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
       <el-table-column label="开工预付款申请编号" align="center" prop="sqbh" />
@@ -137,11 +137,11 @@
         </template>
       </el-table-column>
       <el-table-column label="申请类型" align="center" prop="sqlx" />
-      <el-table-column label="申请次数" align="center" prop="sqcs" />
+      <el-table-column label="申请次数" align="center" prop="sqcs" v-if="false" />
       <el-table-column label="预付款金额" align="center" prop="yukje" />
-      <el-table-column label="申请依据" align="center" prop="sqyj" />
-      <el-table-column label="附件地址" align="center" prop="fj" />
-      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="申请依据" align="center" prop="sqyj" v-if="false"/>
+      <el-table-column label="附件地址" align="center" prop="fj" v-if="false"/>
+      <el-table-column label="状态" align="center" prop="status" v-if="false"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

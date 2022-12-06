@@ -12,7 +12,7 @@
       <el-form-item label="凭证编号" prop="pzbh">
         <el-input
           v-model="queryParams.pzbh"
-          placeholder="请输入凭证编号"
+          placeholder="请输入凭证编号111"
           clearable
           @keyup.enter.native="handleQuery"
         />
