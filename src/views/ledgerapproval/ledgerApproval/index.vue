@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="台账分解编号" prop="tzfjbh">
+<!--      <el-form-item label="台账分解编号" prop="tzfjbh">
         <el-input
           v-model="queryParams.tzfjbh"
           placeholder="请输入台账分解编号"
@@ -60,7 +60,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>

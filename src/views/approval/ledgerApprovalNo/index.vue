@@ -25,7 +25,7 @@
           placeholder="请选择申报日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="申报状态" prop="spzt">
+<!--      <el-form-item label="申报状态" prop="spzt">
         <el-input
           v-model="queryParams.spzt"
           placeholder="请输入申报状态"
@@ -42,7 +42,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
