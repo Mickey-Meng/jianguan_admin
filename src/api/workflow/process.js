@@ -57,6 +57,7 @@ export function listTodoProcess(query) {
   return request({
     url: '/workflow/process/todoList',
     method: 'get',
+    timeout: 100000,
     params: query
   })
 }
