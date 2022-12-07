@@ -1,6 +1,20 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-row :gutter="20">
+      <!--部门数据-->
+    <el-col :span="6" :xs="24">
+    <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+      <el-table-column label="期数" align="center" prop="name" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+    </el-table>
+      </el-col>
+      <el-col :span="18" :xs="24">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
@@ -170,15 +184,18 @@
       @pagination="getList"
     />
 
+      </el-col>
+      </el-row>
+  
     <!-- 添加或修改开工预付款对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item>
-        <el-form-item label="计量期次编号" prop="jlqsbh">
+        <!-- <el-form-item label="计量期次编号" prop="jlqsbh">
           <el-input v-model="form.jlqsbh" placeholder="请输入计量期次编号" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="开工预付款申请编号" prop="sqbh">
           <el-input v-model="form.sqbh" placeholder="请输入开工预付款申请编号" />
         </el-form-item>
@@ -216,15 +233,20 @@
 
 <script>
 import { listStartupPrepayment, getStartupPrepayment, delStartupPrepayment, addStartupPrepayment, updateStartupPrepayment } from "@/api/startup/startupPrepayment";
-
+import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 export default {
   name: "StartupPrepayment",
+  dicts: ['data_status'],
   data() {
     return {
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
       loading: true,
+      // 遮罩层
+      qsloading: true,
+      //选中期数
+      xzQsId: "",
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -237,6 +259,8 @@ export default {
       total: 0,
       // 开工预付款表格数据
       startupPrepaymentList: [],
+      // 中间计量期数管理表格数据
+      measurementNoList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -266,9 +290,9 @@ export default {
         bdbh: [
           { required: true, message: "标段编号不能为空", trigger: "blur" }
         ],
-        jlqsbh: [
-          { required: true, message: "计量期次编号不能为空", trigger: "blur" }
-        ],
+        // jlqsbh: [
+        //   { required: true, message: "计量期次编号不能为空", trigger: "blur" }
+        // ],
         sqbh: [
           { required: true, message: "开工预付款申请编号不能为空", trigger: "blur" }
         ],
@@ -298,6 +322,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getPeriodsList();
   },
   methods: {
     /** 查询开工预付款列表 */
@@ -309,6 +334,20 @@ export default {
         this.loading = false;
       });
     },
+     /** 查询中间计量期数管理列表 */
+     getPeriodsList() {
+      this.qsloading = true;
+      listMeasurementListNo().then(response => {
+        this.measurementNoList = response.data;
+        this.qsloading = false;
+      });
+    },
+    rowQsClick(record,index){ 
+      this.xzQsId=record.id;
+      this.queryParams.jlqsbh = record.id;
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },  
     // 取消按钮
     cancel() {
       this.open = false;
@@ -376,6 +415,10 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
+            if(this.xzQsId==""){
+              this.$modal.confirm("请选择期数");
+            }
+            this.form.jlqsbh=this.xzQsId;
             updateStartupPrepayment(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;

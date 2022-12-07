@@ -9,6 +9,14 @@ export function listMeasurementNo(query) {
   })
 }
 
+// 查询中间计量期数管理列表
+export function listMeasurementListNo() {
+  return request({
+    url: '/measurementNo/measurementNo/sortList',
+    method: 'get'
+  })
+}
+
 // 查询中间计量期数管理详细
 export function getMeasurementNo(id) {
   return request({
