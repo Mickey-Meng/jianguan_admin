@@ -1,172 +1,5 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <!-- <el-form-item label="标段编号" prop="bdbh">
-        <el-input
-          v-model="queryParams.bdbh"
-          placeholder="请输入标段编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="台账分解编号" prop="tzfjbh">
-        <el-input
-          v-model="queryParams.tzfjbh"
-          placeholder="请输入台账分解编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
-      <el-form-item label="子目号" prop="zmh">
-        <el-input
-          v-model="queryParams.zmh"
-          placeholder="请输入子目号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="子目名称" prop="zmmc">
-        <el-input
-          v-model="queryParams.zmmc"
-          placeholder="请输入子目名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <!-- <el-form-item label="单位" prop="dw">
-        <el-input
-          v-model="queryParams.dw"
-          placeholder="请输入单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同单价" prop="htdj">
-        <el-input
-          v-model="queryParams.htdj"
-          placeholder="请输入合同单价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="设计数量" prop="sjsl">
-        <el-input
-          v-model="queryParams.sjsl"
-          placeholder="请输入设计数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="分解数量" prop="fjsl">
-        <el-input
-          v-model="queryParams.fjsl"
-          placeholder="请输入分解数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="变更数量" prop="bgsl">
-        <el-input
-          v-model="queryParams.bgsl"
-          placeholder="请输入变更数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="复核数量" prop="fhsl">
-        <el-input
-          v-model="queryParams.fhsl"
-          placeholder="请输入复核数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="已计量数量" prop="yjlsl">
-        <el-input
-          v-model="queryParams.yjlsl"
-          placeholder="请输入已计量数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="复核金额" prop="fhje">
-        <el-input
-          v-model="queryParams.fhje"
-          placeholder="请输入复核金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="fjlx">
-        <el-input
-          v-model="queryParams.fjlx"
-          placeholder="请输入状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item> -->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:add']"
-        >新增</el-button>
-      </el-col>
-      <!-- <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:remove']"
-        >删除</el-button>
-      </el-col> -->
-      <!-- <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:export']"
-        >导出</el-button>
-      </el-col> -->
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
     <div>
       <el-row :gutter="10">
         <el-col :span="4">
@@ -175,6 +8,172 @@
           </div>
         </el-col>
         <el-col :span="20">
+          <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+            <!-- <el-form-item label="标段编号" prop="bdbh">
+              <el-input
+                v-model="queryParams.bdbh"
+                placeholder="请输入标段编号"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="台账分解编号" prop="tzfjbh">
+              <el-input
+                v-model="queryParams.tzfjbh"
+                placeholder="请输入台账分解编号"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item> -->
+            <el-form-item label="子目号" prop="zmh">
+              <el-input
+                v-model="queryParams.zmh"
+                placeholder="请输入子目号"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="子目名称" prop="zmmc">
+              <el-input
+                v-model="queryParams.zmmc"
+                placeholder="请输入子目名称"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <!-- <el-form-item label="单位" prop="dw">
+              <el-input
+                v-model="queryParams.dw"
+                placeholder="请输入单位"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="合同单价" prop="htdj">
+              <el-input
+                v-model="queryParams.htdj"
+                placeholder="请输入合同单价"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="设计数量" prop="sjsl">
+              <el-input
+                v-model="queryParams.sjsl"
+                placeholder="请输入设计数量"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="分解数量" prop="fjsl">
+              <el-input
+                v-model="queryParams.fjsl"
+                placeholder="请输入分解数量"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="变更数量" prop="bgsl">
+              <el-input
+                v-model="queryParams.bgsl"
+                placeholder="请输入变更数量"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="复核数量" prop="fhsl">
+              <el-input
+                v-model="queryParams.fhsl"
+                placeholder="请输入复核数量"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="已计量数量" prop="yjlsl">
+              <el-input
+                v-model="queryParams.yjlsl"
+                placeholder="请输入已计量数量"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="复核金额" prop="fhje">
+              <el-input
+                v-model="queryParams.fhje"
+                placeholder="请输入复核金额"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="状态" prop="fjlx">
+              <el-input
+                v-model="queryParams.fjlx"
+                placeholder="请输入状态"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+                <el-option
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item> -->
+            <el-form-item>
+              <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </el-form>
+
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-button
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+                v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:add']"
+              >新增</el-button>
+            </el-col>
+            <!-- <el-col :span="1.5">
+              <el-button
+                type="success"
+                plain
+                icon="el-icon-edit"
+                size="mini"
+                :disabled="single"
+                @click="handleUpdate"
+                v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
+              >修改</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="danger"
+                plain
+                icon="el-icon-delete"
+                size="mini"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:remove']"
+              >删除</el-button>
+            </el-col> -->
+            <!-- <el-col :span="1.5">
+              <el-button
+                type="warning"
+                plain
+                icon="el-icon-download"
+                size="mini"
+                @click="handleExport"
+                v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:export']"
+              >导出</el-button>
+            </el-col> -->
+            <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+          </el-row>
           <el-table v-loading="loading" 
             :header-cell-style="headercellStyle"
             :cell-style="cellStyle" 
@@ -672,7 +671,7 @@ export default {
   }
   .left-tree {
     width: 100%;
-    height: calc(100vh - 205px);
+    height: calc(100vh - 115px);
     background: rgb(247, 248, 251);
     padding: 0 10px;
   }

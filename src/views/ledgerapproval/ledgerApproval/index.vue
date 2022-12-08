@@ -1,156 +1,186 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标段编号" prop="bdbh">
-        <el-input
-          v-model="queryParams.bdbh"
-          placeholder="请输入标段编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="申请期次" prop="sqqc">
-        <el-input
-          v-model="queryParams.sqqc"
-          placeholder="请输入申请期次"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-<!--      <el-form-item label="台账分解编号" prop="tzfjbh">
-        <el-input
-          v-model="queryParams.tzfjbh"
-          placeholder="请输入台账分解编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工程部位" prop="gcbw">
-        <el-input
-          v-model="queryParams.gcbw"
-          placeholder="请输入工程部位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="数据状态" prop="dataStatus">
-        <el-select v-model="queryParams.dataStatus" placeholder="请选择数据状态" clearable>
-          <el-option
-            v-for="dict in dict.type.data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="申报状态" prop="spzt">
-        <el-input
-          v-model="queryParams.spzt"
-          placeholder="请输入申报状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>-->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['ledgerapproval:ledgerApproval:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['ledgerapproval:ledgerApproval:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['ledgerapproval:ledgerApproval:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['ledgerapproval:ledgerApproval:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
     <el-row :gutter="10">
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="left-tree">
+          <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+            <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+            <el-table-column label="申报期数" align="center" prop="name"/>
+            <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
+            <el-table-column label="状态" align="center" prop="status" min-width="30">
+              <template slot-scope="scope">
+                <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="18">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form-item label="标段编号" prop="bdbh">
+            <el-input
+              v-model="queryParams.bdbh"
+              placeholder="请输入标段编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="申请期次" prop="sqqc">
+            <el-input
+              v-model="queryParams.sqqc"
+              placeholder="请输入申请期次"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+<!--        <el-form-item label="台账分解编号" prop="tzfjbh">
+          <el-input
+            v-model="queryParams.tzfjbh"
+            placeholder="请输入台账分解编号"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="工程部位" prop="gcbw">
+          <el-input
+            v-model="queryParams.gcbw"
+            placeholder="请输入工程部位"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="数据状态" prop="dataStatus">
+          <el-select v-model="queryParams.dataStatus" placeholder="请选择数据状态" clearable>
+            <el-option
+              v-for="dict in dict.type.data_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="申报状态" prop="spzt">
+          <el-input
+            v-model="queryParams.spzt"
+            placeholder="请输入申报状态"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+            <el-option
+              v-for="dict in dict.type.data_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
+          </el-select>
+        </el-form-item>-->
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['ledgerapproval:ledgerApproval:add']"
+            >新增</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="submitData"
+              v-hasPermi="['ledgerapproval:ledgerApproval:add']"
+            >上报</el-button>
+          </el-col>
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['ledgerapproval:ledgerApproval:edit']"
+            >修改</el-button>
+          </el-col> -->
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['ledgerapproval:ledgerApproval:remove']"
+            >删除</el-button>
+          </el-col> -->
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['ledgerapproval:ledgerApproval:export']"
+            >导出</el-button>
+          </el-col> -->
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        </el-row>
         <el-table v-loading="loading" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="主键id" align="center" prop="id" v-if="true"/>
-          <el-table-column label="标段编号" align="center" prop="bdbh" />
-          <el-table-column label="申请期次" align="center" prop="sqqc" />
-          <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
+          <!-- <el-table-column type="selection" width="55" align="center" /> -->
+          <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
+          <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
           <el-table-column label="工程部位" align="center" prop="gcbw" />
+
+
+          <el-table-column label="子目号" align="center" prop="zmh" />
+          <el-table-column label="子目名称" align="center" prop="zmmc" />
+
+
+          <el-table-column label="申请期次" align="center" prop="sqqc" />
+          <!-- <el-table-column label="台账分解编号" align="center" prop="tzfjbh" /> -->
+
+          <el-table-column label="单位" align="center" prop="dw" />
+          <el-table-column label="设计数量" align="center" prop="sjsl" />
+          <el-table-column label="分解数量" align="center" prop="fjsl" />
+          <el-table-column label="已计量数量" align="center" prop="yjlsl" />
+
           <el-table-column label="数据状态" align="center" prop="dataStatus">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.data_status" :value="scope.row.dataStatus"/>
             </template>
           </el-table-column>
-          <el-table-column label="申报状态" align="center" prop="spzt" />
-          <el-table-column label="状态" align="center" prop="status">
+          <!-- <el-table-column label="申报状态" align="center" prop="spzt" /> -->
+          <!-- <el-table-column label="状态" align="center" prop="status">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['ledgerapproval:ledgerApproval:edit']"
-              >修改</el-button>
+              >修改</el-button> -->
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
+                @click="handleDelete(scope.row, scope.$index)"
                 v-hasPermi="['ledgerapproval:ledgerApproval:remove']"
               >删除</el-button>
             </template>
@@ -158,66 +188,31 @@
         </el-table>
       </el-col>
     </el-row>
-
-    <pagination
+    <!-- <pagination
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
-    />
+    /> -->
 
     <!-- 添加或修改台账报审对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
-        <el-form-item label="申请期次" prop="sqqc">
-          <el-input v-model="form.sqqc" placeholder="请输入申请期次" />
-        </el-form-item>
-        <el-form-item label="台账分解编号" prop="tzfjbh">
-          <el-input v-model="form.tzfjbh" placeholder="请输入台账分解编号" />
-        </el-form-item>
-        <el-form-item label="工程部位" prop="gcbw">
-          <el-input v-model="form.gcbw" placeholder="请输入工程部位" />
-        </el-form-item>
-        <el-form-item label="数据状态">
-          <el-radio-group v-model="form.dataStatus">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="申报状态" prop="spzt">
-          <el-input v-model="form.spzt" placeholder="请输入申报状态" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
+    <el-dialog :title="title" :visible.sync="open" width="1050px" append-to-body>
+      <ledger-list v-if="open" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { listLedgerApproval, getLedgerApproval, delLedgerApproval, addLedgerApproval, updateLedgerApproval } from "@/api/ledgerapproval/ledgerApproval";
-
+import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
+import LedgerList from './components/LedgerList';
 export default {
   name: "LedgerApproval",
   dicts: ['data_status'],
+  components: {
+    LedgerList
+  },
   data() {
     return {
       // 按钮loading
@@ -233,17 +228,21 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 总条数
-      total: 0,
+      // total: 0,
       // 台账报审表格数据
       ledgerApprovalList: [],
+      // 中间计量期数管理表格数据
+      measurementNoList: [],
+      // 左侧表格loading
+      qsloading: false,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
         bdbh: undefined,
         sqqc: undefined,
         tzfjbh: undefined,
@@ -284,6 +283,7 @@ export default {
     };
   },
   created() {
+    this.getPeriodsList();
     this.getList();
   },
   methods: {
@@ -292,7 +292,7 @@ export default {
       this.loading = true;
       listLedgerApproval(this.queryParams).then(response => {
         this.ledgerApprovalList = response.rows;
-        this.total = response.total;
+        // this.total = response.total;
         this.loading = false;
       });
     },
@@ -322,7 +322,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      // this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
@@ -380,25 +380,50 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除台账报审编号为"' + ids + '"的数据项？').then(() => {
-        this.loading = true;
-        return delLedgerApproval(ids);
-      }).then(() => {
-        this.loading = false;
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+    handleDelete(row, index) {
+      this.ledgerApprovalList.splice(index, 1);
+      // const ids = row.id || this.ids;
+      // this.$modal.confirm('是否确认删除台账报审编号为"' + ids + '"的数据项？').then(() => {
+      //   this.loading = true;
+      //   return delLedgerApproval(ids);
+      // }).then(() => {
+      //   this.loading = false;
+      //   this.getList();
+      //   this.$modal.msgSuccess("删除成功");
+      // }).catch(() => {
+      // }).finally(() => {
+      //   this.loading = false;
+      // });
+    },
+    submitData () {
+      // TODO
+      // 对接上报接口
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download('ledgerapproval/ledgerApproval/export', {
         ...this.queryParams
       }, `ledgerApproval_${new Date().getTime()}.xlsx`)
+    },
+    rowQsClick(record,index){ 
+      this.xzQsId=record.id;
+      this.queryParams.jlqsbh = record.id;
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+     /** 查询中间计量期数管理列表 */
+    getPeriodsList() {
+      this.qsloading = true;
+      listMeasurementListNo().then(response => {
+        this.measurementNoList = response.data;
+        this.qsloading = false;
+      });
+    },
+    getSelectionData (val) {
+      this.ledgerApprovalList = [...this.ledgerApprovalList, ...val];
+    },
+    closeOpenAdd () {
+      this.open = false;
     }
   }
 };
@@ -413,8 +438,11 @@ export default {
   }
   .left-tree {
     width: 100%;
-    height: calc(100vh - 205px);
+    height: calc(100vh - 115px);
     background: rgb(247, 248, 251);
     padding: 0 10px;
+    .el-table {
+      height: 100%;
+    }
   }
 </style>
