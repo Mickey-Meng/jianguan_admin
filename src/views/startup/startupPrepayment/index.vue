@@ -15,31 +15,31 @@
       </el-col>
       <el-col :span="18" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标段编号" prop="bdbh">
+      <!-- <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
           placeholder="请输入标段编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-<!--      <el-form-item label="计量期次编号" prop="jlqsbh">
+      </el-form-item> -->
+   <!-- <el-form-item label="计量期次编号" prop="jlqsbh">
         <el-input
           v-model="queryParams.jlqsbh"
           placeholder="请输入计量期次编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="开工预付款申请编号" prop="sqbh">
+      </el-form-item> -->
+      <el-form-item label="申请编号" prop="sqbh">
         <el-input
           v-model="queryParams.sqbh"
-          placeholder="请输入开工预付款申请编号"
+          placeholder="请输入申请编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="申请日期" prop="sqsj">
+     <!--    <el-form-item label="申请日期" prop="sqsj">
         <el-date-picker clearable
           v-model="queryParams.sqsj"
           type="date"
@@ -142,9 +142,9 @@
     <el-table v-loading="loading" :data="startupPrepaymentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="标段编号" align="center" prop="bdbh" />
-      <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
-      <el-table-column label="开工预付款申请编号" align="center" prop="sqbh" />
+      <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
+      <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
+      <el-table-column label="申请编号" align="center" prop="sqbh" />
       <el-table-column label="申请日期" align="center" prop="sqsj" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.sqsj, '{y}-{m}-{d}') }}</span>
@@ -193,11 +193,18 @@
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item>
-        <!-- <el-form-item label="计量期次编号" prop="jlqsbh">
-          <el-input v-model="form.jlqsbh" placeholder="请输入计量期次编号" />
-        </el-form-item> -->
-        <el-form-item label="开工预付款申请编号" prop="sqbh">
-          <el-input v-model="form.sqbh" placeholder="请输入开工预付款申请编号" />
+        <el-form-item label="期次编号" prop="jlqsbh">
+          <el-select v-model="form.jlqsbh" placeholder="请选择期次">
+            <el-option
+              v-for="item in jlqsbhOptions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+         </el-select>
+        </el-form-item>
+        <el-form-item label="申请编号" prop="sqbh">
+          <el-input v-model="form.sqbh" placeholder="请输入申请编号" />
         </el-form-item>
         <el-form-item label="申请日期" prop="sqsj">
           <el-date-picker clearable
@@ -219,8 +226,29 @@
         <el-form-item label="申请依据" prop="sqyj">
           <el-input v-model="form.sqyj" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="附件地址" prop="fj">
-          <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="附件地址">
+        <el-upload
+              class="upload-demo"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              multiple
+              :limit="3"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
+        </el-upload>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in dict.type.data_status"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -261,6 +289,8 @@ export default {
       startupPrepaymentList: [],
       // 中间计量期数管理表格数据
       measurementNoList: [],
+      jlqsbhOptions:[],
+      fileList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -311,9 +341,9 @@ export default {
         sqyj: [
           { required: true, message: "申请依据不能为空", trigger: "blur" }
         ],
-        fj: [
-          { required: true, message: "附件地址不能为空", trigger: "blur" }
-        ],
+        // fj: [
+        //   { required: true, message: "附件地址不能为空", trigger: "blur" }
+        // ],
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
@@ -347,7 +377,22 @@ export default {
       this.queryParams.jlqsbh = record.id;
       this.queryParams.pageNum = 1;
       this.getList();
-    },  
+    }, 
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        console.log(files);
+        console.log(fileList);
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
+      , 
     // 取消按钮
     cancel() {
       this.open = false;
@@ -393,12 +438,18 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      listMeasurementListNo().then(response => {
+        this.jlqsbhOptions = response.data;
+      });
       this.reset();
       this.open = true;
       this.title = "添加开工预付款";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      listMeasurementListNo().then(response => {
+        this.jlqsbhOptions = response.data;
+      });
       this.loading = true;
       this.reset();
       const id = row.id || this.ids
@@ -418,7 +469,8 @@ export default {
             if(this.xzQsId==""){
               this.$modal.confirm("请选择期数");
             }
-            this.form.jlqsbh=this.xzQsId;
+            this.form.fj="http://www.baidu.com";
+            this.form.fj=this.fileList;
             updateStartupPrepayment(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -427,6 +479,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form.fj="http://www.baidu.com";
             addStartupPrepayment(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

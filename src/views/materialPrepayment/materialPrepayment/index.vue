@@ -1,35 +1,55 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标段编号" prop="bdbh">
+    <el-col :span="6" :xs="24">
+      <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+      <el-table-column label="期数" align="center" prop="name" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+    </el-table>
+    </el-col>
+    <el-col :span="18" :xs="24">
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="材料编号" prop="clbh">
+        <el-input
+          v-model="queryParams.clbh"
+          placeholder="请输入材料编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+        <el-form-item label="材料名称" prop="clmc">
+        <el-input
+          v-model="queryParams.clmc"
+          placeholder="请输入材料名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <!-- <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
           placeholder="请输入标段编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="期次编号" prop="jlqsbh">
+      </el-form-item> -->
+      <!-- <el-form-item label="期次编号" prop="jlqsbh">
         <el-input
           v-model="queryParams.jlqsbh"
           placeholder="请输入计量期次编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <!--
       <el-form-item label="编号" prop="clbh">
         <el-input
           v-model="queryParams.clbh"
           placeholder="请输入材料编号/预付款编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="材料名称" prop="clmc">
-        <el-input
-          v-model="queryParams.clmc"
-          placeholder="请输入材料名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -172,28 +192,31 @@
     <el-table v-loading="loading" :data="materialPrepaymentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="标段编号" align="center" prop="bdbh" />
-      <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
-      <el-table-column label="预付款编号" align="center" prop="clbh"  v-if="false"/>
+      <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
+      <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
+      <el-table-column label="材料编号" align="center" prop="clbh" />
       <el-table-column label="材料名称" align="center" prop="clmc" />
       <el-table-column label="单位" align="center" prop="dw" />
       <el-table-column label="单价" align="center" prop="dj" />
       <el-table-column label="数量" align="center" prop="sl" />
       <el-table-column label="金额" align="center" prop="je" />
-      <el-table-column label="预付比例" align="center" prop="yfbl"  v-if="false"/>
-      <el-table-column label="预付金额" align="center" prop="yfje"  v-if="false"/>
-      <el-table-column label="材料来源" align="center" prop="clly"  v-if="false"/>
-      <el-table-column label="单据编号" align="center" prop="djbh"  v-if="false"/>
-      <el-table-column label="质保书编号" align="center" prop="zbsbh"  v-if="false"/>
-      <el-table-column label=" 抽检报告编号" align="center" prop="cjbgbh" v-if="false" />
+      <el-table-column label="预付比例" align="center" prop="yfbl"  />
+      <el-table-column label="预付金额" align="center" prop="yfje"  />
+      <el-table-column label="材料来源" align="center" prop="clly"  />
+      <el-table-column label="单据编号" align="center" prop="djbh"  />
+      <el-table-column label="质保书编号" align="center" prop="zbsbh"  />
+      <el-table-column label=" 抽检报告编号" align="center" prop="cjbgbh"  />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
+      <el-table-column
+      fixed="right"
+      label="操作"
+      width="150">
+      <template slot-scope="scope">
+       <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -208,7 +231,7 @@
             v-hasPermi="['materialPrepayment:materialPrepayment:remove']"
           >删除</el-button>
         </template>
-      </el-table-column>
+    </el-table-column>
     </el-table>
 
     <pagination
@@ -218,53 +241,93 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    </el-col>
+  
 
     <!-- 添加或修改材料预付款对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
-        <el-form-item label="计量期次编号" prop="jlqsbh">
-          <el-input v-model="form.jlqsbh" placeholder="请输入计量期次编号" />
-        </el-form-item>
-        <el-form-item label="材料编号，预付款编号" prop="clbh">
-          <el-input v-model="form.clbh" placeholder="请输入材料编号，预付款编号" />
-        </el-form-item>
-        <el-form-item label="材料名称" prop="clmc">
-          <el-input v-model="form.clmc" placeholder="请输入材料名称" />
-        </el-form-item>
-        <el-form-item label="材料名称" prop="dw">
-          <el-input v-model="form.dw" placeholder="请输入材料名称" />
-        </el-form-item>
-        <el-form-item label="单价" prop="dj">
-          <el-input v-model="form.dj" placeholder="请输入单价" />
-        </el-form-item>
-        <el-form-item label="数量" prop="sl">
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="标段编号" prop="bdbh" >
+             <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
+             </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="期次编号" prop="jlqsbh">
+            <el-select v-model="form.jlqsbh" placeholder="请选择期次">
+            <el-option
+              v-for="item in jlqsbhOptions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+             </el-select>
+           </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="材料编号" prop="clbh">
+             <el-input v-model="form.clbh" placeholder="预付款编号" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+              <el-form-item label="材料名称" prop="clmc">
+            <el-input v-model="form.clmc" placeholder="请输入材料名称" />
+          </el-form-item>
+          </el-col>
+          <el-col :span="12">
+              <el-form-item label="单位" prop="dw">
+              <el-input v-model="form.dw" placeholder="请输入单位名称" />
+               </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单价" prop="dj">
+              <el-input v-model="form.dj" placeholder="请输入单价" />
+              </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="数量" prop="sl">
           <el-input v-model="form.sl" placeholder="请输入数量" />
         </el-form-item>
-        <el-form-item label="金额" prop="je">
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="金额" prop="je">
           <el-input v-model="form.je" placeholder="请输入金额" />
         </el-form-item>
-        <el-form-item label="预付比例" prop="yfbl">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="预付比例" prop="yfbl">
           <el-input v-model="form.yfbl" placeholder="请输入预付比例" />
         </el-form-item>
-        <el-form-item label="预付金额" prop="yfje">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="预付金额" prop="yfje">
           <el-input v-model="form.yfje" placeholder="请输入预付金额" />
         </el-form-item>
-        <el-form-item label="材料来源" prop="clly">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="材料来源" prop="clly">
           <el-input v-model="form.clly" placeholder="请输入材料来源" />
         </el-form-item>
+        </el-col>
+        <el-col :span="12">
         <el-form-item label="单据编号" prop="djbh">
           <el-input v-model="form.djbh" placeholder="请输入单据编号" />
         </el-form-item>
-        <el-form-item label="质保书编号" prop="zbsbh">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="质保书编号" prop="zbsbh">
           <el-input v-model="form.zbsbh" placeholder="请输入质保书编号" />
         </el-form-item>
-        <el-form-item label=" 抽检报告编号" prop="cjbgbh">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label=" 抽检报告编号" prop="cjbgbh">
           <el-input v-model="form.cjbgbh" placeholder="请输入 抽检报告编号" />
         </el-form-item>
-        <el-form-item label="状态">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.data_status"
@@ -273,6 +336,8 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
+        </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -284,12 +349,21 @@
 
 <script>
 import { listMaterialPrepayment, getMaterialPrepayment, delMaterialPrepayment, addMaterialPrepayment, updateMaterialPrepayment } from "@/api/materialPrepayment/materialPrepayment";
-
+import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 export default {
   name: "MaterialPrepayment",
   dicts: ['data_status'],
   data() {
     return {
+      // 中间计量期数管理表格数据
+      measurementNoList: [],
+       // 遮罩层
+       qsloading: true,     
+       jlqsbhOptions:[],
+      //选中期数
+      xzQsId: "",
+      // 按钮loading
+      buttonLoading: false,      
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -387,6 +461,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getPeriodsList();
   },
   methods: {
     /** 查询材料预付款列表 */
@@ -396,6 +471,14 @@ export default {
         this.materialPrepaymentList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /** 查询中间计量期数管理列表 */
+    getPeriodsList() {
+      this.qsloading = true;
+      listMeasurementListNo().then(response => {
+        this.measurementNoList = response.data;
+        this.qsloading = false;
       });
     },
     // 取消按钮
@@ -435,6 +518,12 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
+    rowQsClick(record,index){ 
+      this.xzQsId=record.id;
+      this.queryParams.jlqsbh = record.id;
+      this.queryParams.pageNum = 1;
+      this.getList();
+    }, 
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
@@ -448,12 +537,18 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      listMeasurementListNo().then(response => {
+        this.jlqsbhOptions = response.data;
+      });
       this.reset();
       this.open = true;
       this.title = "添加材料预付款";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      listMeasurementListNo().then(response => {
+        this.jlqsbhOptions = response.data;
+      });
       this.loading = true;
       this.reset();
       const id = row.id || this.ids

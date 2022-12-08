@@ -1,6 +1,19 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-row :gutter="20">
+    <el-col :span="6" :xs="24">
+      <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+      <el-table-column label="期数" align="center" prop="name" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+    </el-table>
+    </el-col>
+      <el-col :span="18" :xs="24">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
@@ -9,14 +22,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="计量期次" prop="jlqsbh">
+      <!-- <el-form-item label="计量期次" prop="jlqsbh">
         <el-input
           v-model="queryParams.jlqsbh"
           placeholder="请输入计量期次"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="申请编号" prop="sqbh">
         <el-input
           v-model="queryParams.sqbh"
@@ -130,8 +143,8 @@
     <el-table v-loading="loading" :data="otherPaymentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="标段编号" align="center" prop="bdbh" />
-      <el-table-column label="计量期次" align="center" prop="jlqsbh" />
+      <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
+      <!-- <el-table-column label="计量期次" align="center" prop="jlqsbh" /> -->
       <el-table-column label="申请编号" align="center" prop="sqbh" />
       <el-table-column label="申请日期" align="center" prop="sqsj" width="180">
         <template slot-scope="scope">
@@ -139,9 +152,9 @@
         </template>
       </el-table-column>
       <el-table-column label="所属单位" align="center" prop="ssdw" v-if="false" />
-      <el-table-column label="款项类型" align="center" prop="kxlx"  v-if="false"/>
+      <el-table-column label="款项类型" align="center" prop="kxlx"  />
       <el-table-column label="款项金额" align="center" prop="kxje" />
-      <el-table-column label="附件" align="center" prop="fj"  v-if="false"/>
+      <!-- <el-table-column label="附件" align="center" prop="fj"  v-if="false"/> -->
       <el-table-column label="状态" align="center" prop="status"  v-if="false">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
@@ -174,6 +187,9 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+      </el-col> 
+      </el-row>
+
 
     <!-- 添加或修改其他款项对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -181,8 +197,15 @@
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item>
-        <el-form-item label="计量期次" prop="jlqsbh">
-          <el-input v-model="form.jlqsbh" placeholder="请输入计量期次" />
+        <el-form-item label="期次编号" prop="jlqsbh">
+          <el-select v-model="form.jlqsbh" placeholder="请选择期次">
+            <el-option
+              v-for="item in jlqsbhOptions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+         </el-select>
         </el-form-item>
         <el-form-item label="申请编号" prop="sqbh">
           <el-input v-model="form.sqbh" placeholder="请输入申请编号" />
@@ -204,15 +227,27 @@
         <el-form-item label="款项金额" prop="kxje">
           <el-input v-model="form.kxje" placeholder="请输入款项金额" />
         </el-form-item>
-        <el-form-item label="附件" prop="fj">
-          <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="附件地址">
+        <el-upload
+              class="upload-demo"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              multiple
+              :limit="3"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
+        </el-upload>
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.data_status"
               :key="dict.value"
-:label="dict.value"
+              :label="dict.value"
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -227,12 +262,19 @@
 
 <script>
 import { listOtherPayment, getOtherPayment, delOtherPayment, addOtherPayment, updateOtherPayment } from "@/api/otherPayment/otherPayment";
-
+import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 export default {
   name: "OtherPayment",
   dicts: ['data_status'],
   data() {
     return {
+      // 中间计量期数管理表格数据
+      measurementNoList: [],
+       // 遮罩层
+       qsloading: true,     
+       jlqsbhOptions:[],
+      //选中期数
+      xzQsId: "",
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -306,6 +348,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getPeriodsList();
   },
   methods: {
     /** 查询其他款项列表 */
@@ -315,6 +358,14 @@ export default {
         this.otherPaymentList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+         /** 查询中间计量期数管理列表 */
+    getPeriodsList() {
+      this.qsloading = true;
+      listMeasurementListNo().then(response => {
+        this.measurementNoList = response.data;
+        this.qsloading = false;
       });
     },
     // 取消按钮
@@ -348,6 +399,27 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
+    rowQsClick(record,index){ 
+      this.xzQsId=record.id;
+      this.queryParams.jlqsbh = record.id;
+      this.queryParams.pageNum = 1;
+      this.getList();
+    }, 
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        console.log(files);
+        console.log(fileList);
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
+      , 
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
@@ -361,12 +433,18 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      listMeasurementListNo().then(response => {
+        this.jlqsbhOptions = response.data;
+      });
       this.reset();
       this.open = true;
       this.title = "添加其他款项";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      listMeasurementListNo().then(response => {
+        this.jlqsbhOptions = response.data;
+      });
       this.loading = true;
       this.reset();
       const id = row.id || this.ids
@@ -380,7 +458,11 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
+        this.form.fj="http://www.baidu.com";
         if (valid) {
+          if(this.xzQsId==""){
+              this.$modal.confirm("请选择期数");
+          }
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateOtherPayment(this.form).then(response => {
@@ -391,6 +473,9 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            if(this.xzQsId==""){
+              this.$modal.confirm("请选择期数");
+            }
             addOtherPayment(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
