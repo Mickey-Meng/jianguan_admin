@@ -361,9 +361,7 @@ export default {
        qsloading: true,     
        jlqsbhOptions:[],
       //选中期数
-      xzQsId: "",
-      // 按钮loading
-      buttonLoading: false,      
+      xzQsId: "", 
       // 按钮loading
       buttonLoading: false,
       // 遮罩层

@@ -1,7 +1,27 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标段编号" prop="bdbh">
+    <el-col :span="6" :xs="24">
+      <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+      <el-table-column label="期数" align="center" prop="name" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+    </el-table>
+    </el-col>
+    <el-col :span="18" :xs="24">
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="凭证编号" prop="pzbh">
+        <el-input
+          v-model="queryParams.pzbh"
+          placeholder="请输入凭证编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <!-- <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
           placeholder="请输入标段编号"
@@ -16,7 +36,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
 <!--      <el-form-item label="台账分解编号" prop="tzfjbh">
         <el-input
           v-model="queryParams.tzfjbh"
@@ -89,7 +109,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>-->
-      <el-form-item label="状态" prop="status">
+      <!-- <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.data_status"
@@ -98,7 +118,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -154,17 +174,17 @@
     <el-table v-loading="loading" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="标段编号" align="center" prop="bdbh" />
-      <el-table-column label="计量期次编号" align="center" prop="jlqsbh" />
+      <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
+      <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
       <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
       <el-table-column label="凭证编号" align="center" prop="pzbh" />
-      <el-table-column label="计量类型" align="center" prop="jllx" v-if="false"/>
+      <el-table-column label="计量类型" align="center" prop="jllx" />
       <el-table-column label="计量日期" align="center" prop="jlrq" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交工证书/变更令编号" align="center" prop="jgzs" v-if="false" />
+      <el-table-column label="交工证书" align="center" prop="jgzs" v-if="false" />
       <el-table-column label="工程部位" align="center" prop="gcbw" />
       <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
       <el-table-column label="计量比例" align="center" prop="jlbl" v-if="false"/>
@@ -201,10 +221,104 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 添加或修改计量凭证，设计计量、变更计量共用一张凭证，明细分开。对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      </el-col>
+    <el-dialog :title="title" :visible.sync="open" width="1500px" append-to-body>
+      <el-row :gutter="24">
+          <el-col :span="6">
+          <el-tree
+            :data="ledgerBreakdownList"
+            :props="treeProps"
+            accordion
+            @node-click="handleNodeClick">
+          </el-tree>
+          </el-col>
+          <el-col :span="18">
+            <el-row :gutter="24">
+              <el-col :span="24">
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                  <el-col :span="12"> 
+                  <el-form-item label="凭证编号" prop="pzbh">
+                    <el-input v-model="form.pzbh" placeholder="请输入凭证编号" />
+                    </el-form-item>
+                  </el-col>
+                <el-col :span="12">
+                  <el-form-item label="交工证书" prop="jgzs">
+                    <el-input v-model="form.jgzs" placeholder="请输入交工证书/变更令编号" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                  <el-form-item label="工程部位" prop="gcbw">
+                    <el-input v-model="form.gcbw" placeholder="请输入工程部位" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                  <el-form-item label="计算式" prop="jss">
+                    <el-input v-model="form.jss" type="textarea" placeholder="请输入内容" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="附件地址">
+                      <el-upload
+                            class="upload-demo"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :on-preview="handlePreview"
+                            :on-remove="handleRemove"
+                            :before-remove="beforeRemove"
+                            multiple
+                            :limit="3"
+                            :on-exceed="handleExceed"
+                            :file-list="fileList">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
+                      </el-upload>
+                   </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="凭证时间 " prop="pzsj"> {{nowDate}}
+                  </el-form-item>
+                </el-col>
+                </el-form>
+                <el-col :span="24">
+                  <el-table
+                      :data="ledgerBreakdownDetailList"
+                      height="250"
+                      border
+                      style="width: 100%">
+                      <el-table-column
+                        prop="zmh"
+                        label="子目号"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="zmmc"
+                        label="子目名称"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="fhsl"
+                        label="复合数量">
+                      </el-table-column>
+                      <el-table-column
+                        prop="yjlsl"
+                        label="已计量数量">
+                      </el-table-column>
+                      <el-table-column
+                        prop="bqyjlsl"
+                        label="本期计量数量">
+                      </el-table-column>
+                  </el-table>
+                </el-col>
+              <el-col :span="24">
+                <div style="margin-top: 10px;margin-left: 30px;">
+                  <el-button :loading="buttonLoading" type="primary" @click="submitForm">保 存</el-button>
+                  <el-button @click="cancel">取 消</el-button>
+                </div>
+              </el-col>
+              </el-col>
+            </el-row>
+          </el-col>
+      </el-row>
+      <!-- <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item>
@@ -234,9 +348,7 @@
         <el-form-item label="工程部位" prop="gcbw">
           <el-input v-model="form.gcbw" placeholder="请输入工程部位" />
         </el-form-item>
-        <el-form-item label="计算式" prop="jss">
-          <el-input v-model="form.jss" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+
         <el-form-item label="计量比例" prop="jlbl">
           <el-input v-model="form.jlbl" placeholder="请输入计量比例" />
         </el-form-item>
@@ -256,19 +368,46 @@
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>
-
+<style>
+  .left-tree {
+    width: 100%;
+    height: calc(100vh - 115px);
+    background: rgb(247, 248, 251);
+    padding: 0 10px;
+  }
+</style>
 <script>
 import { listMeasurementDocuments, getMeasurementDocuments, delMeasurementDocuments, addMeasurementDocuments, updateMeasurementDocuments } from "@/api/measurementDocuments/measurementDocuments";
-
+import { listLedgerBreakdownDetail} from "@/api/ledgerDetail/ledgerBreakdownDetail";
+import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
+import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 export default {
   name: "MeasurementDocuments",
   dicts: ['data_status'],
   data() {
     return {
+      nowDate: "123",
+      treeloading: false,
+      fileList: [],
+      ledgerBreakdownDetailList:[],
+      // 中间计量期数管理表格数据
+      measurementNoList: [],
+      // 遮罩层
+      qsloading: true,     
+      jlqsbhOptions:[],
+      //选中期数
+      xzQsId: "", 
+      ledgerBreakdownList: [],
+      InfoTableData:[],
+      treeProps: {
+        id: 'id',
+        label: 'tzfjmc',
+        children: 'children'
+      },
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -354,8 +493,23 @@ export default {
   },
   created() {
     this.getList();
+    this.getPeriodsList();
   },
   methods: {
+    getNowDate() {
+      const timeOne = new Date()
+      const year = timeOne.getFullYear()
+      let month = timeOne.getMonth() + 1
+      let day = timeOne.getDate()
+      let hour=timeOne.getHours()
+      let min=timeOne.getMinutes()
+      let se=timeOne.getSeconds()
+      month = month < 10 ? '0' + month : month
+      day = day < 10 ? '0' + day : day
+      const NOW_MONTHS_AGO = `${year}-${month}-${day} ${hour}:${min}:${se}`
+      console.log(NOW_MONTHS_AGO);
+      this.nowDate=NOW_MONTHS_AGO
+    },
     /** 查询计量凭证，设计计量、变更计量共用一张凭证，明细分开。列表 */
     getList() {
       this.loading = true;
@@ -365,10 +519,48 @@ export default {
         this.loading = false;
       });
     },
+    getTreeInfoList(){
+      listLedgerBreakdownDetail(this.queryParams).then(response => {
+        this.ledgerBreakdownDetailList = response.rows;
+        // this.total = response.total;
+        this.treeloading = false;
+      });
+    },
+    handleNodeClick(data) {
+        console.log(data);
+        this.queryParams.tzfjbh = data.tzfjbh;
+        this.getTreeInfoList();
+    },
+    selectTree (row) {
+      console.error('选中的数据', row);
+      this.queryParams.tzfjbh = row.tzfjbh;
+    },
+     /** 查询台账分解列表 */
+     getLeftTree() {
+      this.loading = true;
+      listLedgerBreakdown().then(response => {
+        this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
+        console.log("tree",this.ledgerBreakdownList);
+      }).finally(() => {
+        // TODO
+        // if (this.ledgerBreakdownList.length) {
+        //   this.queryParams.tzfjbh = this.ledgerBreakdownList[0].tzfjbh;
+        // }
+      });
+    },
+    /** 查询中间计量期数管理列表 */
+    getPeriodsList() {
+      this.qsloading = true;
+      listMeasurementListNo().then(response => {
+        this.measurementNoList = response.data;
+        this.qsloading = false;
+      });
+    },
     // 取消按钮
     cancel() {
       this.open = false;
       this.reset();
+      this.getList();
     },
     // 表单重置
     reset() {
@@ -399,6 +591,12 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
+    rowQsClick(record,index){ 
+      this.xzQsId=record.id;
+      this.queryParams.jlqsbh = record.id;
+      this.queryParams.pageNum = 1;
+      this.getList();
+    }, 
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
@@ -414,18 +612,21 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加计量凭证，设计计量、变更计量共用一张凭证，明细分开。";
+      this.title = "添加计量";
+      this.getLeftTree()
+      this.getNowDate()
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.loading = true;
       this.reset();
       const id = row.id || this.ids
+      this.getNowDate()
       getMeasurementDocuments(id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改计量凭证，设计计量、变更计量共用一张凭证，明细分开。";
+        this.title = "修改计量";
       });
     },
     /** 提交按钮 */
@@ -456,7 +657,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除计量凭证，设计计量、变更计量共用一张凭证，明细分开。编号为"' + ids + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除计量凭证编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
         return delMeasurementDocuments(ids);
       }).then(() => {
@@ -473,7 +674,21 @@ export default {
       this.download('measurementDocuments/measurementDocuments/export', {
         ...this.queryParams
       }, `measurementDocuments_${new Date().getTime()}.xlsx`)
-    }
+    },
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        console.log(files);
+        console.log(fileList);
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
   }
 };
 </script>
