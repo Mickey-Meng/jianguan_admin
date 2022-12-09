@@ -4,11 +4,13 @@
       <el-row :gutter="10">
         <el-col :span="4">
           <div class="left-tree">
-            <multilevel-tree ref="mulTree" :list="ledgerBreakdownList" :default-props="treeProps" @selectRow="selectTree"/>
+            <multilevel-tree ref="mulTree" :list="ledgerBreakdownList" :default-props="treeProps"
+                             @selectRow="selectTree"/>
           </div>
         </el-col>
         <el-col :span="20">
-          <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
+                   label-width="68px">
             <!-- <el-form-item label="标段编号" prop="bdbh">
               <el-input
                 v-model="queryParams.bdbh"
@@ -138,7 +140,8 @@
                 size="mini"
                 @click="handleAdd"
                 v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:add']"
-              >新增</el-button>
+              >新增
+              </el-button>
             </el-col>
             <!-- <el-col :span="1.5">
               <el-button
@@ -174,16 +177,17 @@
             </el-col> -->
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
           </el-row>
-          <el-table v-loading="loading" 
-            :header-cell-style="headercellStyle"
-            :cell-style="cellStyle" 
-            :height="'calc(100vh - 205px)'"
-            :data="ledgerBreakdownDetailList">
+          <el-table v-loading="loading"
+                    :header-cell-style="headercellStyle"
+                    :cell-style="cellStyle"
+                    :height="'calc(100vh - 205px)'"
+                    :data="ledgerBreakdownDetailList">
             <!-- @selection-change="handleSelectionChange"> -->
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <!-- <el-table-column label="标段编号" align="center" prop="bdbh" />
             <el-table-column label="台账分解编号" align="center" prop="tzfjbh" v-if="true"/> -->
-            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120" :show-overflow-tooltip="true"/>
+            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120"
+                             :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
             <el-table-column label="单位" align="center" prop="dw" min-width="100"/>
             <el-table-column label="合同单价" align="center" prop="htdj" min-width="140"/>
@@ -203,7 +207,8 @@
                 <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="left" fixed="right" class-name="small-padding fixed-width" min-width="200">
+            <el-table-column label="操作" align="left" fixed="right" class-name="small-padding fixed-width"
+                             min-width="200">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -212,7 +217,8 @@
                   v-show="scope.row.action !== 'add'"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-                >修改</el-button>
+                >修改
+                </el-button>
                 <el-button
                   size="mini"
                   type="text"
@@ -220,21 +226,23 @@
                   v-show="scope.row.action === 'add'"
                   @click="save(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-                >保存</el-button>
+                >保存
+                </el-button>
                 <el-button
                   size="mini"
                   type="text"
                   icon="el-icon-delete"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:remove']"
-                >删除</el-button>
+                >删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
         </el-col>
       </el-row>
     </div>
-   
+
 
     <!-- <pagination
       v-show="total>0"
@@ -254,67 +262,67 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="ID" prop="id">
-              <el-input :disabled="true" v-model="form.id" placeholder="请输入ID" />
+              <el-input :disabled="true" v-model="form.id" placeholder="请输入ID"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="标段编号" prop="bdbh">
-              <el-input :disabled="true" v-model="form.bdbh" placeholder="请输入标段编号" />
+              <el-input :disabled="true" v-model="form.bdbh" placeholder="请输入标段编号"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="子目号" prop="zmh">
-              <el-input :disabled="true" v-model="form.zmh" placeholder="请输入子目号" />
+              <el-input :disabled="true" v-model="form.zmh" placeholder="请输入子目号"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="子目名称" prop="zmmc">
-              <el-input :disabled="true" v-model="form.zmmc" placeholder="请输入子目名称" />
+              <el-input :disabled="true" v-model="form.zmmc" placeholder="请输入子目名称"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="单位" prop="dw">
-              <el-input :disabled="true" v-model="form.dw" placeholder="请输入单位" />
+              <el-input :disabled="true" v-model="form.dw" placeholder="请输入单位"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同单价" prop="htdj">
-              <el-input :disabled="true" v-model="form.htdj" placeholder="请输入合同单价" />
+              <el-input :disabled="true" v-model="form.htdj" placeholder="请输入合同单价"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="设计数量" prop="sjsl">
-              <el-input v-model="form.sjsl" placeholder="请输入设计数量" />
+              <el-input v-model="form.sjsl" placeholder="请输入设计数量"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="分解数量" prop="fjsl">
-              <el-input v-model="form.fjsl" placeholder="请输入分解数量" />
+              <el-input v-model="form.fjsl" placeholder="请输入分解数量"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="变更数量" prop="bgsl">
-              <el-input :disabled="true" v-model="form.bgsl" placeholder="请输入变更数量" />
+              <el-input :disabled="true" v-model="form.bgsl" placeholder="请输入变更数量"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="复核数量" prop="fhsl">
-              <el-input :disabled="true" v-model="form.fhsl" placeholder="请输入复核数量" />
+              <el-input :disabled="true" v-model="form.fhsl" placeholder="请输入复核数量"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="已计量数量" prop="yjlsl">
-              <el-input :disabled="true" v-model="form.yjlsl" placeholder="请输入已计量数量" />
+              <el-input :disabled="true" v-model="form.yjlsl" placeholder="请输入已计量数量"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="复核金额" prop="fhje">
-              <el-input :disabled="true" v-model="form.fhje" placeholder="请输入复核金额" />
+              <el-input :disabled="true" v-model="form.fhje" placeholder="请输入复核金额"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="分解类型" prop="fjlx">
-              <el-input :disabled="true" v-model="form.fjlx" placeholder="请输入状态" />
+              <el-input :disabled="true" v-model="form.fjlx" placeholder="请输入状态"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -324,7 +332,8 @@
                   v-for="dict in dict.type.data_status"
                   :key="dict.value"
                   :label="dict.value"
-                >{{dict.label}}</el-radio>
+                >{{ dict.label }}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -339,12 +348,19 @@
 </template>
 
 <script>
-import { listLedgerBreakdownDetail, getLedgerBreakdownDetail, delLedgerBreakdownDetail, addLedgerBreakdownDetail, updateLedgerBreakdownDetail } from "@/api/ledgerDetail/ledgerBreakdownDetail";
-import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
+import {
+  listLedgerBreakdownDetail,
+  getLedgerBreakdownDetail,
+  delLedgerBreakdownDetail,
+  addLedgerBreakdownDetail,
+  updateLedgerBreakdownDetail
+} from "@/api/ledgerDetail/ledgerBreakdownDetail";
+import {listLedgerBreakdown} from "@/api/ledger/ledgerBreakdown";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import MultilevelTree from "@/components/MultilevelTree";
 import LedgerList from './components/LedgerList';
+
 export default {
   name: "LedgerBreakdownDetail",
   dicts: ['data_status'],
@@ -357,6 +373,8 @@ export default {
     return {
       // 按钮loading
       buttonLoading: false,
+
+      currentLevel: '101',
       // 遮罩层
       loading: true,
       // 选中数组
@@ -400,46 +418,46 @@ export default {
       // 表单校验
       rules: {
         bdbh: [
-          { required: true, message: "标段编号不能为空", trigger: "blur" }
+          {required: true, message: "标段编号不能为空", trigger: "blur"}
         ],
         tzfjbh: [
-          { required: true, message: "台账分解编号不能为空", trigger: "blur" }
+          {required: true, message: "台账分解编号不能为空", trigger: "blur"}
         ],
         zmh: [
-          { required: true, message: "子目号不能为空", trigger: "blur" }
+          {required: true, message: "子目号不能为空", trigger: "blur"}
         ],
         zmmc: [
-          { required: true, message: "子目名称不能为空", trigger: "blur" }
+          {required: true, message: "子目名称不能为空", trigger: "blur"}
         ],
         dw: [
-          { required: true, message: "单位不能为空", trigger: "blur" }
+          {required: true, message: "单位不能为空", trigger: "blur"}
         ],
         htdj: [
-          { required: true, message: "合同单价不能为空", trigger: "blur" }
+          {required: true, message: "合同单价不能为空", trigger: "blur"}
         ],
         sjsl: [
-          { required: true, message: "设计数量不能为空", trigger: "blur" }
+          {required: true, message: "设计数量不能为空", trigger: "blur"}
         ],
         fjsl: [
-          { required: true, message: "分解数量不能为空", trigger: "blur" }
+          {required: true, message: "分解数量不能为空", trigger: "blur"}
         ],
         bgsl: [
-          { required: true, message: "变更数量不能为空", trigger: "blur" }
+          {required: true, message: "变更数量不能为空", trigger: "blur"}
         ],
         fhsl: [
-          { required: true, message: "复核数量不能为空", trigger: "blur" }
+          {required: true, message: "复核数量不能为空", trigger: "blur"}
         ],
         yjlsl: [
-          { required: true, message: "已计量数量不能为空", trigger: "blur" }
+          {required: true, message: "已计量数量不能为空", trigger: "blur"}
         ],
         fhje: [
-          { required: true, message: "复核金额不能为空", trigger: "blur" }
+          {required: true, message: "复核金额不能为空", trigger: "blur"}
         ],
         fjlx: [
-          { required: true, message: "状态不能为空", trigger: "blur" }
+          {required: true, message: "状态不能为空", trigger: "blur"}
         ],
         status: [
-          { required: true, message: "状态不能为空", trigger: "blur" }
+          {required: true, message: "状态不能为空", trigger: "blur"}
         ],
       },
       treeProps: {
@@ -487,43 +505,7 @@ export default {
     getList() {
       this.loading = true;
       listLedgerBreakdownDetail(this.queryParams).then(response => {
-        // response = {"total":3,"rows":[
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},{"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        //   {"id":"1","bdbh":"1","tzfjbh":"01-01","fjmulu":"1232313","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"2","bdbh":"1","tzfjbh":"01-01-01","fjmulu":"1","zmh":"1","zmmc":"1","dw":"1","htdj":"1.00","sjsl":"1.00","fjsl":"1.00","bgsl":"1.00","fhsl":"1.00","yjlsl":"1.00","fhje":"1.00","fjlx":"0","status":"0"},
-        //   {"id":"3","bdbh":"2","tzfjbh":"12312414","fjmulu":null,"zmh":"1","zmmc":"1","dw":"1","htdj":null,"sjsl":null,"fjsl":null,"bgsl":null,"fhsl":null,"yjlsl":null,"fhje":null,"fjlx":"0","status":"0"},
-        // ],"code":200,"msg":"查询成功"};
+
         this.ledgerBreakdownDetailList = response.rows;
         // this.total = response.total;
         this.loading = false;
@@ -573,7 +555,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.tzfjbh)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -632,12 +614,29 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
+        console.log("123")
+
       }).finally(() => {
         this.loading = false;
       });
     },
     // 保存逻辑
-    save () {
+    save(row) {
+
+      row.tzfjbh = this.queryParams.tzfjbh;
+      console.log(row);
+      addLedgerBreakdownDetail(row).then(response => {
+        this.$modal.msgSuccess("保存成功");
+        this.open = false;
+        this.getList();
+      }).finally(() => {
+        this.buttonLoading = false;
+      });
+
+
+
+
+
       // 保存成功后刷新表格数据
       // TODO
     },
@@ -647,32 +646,34 @@ export default {
         ...this.queryParams
       }, `ledgerBreakdownDetail_${new Date().getTime()}.xlsx`)
     },
-    selectTree (row) {
-      console.error('选中的数据', row);
+    selectTree(row) {
+      // console.error('选中的数据', row);
       this.queryParams.tzfjbh = row.tzfjbh;
       this.getList();
     },
-    getSelectionData (val) {
+    getSelectionData(val) {
       this.ledgerBreakdownDetailList = [...this.ledgerBreakdownDetailList, ...val];
     },
-    closeOpenAdd () {
+    closeOpenAdd() {
       this.openAdd = false;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-  .app-container {
-    height: 100%;
-    .el-table {
-      height: calc(100vh - 205px);
-      overflow: auto;
-    }
+.app-container {
+  height: 100%;
+
+  .el-table {
+    height: calc(100vh - 205px);
+    overflow: auto;
   }
-  .left-tree {
-    width: 100%;
-    height: calc(100vh - 115px);
-    background: rgb(247, 248, 251);
-    padding: 0 10px;
-  }
+}
+
+.left-tree {
+  width: 100%;
+  height: calc(100vh - 115px);
+  background: rgb(247, 248, 251);
+  padding: 0 10px;
+}
 </style>
