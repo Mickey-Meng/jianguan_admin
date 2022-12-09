@@ -614,7 +614,6 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
-        console.log("123")
 
       }).finally(() => {
         this.loading = false;
