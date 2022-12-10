@@ -642,10 +642,6 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (!this.fileList.length) {
-            this.$message.warning('附件不能为空！');
-            return;
-          }
           if (!this.ledgerBreakdownDetailList.length) {
             this.$message.warning('计量数据不能为空');
             return;
