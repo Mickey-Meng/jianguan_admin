@@ -214,7 +214,7 @@
                   size="mini"
                   type="text"
                   icon="el-icon-edit"
-                  v-show="scope.row.action !== 'add'"
+                  v-show="true"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
                 >修改
@@ -441,24 +441,24 @@ export default {
         fjsl: [
           {required: true, message: "分解数量不能为空", trigger: "blur"}
         ],
-        bgsl: [
-          {required: true, message: "变更数量不能为空", trigger: "blur"}
-        ],
-        fhsl: [
-          {required: true, message: "复核数量不能为空", trigger: "blur"}
-        ],
-        yjlsl: [
-          {required: true, message: "已计量数量不能为空", trigger: "blur"}
-        ],
-        fhje: [
-          {required: true, message: "复核金额不能为空", trigger: "blur"}
-        ],
-        fjlx: [
-          {required: true, message: "状态不能为空", trigger: "blur"}
-        ],
-        status: [
-          {required: true, message: "状态不能为空", trigger: "blur"}
-        ],
+        // bgsl: [
+        //   {required: true, message: "变更数量不能为空", trigger: "blur"}
+        // ],
+        // fhsl: [
+        //   {required: true, message: "复核数量不能为空", trigger: "blur"}
+        // ],
+        // yjlsl: [
+        //   {required: true, message: "已计量数量不能为空", trigger: "blur"}
+        // ],
+        // fhje: [
+        //   {required: true, message: "复核金额不能为空", trigger: "blur"}
+        // ],
+        // fjlx: [
+        //   {required: true, message: "状态不能为空", trigger: "blur"}
+        // ],
+        // status: [
+        //   {required: true, message: "状态不能为空", trigger: "blur"}
+        // ],
       },
       treeProps: {
         id: 'id',
@@ -566,12 +566,14 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.open = true;
-      this.title = "修改台账分解明细";
+      console.log(row)
+      // this.open = true;
+      // this.title = "修改台账分解明细";
       this.loading = true;
       this.reset();
-      const tzfjbh = row.tzfjbh || this.ids
-      getLedgerBreakdownDetail(tzfjbh).then(response => {
+
+
+      getLedgerBreakdownDetail(row.id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;

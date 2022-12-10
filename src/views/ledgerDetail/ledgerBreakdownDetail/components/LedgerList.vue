@@ -26,7 +26,7 @@
         />
       </el-form-item>
       <el-form-item>
-	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -44,17 +44,17 @@
     >
       <el-table-column type="selection" width="55" align="left"/>
       <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="90" :show-overflow-tooltip="true"/>
-      <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh" />
-      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc" />
-      <el-table-column label="单位" align="center" min-width="80" prop="dw" />
-      <el-table-column label="合同单价" align="center" min-width="110" prop="htdj" />
-      <el-table-column label="新增单价" align="center" min-width="110" prop="xzdj" />
-      <el-table-column label="合同数量" align="center" min-width="110" prop="htsl" />
-      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl" />
-      <el-table-column label="审核数量" align="center" min-width="110" prop="shsl" />
-      <el-table-column label="合同金额" align="center" min-width="110" prop="htje" />
-      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje" />
-      <el-table-column label="审核金额" align="center" min-width="110" prop="shje" />
+      <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh"/>
+      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc"/>
+      <el-table-column label="单位" align="center" min-width="80" prop="dw"/>
+      <el-table-column label="合同单价" align="center" min-width="110" prop="htdj"/>
+      <el-table-column label="新增单价" align="center" min-width="110" prop="xzdj"/>
+      <el-table-column label="合同数量" align="center" min-width="110" prop="htsl"/>
+      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl"/>
+      <el-table-column label="审核数量" align="center" min-width="110" prop="shsl"/>
+      <el-table-column label="合同金额" align="center" min-width="110" prop="htje"/>
+      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje"/>
+      <el-table-column label="审核金额" align="center" min-width="110" prop="shje"/>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
@@ -76,7 +76,13 @@
 </template>
 
 <script>
-import { listContractBillPage, getContractBill, delContractBill, addContractBill, updateContractBill } from "@/api/bill/contractBill";
+import {
+  listContractBillPage,
+  getContractBill,
+  delContractBill,
+  addContractBill,
+  updateContractBill
+} from "@/api/bill/contractBill";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -89,7 +95,8 @@ export default {
   props: {
     close: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -202,37 +209,40 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      console.error('selection', selection);
-      // selection.forEach(row => {
-      //   const list = [];
-      //   if (this.selectionList.length) {
-      //     list = this.selectionList.filters(v => v.id === row.id);
-      //   }
-      //   if (list.length === 1) {
-      //     this.selectionList = this.selectionList.filters(v => v.id !== row.id);
-      //   } else {
-      //     row.action = 'add';
-      //     this.selectionList = [...this.selectionList, row];
-      //   }
-      // })
+      // console.error('selection', selection);
+      selection.forEach(row => {
+        var list = [];
+        if (this.selectionList.length) {
+          list = this.selectionList.filters(v => v.id === row.id);
+        }
+        if (list.length === 1) {
+          this.selectionList = this.selectionList.filters(v => v.id !== row.id);
+        } else {
+          row.action = 'add';
+          this.selectionList = [...this.selectionList, row];
+        }
+      })
     },
-    submitForm () {
+    submitForm() {
       if (!this.selectionList.length) {
+
+        console.log("123")
         this.$message.warning('请选择台账分解清单数据后点击确定！');
         return;
       }
-      this.$emit('getSelectionData', this.selectionList); 
-      this.close();   
+      this.$emit('getSelectionData', this.selectionList);
+      this.close();
     },
   }
 };
 </script>
 <style lang="scss" scoped>
-  .app-container {
-    height: 100%;
-    .dialog-footer {
-      text-align: right;
-      margin-top: 36px;
-    }
+.app-container {
+  height: 100%;
+
+  .dialog-footer {
+    text-align: right;
+    margin-top: 36px;
   }
+}
 </style>

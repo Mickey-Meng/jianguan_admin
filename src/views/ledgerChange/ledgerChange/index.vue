@@ -9,104 +9,104 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="变更事项" prop="bgsx">
-        <el-input
-          v-model="queryParams.bgsx"
-          placeholder="请输入变更事项"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="变更等级" prop="bgdj">
-        <el-input
-          v-model="queryParams.bgdj"
-          placeholder="请输入变更等级"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="变更类型" prop="bglx">
-        <el-input
-          v-model="queryParams.bglx"
-          placeholder="请输入变更类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="桩号" prop="zh">
-        <el-input
-          v-model="queryParams.zh"
-          placeholder="请输入桩号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="子目号" prop="zmh">
-        <el-input
-          v-model="queryParams.zmh"
-          placeholder="请输入子目号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工程部位" prop="gcbw">
-        <el-input
-          v-model="queryParams.gcbw"
-          placeholder="请输入工程部位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="图号" prop="th">
-        <el-input
-          v-model="queryParams.th"
-          placeholder="请输入图号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="申请日期" prop="sqrq">
-        <el-date-picker clearable
-          v-model="queryParams.sqrq"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择申请日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="变更金额" prop="bgje">
-        <el-input
-          v-model="queryParams.bgje"
-          placeholder="请输入变更金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="变更原因" prop="bgyy">
-        <el-input
-          v-model="queryParams.bgyy"
-          placeholder="请输入变更原因"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="计算式" prop="jss">
-        <el-input
-          v-model="queryParams.jss"
-          placeholder="请输入计算式"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>-->
+      <!--      <el-form-item label="变更事项" prop="bgsx">
+              <el-input
+                v-model="queryParams.bgsx"
+                placeholder="请输入变更事项"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="变更等级" prop="bgdj">
+              <el-input
+                v-model="queryParams.bgdj"
+                placeholder="请输入变更等级"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="变更类型" prop="bglx">
+              <el-input
+                v-model="queryParams.bglx"
+                placeholder="请输入变更类型"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="桩号" prop="zh">
+              <el-input
+                v-model="queryParams.zh"
+                placeholder="请输入桩号"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="子目号" prop="zmh">
+              <el-input
+                v-model="queryParams.zmh"
+                placeholder="请输入子目号"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="工程部位" prop="gcbw">
+              <el-input
+                v-model="queryParams.gcbw"
+                placeholder="请输入工程部位"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="图号" prop="th">
+              <el-input
+                v-model="queryParams.th"
+                placeholder="请输入图号"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="申请日期" prop="sqrq">
+              <el-date-picker clearable
+                v-model="queryParams.sqrq"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择申请日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="变更金额" prop="bgje">
+              <el-input
+                v-model="queryParams.bgje"
+                placeholder="请输入变更金额"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="变更原因" prop="bgyy">
+              <el-input
+                v-model="queryParams.bgyy"
+                placeholder="请输入变更原因"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="计算式" prop="jss">
+              <el-input
+                v-model="queryParams.jss"
+                placeholder="请输入计算式"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+                <el-option
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -122,7 +122,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['ledgerChange:ledgerChange:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button
@@ -160,11 +161,12 @@
     </el-row>
 
     <div class="table-area">
-      <el-table v-loading="loading" :height="'calc(100vh - 500px)'" :data="ledgerChangeList" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :height="'calc(100vh - 500px)'" :data="ledgerChangeList"
+                @selection-change="handleSelectionChange" @row-click="row_click">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140" />
-        <el-table-column label="变更事项" align="center" prop="bgsx" min-width="140" :show-overflow-tooltip="true" />
+        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140"/>
+        <el-table-column label="变更事项" align="center" prop="bgsx" min-width="140" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="150" :show-overflow-tooltip="true"/>
         <!-- <el-table-column label="桩号" align="center" prop="zh" />
         <el-table-column label="子目号" align="center" prop="zmh" /> -->
@@ -179,7 +181,7 @@
             <span>{{ parseTime(scope.row.sprq, '{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="变更等级" align="center" prop="bgdj" min-width="100" />
+        <el-table-column label="变更等级" align="center" prop="bgdj" min-width="100"/>
         <el-table-column label="变更类型" align="center" prop="bglx" min-width="100"/>
         <el-table-column label="变更金额" align="center" prop="bgje" min-width="140"/>
         <el-table-column label="变更原因" align="center" prop="bgyy" v-if="false"/>
@@ -190,58 +192,26 @@
             <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['ledgerChange:ledgerChange:edit']"
-            >修改</el-button>
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-              v-hasPermi="['ledgerChange:ledgerChange:remove']"
-            >删除</el-button>
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-s-promotion"
-              @click="submitData(scope.row)"
-              v-hasPermi="['ledgerChange:ledgerChange:edit']"
-            >上报</el-button>
-          </template>
-        </el-table-column>
+
       </el-table>
-      <el-table v-loading="loading" :height="'calc(100vh - 550px)'" :data="ledgerList">
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140" />
-        <el-table-column label="变更事项" align="center" prop="bgsx" min-width="140" :show-overflow-tooltip="true" />
-        <el-table-column label="工程部位" align="center" prop="gcbw" min-width="150" :show-overflow-tooltip="true"/>
-        <!-- <el-table-column label="桩号" align="center" prop="zh" />
-        <el-table-column label="子目号" align="center" prop="zmh" /> -->
-        <!-- <el-table-column label="图号" align="center" prop="th" v-if="false"/> -->
-        <el-table-column label="申请日期" align="center" prop="sqrq" width="180">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.sqrq, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="审批日期" align="center" prop="sprq" width="180">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.sprq, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="变更等级" align="center" prop="bgdj" min-width="100" />
-        <el-table-column label="变更类型" align="center" prop="bglx" min-width="100"/>
-        <el-table-column label="变更金额" align="center" prop="bgje" min-width="140"/>
-        <el-table-column label="变更原因" align="center" prop="bgyy" v-if="false"/>
-        <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
-        <el-table-column label="数据状态" align="center" prop="dataStatus" v-if="false"/>
-        <el-table-column label="状态" align="center" prop="status" min-width="100">
+      <el-table v-loading="loading" :height="'calc(100vh - 550px)'" :data="ledgerChangeDetailList">
+
+        <el-table-column label="标段编号" align="center" prop="bdbh" />
+        <el-table-column label="变更编号" align="center" prop="bgbh" />
+        <el-table-column label="子目号" align="center" prop="zmh" v-if="true"/>
+        <el-table-column label="子目名称" align="center" prop="zmmc" />
+        <el-table-column label="工程部位" align="center" prop="gcbw" />
+        <el-table-column label="单位" align="center" prop="dw" />
+        <el-table-column label="合同单价" align="center" prop="htdj" />
+        <el-table-column label="新增单价" align="center" prop="xzdj" />
+        <el-table-column label="合同数量" align="center" prop="htsl" />
+        <el-table-column label="合同金额" align="center" prop="htje" />
+        <el-table-column label="审核数量" align="center" prop="shsl" />
+        <el-table-column label="审核金额" align="center" prop="shje" />
+        <el-table-column label="修正数量" align="center" prop="xzsl" />
+        <el-table-column label="修正金额" align="center" prop="xzje" />
+        <el-table-column label="已计量数量" align="center" prop="yjlsl" />
+        <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
           </template>
@@ -254,26 +224,29 @@
               icon="el-icon-edit"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['ledgerChange:ledgerChange:edit']"
-            >修改</el-button>
+            >修改
+            </el-button>
             <el-button
               size="mini"
               type="text"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
               v-hasPermi="['ledgerChange:ledgerChange:remove']"
-            >删除</el-button>
+            >删除
+            </el-button>
             <el-button
               size="mini"
               type="text"
               icon="el-icon-s-promotion"
               @click="submitData(scope.row)"
               v-hasPermi="['ledgerChange:ledgerChange:edit']"
-            >上报</el-button>
+            >上报
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    
+
 
     <!-- <pagination
       v-show="total>0"
@@ -291,8 +264,17 @@
 </template>
 
 <script>
-import { listLedgerChange, getLedgerChange, delLedgerChange, addLedgerChange, updateLedgerChange } from "@/api/ledgerChange/ledgerChange";
+import {
+  listLedgerChange,
+  getLedgerChange,
+  delLedgerChange,
+  addLedgerChange,
+  updateLedgerChange
+} from "@/api/ledgerChange/ledgerChange";
+import {listLedgerChangeDetail} from "@/api/ledgerChangeDetail/ledgerChangeDetail";
+
 import LedgerChangeForm from './components/LedgerChangeForm';
+
 export default {
   name: "LedgerChange",
   dicts: ['data_status'],
@@ -322,6 +304,26 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      ledgerChangeDetailList: [],
+      listLedgerChangeDetailQueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        bdbh: undefined,
+        bgbh: undefined,
+        zmmc: undefined,
+        gcbw: undefined,
+        dw: undefined,
+        htdj: undefined,
+        xzdj: undefined,
+        htsl: undefined,
+        htje: undefined,
+        shsl: undefined,
+        shje: undefined,
+        xzsl: undefined,
+        xzje: undefined,
+        yjlsl: undefined,
+        status: undefined,
+      },
       queryParams: {
         // pageNum: 1,
         // pageSize: 10,
@@ -345,53 +347,53 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "ID不能为空", trigger: "blur" }
+          {required: true, message: "ID不能为空", trigger: "blur"}
         ],
         bgbh: [
-          { required: true, message: "变更编号不能为空", trigger: "blur" }
+          {required: true, message: "变更编号不能为空", trigger: "blur"}
         ],
         bgsx: [
-          { required: true, message: "变更事项不能为空", trigger: "blur" }
+          {required: true, message: "变更事项不能为空", trigger: "blur"}
         ],
         bgdj: [
-          { required: true, message: "变更等级不能为空", trigger: "blur" }
+          {required: true, message: "变更等级不能为空", trigger: "blur"}
         ],
         bglx: [
-          { required: true, message: "变更类型不能为空", trigger: "blur" }
+          {required: true, message: "变更类型不能为空", trigger: "blur"}
         ],
         zh: [
-          { required: true, message: "桩号不能为空", trigger: "blur" }
+          {required: true, message: "桩号不能为空", trigger: "blur"}
         ],
         zmh: [
-          { required: true, message: "子目号不能为空", trigger: "blur" }
+          {required: true, message: "子目号不能为空", trigger: "blur"}
         ],
         gcbw: [
-          { required: true, message: "工程部位不能为空", trigger: "blur" }
+          {required: true, message: "工程部位不能为空", trigger: "blur"}
         ],
         th: [
-          { required: true, message: "图号不能为空", trigger: "blur" }
+          {required: true, message: "图号不能为空", trigger: "blur"}
         ],
         sqrq: [
-          { required: true, message: "申请日期不能为空", trigger: "blur" }
+          {required: true, message: "申请日期不能为空", trigger: "blur"}
         ],
         bgje: [
-          { required: true, message: "变更金额不能为空", trigger: "blur" }
+          {required: true, message: "变更金额不能为空", trigger: "blur"}
         ],
         bgyy: [
-          { required: true, message: "变更原因不能为空", trigger: "blur" }
+          {required: true, message: "变更原因不能为空", trigger: "blur"}
         ],
         jss: [
-          { required: true, message: "计算式不能为空", trigger: "blur" }
+          {required: true, message: "计算式不能为空", trigger: "blur"}
         ],
-        dataStatus: [
-          { required: true, message: "数据状态不能为空", trigger: "blur" }
-        ],
+        // dataStatus: [
+        //   {required: true, message: "数据状态不能为空", trigger: "blur"}
+        // ],
         status: [
-          { required: true, message: "状态不能为空", trigger: "blur" }
+          {required: true, message: "状态不能为空", trigger: "blur"}
         ],
       },
       // 变更子目数据
-      ledgerList: [],
+
     };
   },
   created() {
@@ -408,6 +410,22 @@ export default {
         this.loading = false;
       });
     },
+    row_click(row, column, event) {
+
+      this.listLedgerChangeDetailQueryParams.bgbh = row.bgbh;
+      this.getlistLedgerChangeDetail()
+
+
+    },
+    getlistLedgerChangeDetail() {
+      listLedgerChangeDetail(this.listLedgerChangeDetailQueryParams).then(response => {
+        this.ledgerChangeDetailList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+
+
     // 取消按钮
     cancel() {
       this.open = false;
@@ -452,7 +470,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -473,7 +491,7 @@ export default {
         this.title = "修改台账变更/工程变更";
       });
     },
-    
+
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
@@ -490,7 +508,7 @@ export default {
       });
     },
     // 上报
-    submitData () {
+    submitData() {
       // TODO 对接上报接口
     },
     /** 导出按钮操作 */
@@ -506,12 +524,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .app-container {
-    height: 100%;
+.app-container {
+  height: 100%;
 
-    .table-area {
-      height: calc(100vh - 205px);
-      overflow: auto;
-    }
+  .table-area {
+    height: calc(100vh - 205px);
+    overflow: auto;
   }
+}
 </style>
