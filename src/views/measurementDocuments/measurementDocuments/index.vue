@@ -3,7 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="6" :xs="24">
         <div class="left-tree">
-          <el-table ref="table" :highlight-current-row="true" v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+          <el-table ref="table" highlight-current-row v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
             <el-table-column label="ID" align="center" prop="id" v-if="false"/>
             <el-table-column label="期数" align="center" prop="name" />
             <el-table-column label="状态" align="center" prop="status" min-width="30">

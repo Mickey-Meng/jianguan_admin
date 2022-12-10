@@ -22,7 +22,8 @@
       </template>
       <template #table>
         <el-table
-          :data="data"
+          v-if="originData.detailBos"
+          :data="originData.detailBos"
           height="250"
           :header-cell-style="headercellStyle"
           :cell-style="cellStyle"
