@@ -1,229 +1,234 @@
 <template>
   <div class="app-container">
-    <el-col :span="6" :xs="24">
-      <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
-      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <el-table-column label="期数" align="center" prop="name" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>
-    </el-table>
-    </el-col>
-    <el-col :span="18" :xs="24">
-      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="凭证编号" prop="pzbh">
-        <el-input
-          v-model="queryParams.pzbh"
-          placeholder="请输入凭证编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <!-- <el-form-item label="标段编号" prop="bdbh">
-        <el-input
-          v-model="queryParams.bdbh"
-          placeholder="请输入标段编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="期次编号" prop="jlqsbh">
-        <el-input
-          v-model="queryParams.jlqsbh"
-          placeholder="请输入计量期次编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
-<!--      <el-form-item label="台账分解编号" prop="tzfjbh">
-        <el-input
-          v-model="queryParams.tzfjbh"
-          placeholder="请输入台账分解编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="凭证编号" prop="pzbh">
-        <el-input
-          v-model="queryParams.pzbh"
-          placeholder="请输入凭证编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="计量类型" prop="jllx">
-        <el-input
-          v-model="queryParams.jllx"
-          placeholder="请输入计量类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="计量日期" prop="jlrq">
-        <el-date-picker clearable
-          v-model="queryParams.jlrq"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择计量日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="交工证书/变更令编号" prop="jgzs">
-        <el-input
-          v-model="queryParams.jgzs"
-          placeholder="请输入交工证书/变更令编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工程部位" prop="gcbw">
-        <el-input
-          v-model="queryParams.gcbw"
-          placeholder="请输入工程部位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="计算式" prop="jss">
-        <el-input
-          v-model="queryParams.jss"
-          placeholder="请输入计算式"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="计量比例" prop="jlbl">
-        <el-input
-          v-model="queryParams.jlbl"
-          placeholder="请输入计量比例"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="附件地址" prop="fj">
-        <el-input
-          v-model="queryParams.fj"
-          placeholder="请输入附件地址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>-->
-      <!-- <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item> -->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row :gutter="10">
+      <el-col :span="6" :xs="24">
+        <div class="left-tree">
+          <el-table ref="table" :highlight-current-row="true" v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+            <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+            <el-table-column label="期数" align="center" prop="name" />
+            <el-table-column label="状态" align="center" prop="status" min-width="30">
+              <template slot-scope="scope">
+                <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-col>
+      <el-col :span="18" :xs="24">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+            <el-form-item label="凭证编号" prop="pzbh">
+            <el-input
+              v-model="queryParams.pzbh"
+              placeholder="请输入凭证编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <!-- <el-form-item label="标段编号" prop="bdbh">
+            <el-input
+              v-model="queryParams.bdbh"
+              placeholder="请输入标段编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="期次编号" prop="jlqsbh">
+            <el-input
+              v-model="queryParams.jlqsbh"
+              placeholder="请输入计量期次编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item> -->
+    <!--      <el-form-item label="台账分解编号" prop="tzfjbh">
+            <el-input
+              v-model="queryParams.tzfjbh"
+              placeholder="请输入台账分解编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="凭证编号" prop="pzbh">
+            <el-input
+              v-model="queryParams.pzbh"
+              placeholder="请输入凭证编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="计量类型" prop="jllx">
+            <el-input
+              v-model="queryParams.jllx"
+              placeholder="请输入计量类型"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="计量日期" prop="jlrq">
+            <el-date-picker clearable
+              v-model="queryParams.jlrq"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择计量日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="交工证书/变更令编号" prop="jgzs">
+            <el-input
+              v-model="queryParams.jgzs"
+              placeholder="请输入交工证书/变更令编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="工程部位" prop="gcbw">
+            <el-input
+              v-model="queryParams.gcbw"
+              placeholder="请输入工程部位"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="计算式" prop="jss">
+            <el-input
+              v-model="queryParams.jss"
+              placeholder="请输入计算式"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="计量比例" prop="jlbl">
+            <el-input
+              v-model="queryParams.jlbl"
+              placeholder="请输入计量比例"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="附件地址" prop="fj">
+            <el-input
+              v-model="queryParams.fj"
+              placeholder="请输入附件地址"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>-->
+          <!-- <el-form-item label="状态" prop="status">
+            <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+              <el-option
+                v-for="dict in dict.type.data_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </el-form-item> -->
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['measurementDocuments:measurementDocuments:add']"
-        >新增</el-button>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['measurementDocuments:measurementDocuments:add']"
+            >新增</el-button>
+          </el-col>
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
+            >修改</el-button>
+          </el-col> -->
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
+            >删除</el-button>
+          </el-col> -->
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['measurementDocuments:measurementDocuments:export']"
+            >导出</el-button>
+          </el-col> -->
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        </el-row>
+
+        <el-table v-loading="loading" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
+          <!-- <el-table-column type="selection" width="55" align="center" /> -->
+          <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+          <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
+          <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
+          <el-table-column label="台账分解编号" align="center" min-width="110" prop="tzfjbh" />
+          <el-table-column label="凭证编号" align="center" min-width="100" prop="pzbh" />
+          <el-table-column label="计量类型" align="center" min-width="100" prop="jllx" />
+          <el-table-column label="计量日期" align="center" min-width="140" prop="jlrq" width="180">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="交工证书" align="center" min-width="100" prop="jgzs" v-if="false" />
+          <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" />
+          <el-table-column label="计算式" align="center" min-width="140" prop="jss" v-if="false"/>
+          <el-table-column label="计量比例" align="center" min-width="140" prop="jlbl" v-if="false"/>
+          <el-table-column label="附件地址" align="center" min-width="140" prop="fj" v-if="false"/>
+          <el-table-column label="状态" align="center" min-width="100" prop="status">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column> -->
+        </el-table>
+
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['measurementDocuments:measurementDocuments:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-
-    <el-table v-loading="loading" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-      <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
-      <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
-      <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
-      <el-table-column label="凭证编号" align="center" prop="pzbh" />
-      <el-table-column label="计量类型" align="center" prop="jllx" />
-      <el-table-column label="计量日期" align="center" prop="jlrq" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交工证书" align="center" prop="jgzs" v-if="false" />
-      <el-table-column label="工程部位" align="center" prop="gcbw" />
-      <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
-      <el-table-column label="计量比例" align="center" prop="jlbl" v-if="false"/>
-      <el-table-column label="附件地址" align="center" prop="fj" v-if="false"/>
-      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-      </el-col>
+   
     <el-dialog :title="title" :visible.sync="open" width="1500px" append-to-body>
-      <el-row :gutter="24">
+      <el-row v-if="open" :gutter="24">
           <el-col :span="6">
           <el-tree
             :data="ledgerBreakdownList"
@@ -258,19 +263,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="附件地址">
-                      <el-upload
-                            class="upload-demo"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            :on-preview="handlePreview"
-                            :on-remove="handleRemove"
-                            :before-remove="beforeRemove"
-                            multiple
-                            :limit="3"
-                            :on-exceed="handleExceed"
-                            :file-list="fileList">
-                            <el-button size="small" type="primary">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
-                      </el-upload>
+                      <upload @input="getFileList"/>
                    </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -305,6 +298,11 @@
                       <el-table-column
                         prop="bqyjlsl"
                         label="本期计量数量">
+                        <template slot-scope="scope">
+                          <div>
+                            <el-input type="number" v-model="scope.row.bqyjlsl" placeholder="请输入"></el-input>
+                          </div>
+                        </template>
                       </el-table-column>
                   </el-table>
                 </el-col>
@@ -372,22 +370,18 @@
     </el-dialog>
   </div>
 </template>
-<style>
-  .left-tree {
-    width: 100%;
-    height: calc(100vh - 115px);
-    background: rgb(247, 248, 251);
-    padding: 0 10px;
-  }
-</style>
 <script>
 import { listMeasurementDocuments, getMeasurementDocuments, delMeasurementDocuments, addMeasurementDocuments, updateMeasurementDocuments } from "@/api/measurementDocuments/measurementDocuments";
 import { listLedgerBreakdownDetail} from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
+import upload from '@/components/FileUpload';
 export default {
   name: "MeasurementDocuments",
   dicts: ['data_status'],
+  components: {
+    upload
+  },
   data() {
     return {
       nowDate: "123",
@@ -488,11 +482,12 @@ export default {
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
-      }
+      },
+      currentRow: null
     };
   },
   created() {
-    this.getList();
+    // this.getList();
     this.getPeriodsList();
   },
   methods: {
@@ -521,7 +516,11 @@ export default {
     },
     getTreeInfoList(){
       listLedgerBreakdownDetail(this.queryParams).then(response => {
-        this.ledgerBreakdownDetailList = response.rows;
+        this.ledgerBreakdownDetailList = response.rows.map(item => {
+          item.id = '';
+          item.bqyjlsl = '';
+          return item;
+        });
         // this.total = response.total;
         this.treeloading = false;
       });
@@ -554,6 +553,16 @@ export default {
       listMeasurementListNo().then(response => {
         this.measurementNoList = response.data;
         this.qsloading = false;
+      }).finally(() => {
+        if (this.measurementNoList.length) {
+          this.rowQsClick(this.measurementNoList[0], 0)
+          this.currentRow = this.measurementNoList[0]
+          this.$nextTick(() => {
+            this.$refs.table.setCurrentRow(this.currentRow)
+          })
+        } else {
+          this.getList()
+        }
       });
     },
     // 取消按钮
@@ -592,8 +601,8 @@ export default {
       this.getList();
     },
     rowQsClick(record,index){ 
-      this.xzQsId=record.id;
-      this.queryParams.jlqsbh = record.id;
+      this.currentRow = record;
+      this.queryParams.jlqsbh = record.jlqsbh;
       this.queryParams.pageNum = 1;
       this.getList();
     }, 
@@ -633,6 +642,24 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if (!this.fileList.length) {
+            this.$message.warning('附件不能为空！');
+            return;
+          }
+          if (!this.ledgerBreakdownDetailList.length) {
+            this.$message.warning('计量数据不能为空');
+            return;
+          }
+          const flag = false;
+          this.ledgerBreakdownDetailList.forEach(item => {
+            if (!item.bqyjlsl) {
+              flag = true;
+            }
+          })
+          if (flag) {
+            this.$message.error('本期计量数据不能为空！')
+            return;
+          }
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateMeasurementDocuments(this.form).then(response => {
@@ -643,6 +670,10 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form.jlqsbh = this.currentRow.jlqsbh;
+            this.form.detailBos = this.ledgerBreakdownDetailList;
+            this.form.fj = JSON.stringify(this.fileList);
+            this.form.tzfjbh = this.queryParams.tzfjbh;
             addMeasurementDocuments(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -653,6 +684,11 @@ export default {
           }
         }
       });
+    },
+    getFileList (val) {
+      console.error('val', val);
+      this.fileList = [];
+      this.fileList = val;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -692,3 +728,21 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.app-container {
+  height: 100%;
+  .el-table {
+    height: calc(100vh - 270px);
+    overflow: auto;
+  }
+}
+.left-tree {
+  width: 100%;
+  height: calc(100vh - 115px);
+  background: rgb(247, 248, 251);
+  padding: 0 10px;
+  .el-table {
+    height: 100%;
+  }
+}
+</style>

@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <el-tabs tab-position="top" :value="finished === 'true' ? 'approval' : 'form'">
-
       <el-tab-pane label="任务办理" name="approval" v-if="finished === 'true'">
         <el-card class="box-card" shadow="hover" v-if="taskFormOpen">
           <div slot="header" class="clearfix">
@@ -60,13 +59,15 @@
 
       <el-tab-pane label="表单信息" name="form">
         <div v-if="formOpen">
-          <el-card class="box-card" shadow="never" v-for="formInfo in processFormList">
+          <el-card class="box-card" shadow="never" v-for="(formInfo, index) in processInfoFormList" :key="index">
             <div slot="header" class="clearfix">
-              <span>{{ formInfo.title }}</span>
+              <span>{{ formInfo.title || '详情' }}</span>
             </div>
-            <!--流程处理表单模块-->
             <el-col :span="20" :offset="2">
-              <parser :form-conf="formInfo"/>
+              <!-- <parser :form-conf="formInfo"/> -->
+              <!-- <precess :origin-data="formInfo" :disabled="true"/>  -->
+              <!-- <measurement-documents :origin-data="formInfo" :disabled="true"/> -->
+              <component :is="formInfo.formKey" :origin-data="formInfo.data" :disabled="true"></component>
             </el-col>
           </el-card>
         </div>
@@ -201,13 +202,16 @@ import { selectUser, deptTreeSelect } from '@/api/system/user'
 import ProcessViewer from '@/components/ProcessViewer'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Treeselect from '@riophae/vue-treeselect'
-
+import ledgerBreakdown from './../processForm/forms/ledgerBreakdown';
+import measurementDocuments from './../processForm/forms/measurementDocuments';
 export default {
   name: "Detail",
   components: {
     ProcessViewer,
     Parser,
-    Treeselect
+    Treeselect,
+    ledgerBreakdown,
+    measurementDocuments
   },
   props: {},
   computed: {
@@ -282,7 +286,7 @@ export default {
       variables: [], // 流程变量数据
       taskFormOpen: false,
       taskFormData: {}, // 流程变量数据
-      processFormList: [], // 流程变量数据
+      processInfoFormList: [], // 流程变量数据
       formOpen: false, // 是否加载流程变量数据
       returnTaskList: [],  // 回退列表数据
       finished: 'false',
@@ -403,7 +407,7 @@ export default {
       detailProcess(params).then(res => {
         const data = res.data;
         this.xmlData = data.bpmnXml;
-        this.processFormList = data.processFormList;
+        this.processInfoFormList = data.processInfoFormList;
         this.taskFormOpen = data.existTaskForm;
         if (this.taskFormOpen) {
           this.taskFormData = data.taskFormData;

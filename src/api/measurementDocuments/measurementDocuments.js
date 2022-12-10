@@ -20,7 +20,7 @@ export function getMeasurementDocuments(id) {
 // 新增计量凭证，设计计量、变更计量共用一张凭证，明细分开。
 export function addMeasurementDocuments(data) {
   return request({
-    url: '/measurementDocuments/measurementDocuments',
+    url: '/measurementDocuments/measurementDocuments/saveMeaMeasurementDocumentsAndDeBo',
     method: 'post',
     data: data
   })

@@ -67,6 +67,10 @@ export default {
     isShowTip: {
       type: Boolean,
       default: true
+    },
+    fileData: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -111,6 +115,12 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    fileData: {
+      handler (val) {
+        this.fileList = val;
+      },
+      deep: true
     }
   },
   computed: {
@@ -177,7 +187,7 @@ export default {
       let ossId = this.fileList[index].ossId;
       delOss(ossId);
       this.fileList.splice(index, 1);
-      this.$emit("input", this.listToString(this.fileList));
+      this.$emit("input", this.fileList);
     },
     // 上传结束处理
     uploadedSuccessfully() {
@@ -185,7 +195,7 @@ export default {
         this.fileList = this.fileList.concat(this.uploadList);
         this.uploadList = [];
         this.number = 0;
-        this.$emit("input", this.listToString(this.fileList));
+        this.$emit("input", this.fileList);
         this.$modal.closeLoading();
       }
     },
