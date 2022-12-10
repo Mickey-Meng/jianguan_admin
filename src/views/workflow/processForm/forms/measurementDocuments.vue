@@ -5,14 +5,14 @@
         <file v-if="!disabled"/>
         <div v-else class="history-file"> 
             <div class="history-list">
-                <div class="history-value-list" v-if="originData.marketFileDTOList && originData.marketFileDTOList.length > 0">
-                    <div class="history-value-item" v-for="(file, i) in originData.marketFileDTOList" :key="i">
-                        <a :href="file.filePath" target="_blank">
+                <div class="history-value-list" v-if="fileList && fileList.length > 0">
+                    <div class="history-value-item" v-for="(file, i) in fileList" :key="i">
+                        <a :href="file.url" target="_blank">
                             <div class="history-value-icon">
                                 <i class="el-icon-paperclip"></i> 
                             </div>
                             <div class="history-value-text">
-                                {{ file.fileName }}
+                                {{ file.name }}
                             </div>
                         </a>
                     </div>
@@ -37,6 +37,11 @@
             :width="col.width"
             :min-width="col.minWidth"
             :show-overflow-tooltip="col.tooltip || false">
+            <template slot-scope="scope">
+              <div>
+                {{ scope.row[col.key] || '-' }}
+              </div>
+            </template>
           </el-table-column>
       </el-table>
       </template>
@@ -63,7 +68,7 @@ export default {
   },
   data () {
     return {
-      fields,
+      fields: [],
       headercellStyle: {
           fontFamily: 'PingFangSC-Regular',
           background: '#F7F8FB',
@@ -108,7 +113,7 @@ export default {
               tooltip: false
           },
           {
-              key: 'bqyjlsl',
+              key: 'bqjlsl',
               label: '本期计量数量',
               format: 'money',
               align: 'right',
@@ -117,18 +122,21 @@ export default {
           },
       ],
       data: [],
+      fileList: []
     }
   },
   mounted () {
+    this.fields = JSON.parse(JSON.stringify(fields));
     if (this.disabled) {
       const data =  {
         'type': 'input',
-        'key': 'djlx',
+        'key': 'tzfjbh',
         'label': '台账分解编号',
         'size': 24
       };
       this.fields[0].children.splice(0, 0, data);
     }
+    this.fileList = JSON.parse(this.originData.fj);
   }
 }
 </script>
@@ -138,7 +146,7 @@ export default {
     font-size: 0.9rem;
     color: #3A4566;
     font-weight: 400;
-    line-height: 22px;
+    line-height: 36px;
     display: flex;
     .history-label {
         width: 50px;

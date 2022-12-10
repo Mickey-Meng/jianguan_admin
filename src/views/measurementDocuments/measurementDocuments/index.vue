@@ -296,11 +296,11 @@
                         label="已计量数量">
                       </el-table-column>
                       <el-table-column
-                        prop="bqyjlsl"
+                        prop="bqjlsl"
                         label="本期计量数量">
                         <template slot-scope="scope">
                           <div>
-                            <el-input type="number" v-model="scope.row.bqyjlsl" placeholder="请输入"></el-input>
+                            <el-input type="number" v-model="scope.row.bqjlsl" placeholder="请输入"></el-input>
                           </div>
                         </template>
                       </el-table-column>
@@ -518,7 +518,7 @@ export default {
       listLedgerBreakdownDetail(this.queryParams).then(response => {
         this.ledgerBreakdownDetailList = response.rows.map(item => {
           item.id = '';
-          item.bqyjlsl = '';
+          item.bqjlsl = '';
           return item;
         });
         // this.total = response.total;
@@ -652,7 +652,7 @@ export default {
           }
           const flag = false;
           this.ledgerBreakdownDetailList.forEach(item => {
-            if (!item.bqyjlsl) {
+            if (!item.bqjlsl) {
               flag = true;
             }
           })
