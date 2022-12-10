@@ -216,7 +216,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-table v-loading="loading" :data="ledgerList">
+      <el-table v-loading="loading" :height="'calc(100vh - 550px)'" :data="ledgerList">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
         <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140" />
