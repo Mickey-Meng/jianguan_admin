@@ -356,7 +356,6 @@ import {
   updateLedgerBreakdownDetail
 } from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import {listLedgerBreakdown} from "@/api/ledger/ledgerBreakdown";
-import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import MultilevelTree from "@/components/MultilevelTree";
 import LedgerList from './components/LedgerList';
@@ -365,7 +364,6 @@ export default {
   name: "LedgerBreakdownDetail",
   dicts: ['data_status'],
   components: {
-    Treeselect,
     MultilevelTree,
     LedgerList
   },

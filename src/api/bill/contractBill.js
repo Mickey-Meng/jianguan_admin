@@ -9,6 +9,16 @@ export function listContractBill(query) {
   })
 }
 
+// 工程变更查询不带叶子节点的树
+export function listContractBillTree(query) {
+  return request({
+    url: '/bill/contractBill/treeList',
+    method: 'get',
+    params: query
+  })
+}
+
+
 // 查询工程量清单列表分页
 export function listContractBillPage(query) {
   return request({

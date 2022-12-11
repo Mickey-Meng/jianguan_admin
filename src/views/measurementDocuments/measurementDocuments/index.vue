@@ -16,7 +16,7 @@
       </el-col>
       <el-col :span="18" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-            <el-form-item label="凭证编号" prop="pzbh">
+          <el-form-item label="凭证编号" prop="pzbh">
             <el-input
               v-model="queryParams.pzbh"
               placeholder="请输入凭证编号"

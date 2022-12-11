@@ -165,7 +165,7 @@
                 @selection-change="handleSelectionChange" @row-click="row_click">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140"/>
+        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140" :show-overflow-tooltip="true"/>
         <el-table-column label="变更事项" align="center" prop="bgsx" min-width="140" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="150" :show-overflow-tooltip="true"/>
         <!-- <el-table-column label="桩号" align="center" prop="zh" />
@@ -181,8 +181,16 @@
             <span>{{ parseTime(scope.row.sprq, '{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="变更等级" align="center" prop="bgdj" min-width="100"/>
-        <el-table-column label="变更类型" align="center" prop="bglx" min-width="100"/>
+        <el-table-column label="变更等级" align="center" prop="bgdj" min-width="100">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.ledger_change_level" :value="scope.row.bgdj"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="变更类型" align="center" prop="bglx" min-width="100">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.ledger_change_type" :value="scope.row.bglx"/>
+          </template>
+        </el-table-column>
         <el-table-column label="变更金额" align="center" prop="bgje" min-width="140"/>
         <el-table-column label="变更原因" align="center" prop="bgyy" v-if="false"/>
         <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
@@ -195,21 +203,20 @@
 
       </el-table>
       <el-table v-loading="loading" :height="'calc(100vh - 550px)'" :data="ledgerChangeDetailList">
-
-        <el-table-column label="标段编号" align="center" prop="bdbh" />
-        <el-table-column label="变更编号" align="center" prop="bgbh" />
+        <el-table-column label="标段编号" align="center" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
+        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="100" :show-overflow-tooltip="true"/>
         <el-table-column label="子目号" align="center" prop="zmh" v-if="true"/>
-        <el-table-column label="子目名称" align="center" prop="zmmc" />
-        <el-table-column label="工程部位" align="center" prop="gcbw" />
+        <el-table-column label="子目名称" align="center" prop="zmmc" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="工程部位" align="center" prop="gcbw" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="单位" align="center" prop="dw" />
-        <el-table-column label="合同单价" align="center" prop="htdj" />
-        <el-table-column label="新增单价" align="center" prop="xzdj" />
-        <el-table-column label="合同数量" align="center" prop="htsl" />
-        <el-table-column label="合同金额" align="center" prop="htje" />
-        <el-table-column label="审核数量" align="center" prop="shsl" />
-        <el-table-column label="审核金额" align="center" prop="shje" />
-        <el-table-column label="修正数量" align="center" prop="xzsl" />
-        <el-table-column label="修正金额" align="center" prop="xzje" />
+        <el-table-column label="合同单价" align="center" prop="htdj" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="新增单价" align="center" prop="xzdj" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="合同数量" align="center" prop="htsl" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="合同金额" align="center" prop="htje" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="审核数量" align="center" prop="shsl" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="审核金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="修正数量" align="center" prop="xzsl" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="修正金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true"/>
         <el-table-column label="已计量数量" align="center" prop="yjlsl" />
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
@@ -277,7 +284,7 @@ import LedgerChangeForm from './components/LedgerChangeForm';
 
 export default {
   name: "LedgerChange",
-  dicts: ['data_status'],
+  dicts: ['data_status', 'ledger_change_type', 'ledger_change_level'],
   components: {
     LedgerChangeForm
   },
@@ -519,6 +526,7 @@ export default {
     },
     closeOpen() {
       this.open = false;
+      this.getList();
     }
   }
 };

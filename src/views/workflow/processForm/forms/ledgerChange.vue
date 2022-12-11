@@ -38,18 +38,19 @@
             :min-width="col.minWidth"
             :show-overflow-tooltip="col.tooltip || false">
             <template slot-scope="scope">
-              {{ scope.row[col.key] || '-' }}
+              <div>
+                {{ scope.row[col.key] || '-' }}
+              </div>
             </template>
           </el-table-column>
-        </el-table>
+      </el-table>
       </template>
     </wti-form>
   </div>
 </template>
 
 <script>
-import fields from '../config/measurementDocuments';
-import file from '@/components/FileUpload/index';
+import fields from '../config/ledgerChange';
 export default {
   props: {
     originData: {
@@ -60,9 +61,6 @@ export default {
       type: Boolean,
       defaule: false
     }
-  },
-  components: {
-    file
   },
   data () {
     return {
@@ -97,25 +95,57 @@ export default {
               tooltip: true
           },
           {
-              key: 'fhsl',
-              label: '复合数量',
+              key: 'gcbw',
+              label: '工程部位',
               align: 'left',
               minWidth: '80',
               tooltip: false
           },
           {
-              key: 'yjlsl',
-              label: '已计量数量',
+              key: 'htdj',
+              label: '合同单价',
               align: 'left',
               minWidth: '80',
               tooltip: false
           },
           {
-              key: 'bqjlsl',
-              label: '本期计量数量',
+              key: 'shsl',
+              label: '审核数量',
               format: 'money',
               align: 'right',
               minWidth: '80',
+              tooltip: false
+          },
+          {
+              key: 'xzsl',
+              label: '修正数量',
+              format: 'money',
+              align: 'center',
+              minWidth: '80',
+              tooltip: false
+          },
+          {
+              key: 'xzje',
+              label: '修正金额',
+              format: 'money',
+              align: 'center',
+              minWidth: '80',
+              tooltip: false
+          },
+          {
+              key: 'dw',
+              label: '单位',
+              format: 'money',
+              align: 'center',
+              minWidth: '80',
+              tooltip: false
+          },
+          {
+              key: 'shje',
+              label: '审核金额',
+              format: 'money',
+              align: 'center',
+              minWidth: '110',
               tooltip: false
           },
       ],
@@ -123,9 +153,6 @@ export default {
       fileList: []
     }
   },
-  mounted () {
-    this.fileList = JSON.parse(this.originData.fj);
-  }
 }
 </script>
 <style lang="scss" scope>

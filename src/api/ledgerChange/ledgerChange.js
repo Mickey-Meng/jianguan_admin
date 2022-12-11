@@ -20,7 +20,7 @@ export function getLedgerChange(id) {
 // 新增台账变更/工程变更
 export function addLedgerChange(data) {
   return request({
-    url: '/ledgerChange/ledgerChange',
+    url: '/ledgerChange/ledgerChange/save',
     method: 'post',
     data: data
   })

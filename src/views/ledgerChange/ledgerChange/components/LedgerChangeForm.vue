@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="change-form">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       <el-row :gutter="10">
         <el-col :span="6">
@@ -14,12 +14,34 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="变更等级" prop="bgdj">
-            <el-input v-model="form.bgdj" placeholder="请输入变更等级"/>
+            <el-select
+              v-model="form.bgdj"
+              placeholder="请选择变更等级"
+              clearable
+            >
+              <el-option
+                v-for="dict in dict.type.ledger_change_level"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="变更类型" prop="bglx">
-            <el-input v-model="form.bglx" placeholder="请输入变更类型"/>
+             <el-select
+              v-model="form.bglx"
+              placeholder="请选择变更类型"
+              clearable
+            >
+              <el-option
+                v-for="dict in dict.type.ledger_change_type"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -37,19 +59,19 @@
             <el-input v-model="form.th" placeholder="请输入图号"/>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="申请日期" prop="sqrq">
             <el-date-picker clearable
-                            v-model="form.sqrq"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择申请日期">
+              v-model="form.sqrq"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择申请日期">
             </el-date-picker>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="12">
           <el-form-item label="变更金额" prop="bgje">
-            <el-input v-model="form.bgje" placeholder="请输入变更金额"/>
+            <el-input v-model="form.bgje" disabled placeholder="请输入变更金额"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -63,66 +85,65 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="备注明说" prop="jss">
-            <el-input v-model="form.jss" type="textarea" placeholder="请输入内容"/>
+          <el-form-item label="备注明说" prop="remark">
+            <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="相关附件" prop="fj">
-            <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              multiple
-              :limit="3"
-              :on-exceed="handleExceed"
-              :file-list="fileList">
-              <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </el-upload>
+            <upload @input="getFileList"/>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-
+    <el-col :span="1.5">
+      <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['ledgerChange:ledgerChange:add']"
+          style="margin-bottom: 12px"
+        >新增
+      </el-button>
+    </el-col>
     <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="contractBillList"
-      :height="'calc(100vh - 600px)'"
+      :data="getContractBillList"
+      :height="'calc(100vh - 550px)'"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="left"/>
+      <el-table-column fixed="left" type="index" label="序号" width="55" align="left"/>
       <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="90" :show-overflow-tooltip="true"/>
       <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh"/>
-      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc"/>
-      <el-table-column label="工程部位" align="center" prop="gcbw" min-width="150" :show-overflow-tooltip="true"/>
-      <el-table-column label="单位" align="center" min-width="80" prop="dw"/>
+      <el-table-column label="子目名称" align="center" min-width="160" :show-overflow-tooltip="true" prop="zmmc"/>
+      <el-table-column label="工程部位" align="center" prop="gcbw" min-width="100" :show-overflow-tooltip="true"/>
       <el-table-column label="合同单价" align="center" min-width="110" prop="htdj"/>
       <el-table-column label="审核数量" align="center" min-width="110" prop="shsl"/>
-      <el-table-column label="变更数量" align="center" min-width="110" prop="bgsl"/>
-      <el-table-column label="变更金额" align="center" min-width="110" prop="bgje"/>
+      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl">
+        <template slot-scope="scope">
+          <div>
+              <el-input type="number" v-model="scope.row.xzsl" placeholder="请输入"></el-input>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje"/>
+      <el-table-column label="单位" align="center" min-width="80" prop="dw"/>
       <el-table-column label="审核金额" align="center" min-width="110" prop="shje"/>
-
     </el-table>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm">确 定</el-button>
       <el-button @click="close">取 消</el-button>
     </div>
+    <!-- 添加或修改台账变更/工程变更对话框 -->
+    <el-dialog title="添加清单" :visible.sync="open" width="1150px" append-to-body>
+      <addContractBillList v-if="open" :list="contractBillList" :close="closeOpen" @getData="getChoseList"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {
-  listContractBillPage,
-  getContractBill,
-  delContractBill,
-  addContractBill,
-  updateContractBill
-} from "@/api/bill/contractBill";
-import {insertList} from "@/api/ledgerChangeDetail/ledgerChangeDetail";
+import { getContractBill } from "@/api/bill/contractBill";
 
 import {
   addLedgerChange,
@@ -130,19 +151,21 @@ import {
 } from "@/api/ledgerChange/ledgerChange";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-
+import upload from '@/components/FileUpload';
+import addContractBillList from './addContractBillList';
+import calc from '@/utils/calc.js'
 export default {
   name: "ContractBill",
-  dicts: ['data_status'],
+  dicts: ['data_status', 'ledger_change_type', 'ledger_change_level'],
   components: {
-    Treeselect
+    Treeselect, upload, addContractBillList
   },
   props: {
     close: {
       type: Function,
       default: () => {
       }
-    }
+    },
   },
   data() {
     return {
@@ -156,8 +179,6 @@ export default {
       title: "",
       // 是否展开，默认全部展开
       isExpandAll: true,
-      // 重新渲染表格状态
-      refreshTable: true,
       // total: 0,
       // 查询参数
       queryParams: {
@@ -186,9 +207,6 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        // id: [
-        //   { required: true, message: "ID不能为空", trigger: "blur" }
-        // ],
         bgbh: [
           {required: true, message: "变更编号不能为空", trigger: "blur"}
         ],
@@ -231,22 +249,52 @@ export default {
       },
       // 选中的数据集合
       selectionList: [],
-      fileList: []
+      fileList: [],
+      open: false
     };
   },
   created() {
-    this.getList();
+    // this.getList();
+  },
+  // watch: {
+  //   contractBillList: {
+  //     handler (val) {
+  //       const amount = [];
+  //       this.contractBillList = val.map(item => {
+  //         if (item.xzsl) {
+  //           item.xzje = calc.mul(Number(item.xzsl) * Number(dw));
+  //           amount.push(item.xzje)
+  //         }
+  //         return item;
+  //       })
+  //       this.form.bgje = calc.add(...amount);
+  //     },
+  //     deep: true
+  //   }
+  // },
+  computed: {
+    getContractBillList () {
+      const amount = [];
+      if (this.contractBillList.length) {
+        this.contractBillList.forEach(item => {
+          item.xzje = calc.mul(Number(item.xzsl || 0), Number(item.htdj));
+          amount.push(item.xzje)
+        })
+      }
+      this.form.bgje = calc.add(...amount);
+      return this.contractBillList;
+    }
   },
   methods: {
     /** 查询工程量清单列表 */
-    getList() {
-      this.loading = true;
-      listContractBillPage(this.queryParams).then(response => {
-        this.contractBillList = response.rows;
-        // this.total = response.total;
-        this.loading = false;
-      });
-    },
+    // getList() {
+    //   this.loading = true;
+    //   listContractBillPage(this.queryParams).then(response => {
+    //     this.contractBillList = response.rows;
+    //     // this.total = response.total;
+    //     this.loading = false;
+    //   });
+    // },
     // 取消按钮
     cancel() {
       this.reset();
@@ -292,30 +340,6 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    /** 展开/折叠操作 */
-    toggleExpandAll() {
-      this.refreshTable = false;
-      this.isExpandAll = !this.isExpandAll;
-      this.$nextTick(() => {
-        this.refreshTable = true;
-      });
-    },
-    addLedgerChangeDetailqwe(bgbh) {
-      var selectionList = this.selectionList;
-      for (let i in selectionList) {
-        selectionList[i].bgbh = bgbh;
-      }
-
-      insertList(selectionList).then(response => {
-        this.$modal.msgSuccess("新增成功");
-        this.open = false;
-        this.getList();
-      }).finally(() => {
-
-        this.buttonLoading = false;
-      });
-    },
-
     // 多选框选中数据
     handleSelectionChange(selection) {
 
@@ -341,19 +365,32 @@ export default {
           if (this.form.id != null) {
             updateLedgerChange(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
-              this.open = false;
+              this.close();
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
             });
           } else {
+            // this.form.sqrq = this.form.sqrq ? this.form.sqrq + '00:00:00' : '';
+            this.form.fj = JSON.stringify(this.fileList);
+            if (!this.contractBillList.length) {
+              this.$message.warning('工程清单不能为空！');
+              return
+            }
+            let flag = false;
+            this.contractBillList.forEach(item => {
+              if (!(Number(item.xzsl) > 0)) {
+                flag = true;
+              }
+            })
+            if (flag) {
+              this.$message.warning('工程清单修正金额必须大于0！');
+              return
+            }
+            this.form.detailBos = this.contractBillList;
             addLedgerChange(this.form).then(response => {
-
-              console.log()
-              this.addLedgerChangeDetailqwe(this.form.bgbh);
               this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
+              this.close();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -361,35 +398,34 @@ export default {
         }
       });
     },
-
-
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    },
     // 添加清单
     handleAdd() {
       // TODO
       // 再打开一个弹窗
+      this.open = true;
+    },
+    getFileList (val) {
+      this.fileList = [];
+      this.fileList = val;
+    },
+    closeOpen () {
+      this.open = false;
+    },
+    // 获取添加的清单
+    getChoseList (val) {
+      this.contractBillList = []
+      this.contractBillList = val;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.app-container {
+.change-form {
   height: 100%;
 
   .dialog-footer {
     text-align: right;
-    margin-top: 36px;
+    margin-top: 16px;
   }
 }
 </style>
