@@ -135,11 +135,11 @@
               <treeselect v-model="form.zmhParent" :options="contractBillOptions" :normalizer="normalizer" placeholder="请选择子目号父节点" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="子目号祖级列表" prop="zmhAncestors">
-              <el-input v-model="form.zmhAncestors" placeholder="请输入子目号祖级列表" />
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="子目号祖级列表" prop="zmhAncestors">-->
+<!--              <el-input v-model="form.zmhAncestors" placeholder="请输入子目号祖级列表" />-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="12">
             <el-form-item label="单位" prop="dw">
               <el-input v-model="form.dw" placeholder="请输入单位" />
@@ -165,26 +165,26 @@
               <el-input v-model="form.htje" placeholder="请输入合同金额" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核数量" prop="shsl">
-              <el-input v-model="form.shsl" placeholder="请输入审核数量" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核金额" prop="shje">
-              <el-input v-model="form.shje" placeholder="请输入审核金额" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="修正数量" prop="xzsl">
-              <el-input v-model="form.xzsl" placeholder="请输入修正数量" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="修正金额" prop="xzje">
-              <el-input v-model="form.xzje" placeholder="请输入修正金额" />
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="审核数量" prop="shsl">-->
+<!--              <el-input v-model="form.shsl" placeholder="请输入审核数量" />-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="审核金额" prop="shje">-->
+<!--              <el-input v-model="form.shje" placeholder="请输入审核金额" />-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="修正数量" prop="xzsl">-->
+<!--              <el-input v-model="form.xzsl" placeholder="请输入修正数量" />-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="修正金额" prop="xzje">-->
+<!--              <el-input v-model="form.xzje" placeholder="请输入修正金额" />-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
@@ -282,48 +282,48 @@ export default {
         zmhParent: [
           { required: true, message: "子目号父节点不能为空", trigger: "blur" }
         ],
-        zmhAncestors: [
-          { required: true, message: "子目号祖级列表不能为空", trigger: "blur" }
-        ],
-        dw: [
-          { required: true, message: "单位不能为空", trigger: "blur" }
-        ],
-        htdj: [
-          { required: true, message: "合同单价不能为空", trigger: "blur" }
-        ],
-        xzdj: [
-          { required: true, message: "新增单价不能为空", trigger: "blur" }
-        ],
-        htsl: [
-          { required: true, message: "合同数量不能为空", trigger: "blur" }
-        ],
-        htje: [
-          { required: true, message: "合同金额不能为空", trigger: "blur" }
-        ],
-        shsl: [
-          { required: true, message: "审核数量不能为空", trigger: "blur" }
-        ],
-        shje: [
-          { required: true, message: "审核金额不能为空", trigger: "blur" }
-        ],
-        xzsl: [
-          { required: true, message: "修正数量不能为空", trigger: "blur" }
-        ],
-        xzje: [
-          { required: true, message: "修正金额不能为空", trigger: "blur" }
-        ],
-        zsl: [
-          { required: true, message: "总数量不能为空", trigger: "blur" }
-        ],
-        zje: [
-          { required: true, message: "总金额不能为空", trigger: "blur" }
-        ],
+        // zmhAncestors: [
+        //   { required: true, message: "子目号祖级列表不能为空", trigger: "blur" }
+        // ],
+        // dw: [
+        //   { required: true, message: "单位不能为空", trigger: "blur" }
+        // ],
+        // htdj: [
+        //   { required: true, message: "合同单价不能为空", trigger: "blur" }
+        // ],
+        // xzdj: [
+        //   { required: true, message: "新增单价不能为空", trigger: "blur" }
+        // ],
+        // htsl: [
+        //   { required: true, message: "合同数量不能为空", trigger: "blur" }
+        // ],
+        // htje: [
+        //   { required: true, message: "合同金额不能为空", trigger: "blur" }
+        // ],
+        // shsl: [
+        //   { required: true, message: "审核数量不能为空", trigger: "blur" }
+        // ],
+        // shje: [
+        //   { required: true, message: "审核金额不能为空", trigger: "blur" }
+        // ],
+        // xzsl: [
+        //   { required: true, message: "修正数量不能为空", trigger: "blur" }
+        // ],
+        // xzje: [
+        //   { required: true, message: "修正金额不能为空", trigger: "blur" }
+        // ],
+        // zsl: [
+        //   { required: true, message: "总数量不能为空", trigger: "blur" }
+        // ],
+        // zje: [
+        //   { required: true, message: "总金额不能为空", trigger: "blur" }
+        // ],
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
-        remark: [
-          { required: true, message: "备注不能为空", trigger: "blur" }
-        ],
+        // remark: [
+        //   { required: true, message: "备注不能为空", trigger: "blur" }
+        // ],
         parentId: [
           { required: true, message: "树id不能为空", trigger: "blur" }
         ]

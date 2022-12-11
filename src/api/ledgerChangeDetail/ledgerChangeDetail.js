@@ -26,6 +26,15 @@ export function addLedgerChangeDetail(data) {
   })
 }
 
+// 新增台账变更/工程变更 明细
+export function insertList(data) {
+  return request({
+    url: '/ledgerChange/ledgerChange/insertList',
+    method: 'post',
+    data: data
+  })
+}
+
 // 修改台账变更/工程变更 明细
 export function updateLedgerChangeDetail(data) {
   return request({
