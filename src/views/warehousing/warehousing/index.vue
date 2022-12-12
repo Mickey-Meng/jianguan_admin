@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="入库对接人" prop="warehousingUsername">
+      <el-form-item label="对接人" prop="warehousingUsername">
         <el-input
           v-model="queryParams.warehousingUsername"
           placeholder="请输入入库对接人"
@@ -87,7 +87,7 @@
 
     <el-table v-loading="loading" :data="warehousingList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="入库单号" align="center" prop="warehousingCode" />
       <el-table-column label="入库对接人" align="center" prop="warehousingUsername" />
       <el-table-column label="入库时间" align="center" prop="warehousingDate" width="180">
@@ -124,41 +124,59 @@
       @pagination="getList"
     />
 
+
     <!-- 添加或修改入库管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="入库单号" prop="warehousingCode">
-          <el-input v-model="form.warehousingCode" placeholder="请输入入库单号" />
-        </el-form-item>
-        <el-form-item label="入库对接人" prop="warehousingUsername">
-          <el-input v-model="form.warehousingUsername" placeholder="请输入入库对接人" />
-        </el-form-item>
-        <el-form-item label="采购订单id" prop="purchaseOrderId">
-          <el-input v-model="form.purchaseOrderId" placeholder="请输入采购订单id" />
-        </el-form-item>
-        <el-form-item label="产品id" prop="proudctId">
-          <el-input v-model="form.proudctId" placeholder="请输入产品id" />
-        </el-form-item>
-        <el-form-item label="入库数量" prop="warehousingNumber">
-          <el-input v-model="form.warehousingNumber" placeholder="请输入入库数量" />
-        </el-form-item>
-        <el-form-item label="入库时间" prop="warehousingDate">
-          <el-date-picker clearable
-            v-model="form.warehousingDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择入库时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
-        <el-form-item label="产品名称" prop="proudctName">
-          <el-input v-model="form.proudctName" placeholder="请输入产品名称" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="入库单号" prop="warehousingCode">
+              <el-input v-model="form.warehousingCode" placeholder="请输入入库单号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入库对接人" prop="warehousingUsername">
+              <el-input v-model="form.warehousingUsername" placeholder="请输入入库对接人" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="采购订单id" prop="purchaseOrderId">
+              <el-input v-model="form.purchaseOrderId" placeholder="请输入采购订单id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="产品id" prop="proudctId">
+              <el-input v-model="form.proudctId" placeholder="请输入产品id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="产品名称" prop="proudctName">
+              <el-input v-model="form.proudctName" placeholder="请输入产品名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入库数量" prop="warehousingNumber">
+              <el-input v-model="form.warehousingNumber" placeholder="请输入入库数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入库时间" prop="warehousingDate">
+              <el-date-picker clearable
+                              v-model="form.warehousingDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择入库时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+
+
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

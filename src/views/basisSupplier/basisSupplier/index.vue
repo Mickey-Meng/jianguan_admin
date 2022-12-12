@@ -121,47 +121,70 @@
     />
 
     <!-- 添加或修改供应商管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+<!--          <el-col :span="12">
         <el-form-item label="单位关联主键" prop="warehouseId">
           <el-input v-model="form.warehouseId" placeholder="请输入单位关联主键" />
         </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
         <el-form-item label="供应商编码" prop="supplierCode">
           <el-input v-model="form.supplierCode" placeholder="请输入供应商编码" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="供应商名称" prop="supplierName">
           <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="联系人" prop="contactPerson">
           <el-input v-model="form.contactPerson" placeholder="请输入联系人" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="电话" prop="telephone">
           <el-input v-model="form.telephone" placeholder="请输入电话" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="手机" prop="mobilePhone">
           <el-input v-model="form.mobilePhone" placeholder="请输入手机" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="地址" prop="address">
           <el-input v-model="form.address" placeholder="请输入地址" />
         </el-form-item>
+          </el-col>
+<!--          <el-col :span="12">
         <el-form-item label="级别(关联字典)" prop="supplierLevel">
           <el-input v-model="form.supplierLevel" placeholder="请输入级别(关联字典)" />
         </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
         <el-form-item label="发票抬头" prop="invoiceLookedUp">
           <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="发票税率" prop="invoiceTax">
           <el-input v-model="form.invoiceTax" placeholder="请输入发票税率" />
         </el-form-item>
-        <el-form-item label="" prop="remark">
+          </el-col>
+          <el-col :span="12">
+        <el-form-item label="" label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

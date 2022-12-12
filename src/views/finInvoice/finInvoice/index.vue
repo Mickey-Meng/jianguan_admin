@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="本次开票金额" prop="invoiceAmount">
+      <el-form-item label="开票金额" prop="invoiceAmount">
         <el-input
           v-model="queryParams.invoiceAmount"
           placeholder="请输入本次开票金额"
@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="供应商名称" prop="supplierName">
+      <el-form-item label="供应商" prop="supplierName">
         <el-input
           v-model="queryParams.supplierName"
           placeholder="请输入供应商名称"
@@ -109,40 +109,57 @@
     />
 
     <!-- 添加或修改供应商开票对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="合同id" prop="contractId">
-          <el-input v-model="form.contractId" placeholder="请输入合同id" />
-        </el-form-item>
-        <el-form-item label="合同名称" prop="contractName">
-          <el-input v-model="form.contractName" placeholder="请输入合同名称" />
-        </el-form-item>
-        <el-form-item label="供应商id" prop="supplierId">
-          <el-input v-model="form.supplierId" placeholder="请输入供应商id" />
-        </el-form-item>
-        <el-form-item label="本次开票金额" prop="invoiceAmount">
-          <el-input v-model="form.invoiceAmount" placeholder="请输入本次开票金额" />
-        </el-form-item>
-        <el-form-item label="欠开票金额" prop="uninvoice">
-          <el-input v-model="form.uninvoice" placeholder="请输入欠开票金额" />
-        </el-form-item>
-        <el-form-item label="开票时间" prop="invoiceDate">
-          <el-date-picker clearable
-            v-model="form.invoiceDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择开票时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
-        <el-form-item label="供应商名称" prop="supplierName">
-          <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="合同id" prop="contractId">
+              <el-input v-model="form.contractId" placeholder="请输入合同id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同名称" prop="contractName">
+              <el-input v-model="form.contractName" placeholder="请输入合同名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="供应商id" prop="supplierId">
+              <el-input v-model="form.supplierId" placeholder="请输入供应商id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="供应商名称" prop="supplierName">
+              <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="本次开票金额" prop="invoiceAmount">
+              <el-input v-model="form.invoiceAmount" placeholder="请输入本次开票金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="欠开票金额" prop="uninvoice">
+              <el-input v-model="form.uninvoice" placeholder="请输入欠开票金额" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开票时间" prop="invoiceDate">
+              <el-date-picker clearable
+                              v-model="form.invoiceDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择开票时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+
+
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

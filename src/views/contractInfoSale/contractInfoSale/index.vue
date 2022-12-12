@@ -25,7 +25,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="总金额" prop="amount">
+<!--      <el-form-item label="总金额" prop="amount">
         <el-input
           v-model="queryParams.amount"
           placeholder="请输入总金额"
@@ -48,7 +48,7 @@
           value-format="yyyy-MM-dd"
           placeholder="请选择质保金到期时间">
         </el-date-picker>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -145,26 +145,40 @@
     />
 
     <!-- 添加或修改合同管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
         <el-form-item label="合同编码" prop="contractCode">
           <el-input v-model="form.contractCode" placeholder="请输入合同编码" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="合同名称" prop="contractName">
           <el-input v-model="form.contractName" placeholder="请输入合同名称" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="客户名称" prop="customerName">
           <el-input v-model="form.customerName" placeholder="请输入客户名称" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="客户id" prop="customerId">
           <el-input v-model="form.customerId" placeholder="请输入客户id" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="总金额" prop="amount">
           <el-input v-model="form.amount" placeholder="请输入总金额" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="质保金" prop="retentionAmount">
           <el-input v-model="form.retentionAmount" placeholder="请输入质保金" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="合同签订时间" prop="contactDate">
           <el-date-picker clearable
             v-model="form.contactDate"
@@ -173,6 +187,8 @@
             placeholder="请选择合同签订时间">
           </el-date-picker>
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="质保金到期时间" prop="retentionDate">
           <el-date-picker clearable
             v-model="form.retentionDate"
@@ -181,21 +197,28 @@
             placeholder="请选择质保金到期时间">
           </el-date-picker>
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="税率" prop="rate">
           <el-input v-model="form.rate" placeholder="请输入税率" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="发货地" prop="area">
           <el-input v-model="form.area" placeholder="请输入发货地" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="附件" prop="fj">
           <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="" prop="remark">
+          </el-col>
+          <el-col :span="12">
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

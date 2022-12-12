@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="身份证号码" prop="empId">
+      <el-form-item label="身份证" prop="empId">
         <el-input
           v-model="queryParams.empId"
           placeholder="请输入身份证号码"
@@ -110,8 +110,8 @@
     />
 
     <!-- 添加或修改员工信息管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="姓名" prop="empName">
           <el-input v-model="form.empName" placeholder="请输入姓名" />
         </el-form-item>

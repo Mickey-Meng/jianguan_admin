@@ -1,14 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="客户编码" prop="customerCode">
-        <el-input
-          v-model="queryParams.customerCode"
-          placeholder="请输入客户编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="客户名称" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
@@ -17,14 +10,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="营业执照(税号)" prop="businessLicense">
-        <el-input
-          v-model="queryParams.businessLicense"
-          placeholder="请输入营业执照(税号)"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="联系人" prop="contactPerson">
         <el-input
           v-model="queryParams.contactPerson"
@@ -41,7 +27,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="手机" prop="mobilePhone">
+<!--      <el-form-item label="手机" prop="mobilePhone">
         <el-input
           v-model="queryParams.mobilePhone"
           placeholder="请输入手机"
@@ -104,15 +90,8 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="部门ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      </el-form-item>-->
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -167,7 +146,7 @@
 
     <el-table v-loading="loading" :data="basisCustomerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="客户资料id" align="center" prop="id" v-if="true"/>
+<!--      <el-table-column label="客户id" align="center" prop="id" v-if="true"/>-->
       <el-table-column label="客户名称" align="center" prop="customerName" />
       <el-table-column label="联系人" align="center" prop="contactPerson" />
       <el-table-column label="手机" align="center" prop="mobilePhone" />
@@ -200,53 +179,80 @@
     />
 
     <!-- 添加或修改客户资料对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
         <el-form-item label="客户编码" prop="customerCode">
           <el-input v-model="form.customerCode" placeholder="请输入客户编码" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="客户名称" prop="customerName">
           <el-input v-model="form.customerName" placeholder="请输入客户名称" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="营业执照(税号)" prop="businessLicense">
           <el-input v-model="form.businessLicense" placeholder="请输入营业执照(税号)" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="联系人" prop="contactPerson">
           <el-input v-model="form.contactPerson" placeholder="请输入联系人" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="电话" prop="telephone">
           <el-input v-model="form.telephone" placeholder="请输入电话" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="手机" prop="mobilePhone">
           <el-input v-model="form.mobilePhone" placeholder="请输入手机" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="客户所属地区" prop="area">
           <el-input v-model="form.area" placeholder="请输入客户所属地区" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="地址描述" prop="address">
           <el-input v-model="form.address" placeholder="请输入地址描述" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="联系人1" prop="contactPersonOne">
           <el-input v-model="form.contactPersonOne" placeholder="请输入联系人1" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="电话1" prop="telephoneOne">
           <el-input v-model="form.telephoneOne" placeholder="请输入电话1" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="发票抬头" prop="invoiceLookedUp">
           <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="发票税率" prop="invoiceTax">
           <el-input v-model="form.invoiceTax" placeholder="请输入发票税率" />
         </el-form-item>
-        <el-form-item label="" prop="remark">
+          </el-col>
+          <el-col :span="12">
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

@@ -137,12 +137,16 @@
         <el-form-item label="所属库区" prop="reservoirId">
           <el-input v-model="form.reservoirId" placeholder="请输入所属库区" />
         </el-form-item>
+        <el-form-item label="空库位" prop="isEmpty">
+          <el-input v-model="form.isEmpty" placeholder="是否空库位" />
+        </el-form-item>
+        <el-form-item label="启用状态" prop="isDisable">
+          <el-input v-model="form.isDisable" placeholder="启用状态" />
+        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

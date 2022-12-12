@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="报销订单ID，唯一标识某一次具体报销事件" prop="reimbursementOrderId">
+<!--      <el-form-item label="报销订单ID，唯一标识某一次具体报销事件" prop="reimbursementOrderId">
         <el-input
           v-model="queryParams.reimbursementOrderId"
           placeholder="请输入报销订单ID，唯一标识某一次具体报销事件"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="报销日期" prop="finReimbursementDate">
         <el-date-picker clearable
           v-model="queryParams.finReimbursementDate"
@@ -87,15 +87,15 @@
 
     <el-table v-loading="loading" :data="finReimbursementList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
-      <el-table-column label="报销订单ID，唯一标识某一次具体报销事件" align="center" prop="reimbursementOrderId" />
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="报销订单ID，唯一标识某一次具体报销事件" align="center" prop="reimbursementOrderId" v-if="false"/>
+      <el-table-column label="员工姓名" align="center" prop="empName" />
+      <el-table-column label="金额" align="center" prop="finAmount" />
       <el-table-column label="报销日期" align="center" prop="finReimbursementDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.finReimbursementDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="金额" align="center" prop="finAmount" />
-      <el-table-column label="员工姓名" align="center" prop="empName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -125,11 +125,23 @@
     />
 
     <!-- 添加或修改费用报销对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="报销订单ID，唯一标识某一次具体报销事件" prop="reimbursementOrderId">
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+<!--        <el-form-item label="报销订单ID，唯一标识某一次具体报销事件" prop="reimbursementOrderId">
           <el-input v-model="form.reimbursementOrderId" placeholder="请输入报销订单ID，唯一标识某一次具体报销事件" />
+        </el-form-item>-->
+        <el-form-item label="员工姓名" prop="empName">
+          <el-input v-model="form.empName" placeholder="请输入员工姓名" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
+        <el-form-item label="员工id" prop="empId">
+          <el-input v-model="form.empId" placeholder="请输入员工id" />
+        </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="报销日期" prop="finReimbursementDate">
           <el-date-picker clearable
             v-model="form.finReimbursementDate"
@@ -138,18 +150,18 @@
             placeholder="请选择报销日期">
           </el-date-picker>
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="金额" prop="finAmount">
           <el-input v-model="form.finAmount" placeholder="请输入金额" />
         </el-form-item>
+          </el-col>
+          <el-col :span="12">
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="员工姓名" prop="empName">
-          <el-input v-model="form.empName" placeholder="请输入员工姓名" />
-        </el-form-item>
-        <el-form-item label="员工id" prop="empId">
-          <el-input v-model="form.empId" placeholder="请输入员工id" />
-        </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

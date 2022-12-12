@@ -110,70 +110,110 @@
     />
 
     <!-- 添加或修改工资管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="月份" prop="payDate">
-          <el-date-picker clearable
-            v-model="form.payDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择月份">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="基础工资" prop="basePay">
-          <el-input v-model="form.basePay" placeholder="请输入基础工资" />
-        </el-form-item>
-        <el-form-item label="基础天数" prop="baseDays">
-          <el-input v-model="form.baseDays" placeholder="请输入基础天数" />
-        </el-form-item>
-        <el-form-item label="出勤天数" prop="attendanceDays">
-          <el-input v-model="form.attendanceDays" placeholder="请输入出勤天数" />
-        </el-form-item>
-        <el-form-item label="法定假日公休天数" prop="legalHolidayDays">
-          <el-input v-model="form.legalHolidayDays" placeholder="请输入法定假日公休天数" />
-        </el-form-item>
-        <el-form-item label="加班天数" prop="workOvertimeDays">
-          <el-input v-model="form.workOvertimeDays" placeholder="请输入加班天数" />
-        </el-form-item>
-        <el-form-item label="出差天数" prop="evectionDays">
-          <el-input v-model="form.evectionDays" placeholder="请输入出差天数" />
-        </el-form-item>
-        <el-form-item label="出差补贴" prop="evectionMoney">
-          <el-input v-model="form.evectionMoney" placeholder="请输入出差补贴" />
-        </el-form-item>
-        <el-form-item label="全勤奖" prop="fullAttendanceBonus">
-          <el-input v-model="form.fullAttendanceBonus" placeholder="请输入全勤奖" />
-        </el-form-item>
-        <el-form-item label="饭补" prop="mealAllowance">
-          <el-input v-model="form.mealAllowance" placeholder="请输入饭补" />
-        </el-form-item>
-        <el-form-item label="预付工资" prop="payInAdvance">
-          <el-input v-model="form.payInAdvance" placeholder="请输入预付工资" />
-        </el-form-item>
-        <el-form-item label="社保" prop="socialSecurity">
-          <el-input v-model="form.socialSecurity" placeholder="请输入社保" />
-        </el-form-item>
-        <el-form-item label="个人所得税" prop="tax">
-          <el-input v-model="form.tax" placeholder="请输入个人所得税" />
-        </el-form-item>
-        <el-form-item label="税前工资" prop="preTaxPay">
-          <el-input v-model="form.preTaxPay" placeholder="请输入税前工资" />
-        </el-form-item>
-        <el-form-item label="税后工资" prop="afterTaxPay">
-          <el-input v-model="form.afterTaxPay" placeholder="请输入税后工资" />
-        </el-form-item>
-        <el-form-item label="实际到手工资" prop="netPay">
-          <el-input v-model="form.netPay" placeholder="请输入实际到手工资" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="员工姓名" prop="empName">
-          <el-input v-model="form.empName" placeholder="请输入员工姓名" />
-        </el-form-item>
-        <el-form-item label="员工id" prop="empId">
-          <el-input v-model="form.empId" placeholder="请输入员工id" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="月份" prop="payDate">
+              <el-date-picker clearable
+                              v-model="form.payDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择月份">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="员工id" prop="empId">
+              <el-input v-model="form.empId" placeholder="请输入员工id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="员工姓名" prop="empName">
+              <el-input v-model="form.empName" placeholder="请输入员工姓名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="基础工资" prop="basePay">
+              <el-input v-model="form.basePay" placeholder="请输入基础工资" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="基础天数" prop="baseDays">
+              <el-input v-model="form.baseDays" placeholder="请输入基础天数" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="出勤天数" prop="attendanceDays">
+              <el-input v-model="form.attendanceDays" placeholder="请输入出勤天数" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="法定假日公休天数" prop="legalHolidayDays">
+              <el-input v-model="form.legalHolidayDays" placeholder="请输入法定假日公休天数" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="加班天数" prop="workOvertimeDays">
+              <el-input v-model="form.workOvertimeDays" placeholder="请输入加班天数" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="出差天数" prop="evectionDays">
+              <el-input v-model="form.evectionDays" placeholder="请输入出差天数" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="出差补贴" prop="evectionMoney">
+              <el-input v-model="form.evectionMoney" placeholder="请输入出差补贴" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="全勤奖" prop="fullAttendanceBonus">
+              <el-input v-model="form.fullAttendanceBonus" placeholder="请输入全勤奖" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="饭补" prop="mealAllowance">
+              <el-input v-model="form.mealAllowance" placeholder="请输入饭补" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="预付工资" prop="payInAdvance">
+              <el-input v-model="form.payInAdvance" placeholder="请输入预付工资" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="社保" prop="socialSecurity">
+              <el-input v-model="form.socialSecurity" placeholder="请输入社保" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="个人所得税" prop="tax">
+              <el-input v-model="form.tax" placeholder="请输入个人所得税" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="税前工资" prop="preTaxPay">
+              <el-input v-model="form.preTaxPay" placeholder="请输入税前工资" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="税后工资" prop="afterTaxPay">
+              <el-input v-model="form.afterTaxPay" placeholder="请输入税后工资" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="实际到手工资" prop="netPay">
+              <el-input v-model="form.netPay" placeholder="请输入实际到手工资" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
