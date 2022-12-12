@@ -52,6 +52,7 @@
 import fields from '../config/ledgerChange';
 import { dealNumberFormat } from "@/plugins/utils.js";
 export default {
+  dicts: ['data_status', 'ledger_change_type', 'ledger_change_level'],
   props: {
     originData: {
       type: Object,
@@ -160,11 +161,27 @@ export default {
     }
   },
   mounted () {
-    this.fields = JSON.parse(JSON.stringify(fields));
+    const fieldsCopy = JSON.parse(JSON.stringify(fields));
+    setTimeout(() => {
+      this.$nextTick(() => {
+        fieldsCopy[0].children.forEach(field => {
+          if (field.type === 'normal-select') {
+            const options = this.dict.type[field.dicKey].map(item => {
+              return {
+                value: item.value,
+                label: item.label
+              }
+            })
+            this.$set(field, 'options', options);
+          }
+        });
+      })
+    }, 2000);
+    this.fields = fieldsCopy;
     if (this.originData.fj) {
       this.fileList = JSON.parse(this.originData.fj);
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scope>

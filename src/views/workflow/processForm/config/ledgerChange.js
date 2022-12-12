@@ -31,7 +31,7 @@ const fields = [
                 'size': 6,
             },
             {
-                'type': 'input',
+                'type': 'normal-select',
                 'key': 'bgdj',
                 'label': '变更等级',
                 'placeholder': '',
@@ -42,10 +42,12 @@ const fields = [
                         'trigger': [ 'blur', 'change' ],
                     },
                 ],
+                'options': [],
+                'dicKey': 'ledger_change_level',
                 'size': 6,
             },
             {
-                'type': 'input',
+                'type': 'normal-select',
                 'key': 'bglx',
                 'label': '变更类型',
                 'placeholder': ' ',
@@ -56,6 +58,8 @@ const fields = [
                         'trigger': [ 'blur', 'change' ],
                     },
                 ],
+                'options': [],
+                'dicKey': 'ledger_change_type',
                 'size': 6,
             },
             {
