@@ -6,7 +6,7 @@ const fields = [
                 'type': 'input',
                 'key': 'bgbh',
                 'label': '变更编号',
-                'placeholder': '请选择',
+                'placeholder': '',
                 'rules': [
                     {
                         'required': true,
@@ -14,13 +14,13 @@ const fields = [
                         'trigger': [ 'blur', 'change' ],
                     },
                 ],
-                'size': 12,
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'bgsx',
                 'label': '变更事项',
-                'placeholder': '请输入',
+                'placeholder': '',
                 'rules': [
                     {
                         'required': true,
@@ -28,13 +28,13 @@ const fields = [
                         'trigger': [ 'blur', 'change' ],
                     },
                 ],
-                'size': 12,
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'bgdj',
                 'label': '变更等级',
-                'placeholder': '请输入',
+                'placeholder': '',
                 'rules': [
                     {
                         'required': true,
@@ -42,13 +42,13 @@ const fields = [
                         'trigger': [ 'blur', 'change' ],
                     },
                 ],
-                'size': 12,
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'bglx',
                 'label': '变更类型',
-                'placeholder': '请输入',
+                'placeholder': ' ',
                 'rules': [
                     {
                         'required': true,
@@ -56,117 +56,62 @@ const fields = [
                         'trigger': [ 'blur', 'change' ],
                     },
                 ],
-                'size': 12,
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'gcbw',
                 'label': '工程部位',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
-                'size': 12,
+                'placeholder': '',
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'zh',
                 'label': '桩号',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    }
-                ],
-                'size': 12,
+                'placeholder': '',
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'th',
                 'label': '图号',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
-                'size': 12,
+                'placeholder': '',
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'sqrq',
                 'label': '申请日期',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
-                'size': 12,
+                'placeholder': '',
+                'size': 6,
             },
             {
                 'type': 'input',
                 'key': 'bgje',
                 'label': '变更金额',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
+                'placeholder': '',
                 'size': 12,
             },
             {
                 'type': 'input',
                 'key': 'bgyy',
                 'label': '变更原因',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
+                'placeholder': '',
                 'size': 12,
             },
             {
                 'type': 'input',
                 'key': 'jss',
                 'label': '计算式',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
+                'placeholder': '',
                 'size': 12,
             },
             {
                 'type': 'input',
                 'key': 'remark',
                 'label': '备注说明',
-                'placeholder': '请输入',
-                'rules': [
-                    {
-                        'required': true,
-                        'message': '请输入',
-                        'trigger': [ 'blur', 'change' ],
-                    },
-                ],
+                'placeholder': '',
                 'size': 12,
             },
             {

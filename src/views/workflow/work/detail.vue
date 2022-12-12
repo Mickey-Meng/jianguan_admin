@@ -59,11 +59,11 @@
 
       <el-tab-pane label="表单信息" name="form">
         <div v-if="formOpen">
-          <el-card class="box-card" shadow="never" v-for="(formInfo, index) in processInfoFormList" :key="index">
+          <el-card class="box-card el-card__body_setting" shadow="never" v-for="(formInfo, index) in processInfoFormList" :key="index">
             <div slot="header" class="clearfix">
               <span>{{ formInfo.title || '详情' }}</span>
             </div>
-            <el-col :span="20" :offset="2">
+            <el-col :span="24">
               <!-- <parser :form-conf="formInfo"/> -->
               <!-- <precess :origin-data="formInfo" :disabled="true"/>  -->
               <!-- <measurement-documents :origin-data="formInfo" :disabled="true"/> -->
@@ -607,8 +607,16 @@ export default {
 }
 
 .box-card {
+  height: calc(100vh - 170px);
+  min-height: calc(100vh - 170px);
+  overflow: auto;
   width: 100%;
   margin-bottom: 20px;
+}
+.el-card__body_setting {
+  ::v-deep .el-card__body {
+    height: calc(100% - 40px);
+  }
 }
 
 .el-tag + .el-tag {

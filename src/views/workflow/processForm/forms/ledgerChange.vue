@@ -1,6 +1,6 @@
 <template>
   <div class="form-process">
-    <wti-form :fields="fields" :all-disabled="disabled" :border-form="false" label-position="right" :data="originData">
+    <wti-form :fields="fields" :all-disabled="disabled" :border-form="false" label-position="right" label-width="110px" :data="originData">
       <template #file>
         <file v-if="!disabled"/>
         <div v-else class="history-file"> 
@@ -17,6 +17,7 @@
                         </a>
                     </div>
                 </div>
+                <div v-else>-</div>
             </div>
         </div>
       </template>
@@ -38,9 +39,7 @@
             :min-width="col.minWidth"
             :show-overflow-tooltip="col.tooltip || false">
             <template slot-scope="scope">
-              <div>
-                {{ scope.row[col.key] || '-' }}
-              </div>
+                {{ col.format === 'money' ? dealNumberFormat(scope.row[col.key]) || '-' : scope.row[col.key] || '-' }}
             </template>
           </el-table-column>
       </el-table>
@@ -51,6 +50,7 @@
 
 <script>
 import fields from '../config/ledgerChange';
+import { dealNumberFormat } from "@/plugins/utils.js";
 export default {
   props: {
     originData: {
@@ -81,6 +81,13 @@ export default {
       },
       columnData: [
           {
+              key: 'bdbh',
+              label: '标段编号',
+              align: 'center',
+              minWidth: '90',
+              tooltip: true
+          },
+          {
               key: 'zmh',
               label: '子目号',
               align: 'center',
@@ -90,38 +97,37 @@ export default {
           {
               key: 'zmmc',
               label: '子目名称',
-              align: 'left',
-              minWidth: '120',
+              align: 'center',
+              minWidth: '160',
               tooltip: true
           },
           {
               key: 'gcbw',
               label: '工程部位',
-              align: 'left',
-              minWidth: '80',
+              align: 'center',
+              minWidth: '100',
               tooltip: false
           },
           {
               key: 'htdj',
               label: '合同单价',
-              align: 'left',
-              minWidth: '80',
+              align: 'center',
+              format: 'money',
+              minWidth: '120',
               tooltip: false
           },
           {
               key: 'shsl',
               label: '审核数量',
-              format: 'money',
-              align: 'right',
-              minWidth: '80',
+              align: 'center',
+              minWidth: '110',
               tooltip: false
           },
           {
               key: 'xzsl',
               label: '修正数量',
-              format: 'money',
               align: 'center',
-              minWidth: '80',
+              minWidth: '110',
               tooltip: false
           },
           {
@@ -129,15 +135,14 @@ export default {
               label: '修正金额',
               format: 'money',
               align: 'center',
-              minWidth: '80',
+              minWidth: '120',
               tooltip: false
           },
           {
               key: 'dw',
               label: '单位',
-              format: 'money',
               align: 'center',
-              minWidth: '80',
+              minWidth: '110',
               tooltip: false
           },
           {
@@ -145,14 +150,21 @@ export default {
               label: '审核金额',
               format: 'money',
               align: 'center',
-              minWidth: '110',
+              minWidth: '120',
               tooltip: false
           },
       ],
       data: [],
-      fileList: []
+      fileList: [],
+      dealNumberFormat
     }
   },
+  mounted () {
+    this.fields = JSON.parse(JSON.stringify(fields));
+    if (this.originData.fj) {
+      this.fileList = JSON.parse(this.originData.fj);
+    }
+  }
 }
 </script>
 <style lang="scss" scope>

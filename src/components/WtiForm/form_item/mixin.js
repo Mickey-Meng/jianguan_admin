@@ -108,7 +108,7 @@ export default {
         getPlaceholder (formItem) {
             // todo 这里可能还要加一个全部 disable 的判断
             // 如果已禁用，那么不显示 placeholder
-            if (formItem.disable) {
+            if (formItem.disable || formItem.placeholder === '') {
                 return '';
             }
             // 如果有 placeholder，则直接返回

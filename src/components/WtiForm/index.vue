@@ -72,7 +72,6 @@
                         展开 <i class="el-icon-arrow-down"></i>
                     </span>
                     </div> -->
-
                     <template v-for="(row, rowIndex) in getFieldRow(field.children)">
                         <el-row :gutter="20"
                                 :key="rowIndex"
@@ -1133,7 +1132,7 @@
         }
 
         ::v-deep .el-form-item {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
 
             .el-form-item__label {
                 height: auto;
@@ -1147,6 +1146,9 @@
                 min-height: 36px;
                 height: auto;
                 line-height: 36px;
+            }
+            .el-input.is-disabled .el-input__inner {
+                color: #12182A;
             }
         }
 
@@ -1179,7 +1181,7 @@
         }
 
         ::v-deep .el-form-item {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         ::v-deep .el-input.is-active .el-input__inner, ::v-deep .el-input__inner:focus,

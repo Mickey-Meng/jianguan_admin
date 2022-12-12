@@ -1,6 +1,6 @@
 <template>
   <div class="form-process">
-    <wti-form :fields="fields" :all-disabled="disabled" :border-form="false" label-position="right" :data="originData">
+    <wti-form :fields="fields" :all-disabled="disabled" :border-form="false" label-position="right" label-width="110px" :data="originData">
       <template #file>
         <file v-if="!disabled"/>
         <div v-else class="history-file"> 
@@ -24,7 +24,7 @@
         <el-table
           v-if="originData.detailBos"
           :data="originData.detailBos"
-          height="250"
+          height="calc(100vh - 540px)"
           :header-cell-style="headercellStyle"
           :cell-style="cellStyle"
           border
@@ -124,12 +124,20 @@ export default {
     }
   },
   mounted () {
-    this.fileList = JSON.parse(this.originData.fj);
+    this.fields = JSON.parse(JSON.stringify(fields));
+    if (this.originData.fj) {
+      this.fileList = JSON.parse(this.originData.fj);
+    }
+    this.originData.detailBos = [...this.originData.detailBos, ...this.originData.detailBos, ...this.originData.detailBos, ...this.originData.detailBos];
   }
 }
 </script>
 <style lang="scss" scope>
-.history-file {
+.form-process {
+  .el-table {
+    min-height: 300px;
+  }
+  .history-file {
     font-family: PingFangSC-Regular;
     font-size: 0.9rem;
     color: #3A4566;
@@ -171,5 +179,7 @@ export default {
             margin-left: 0;
         }
     }
+  }
 }
+
 </style>
