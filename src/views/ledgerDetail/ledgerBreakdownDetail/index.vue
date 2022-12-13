@@ -217,7 +217,7 @@
                   v-show="true"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-                >修改
+                >设计数量
                 </el-button>
                 <el-button
                   size="mini"
