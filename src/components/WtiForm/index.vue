@@ -88,6 +88,7 @@
                                                    :all-disabled="allDisabled"
                                                    :item="rowItem"
                                                    :base-u-r-l="baseURL"
+                                                   :label-width="childLabelWidth"
                                                    :label-position="labelPosition ? labelPosition : 'top'"
                                                    v-model.trim="formData[rowItem.key]"/>
 

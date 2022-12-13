@@ -807,7 +807,7 @@
         .child-form {
             background: #F8F9FB;
             border-radius: 4px;
-            margin-bottom: 24px;
+            margin-bottom: 12px;
 
             .child-form-head {
                 position: relative;
@@ -861,7 +861,7 @@
             }
 
             .child-form-body {
-                padding: 0 20px;
+                padding: 12px 20px 0  20px;
             }
         }
 
