@@ -107,21 +107,21 @@
     </el-table>
 
     <!-- 添加或修改台账分解对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <!-- <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item> -->
         <el-form-item label="台账分解编号" prop="tzfjbh">
           <el-input v-model="form.tzfjbh" placeholder="请输入台账分解编号" />
         </el-form-item>
-        <el-form-item label="台账分解编号父节点" prop="tzfjbhParent">
+        <el-form-item label="父节点" prop="tzfjbhParent">
           <treeselect v-model="form.tzfjbhParent" :options="ledgerBreakdownOptions" :normalizer="normalizer" placeholder="请选择台账分解编号父节点" />
         </el-form-item>
         <!-- <el-form-item label="台账分解编号祖级列表" prop="tzfjbhAncestors">
           <el-input v-model="form.tzfjbhAncestors" placeholder="请输入台账分解编号祖级列表" />
         </el-form-item> -->
-        <el-form-item label="台账分解名称" prop="tzfjmc">
+        <el-form-item label="名称" prop="tzfjmc">
           <el-input v-model="form.tzfjmc" placeholder="请输入台账分解名称" />
         </el-form-item>
         <!-- <el-form-item label="分解类型" prop="fjlx">

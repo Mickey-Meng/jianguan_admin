@@ -339,11 +339,7 @@
               <el-input v-model="form.htbh" placeholder="请输入合同编号" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="合同编号" prop="htbh">
-              <el-input v-model="form.htbh" placeholder="请输入合同编号" />
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="开工日期" prop="kgrq">
               <el-date-picker clearable
