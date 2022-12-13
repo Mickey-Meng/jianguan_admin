@@ -353,3 +353,9 @@ export default {
   }
 };
 </script>
+<style lang="scss" scope>
+  .el-dialog__body {
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+  }
+</style>
