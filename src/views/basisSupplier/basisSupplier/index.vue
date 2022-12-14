@@ -1,15 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="供应商编码" prop="supplierCode">
-        <el-input
-          v-model="queryParams.supplierCode"
-          placeholder="请输入供应商编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="供应商名称" prop="supplierName">
+
+      <el-form-item label="名称" prop="supplierName">
         <el-input
           v-model="queryParams.supplierName"
           placeholder="请输入供应商名称"
@@ -87,7 +80,7 @@
 
     <el-table v-loading="loading" :data="basisSupplierList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="供应商管理id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="供应商管理id" align="center" prop="id" v-if="false"/>
       <el-table-column label="供应商编码" align="center" prop="supplierCode" />
       <el-table-column label="供应商名称" align="center" prop="supplierName" />
       <el-table-column label="联系人" align="center" prop="contactPerson" />
@@ -234,9 +227,7 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        id: [
-          { required: true, message: "供应商管理id不能为空", trigger: "blur" }
-        ],
+
         supplierCode: [
           { required: true, message: "供应商编码不能为空", trigger: "blur" }
         ],
@@ -249,9 +240,7 @@ export default {
         mobilePhone: [
           { required: true, message: "手机不能为空", trigger: "blur" }
         ],
-        invoiceType: [
-          { required: true, message: "发票种类【数据字典】不能为空", trigger: "change" }
-        ],
+
       }
     };
   },

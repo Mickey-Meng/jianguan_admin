@@ -103,7 +103,7 @@
 
     <el-table v-loading="loading" :data="contractInfoSaleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="合同id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="合同id" align="center" prop="id" v-if="false"/>
       <el-table-column label="合同编码" align="center" prop="contractCode" />
       <el-table-column label="合同名称" align="center" prop="contractName" />
       <el-table-column label="客户名称" align="center" prop="customerName" />
@@ -113,9 +113,12 @@
           <span>{{ parseTime(scope.row.contactDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="1已签订 0未签订" align="center" prop="contractStatus" />
-      <el-table-column label="" align="center" prop="remark" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
+
+      <el-table-column label="是否已签合同" align="center" prop="contractStatus">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.contractStatus"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -203,11 +206,27 @@
           <el-input v-model="form.rate" placeholder="请输入税率" />
         </el-form-item>
           </el-col>
+
           <el-col :span="12">
         <el-form-item label="发货地" prop="area">
           <el-input v-model="form.area" placeholder="请输入发货地" />
         </el-form-item>
           </el-col>
+
+
+          <el-col :span="12">
+            <el-form-item label="合同是否已签订" prop="contractStatus">
+              <el-select v-model="form.contractStatus" placeholder="请选择合同是否已签订">
+                <el-option
+                  v-for="dict in dict.type.sys_yes_no"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="12">
         <el-form-item label="附件" prop="fj">
           <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
@@ -233,6 +252,7 @@ import { listContractInfoSale, getContractInfoSale, delContractInfoSale, addCont
 
 export default {
   name: "ContractInfoSale",
+  dicts: ['sys_yes_no'],
   data() {
     return {
       // 按钮loading
@@ -305,16 +325,8 @@ export default {
         ],
         contractStatus: [
           { required: true, message: "1已签订 0未签订不能为空", trigger: "blur" }
-        ],
-        fj: [
-          { required: true, message: "附件不能为空", trigger: "blur" }
-        ],
-        remark: [
-          { required: true, message: "不能为空", trigger: "blur" }
-        ],
-        deptId: [
-          { required: true, message: "部门ID不能为空", trigger: "blur" }
         ]
+
       }
     };
   },
@@ -350,7 +362,7 @@ export default {
         retentionDate: undefined,
         rate: undefined,
         area: undefined,
-        contractStatus: "0",
+        contractStatus: undefined,
         fj: undefined,
         delFlag: undefined,
         createBy: undefined,
@@ -382,7 +394,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加合同管理";
+      this.title = "添加销售合同管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -393,7 +405,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改合同管理";
+        this.title = "修改销售合同管理";
       });
     },
     /** 提交按钮 */

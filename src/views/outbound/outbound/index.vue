@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="出库对接人" prop="outboundUsername">
         <el-input
           v-model="queryParams.outboundUsername"
@@ -116,8 +116,8 @@
     />
 
     <!-- 添加或修改出库管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="出库单号" prop="outboundCode">
           <el-input v-model="form.outboundCode" placeholder="请输入出库单号" />
         </el-form-item>
@@ -126,6 +126,9 @@
         </el-form-item>
         <el-form-item label="产品id" prop="proudctId">
           <el-input v-model="form.proudctId" placeholder="请输入产品id" />
+        </el-form-item>
+        <el-form-item label="产品名称" prop="proudctName">
+          <el-input v-model="form.proudctName" placeholder="请输入产品名称" />
         </el-form-item>
         <el-form-item label="出库数量" prop="outboundNumber">
           <el-input v-model="form.outboundNumber" placeholder="请输入出库数量" />
@@ -138,15 +141,11 @@
             placeholder="请选择出库时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="" prop="remark">
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
-        <el-form-item label="产品名称" prop="proudctName">
-          <el-input v-model="form.proudctName" placeholder="请输入产品名称" />
-        </el-form-item>
+
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

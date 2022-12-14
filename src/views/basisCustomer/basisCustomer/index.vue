@@ -182,11 +182,11 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-          <el-col :span="12">
+<!--          <el-col :span="12">
         <el-form-item label="客户编码" prop="customerCode">
           <el-input v-model="form.customerCode" placeholder="请输入客户编码" />
         </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
         <el-form-item label="客户名称" prop="customerName">
           <el-input v-model="form.customerName" placeholder="请输入客户名称" />
