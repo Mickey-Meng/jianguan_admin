@@ -52,6 +52,10 @@ export default {
             type: String,
             default: '160px',
         },
+        childLabelWidth: {
+            type: String,
+            default: '140px'
+        }
     },
     methods: {
         // 获取区块的样式

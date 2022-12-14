@@ -126,12 +126,9 @@
 
     <!-- 添加或修改费用报销对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+      <!-- <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
           <el-col :span="12">
-<!--        <el-form-item label="报销订单ID，唯一标识某一次具体报销事件" prop="reimbursementOrderId">
-          <el-input v-model="form.reimbursementOrderId" placeholder="请输入报销订单ID，唯一标识某一次具体报销事件" />
-        </el-form-item>-->
         <el-form-item label="员工姓名" prop="empName">
           <el-input v-model="form.empName" placeholder="请输入员工姓名" />
         </el-form-item>
@@ -162,7 +159,11 @@
         </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
+      </el-form> -->
+      <div style="padding: 0 24px;">
+        <wti-form :fields="fields" :border-form="false" label-position="right" label-width="140px" child-label-width="120px" :data="form">
+        </wti-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -173,7 +174,7 @@
 
 <script>
 import { listFinReimbursement, getFinReimbursement, delFinReimbursement, addFinReimbursement, updateFinReimbursement } from "@/api/finReimbursement/finReimbursement";
-
+import fields from './fields';
 export default {
   name: "FinReimbursement",
   data() {
@@ -208,7 +209,10 @@ export default {
         empName: undefined,
       },
       // 表单参数
-      form: {},
+      form: {
+        finAmount: '',
+        bxmx: []
+      },
       // 表单校验
       rules: {
         id: [
@@ -226,7 +230,8 @@ export default {
         empName: [
           { required: true, message: "员工姓名不能为空", trigger: "blur" }
         ],
-      }
+      },
+      fields
     };
   },
   created() {
@@ -250,18 +255,18 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: undefined,
-        reimbursementOrderId: undefined,
-        finReimbursementDate: undefined,
-        finAmount: undefined,
-        delFlag: undefined,
-        createBy: undefined,
-        createTime: undefined,
-        updateBy: undefined,
-        updateTime: undefined,
-        remark: undefined,
-        empName: undefined,
-        empId: undefined
+        id: '',
+        reimbursementOrderId: '',
+        finReimbursementDate: '',
+        finAmount: '',
+        delFlag: '',
+        createBy: '',
+        createTime: '',
+        updateBy: '',
+        updateTime: '',
+        remark: '',
+        empName: '',
+        empId: ''
       };
       this.resetForm("form");
     },
@@ -348,3 +353,9 @@ export default {
   }
 };
 </script>
+<style lang="scss" scope>
+  .el-dialog__body {
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+  }
+</style>
