@@ -221,25 +221,31 @@
             // 以下两个示例都会触发。注意，其他情况下不会触发
             // WtiForm.$set(WtiForm.formData, 'key',[{projectName:'12'}]);
             // WtiForm.$set(WtiForm.formData.testInput, '0',{projectName:'12'});
-            value (oldVal, newVal) {
-                // console.log('oldVal, newVal', oldVal === newVal);
-                // 这里的逻辑存在比较难处理的情况：
-                // 1. 预期：当初始化，value 为空数组或者不存在的时候，这里可以自动生成一个新行
-                // 2. 预期：当编辑模式下，这里的值是后续加载的，期望 fields 可以和 value 进行同步（需要重置）
-                // 3. 预期：正常模式下新增、删除行，fields 会随着 value 更新（不应当重置）
-                if (!this.value || this.value.length === 0) {
-                    // this.childFormData = [];
-                    this.childFormFileds = [];
-                    this.addChildForm();
-                } else {
-                    if (oldVal !== newVal) {
-                        // 值变化了，应当重置
-                        this.resetChildFormFileds();
+            value: {
+                handler (oldVal, newVal) {
+                    // console.log('oldVal, newVal', oldVal === newVal);
+                    // 这里的逻辑存在比较难处理的情况：
+                    // 1. 预期：当初始化，value 为空数组或者不存在的时候，这里可以自动生成一个新行
+                    // 2. 预期：当编辑模式下，这里的值是后续加载的，期望 fields 可以和 value 进行同步（需要重置）
+                    // 3. 预期：正常模式下新增、删除行，fields 会随着 value 更新（不应当重置）
+                    this.valueUpdateEvent({
+                        [this.item.key]: newVal
+                    })
+                    if (!this.value || this.value.length === 0) {
+                        // this.childFormData = [];
+                        this.childFormFileds = [];
+                        this.addChildForm();
+                    } else {
+                        if (oldVal !== newVal) {
+                            // 值变化了，应当重置
+                            this.resetChildFormFileds();
+                        }
+                        // 不变化的情况下，不应该进行处理（push 和 splice 会是这种情况）
+                        // 该种情况下，childFormFileds 由各自的行为进行处理
                     }
-                    // 不变化的情况下，不应该进行处理（push 和 splice 会是这种情况）
-                    // 该种情况下，childFormFileds 由各自的行为进行处理
-                }
-            },
+                },
+                deep: true
+            }
         },
         mounted () {
             if (this.value && this.value instanceof Array && this.value.length > 0) {
@@ -285,12 +291,15 @@
         },
         methods: {
             // 监听值更新
-            valueUpdateEvent () {
-                // const data = this.getData();
-                // console.log('data', data);
-                // this.$emit('input', data);
+            // valueUpdateEvent () {
+            //     // const data = this.getData();
+            //     // console.log('data', data);
+            //     // this.$emit('input', data);
+            // },
+            valueUpdateEvent (params) {
+                console.error('params', params);
+                this.$emit('updateValue', params);
             },
-
             // todo 这里的数据字典请求接口，应该最后合并到一起，由一个专门的数据字典请求管理器去请求，减低接口重复请求的情况
             loadDynamicSelectOptions () {
                 const parentCodeList = [];
@@ -729,7 +738,9 @@
 
                 this.childFormFileds.splice(i, 1);
                 this.val.splice(i, 1);
-                this.valueUpdateEvent();
+                this.valueUpdateEvent({
+                    [this.item.key]: this.updateFormData
+                });
 
                 if (this.val.length === 0) {
                     this.addChildForm();

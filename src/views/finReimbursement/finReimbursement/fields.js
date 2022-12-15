@@ -1,3 +1,4 @@
+import { listFinEmp } from "@/api/finEmp/finEmp";
 const fields = [
     {
         'label': '',
@@ -15,6 +16,36 @@ const fields = [
                     },
                 ],
                 'size': 12,
+                querySearchAsync (queryString, cb, formItem) {
+                    console.log(`你的请求字符串是 ${queryString}`);
+                    console.log('该组件元素是', formItem);
+                    console.log('该组件回调', cb);
+                    const queryParams = {
+                        empName: queryString,
+                    };
+                    let flag = false;
+                    listFinEmp(queryParams).then(response => {
+                        flag = true;
+                        if (response.rows.length) {
+                            const d = response.rows.map(item => {
+                                return {
+                                    value: item.empName,
+                                    label: item.empId,
+                                    item
+                                };
+                            });
+                            cb(d);
+                        } else {
+                            cb([]);
+                        }
+                    }).finally(() => {
+                        if (!flag) {
+                            cb([]);
+                        }
+                    });
+                },
+                'mainShowKey': 'empName',
+                'autoCompleteKeys': [ 'empId' ],
             },
             {
                 'type': 'input',
@@ -70,7 +101,7 @@ const fields = [
                 'headerLabel': '报销明细',
                 'childrenForm': [
                     {
-                        'type': 'dynamic-select-normal',
+                        'type': 'normal-select',
                         'key': 'bxlt', // 1
                         'label': '报销类型',
                         'placeholder': '请选择',
@@ -82,7 +113,7 @@ const fields = [
                             },
                         ],
                         'options': [],
-                        'dicKey': '',
+                        'dicKey': 'fin_reimbursement_type',
                         'size': 12,
                     },
                     {

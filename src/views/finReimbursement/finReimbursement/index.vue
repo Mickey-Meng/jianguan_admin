@@ -160,8 +160,8 @@
           </el-col>
         </el-row>
       </el-form> -->
-      <div style="padding: 0 24px;">
-        <wti-form :fields="fields" :border-form="false" label-position="right" label-width="140px" child-label-width="120px" :data="form">
+      <div style="padding: 0 24px;" v-if="open">
+        <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue" label-position="right" label-width="140px" child-label-width="120px" :data="form">
         </wti-form>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -175,8 +175,10 @@
 <script>
 import { listFinReimbursement, getFinReimbursement, delFinReimbursement, addFinReimbursement, updateFinReimbursement } from "@/api/finReimbursement/finReimbursement";
 import fields from './fields';
+import calc from '@/utils/calc.js'
 export default {
   name: "FinReimbursement",
+  dicts: [ 'fin_reimbursement_type' ],
   data() {
     return {
       // 按钮loading
@@ -210,7 +212,17 @@ export default {
       },
       // 表单参数
       form: {
+        reimbursementOrderId: '',
+        finReimbursementDate: '',
         finAmount: '',
+        delFlag: '',
+        createBy: '',
+        createTime: '',
+        updateBy: '',
+        updateTime: '',
+        remark: '',
+        empName: '',
+        empId: '',
         bxmx: []
       },
       // 表单校验
@@ -236,6 +248,21 @@ export default {
   },
   created() {
     this.getList();
+  },
+  mounted () {
+    setTimeout(() => {
+      this.$nextTick(() => {
+        if (this.dict.type['fin_reimbursement_type'] && this.dict.type['fin_reimbursement_type'].length) {
+          const options = this.dict.type['fin_reimbursement_type'].map(item => {
+            return {
+              value: item.value,
+              label: item.label
+            }
+          })
+          this.$set(this.fields[0].children[5].childrenForm[0], 'options', options);
+        }
+      })
+    }, 3000)
   },
   methods: {
     /** 查询费用报销列表 */
@@ -349,6 +376,28 @@ export default {
       this.download('finReimbursement/finReimbursement/export', {
         ...this.queryParams
       }, `finReimbursement_${new Date().getTime()}.xlsx`)
+    },
+    updateValue (params) {
+      if (params) {
+        const key = Object.keys(params)[0];
+        if (key === 'bxmx') {
+          let num = []
+          params[key].forEach(item => {
+            num.push(Number(item.bxje))
+          })
+          let sum = num[0];
+          if (num.length > 1) {
+            sum = calc.add(...num)
+          }
+          this.$refs.wtiForm.updateFormData({'finAmount': sum});
+          // this.fields[0].children.forEach(field => {
+          //   if (field.key === key) {
+          //     field.childrenForm.forEach(child => {
+          //     })
+          //   }
+          // });
+        }
+      }
     }
   }
 };

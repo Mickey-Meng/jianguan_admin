@@ -90,6 +90,7 @@
                                                    :base-u-r-l="baseURL"
                                                    :label-width="childLabelWidth"
                                                    :label-position="labelPosition ? labelPosition : 'top'"
+                                                   @updateValue="valueUpdateEvent"
                                                    v-model.trim="formData[rowItem.key]"/>
 
                                         <TableReadonly v-else-if="rowItem.type === 'table-readonly'"
