@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="仓库编码" prop="warehouseCode">
+<!--      <el-form-item label="仓库编码" prop="warehouseCode">
         <el-input
           v-model="queryParams.warehouseCode"
           placeholder="请输入仓库编码"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="仓库名称" prop="warehouseName">
         <el-input
           v-model="queryParams.warehouseName"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所在城市" prop="city">
+<!--      <el-form-item label="所在城市" prop="city">
         <el-select v-model="queryParams.city" placeholder="请选择所在城市" clearable>
           <el-option
             v-for="dict in dict.type.sys_user_sex"
@@ -50,7 +50,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -105,7 +105,7 @@
 
     <el-table v-loading="loading" :data="whWarehouseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="仓库设置id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="仓库设置id" align="center" prop="id" v-if="false"/>
       <el-table-column label="仓库编码" align="center" prop="warehouseCode" />
       <el-table-column label="仓库名称" align="center" prop="warehouseName" />
       <el-table-column label="所在城市" align="center" prop="city">
@@ -145,8 +145,8 @@
     />
 
     <!-- 添加或修改仓库设置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="仓库编码" prop="warehouseCode">
           <el-input v-model="form.warehouseCode" placeholder="请输入仓库编码" />
         </el-form-item>
@@ -175,9 +175,7 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

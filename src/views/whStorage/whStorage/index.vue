@@ -87,13 +87,12 @@
 
     <el-table v-loading="loading" :data="whStorageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="库位(储位)设置id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="库位(储位)设置id" align="center" prop="id" v-if="false"/>
       <el-table-column label="库位编码" align="center" prop="storageCode" />
       <el-table-column label="库位名称" align="center" prop="storageName" />
       <el-table-column label="库位条码" align="center" prop="storageBarcode" />
       <el-table-column label="所属库区" align="center" prop="reservoirId" />
       <el-table-column label="空库位标识(Y是 N否)" align="center" prop="isEmpty" />
-      <el-table-column label="是否停用(0:正常 1:停用)" align="center" prop="isDisable" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -123,8 +122,8 @@
     />
 
     <!-- 添加或修改库位(储位)设置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="库位编码" prop="storageCode">
           <el-input v-model="form.storageCode" placeholder="请输入库位编码" />
         </el-form-item>
@@ -137,12 +136,27 @@
         <el-form-item label="所属库区" prop="reservoirId">
           <el-input v-model="form.reservoirId" placeholder="请输入所属库区" />
         </el-form-item>
-        <el-form-item label="空库位" prop="isEmpty">
-          <el-input v-model="form.isEmpty" placeholder="是否空库位" />
+        <el-form-item label="空库位标识" prop="isEmpty">
+          <el-select v-model="form.isEmpty" placeholder="空库位标识">
+            <el-option
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="启用状态" prop="isDisable">
-          <el-input v-model="form.isDisable" placeholder="启用状态" />
-        </el-form-item>
+          <el-form-item label="启用状态" prop="isDisable">
+            <el-select v-model="form.isDisable" placeholder="启用状态">
+              <el-option
+                v-for="dict in dict.type.sys_yes_no"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -161,6 +175,7 @@ import { listWhStorage, getWhStorage, delWhStorage, addWhStorage, updateWhStorag
 
 export default {
   name: "WhStorage",
+  dicts: ['sys_yes_no'],
   data() {
     return {
       // 按钮loading
@@ -245,8 +260,8 @@ export default {
         storageName: undefined,
         storageBarcode: undefined,
         reservoirId: undefined,
-        isEmpty: "0",
-        isDisable: "0",
+        isEmpty: undefined,
+        isDisable: undefined,
         delFlag: undefined,
         createBy: undefined,
         createTime: undefined,

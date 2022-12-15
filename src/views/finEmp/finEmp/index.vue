@@ -71,7 +71,7 @@
 
     <el-table v-loading="loading" :data="finEmpList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID ,主键" align="center" prop="id" v-if="true"/>
+      <el-table-column label="ID ,主键" align="center" prop="id" v-if="false"/>
       <el-table-column label="姓名" align="center" prop="empName" />
       <el-table-column label="年龄" align="center" prop="empAge" />
       <el-table-column label="性别" align="center" prop="empGender">
@@ -110,7 +110,7 @@
     />
 
     <!-- 添加或修改员工信息管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="姓名" prop="empName">
           <el-input v-model="form.empName" placeholder="请输入姓名" />
@@ -124,7 +124,7 @@
               v-for="dict in dict.type.sys_user_sex"
               :key="dict.value"
               :label="dict.label"
-:value="dict.value"
+              :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>

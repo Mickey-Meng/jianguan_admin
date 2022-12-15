@@ -95,7 +95,7 @@
 
     <el-table v-loading="loading" :data="contractInfoPurchaseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="合同id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="合同id" align="center" prop="id" v-if="false"/>
       <el-table-column label="合同编码" align="center" prop="contractCode" />
       <el-table-column label="合同名称" align="center" prop="contractName" />
       <el-table-column label="供应商名称" align="center" prop="supplierName" />
