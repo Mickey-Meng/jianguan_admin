@@ -50,7 +50,7 @@
 
 <script>
 import fields from '../config/ledgerChange';
-import { dealNumberFormat } from "@/plugins/utils.js";
+import { dealNumberFormat } from "@/utils/utils.js";
 export default {
   dicts: ['data_status', 'ledger_change_type', 'ledger_change_level'],
   props: {

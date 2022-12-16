@@ -3,9 +3,10 @@
     <el-row :gutter="10">
       <el-col :span="6" :xs="24">
         <div class="left-tree">
-          <el-table ref="table" highlight-current-row v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+          <el-table ref="table" :header-cell-style="headercellStyle"
+            :cell-style="cellStyle" highlight-current-row v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
             <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-            <el-table-column label="期数" align="center" prop="name" />
+            <el-table-column label="期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true" />
             <el-table-column label="状态" align="center" prop="status" min-width="30">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
@@ -174,7 +175,8 @@
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
-        <el-table v-loading="loading" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :header-cell-style="headercellStyle"
+          :cell-style="cellStyle" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <el-table-column label="ID" align="center" prop="id" v-if="false"/>
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
@@ -376,6 +378,7 @@ import { listLedgerBreakdownDetail} from "@/api/ledgerDetail/ledgerBreakdownDeta
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import upload from '@/components/FileUpload';
+
 export default {
   name: "MeasurementDocuments",
   dicts: ['data_status'],
@@ -483,7 +486,21 @@ export default {
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
       },
-      currentRow: null
+      currentRow: null,
+      headercellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          background: '#F7F8FB',
+          color: '#12182A',
+          fontWeight: 600,
+          height: '44px',
+          fontSize: '14px',
+      },
+      cellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          color: '#3A4566',
+          height: '44px',
+          fontSize: '14px',
+      },
     };
   },
   created() {
@@ -555,8 +572,8 @@ export default {
         this.qsloading = false;
       }).finally(() => {
         if (this.measurementNoList.length) {
-          this.rowQsClick(this.measurementNoList[0], 0)
-          this.currentRow = this.measurementNoList[0]
+          this.rowQsClick(this.measurementNoList[this.measurementNoList.length - 1], 0)
+          this.currentRow = this.measurementNoList[this.measurementNoList.length - 1]
           this.$nextTick(() => {
             this.$refs.table.setCurrentRow(this.currentRow)
           })

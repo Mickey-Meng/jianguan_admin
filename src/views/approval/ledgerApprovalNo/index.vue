@@ -95,7 +95,8 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="ledgerApprovalNoList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :header-cell-style="headercellStyle"
+      :cell-style="cellStyle" :data="ledgerApprovalNoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" v-if="false"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
@@ -141,7 +142,7 @@
 
     <!-- 添加或修改期数管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" v-if="open" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item>
@@ -237,7 +238,21 @@ export default {
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
-      }
+      },
+      headercellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          background: '#F7F8FB',
+          color: '#12182A',
+          fontWeight: 600,
+          height: '44px',
+          fontSize: '14px',
+      },
+      cellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          color: '#3A4566',
+          height: '44px',
+          fontSize: '14px',
+      },
     };
   },
   created() {

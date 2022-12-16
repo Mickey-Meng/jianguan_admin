@@ -212,6 +212,7 @@ export default {
       },
       // 表单参数
       form: {
+        id: null,
         reimbursementOrderId: '',
         finReimbursementDate: '',
         finAmount: '',
@@ -223,7 +224,7 @@ export default {
         remark: '',
         empName: '',
         empId: '',
-        bxmx: []
+        qlFinReimbursementItemVoList: []
       },
       // 表单校验
       rules: {
@@ -282,7 +283,7 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: '',
+        id: null,
         reimbursementOrderId: '',
         finReimbursementDate: '',
         finAmount: '',
@@ -327,13 +328,14 @@ export default {
       getFinReimbursement(id).then(response => {
         this.loading = false;
         this.form = response.data;
+        this.$refs.wtiForm.update(this.form);
         this.open = true;
         this.title = "修改费用报销";
       });
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["wtiForm"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
@@ -345,6 +347,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form = this.$refs.wtiForm.formData;
+            console.error('this.form', this.form);
             addFinReimbursement(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -356,7 +360,7 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
+    // /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除费用报销编号为"' + ids + '"的数据项？').then(() => {
@@ -380,7 +384,7 @@ export default {
     updateValue (params) {
       if (params) {
         const key = Object.keys(params)[0];
-        if (key === 'bxmx') {
+        if (key === 'qlFinReimbursementItemVoList') {
           let num = []
           params[key].forEach(item => {
             num.push(Number(item.bxje))
@@ -390,12 +394,6 @@ export default {
             sum = calc.add(...num)
           }
           this.$refs.wtiForm.updateFormData({'finAmount': sum});
-          // this.fields[0].children.forEach(field => {
-          //   if (field.key === key) {
-          //     field.childrenForm.forEach(child => {
-          //     })
-          //   }
-          // });
         }
       }
     }

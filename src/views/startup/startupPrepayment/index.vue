@@ -1,12 +1,13 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20">
+    <el-row :gutter="10">
       <!--部门数据-->
       <el-col :span="6" :xs="24">
-        <el-table v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+        <el-table :header-cell-style="headercellStyle"
+          :cell-style="cellStyle" v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
           <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-          <el-table-column label="期数" align="center" prop="name"/>
-          <el-table-column label="状态" align="center" prop="status">
+          <el-table-column label="期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true"/>
+          <el-table-column label="状态" align="center" prop="status" min-width="30">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
             </template>
@@ -144,7 +145,8 @@
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
-        <el-table v-loading="loading" :data="startupPrepaymentList" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :header-cell-style="headercellStyle"
+          :cell-style="cellStyle" :data="startupPrepaymentList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center"/>
           <el-table-column label="ID" align="center" prop="id" v-if="false"/>
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
@@ -157,7 +159,11 @@
           </el-table-column>
           <el-table-column label="申请类型" align="center" prop="sqlx"/>
           <el-table-column label="申请次数" align="center" prop="sqcs" v-if="false"/>
-          <el-table-column label="预付款金额" align="center" prop="yukje"/>
+          <el-table-column label="预付款金额" align="center" prop="yukje">
+            <template slot-scope="scope">
+                {{ dealNumberFormat(scope.row.yukje) }}
+              </template>
+          </el-table-column>
           <el-table-column label="申请依据" align="center" prop="sqyj" v-if="false"/>
           <el-table-column label="附件地址" align="center" prop="fj" v-if="false"/>
           <el-table-column label="状态" align="center" prop="status" v-if="false"/>
@@ -289,7 +295,7 @@ import {
 } from "@/api/startup/startupPrepayment";
 import {getToken} from "@/utils/auth";
 import {listMeasurementListNo} from "@/api/measurementNo/measurementNo";
-
+import { dealNumberFormat } from "@/utils/utils.js";
 export default {
   name: "StartupPrepayment",
   props: {
@@ -407,7 +413,22 @@ export default {
         status: [
           {required: true, message: "状态不能为空", trigger: "blur"}
         ],
-      }
+      },
+      headercellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          background: '#F7F8FB',
+          color: '#12182A',
+          fontWeight: 600,
+          height: '44px',
+          fontSize: '14px',
+      },
+      cellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          color: '#3A4566',
+          height: '44px',
+          fontSize: '14px',
+      },
+      dealNumberFormat
     };
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <!-- <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
@@ -70,9 +70,11 @@
       :data="ledgerBreakdownList"
       row-key="tzfjbh"
       :default-expand-all="isExpandAll"
+      :header-cell-style="headercellStyle"
+      :cell-style="cellStyle"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="台账分解编号" align="center" prop="tzfjbh" />
+      <el-table-column label="台账分解编号" align="left" prop="tzfjbh" />
       <el-table-column label="台账分解名称" align="center" prop="tzfjmc" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
@@ -132,7 +134,7 @@
             <el-radio
               v-for="dict in dict.type.data_status"
               :key="dict.value"
-:label="dict.value"
+              :label="dict.value"
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -222,7 +224,23 @@ export default {
         // parentId: [
         //   { required: true, message: "树id不能为空", trigger: "blur" }
         // ]
-      }
+      },
+      headercellStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        background: '#F7F8FB',
+        color: '#12182A',
+        fontWeight: 600,
+        height: '44px',
+        padding: '0 14px',
+        fontSize: '14px',
+      },
+      cellStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        color: '#3A4566',
+        height: '44px',
+        padding: '0 14px',
+        fontSize: '14px',
+      },
     };
   },
   created() {

@@ -96,7 +96,7 @@ const fields = [
                 },
             },
             {
-                'key': 'bxmx',
+                'key': 'qlFinReimbursementItemVoList',
                 'type': 'child-form', // 小型表单
                 'headerLabel': '报销明细',
                 'childrenForm': [

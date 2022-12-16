@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="标段编号" prop="bdbh">
         <el-input
           v-model="queryParams.bdbh"
@@ -119,23 +119,24 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="measurementNoList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :header-cell-style="headercellStyle"
+      :cell-style="cellStyle" :data="measurementNoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" v-if="true"/>
+      <el-table-column label="ID" align="center" prop="id" min-width="120" :show-overflow-tooltip="true" v-if="true"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
       <el-table-column label="计量期数编号" align="center" prop="jlqsbh" />
-      <el-table-column label="计量期数文字表达" align="center" prop="jlqs" />
+      <el-table-column label="计量期数文字表达" align="center" min-width="120" prop="jlqs" />
       <el-table-column label="开始日期" align="center" prop="ksrq" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.ksrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束日期" align="center" prop="jsrq" width="180">
+      <el-table-column label="结束日期" align="center" prop="jsrq" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.jsrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="默认日期" align="center" prop="mrrq" width="180">
+      <el-table-column label="默认日期" align="center" prop="mrrq" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mrrq, '{y}-{m}-{d}') }}</span>
         </template>
@@ -176,7 +177,7 @@
 
     <!-- 添加或修改中间计量期数管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" v-if="open" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item>
@@ -303,7 +304,21 @@ export default {
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
-      }
+      },
+      headercellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          background: '#F7F8FB',
+          color: '#12182A',
+          fontWeight: 600,
+          height: '44px',
+          fontSize: '14px',
+      },
+      cellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          color: '#3A4566',
+          height: '44px',
+          fontSize: '14px',
+      },
     };
   },
   created() {

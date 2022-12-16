@@ -3,9 +3,10 @@
     <el-row :gutter="10">
       <el-col :span="6">
         <div class="left-tree">
-          <el-table v-loading="qsloading" highlight-current-row :data="measurementNoList" @row-click="rowQsClick">
+          <el-table ref="table" :header-cell-style="headercellStyle"
+            :cell-style="cellStyle" v-loading="qsloading" highlight-current-row :data="measurementNoList" @row-click="rowQsClick">
             <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-            <el-table-column label="申报期数" align="center" prop="name"/>
+            <el-table-column label="申报期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true"/>
             <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
             <el-table-column label="状态" align="center" prop="status" min-width="30">
               <template slot-scope="scope">
@@ -137,26 +138,27 @@
           </el-col> -->
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
-        <el-table v-loading="loading" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :header-cell-style="headercellStyle"
+          :cell-style="cellStyle" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
-          <el-table-column label="工程部位" align="center" prop="gcbw" />
+          <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" />
 
 
-          <el-table-column label="子目号" align="center" prop="zmh" />
-          <el-table-column label="子目名称" align="center" prop="zmmc" />
+          <el-table-column label="子目号" align="center" min-width="120" prop="zmh" />
+          <el-table-column label="子目名称" align="center" min-width="120" prop="zmmc" />
 
 
-          <el-table-column label="申请期次" align="center" prop="sqqc" />
-          <!-- <el-table-column label="台账分解编号" align="center" prop="tzfjbh" /> -->
+          <el-table-column label="申请期次" align="center" min-width="80" prop="sqqc" />
+          <!-- <el-table-column label="台账分解编号" align="center" min-width="120" prop="tzfjbh" /> -->
 
-          <el-table-column label="单位" align="center" prop="dw" />
-          <el-table-column label="设计数量" align="center" prop="sjsl" />
-          <el-table-column label="分解数量" align="center" prop="fjsl" />
-          <el-table-column label="已计量数量" align="center" prop="yjlsl" />
+          <el-table-column label="单位" align="center" min-width="80" prop="dw" />
+          <el-table-column label="设计数量" align="center" min-width="100" prop="sjsl" />
+          <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl" />
+          <el-table-column label="已计量数量" align="center" min-width="120" prop="yjlsl" />
 
-          <el-table-column label="数据状态" align="center" prop="dataStatus">
+          <el-table-column label="数据状态" align="center" min-width="80" prop="dataStatus">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.data_status" :value="scope.row.dataStatus"/>
             </template>
@@ -279,12 +281,26 @@ export default {
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
-      }
+      },
+      headercellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          background: '#F7F8FB',
+          color: '#12182A',
+          fontWeight: 600,
+          height: '44px',
+          fontSize: '14px',
+      },
+      cellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          color: '#3A4566',
+          height: '44px',
+          fontSize: '14px',
+      },
     };
   },
   created() {
     this.getPeriodsList();
-    this.getList();
+    // this.getList();
   },
   methods: {
     /** 查询台账报审列表 */
@@ -417,6 +433,16 @@ export default {
       listMeasurementListNo().then(response => {
         this.measurementNoList = response.data;
         this.qsloading = false;
+      }).finally(() => {
+        if (this.measurementNoList.length) {
+          this.rowQsClick(this.measurementNoList[this.measurementNoList.length - 1], 0)
+          this.currentRow = this.measurementNoList[this.measurementNoList.length - 1]
+          this.$nextTick(() => {
+            this.$refs.table.setCurrentRow(this.currentRow)
+          })
+        } else {
+          this.getList()
+        }
       });
     },
     getSelectionData (val) {

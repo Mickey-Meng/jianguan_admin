@@ -61,20 +61,42 @@
       row-key="zmh"
       :default-expand-all="isExpandAll"
       :height="'cacl(100vh - 205px)'"
+      :header-cell-style="headercellStyle"
+      :cell-style="cellStyle"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
+      <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="160" :show-overflow-tooltip="true"/>
       <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh" />
       <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc" />
       <el-table-column label="单位" align="center" min-width="80" prop="dw" />
-      <el-table-column label="合同单价" align="center" min-width="110" prop="htdj" />
-      <el-table-column label="新增单价" align="center" min-width="110" prop="xzdj" />
-      <el-table-column label="合同数量" align="center" min-width="110" prop="htsl" />
-      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl" />
-      <el-table-column label="审核数量" align="center" min-width="110" prop="shsl" />
-      <el-table-column label="合同金额" align="center" min-width="110" prop="htje" />
-      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje" />
-      <el-table-column label="审核金额" align="center" min-width="110" prop="shje" />
+      <el-table-column label="合同单价" align="center" min-width="120" prop="htdj">
+        <template slot-scope="scope">
+          {{ dealNumberFormat(scope.row.htdj) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="新增单价" align="center" min-width="120" prop="xzdj">
+        <template slot-scope="scope">
+          {{ dealNumberFormat(scope.row.xzdj) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="合同数量" align="center" min-width="120" prop="htsl" />
+      <el-table-column label="修正数量" align="center" min-width="120" prop="xzsl" />
+      <el-table-column label="审核数量" align="center" min-width="120" prop="shsl" />
+      <el-table-column label="合同金额" align="center" min-width="120" prop="htje">
+        <template slot-scope="scope">
+          {{ dealNumberFormat(scope.row.htje) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="修正金额" align="center" min-width="120" prop="xzje">
+        <template slot-scope="scope">
+          {{ dealNumberFormat(scope.row.xzje) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="审核金额" align="center" min-width="120" prop="shje">
+        <template slot-scope="scope">
+          {{ dealNumberFormat(scope.row.shje) }}
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="总数量" align="center" prop="zsl" />
       <el-table-column label="总金额" align="center" prop="zje" /> -->
       <el-table-column label="状态" align="center" prop="status">
@@ -84,7 +106,7 @@
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="树id" align="center" prop="parentId" /> -->
-      <el-table-column fixed="right" label="操作" width="160" align="center" class-name="small-padding fixed-width">
+      <el-table-column fixed="right" label="操作" width="180" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -113,7 +135,7 @@
 
     <!-- 添加或修改工程量清单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form ref="form" v-if="open" :model="form" :rules="rules" label-width="120px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="标段编号" prop="bdbh">
@@ -147,22 +169,33 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同单价" prop="htdj">
-              <el-input v-model="form.htdj" placeholder="请输入合同单价" />
+              <el-input v-model="form.htdj" :disabled="action === 'edit'" placeholder="请输入合同单价" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="新增单价" prop="xzdj">
-              <el-input v-model="form.xzdj" placeholder="请输入新增单价" />
+              <el-input v-model="form.xzdj" :disabled="action === 'edit'" placeholder="请输入新增单价" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同数量" prop="htsl">
-              <el-input v-model="form.htsl" placeholder="请输入合同数量" />
+              <el-input v-model="form.htsl" :disabled="action === 'edit'" placeholder="请输入合同数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同金额" prop="htje">
-              <el-input v-model="form.htje" placeholder="请输入合同金额" />
+              <el-input v-model="form.htje" :disabled="action === 'edit'" placeholder="请输入合同金额" />
             </el-form-item>
           </el-col>
 <!--          <el-col :span="12">-->
@@ -186,17 +219,6 @@
 <!--            </el-form-item>-->
 <!--          </el-col>-->
           <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in dict.type.data_status"
-                  :key="dict.value"
-                  :label="dict.value"
-                >{{dict.label}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
             </el-form-item>
@@ -215,7 +237,8 @@
 import { listContractBill, getContractBill, delContractBill, addContractBill, updateContractBill } from "@/api/bill/contractBill";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-
+import { dealNumberFormat } from "@/utils/utils.js";
+import formValidate from '@/plugins/formValidate/formValidate'
 export default {
   name: "ContractBill",
   dicts: ['data_status'],
@@ -244,24 +267,24 @@ export default {
       refreshTable: true,
       // 查询参数
       queryParams: {
-        bdbh: undefined,
-        zmh: undefined,
-        zmmc: undefined,
-        zmhParent: undefined,
-        zmhAncestors: undefined,
-        dw: undefined,
-        htdj: undefined,
-        xzdj: undefined,
-        htsl: undefined,
-        htje: undefined,
-        shsl: undefined,
-        shje: undefined,
-        xzsl: undefined,
-        xzje: undefined,
-        zsl: undefined,
-        zje: undefined,
-        status: undefined,
-        parentId: undefined
+        bdbh: '',
+        zmh: '',
+        zmmc: '',
+        zmhParent: '',
+        zmhAncestors: '',
+        dw: '',
+        htdj: '',
+        xzdj: '',
+        htsl: '',
+        htje: '',
+        shsl: '',
+        shje: '',
+        xzsl: '',
+        xzje: '',
+        zsl: '',
+        zje: '',
+        status: '',
+        parentId: ''
       },
       // 表单参数
       form: {},
@@ -288,18 +311,33 @@ export default {
         // dw: [
         //   { required: true, message: "单位不能为空", trigger: "blur" }
         // ],
-        // htdj: [
-        //   { required: true, message: "合同单价不能为空", trigger: "blur" }
-        // ],
-        // xzdj: [
-        //   { required: true, message: "新增单价不能为空", trigger: "blur" }
-        // ],
-        // htsl: [
-        //   { required: true, message: "合同数量不能为空", trigger: "blur" }
-        // ],
-        // htje: [
-        //   { required: true, message: "合同金额不能为空", trigger: "blur" }
-        // ],
+        htdj: [
+          {
+            'validator': formValidate.numberValidator('14/2', true),
+            'trigger': ['change', 'blur'],
+          },
+        ],
+        xzdj: [
+          // { required: true, message: "新增单价不能为空", trigger: "blur" }
+          {
+            'validator': formValidate.numberValidator('14/2', true),
+            'trigger': ['change', 'blur'],
+          },
+        ],
+        htsl: [
+          // { required: true, message: "合同数量不能为空", trigger: "blur" }
+          {
+            'validator': formValidate.checkNumberFour(),
+            'trigger': ['change', 'blur'],
+          },
+        ],
+        htje: [
+          // { required: true, message: "合同金额不能为空", trigger: "blur" }
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
+        ],
         // shsl: [
         //   { required: true, message: "审核数量不能为空", trigger: "blur" }
         // ],
@@ -327,7 +365,23 @@ export default {
         parentId: [
           { required: true, message: "树id不能为空", trigger: "blur" }
         ]
-      }
+      },
+      dealNumberFormat,
+      headercellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          background: '#F7F8FB',
+          color: '#12182A',
+          fontWeight: 600,
+          height: '44px',
+          fontSize: '14px',
+      },
+      cellStyle: {
+          fontFamily: 'PingFangSC-Regular',
+          color: '#3A4566',
+          height: '44px',
+          fontSize: '14px',
+      },
+      action: ''
     };
   },
   created() {
@@ -371,30 +425,30 @@ export default {
     reset() {
       this.form = {
         id: null,
-        bdbh: null,
-        zmh: null,
-        zmmc: null,
-        zmhParent: null,
-        zmhAncestors: null,
-        dw: null,
-        htdj: null,
-        xzdj: null,
-        htsl: null,
-        htje: null,
-        shsl: null,
-        shje: null,
-        xzsl: null,
-        xzje: null,
-        zsl: null,
-        zje: null,
+        bdbh: '',
+        zmh: '',
+        zmmc: '',
+        zmhParent: '',
+        zmhAncestors: '',
+        dw: '',
+        htdj: '',
+        xzdj: '',
+        htsl: '',
+        htje: '',
+        shsl: '',
+        shje: '',
+        xzsl: '',
+        xzje: '',
+        zsl: '',
+        zje: '',
         status: "0",
 
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null,
-        remark: null,
-        parentId: null
+        createBy: '',
+        createTime: '',
+        updateBy: '',
+        updateTime: '',
+        remark: '',
+        parentId: ''
       };
       this.resetForm("form");
     },
@@ -416,6 +470,7 @@ export default {
       } else {
         this.form.zmhParent = 0;
       }
+      this.action = 'add';
       this.open = true;
       this.title = "添加工程量清单";
     },
@@ -437,7 +492,11 @@ export default {
       }
       getContractBill(row.id).then(response => {
 	    this.loading = false;
-        this.form = response.data;
+        // this.form = response.data;
+        Object.keys(this.form).forEach(key => {
+          this.form[key] = response.data[key] || ''
+        })
+        this.action = 'edit';
         this.open = true;
         this.title = "修改工程量清单";
       });

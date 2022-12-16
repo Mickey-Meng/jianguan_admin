@@ -483,7 +483,8 @@
 
 <script>
 import { listContractInfo, getContractInfo, delContractInfo, addContractInfo, updateContractInfo } from "@/api/contractInfo/contractInfo";
-import { dealNumberFormat } from "@/plugins/utils.js";
+import { dealNumberFormat } from "@/utils/utils.js";
+import formValidate from '@/plugins/formValidate/formValidate'
 
 export default {
   name: "ContractInfo",
@@ -563,19 +564,35 @@ export default {
           { required: true, message: "项目名称不能为空", trigger: "blur" }
         ],
         htzje: [
-          { required: true, message: "合同总金额不能为空", trigger: "blur" }
+          { required: true, message: "合同总金额不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         htd: [
           { required: true, message: "合同段不能为空", trigger: "blur" }
         ],
         gclqdje: [
-          { required: true, message: "工程量清单金额不能为空", trigger: "blur" }
+          { required: true, message: "工程量清单金额不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         kgyfkje: [
-          { required: true, message: "开工预付款金额不能为空", trigger: "blur" }
+          { required: true, message: "开工预付款金额不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         zljje: [
-          { required: true, message: "暂列金金额不能为空", trigger: "blur" }
+          { required: true, message: "暂列金金额不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         htgq: [
           { required: true, message: "合同工期)不能为空", trigger: "blur" }
@@ -593,13 +610,25 @@ export default {
           { required: true, message: "农民工工资保证金扣款比例不能为空", trigger: "blur" }
         ],
         zbjze: [
-          { required: true, message: "质保金总额不能为空", trigger: "blur" }
+          { required: true, message: "质保金总额不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         jrgje: [
-          { required: true, message: "计日工金额不能为空", trigger: "blur" }
+          { required: true, message: "计日工金额不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         bdcd: [
-          { required: true, message: "标段长度(km)不能为空", trigger: "blur" }
+          { required: true, message: "标段长度(km)不能为空", trigger: "blur" },
+          {
+            'validator': formValidate.checkNumberFour(),
+            'trigger': ['change', 'blur'],
+          },
         ],
         qqzh: [
           { required: true, message: "起讫桩号不能为空", trigger: "blur" }
