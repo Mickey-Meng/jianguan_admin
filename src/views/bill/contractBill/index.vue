@@ -172,14 +172,19 @@
               <el-input v-model="form.htdj" :disabled="action === 'edit'" placeholder="请输入合同单价" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="新增单价" prop="xzdj">
               <el-input v-model="form.xzdj" :disabled="action === 'edit'" placeholder="请输入新增单价" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item label="合同数量" prop="htsl">
               <el-input v-model="form.htsl" :disabled="action === 'edit'" placeholder="请输入合同数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同金额" prop="htje">
+              <el-input v-model="form.htje" :disabled="action === 'edit'" placeholder="请输入合同金额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -191,11 +196,6 @@
                   :label="dict.value"
                 >{{dict.label}}</el-radio>
               </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="合同金额" prop="htje">
-              <el-input v-model="form.htje" :disabled="action === 'edit'" placeholder="请输入合同金额" />
             </el-form-item>
           </el-col>
 <!--          <el-col :span="12">-->

@@ -6,7 +6,11 @@
           <el-table ref="table" :header-cell-style="headercellStyle"
             :cell-style="cellStyle" v-loading="qsloading" highlight-current-row :data="measurementNoList" @row-click="rowQsClick">
             <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-            <el-table-column label="申报期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true"/>
+            <el-table-column label="申报期数" align="center" prop="sqqc" min-width="120" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                {{ '第' + scope.row.sqqc + '期' }}
+              </template>
+            </el-table-column>
             <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
             <el-table-column label="状态" align="center" prop="status" min-width="30">
               <template slot-scope="scope">
@@ -26,14 +30,14 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="申请期次" prop="sqqc">
+          <!-- <el-form-item label="申请期次" prop="sqqc">
             <el-input
               v-model="queryParams.sqqc"
               placeholder="请输入申请期次"
               clearable
               @keyup.enter.native="handleQuery"
             />
-          </el-form-item>
+          </el-form-item> -->
 <!--        <el-form-item label="台账分解编号" prop="tzfjbh">
           <el-input
             v-model="queryParams.tzfjbh"
@@ -207,6 +211,7 @@
 
 <script>
 import { listLedgerApproval, getLedgerApproval, delLedgerApproval, addLedgerApproval, updateLedgerApproval } from "@/api/ledgerapproval/ledgerApproval";
+import { listLedgerApprovalNo } from "@/api/approval/ledgerApprovalNo";
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import LedgerList from './components/LedgerList';
 export default {
@@ -309,6 +314,7 @@ export default {
       listLedgerApproval(this.queryParams).then(response => {
         this.ledgerApprovalList = response.rows;
         // this.total = response.total;
+      }).finally(() => {
         this.loading = false;
       });
     },
@@ -422,16 +428,15 @@ export default {
       }, `ledgerApproval_${new Date().getTime()}.xlsx`)
     },
     rowQsClick(record,index){ 
-      this.xzQsId=record.id;
-      this.queryParams.jlqsbh = record.id;
-      this.queryParams.pageNum = 1;
+      this.queryParams.sqqc = record.sqqc;
+      // this.queryParams.pageNum = 1;
       this.getList();
     },
      /** 查询中间计量期数管理列表 */
     getPeriodsList() {
       this.qsloading = true;
-      listMeasurementListNo().then(response => {
-        this.measurementNoList = response.data;
+      listLedgerApprovalNo().then(response => {
+        this.measurementNoList = response.rows;
         this.qsloading = false;
       }).finally(() => {
         if (this.measurementNoList.length) {
