@@ -31,7 +31,9 @@ const fields = [
                                 return {
                                     value: item.empName,
                                     label: item.empId,
-                                    item
+                                    item: {
+                                        empId: item.id,
+                                    }
                                 };
                             });
                             cb(d);
@@ -102,7 +104,7 @@ const fields = [
                 'childrenForm': [
                     {
                         'type': 'normal-select',
-                        'key': 'bxlt', // 1
+                        'key': 'finReimbursementType', // 1
                         'label': '报销类型',
                         'placeholder': '请选择',
                         'rules': [
@@ -118,7 +120,7 @@ const fields = [
                     },
                     {
                         'type': 'money-input',
-                        'key': 'bxje', // 1
+                        'key': 'finAmount', // 1
                         'label': '报销金额',
                         'rules': [
                             {

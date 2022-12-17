@@ -12,7 +12,7 @@
                         @blur="e => onBlur(item, e)"
                         @focus="e => onFocus(item, e)"
                         :picker-options="item.pickerOptions ? handlerDate(item.pickerOptions) : () => false"
-                        value-format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd HH:mm:ss"
                         :clearable="true"
                         v-bind="bindOptions"
                         v-if="!getTextModel"/>

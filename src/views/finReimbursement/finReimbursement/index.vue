@@ -328,8 +328,10 @@ export default {
       getFinReimbursement(id).then(response => {
         this.loading = false;
         this.form = response.data;
-        this.$refs.wtiForm.update(this.form);
         this.open = true;
+        this.$nextTick(() => {
+          this.$refs.wtiForm.update(this.form);
+        });
         this.title = "修改费用报销";
       });
     },
@@ -339,6 +341,10 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
+            const form = this.$refs.wtiForm.formData;
+            form.qlFinReimbursementItemVoList.forEach(item => {
+              item['reimbursementDate'] = form.finReimbursementDate;
+            });
             updateFinReimbursement(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -347,9 +353,11 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            this.form = this.$refs.wtiForm.formData;
-            console.error('this.form', this.form);
-            addFinReimbursement(this.form).then(response => {
+            const form = this.$refs.wtiForm.formData;
+            form.qlFinReimbursementItemVoList.forEach(item => {
+              item['reimbursementDate'] = form.finReimbursementDate;
+            });
+            addFinReimbursement(form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -387,7 +395,7 @@ export default {
         if (key === 'qlFinReimbursementItemVoList') {
           let num = []
           params[key].forEach(item => {
-            num.push(Number(item.bxje))
+            num.push(Number(item.finAmount))
           })
           let sum = num[0];
           if (num.length > 1) {
