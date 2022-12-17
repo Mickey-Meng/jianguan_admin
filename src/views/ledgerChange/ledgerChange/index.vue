@@ -1,129 +1,128 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="变更编号" prop="bgbh">
-        <el-input
-          v-model="queryParams.bgbh"
-          placeholder="请输入变更编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <!--      <el-form-item label="变更事项" prop="bgsx">
-              <el-input
-                v-model="queryParams.bgsx"
-                placeholder="请输入变更事项"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="变更等级" prop="bgdj">
-              <el-input
-                v-model="queryParams.bgdj"
-                placeholder="请输入变更等级"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="变更类型" prop="bglx">
-              <el-input
-                v-model="queryParams.bglx"
-                placeholder="请输入变更类型"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="桩号" prop="zh">
-              <el-input
-                v-model="queryParams.zh"
-                placeholder="请输入桩号"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="子目号" prop="zmh">
-              <el-input
-                v-model="queryParams.zmh"
-                placeholder="请输入子目号"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="工程部位" prop="gcbw">
-              <el-input
-                v-model="queryParams.gcbw"
-                placeholder="请输入工程部位"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="图号" prop="th">
-              <el-input
-                v-model="queryParams.th"
-                placeholder="请输入图号"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="申请日期" prop="sqrq">
-              <el-date-picker clearable
-                v-model="queryParams.sqrq"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择申请日期">
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="变更金额" prop="bgje">
-              <el-input
-                v-model="queryParams.bgje"
-                placeholder="请输入变更金额"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="变更原因" prop="bgyy">
-              <el-input
-                v-model="queryParams.bgyy"
-                placeholder="请输入变更原因"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="计算式" prop="jss">
-              <el-input
-                v-model="queryParams.jss"
-                placeholder="请输入计算式"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="状态" prop="status">
-              <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-                <el-option
-                  v-for="dict in dict.type.data_status"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                />
-              </el-select>
-            </el-form-item>-->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['ledgerChange:ledgerChange:add']"
-        >新增
-        </el-button>
+    <el-row :gutter="10">
+      <el-col :span="16">
+         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form-item label="变更编号" prop="bgbh">
+            <el-input
+              v-model="queryParams.bgbh"
+              placeholder="请输入变更编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <!--      <el-form-item label="变更事项" prop="bgsx">
+                  <el-input
+                    v-model="queryParams.bgsx"
+                    placeholder="请输入变更事项"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="变更等级" prop="bgdj">
+                  <el-input
+                    v-model="queryParams.bgdj"
+                    placeholder="请输入变更等级"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="变更类型" prop="bglx">
+                  <el-input
+                    v-model="queryParams.bglx"
+                    placeholder="请输入变更类型"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="桩号" prop="zh">
+                  <el-input
+                    v-model="queryParams.zh"
+                    placeholder="请输入桩号"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="子目号" prop="zmh">
+                  <el-input
+                    v-model="queryParams.zmh"
+                    placeholder="请输入子目号"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="工程部位" prop="gcbw">
+                  <el-input
+                    v-model="queryParams.gcbw"
+                    placeholder="请输入工程部位"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="图号" prop="th">
+                  <el-input
+                    v-model="queryParams.th"
+                    placeholder="请输入图号"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="申请日期" prop="sqrq">
+                  <el-date-picker clearable
+                    v-model="queryParams.sqrq"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="请选择申请日期">
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item label="变更金额" prop="bgje">
+                  <el-input
+                    v-model="queryParams.bgje"
+                    placeholder="请输入变更金额"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="变更原因" prop="bgyy">
+                  <el-input
+                    v-model="queryParams.bgyy"
+                    placeholder="请输入变更原因"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="计算式" prop="jss">
+                  <el-input
+                    v-model="queryParams.jss"
+                    placeholder="请输入计算式"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                  />
+                </el-form-item>
+                <el-form-item label="状态" prop="status">
+                  <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+                    <el-option
+                      v-for="dict in dict.type.data_status"
+                      :key="dict.value"
+                      :label="dict.label"
+                      :value="dict.value"
+                    />
+                  </el-select>
+                </el-form-item>-->
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['ledgerChange:ledgerChange:add']"
+            >新增
+            </el-button>
+          </el-form-item>
+        </el-form>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button
@@ -161,7 +160,7 @@
     </el-row>
 
     <div class="table-area">
-      <el-table v-loading="loading" :height="'calc(100vh - 500px)'" :data="ledgerChangeList"
+      <el-table v-loading="loading" :height="'calc(100vh - 510px)'" :data="ledgerChangeList"
                 @selection-change="handleSelectionChange" @row-click="row_click">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
@@ -191,7 +190,11 @@
             <dict-tag :options="dict.type.ledger_change_type" :value="scope.row.bglx"/>
           </template>
         </el-table-column>
-        <el-table-column label="变更金额" align="center" prop="bgje" min-width="140"/>
+        <el-table-column label="变更金额" align="center" prop="bgje" min-width="140">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.bgje) }}
+          </template>
+        </el-table-column>
         <el-table-column label="变更原因" align="center" prop="bgyy" v-if="false"/>
         <el-table-column label="计算式" align="center" prop="jss" v-if="false"/>
         <el-table-column label="数据状态" align="center" prop="dataStatus" v-if="false"/>
@@ -202,22 +205,42 @@
         </el-table-column>
 
       </el-table>
-      <el-table v-loading="loading" :height="'calc(100vh - 550px)'" :data="ledgerChangeDetailList">
+      <el-table v-loading="loading" :height="'calc(100vh - 555px)'" style="margin-top: 24px;" :data="ledgerChangeDetailList">
         <el-table-column label="标段编号" align="center" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
         <el-table-column label="变更编号" align="center" prop="bgbh" min-width="100" :show-overflow-tooltip="true"/>
         <el-table-column label="子目号" align="center" prop="zmh" v-if="true"/>
         <el-table-column label="子目名称" align="center" prop="zmmc" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="单位" align="center" prop="dw" />
-        <el-table-column label="合同单价" align="center" prop="htdj" min-width="100" :show-overflow-tooltip="true"/>
-        <el-table-column label="新增单价" align="center" prop="xzdj" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="合同单价" align="center" prop="htdj" min-width="100" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.htdj) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="新增单价" align="center" prop="xzdj" min-width="100" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.xzdj) }}
+          </template>
+        </el-table-column>
         <el-table-column label="合同数量" align="center" prop="htsl" min-width="120" :show-overflow-tooltip="true"/>
-        <el-table-column label="合同金额" align="center" prop="htje" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="合同金额" align="center" prop="htje" min-width="120" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.htje) }}
+          </template>
+        </el-table-column>
         <el-table-column label="审核数量" align="center" prop="shsl" min-width="120" :show-overflow-tooltip="true"/>
-        <el-table-column label="审核金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="审核金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.shje) }}
+          </template>
+        </el-table-column>
         <el-table-column label="修正数量" align="center" prop="xzsl" min-width="100" :show-overflow-tooltip="true"/>
-        <el-table-column label="修正金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true"/>
-        <el-table-column label="已计量数量" align="center" prop="yjlsl" />
+        <el-table-column label="修正金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.xzje) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="已计量数量" align="center" prop="yjlsl"  min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
@@ -281,7 +304,7 @@ import {
 import {listLedgerChangeDetail} from "@/api/ledgerChangeDetail/ledgerChangeDetail";
 
 import LedgerChangeForm from './components/LedgerChangeForm';
-
+import { dealNumberFormat } from "@/utils/utils.js";
 export default {
   name: "LedgerChange",
   dicts: ['data_status', 'ledger_change_type', 'ledger_change_level'],
@@ -400,7 +423,7 @@ export default {
         ],
       },
       // 变更子目数据
-
+      dealNumberFormat
     };
   },
   created() {
@@ -536,7 +559,7 @@ export default {
   height: 100%;
 
   .table-area {
-    height: calc(100vh - 205px);
+    height: calc(100vh - 180px);
     overflow: auto;
   }
 }

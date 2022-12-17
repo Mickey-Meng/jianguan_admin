@@ -26,3 +26,10 @@ export const isEmpty = value => {
             return false // 其他对象均视作非空
     }
 };
+export const getParamType = param => {
+    let paramType = ''
+    paramType = Object.prototype.toString.call(param)
+    paramType = paramType.substring(1, paramType.length - 1)
+    paramType = paramType.split(' ')
+    return paramType[1].toLowerCase()
+}

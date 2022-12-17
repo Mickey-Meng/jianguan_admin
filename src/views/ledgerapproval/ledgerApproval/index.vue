@@ -6,13 +6,13 @@
           <el-table ref="table" :header-cell-style="headercellStyle"
             :cell-style="cellStyle" v-loading="qsloading" highlight-current-row :data="measurementNoList" @row-click="rowQsClick">
             <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-            <el-table-column label="申报期数" align="center" prop="sqqc" min-width="120" :show-overflow-tooltip="true">
+            <el-table-column label="申报期数" align="center" prop="sqqc" min-width="80" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{ '第' + scope.row.sqqc + '期' }}
               </template>
             </el-table-column>
             <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
-            <el-table-column label="状态" align="center" prop="status" min-width="30">
+            <el-table-column label="状态" align="center" prop="status" min-width="40">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
               </template>
@@ -147,20 +147,20 @@
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
-          <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" />
+          <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" :show-overflow-tooltip="true"/>
 
 
-          <el-table-column label="子目号" align="center" min-width="120" prop="zmh" />
-          <el-table-column label="子目名称" align="center" min-width="120" prop="zmmc" />
+          <el-table-column label="子目号" align="center" min-width="120" prop="zmh"  :show-overflow-tooltip="true"/>
+          <el-table-column label="子目名称" align="center" min-width="120" prop="zmmc" :show-overflow-tooltip="true"/>
 
 
-          <el-table-column label="申请期次" align="center" min-width="80" prop="sqqc" />
+          <el-table-column label="申请期次" align="center" min-width="80" prop="sqqc" :show-overflow-tooltip="true" />
           <!-- <el-table-column label="台账分解编号" align="center" min-width="120" prop="tzfjbh" /> -->
 
-          <el-table-column label="单位" align="center" min-width="80" prop="dw" />
-          <el-table-column label="设计数量" align="center" min-width="100" prop="sjsl" />
-          <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl" />
-          <el-table-column label="已计量数量" align="center" min-width="120" prop="yjlsl" />
+          <el-table-column label="单位" align="center" min-width="80" prop="dw"  :show-overflow-tooltip="true"/>
+          <el-table-column label="设计数量" align="center" min-width="100" prop="sjsl" :show-overflow-tooltip="true" />
+          <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl" :show-overflow-tooltip="true"/>
+          <el-table-column label="已计量数量" align="center" min-width="120" prop="yjlsl" :show-overflow-tooltip="true"/>
 
           <el-table-column label="数据状态" align="center" min-width="80" prop="dataStatus">
             <template slot-scope="scope">

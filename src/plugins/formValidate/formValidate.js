@@ -154,12 +154,23 @@ class Validate {
             callback();
         };
     }
-    checkNumber () {
+    checkNumberAmount () {
         return (rule, value, callback) => {
             if (!isEmpty(value)) {
                 const match = /^\d{1,20}(\.\d{1,2})?$/
                 if (!match.test(value)) {
                     return callback(new Error('请输入正确的金额'))
+                }
+            }
+            callback()
+        }
+    }
+    checkNumber () {
+        return (rule, value, callback) => {
+            if (!isEmpty(value)) {
+                const match = /^\d{1,20}(\.\d{1,2})?$/
+                if (!match.test(value)) {
+                    return callback(new Error('请输入数字，可输入小数'))
                 }
             }
             callback()

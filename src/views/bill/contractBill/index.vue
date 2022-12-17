@@ -154,7 +154,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="子目号父节点" prop="zmhParent">
-              <treeselect v-model="form.zmhParent" :options="contractBillOptions" :normalizer="normalizer" placeholder="请选择子目号父节点" />
+              <treeselect v-model="form.zmhParent" :disabled="action === 'edit'" :options="contractBillOptions" :normalizer="normalizer" placeholder="请选择子目号父节点" />
             </el-form-item>
           </el-col>
 <!--          <el-col :span="12">-->
@@ -169,7 +169,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同单价" prop="htdj">
-              <el-input v-model="form.htdj" :disabled="action === 'edit'" placeholder="请输入合同单价" />
+              <el-input v-model="form.htdj" :disabled="action === 'edit' && !isLeaf" placeholder="请输入合同单价" />
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12">
@@ -179,12 +179,12 @@
           </el-col> -->
           <el-col :span="12">
             <el-form-item label="合同数量" prop="htsl">
-              <el-input v-model="form.htsl" :disabled="action === 'edit'" placeholder="请输入合同数量" />
+              <el-input v-model="form.htsl" :disabled="action === 'edit' && !isLeaf" placeholder="请输入合同数量" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同金额" prop="htje">
-              <el-input v-model="form.htje" :disabled="action === 'edit'" placeholder="请输入合同金额" />
+              <el-input v-model="form.htje" :disabled="action === 'edit' && !isLeaf" placeholder="请输入合同金额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -327,7 +327,7 @@ export default {
         htsl: [
           // { required: true, message: "合同数量不能为空", trigger: "blur" }
           {
-            'validator': formValidate.checkNumberFour(),
+            'validator': formValidate.checkNumber(),
             'trigger': ['change', 'blur'],
           },
         ],
@@ -381,7 +381,8 @@ export default {
           height: '44px',
           fontSize: '14px',
       },
-      action: ''
+      action: '',
+      isLeaf: false
     };
   },
   created() {
@@ -484,7 +485,9 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-	  this.loading = true;
+      console.error('row', row);
+      this.isLeaf = row.children === undefined; 
+	    this.loading = true;
       this.reset();
       this.getTreeselect();
       if (row != null) {
