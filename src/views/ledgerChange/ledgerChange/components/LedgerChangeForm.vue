@@ -342,19 +342,19 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-
-      selection.forEach(row => {
-        let list = [];
-        if (this.selectionList.length) {
-          list = this.selectionList.filters(v => v.id === row.id);
-        }
-        if (list.length === 1) {
-          this.selectionList = this.selectionList.filters(v => v.id !== row.id);
-        } else {
-          row.action = 'add';
-          this.selectionList = [...this.selectionList, row];
-        }
-      })
+      this.selectionList = selection;
+      // selection.forEach(row => {
+      //   let list = [];
+      //   if (this.selectionList.length) {
+      //     list = this.selectionList.filters(v => v.id === row.id);
+      //   }
+      //   if (list.length === 1) {
+      //     this.selectionList = this.selectionList.filters(v => v.id !== row.id);
+      //   } else {
+      //     row.action = 'add';
+      //     this.selectionList = [...this.selectionList, row];
+      //   }
+      // })
     },
     /** 提交按钮 */
     submitForm() {
