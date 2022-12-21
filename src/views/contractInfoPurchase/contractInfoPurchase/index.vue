@@ -170,6 +170,21 @@
           <el-input v-model="form.amount" placeholder="请输入总金额" />
         </el-form-item>
           </el-col>
+
+
+          <el-col :span="12">
+            <el-form-item label="合同是否已签订" prop="contractStatus">
+              <el-select v-model="form.contractStatus" placeholder="请选择合同是否已签订">
+                <el-option
+                  v-for="dict in dict.type.sys_yes_no"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="12">
         <el-form-item label="合同签订时间" prop="contactDate">
           <el-date-picker clearable
@@ -213,6 +228,7 @@ import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 
 export default {
   name: "ContractInfoPurchase",
+  dicts: ['sys_yes_no'],
   data() {
     return {
       // 按钮loading
@@ -291,12 +307,12 @@ export default {
         id: undefined,
         contractCode: undefined,
         contractName: undefined,
+        contractStatus: undefined,
         supplierName: undefined,
         supplierId: undefined,
         amount: undefined,
         contactDate: undefined,
         rate: undefined,
-        contractStatus: "0",
         fj: undefined,
         delFlag: undefined,
         createBy: undefined,
