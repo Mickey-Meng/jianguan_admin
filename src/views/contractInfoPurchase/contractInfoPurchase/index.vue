@@ -147,11 +147,19 @@
           <el-input v-model="form.contractName" placeholder="请输入合同名称" />
         </el-form-item>
           </el-col>
+
           <el-col :span="12">
-        <el-form-item label="供应商名称" prop="supplierName">
-          <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
-        </el-form-item>
+            <el-form-item label="供应商名称" prop="supplierName">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.supplierName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入供应商名称"
+                @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
           </el-col>
+
           <el-col :span="12">
         <el-form-item label="供应商id" prop="supplierId">
           <el-input v-model="form.supplierId" placeholder="请输入供应商id" />
@@ -199,6 +207,9 @@
 
 <script>
 import { listContractInfoPurchase, getContractInfoPurchase, delContractInfoPurchase, addContractInfoPurchase, updateContractInfoPurchase } from "@/api/contractInfoPurchase/contractInfoPurchase";
+
+import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+
 
 export default {
   name: "ContractInfoPurchase",
@@ -248,7 +259,7 @@ export default {
           { required: true, message: "合同名称不能为空", trigger: "blur" }
         ],
         supplierName: [
-          { required: true, message: "供应商名称不能为空", trigger: "blur" }
+          { required: true, message: "供应商名称不能为空", trigger: "blur,change" }
         ],
         amount: [
           { required: true, message: "总金额不能为空", trigger: "blur" }
@@ -376,7 +387,45 @@ export default {
       this.download('contractInfoPurchase/contractInfoPurchase/export', {
         ...this.queryParams
       }, `contractInfoPurchase_${new Date().getTime()}.xlsx`)
+    },
+
+
+    /*
+    *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        supplierName: queryString,
+      };
+      let flag = false;
+      listBasisSupplier(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.supplierName,
+              label: item.id,
+              item: {
+                supplierId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.supplierId = item.item.supplierId;
+      console.log(item);
     }
+
   }
 };
 </script>

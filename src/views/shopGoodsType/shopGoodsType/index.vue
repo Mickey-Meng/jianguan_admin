@@ -1,31 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="父商品类别id" prop="parentId">
-        <el-input
-          v-model="queryParams.parentId"
-          placeholder="请输入父商品类别id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="祖级列表" prop="ancestors">
-        <el-input
-          v-model="queryParams.ancestors"
-          placeholder="请输入祖级列表"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="商品类别编码" prop="goodsTypeCode">
-        <el-input
-          v-model="queryParams.goodsTypeCode"
-          placeholder="请输入商品类别编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="商品类别名称" prop="goodsTypeName">
+
+      <el-form-item label="名称" prop="goodsTypeName">
         <el-input
           v-model="queryParams.goodsTypeName"
           placeholder="请输入商品类别名称"
@@ -33,14 +10,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="显示顺序" prop="orderNum">
-        <el-input
-          v-model="queryParams.orderNum"
-          placeholder="请输入显示顺序"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
 	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -78,13 +48,13 @@
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="父商品类别id" prop="parentId" />
-      <el-table-column label="祖级列表" align="center" prop="ancestors" />
-      <el-table-column label="商品类别编码" align="center" prop="goodsTypeCode" />
+      <el-table-column label="父商品类别id" prop="parentId"  v-if="false"/>
+      <el-table-column label="祖级列表" align="center" prop="ancestors"  v-if="true"/>
+      <el-table-column label="商品类别编码" align="center" prop="goodsTypeCode"  v-if="false"/>
       <el-table-column label="商品类别名称" align="center" prop="goodsTypeName" />
-      <el-table-column label="显示顺序" align="center" prop="orderNum" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
+      <el-table-column label="显示顺序" align="center" prop="orderNum"  v-if="false"/>
+      <el-table-column label="备注" align="center" prop="remark"  v-if="false"/>
+      <el-table-column label="部门ID" align="center" prop="deptId"  v-if="false"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -113,17 +83,17 @@
     </el-table>
 
     <!-- 添加或修改商品类别对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="父商品类别id" prop="parentId">
           <treeselect v-model="form.parentId" :options="shopGoodsTypeOptions" :normalizer="normalizer" placeholder="请选择父商品类别id" />
         </el-form-item>
-        <el-form-item label="祖级列表" prop="ancestors">
-          <el-input v-model="form.ancestors" placeholder="请输入祖级列表" />
-        </el-form-item>
+<!--        <el-form-item label="祖级列表" prop="ancestors">-->
+<!--          <el-input v-model="form.ancestors" placeholder="请输入祖级列表" />-->
+<!--        </el-form-item>
         <el-form-item label="商品类别编码" prop="goodsTypeCode">
           <el-input v-model="form.goodsTypeCode" placeholder="请输入商品类别编码" />
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="商品类别名称" prop="goodsTypeName">
           <el-input v-model="form.goodsTypeName" placeholder="请输入商品类别名称" />
         </el-form-item>
@@ -133,9 +103,7 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

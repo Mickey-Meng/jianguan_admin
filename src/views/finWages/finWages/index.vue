@@ -130,7 +130,13 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="员工姓名" prop="empName">
-              <el-input v-model="form.empName" placeholder="请输入员工姓名" />
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.empName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入员工姓名"
+                @select="handleSelect"
+              ></el-autocomplete>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -225,6 +231,7 @@
 
 <script>
 import { listFinWages, getFinWages, delFinWages, addFinWages, updateFinWages } from "@/api/finWages/finWages";
+import {listFinEmp} from "@/api/finEmp/finEmp";
 
 export default {
   name: "FinWages",
@@ -312,11 +319,8 @@ export default {
         netPay: [
           { required: true, message: "实际到手工资不能为空", trigger: "blur" }
         ],
-        remark: [
-          { required: true, message: "备注不能为空", trigger: "blur" }
-        ],
         empName: [
-          { required: true, message: "员工姓名不能为空", trigger: "blur" }
+          { required: true, message: "员工姓名不能为空", trigger: "blur,change" }
         ],
         empId: [
           { required: true, message: "员工id不能为空", trigger: "blur" }
@@ -452,7 +456,45 @@ export default {
       this.download('finWages/finWages/export', {
         ...this.queryParams
       }, `finWages_${new Date().getTime()}.xlsx`)
+    },
+
+    /*
+    *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        empName: queryString,
+      };
+      let flag = false;
+      listFinEmp(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.empName,
+              label: item.empId,
+              item: {
+                empId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.empId = item.item.empId;
+      console.log(item);
     }
+
   }
+
 };
 </script>

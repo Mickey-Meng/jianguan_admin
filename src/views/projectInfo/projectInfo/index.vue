@@ -126,8 +126,8 @@
     />
 
     <!-- 添加或修改项目信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="客户id" prop="customerId">
           <el-input v-model="form.customerId" placeholder="请输入客户id" />
         </el-form-item>
@@ -152,11 +152,8 @@
         <el-form-item label="附件" prop="fj">
           <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="" prop="remark">
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
         </el-form-item>
         <el-form-item label="项目所属地区" prop="area">
           <el-select v-model="form.area" placeholder="请选择项目所属地区">

@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="合同id" prop="contractId">
-        <el-input
-          v-model="queryParams.contractId"
-          placeholder="请输入合同id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <!--      <el-form-item label="合同id" prop="contractId">
+              <el-input
+                v-model="queryParams.contractId"
+                placeholder="请输入合同id"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>-->
       <el-form-item label="合同名称" prop="contractName">
         <el-input
           v-model="queryParams.contractName"
@@ -17,46 +17,39 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="供应商id" prop="supplierId">
+      <el-form-item label="供应商" prop="supplierName">
         <el-input
-          v-model="queryParams.supplierId"
-          placeholder="请输入供应商id"
+          v-model="queryParams.supplierName"
+          placeholder="请输入供应商"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="本次付款金额" prop="payAmount">
-        <el-input
-          v-model="queryParams.payAmount"
-          placeholder="请输入本次付款金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="欠付款金额" prop="unpaid">
-        <el-input
-          v-model="queryParams.unpaid"
-          placeholder="请输入欠付款金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <!--      <el-form-item label="本次付款金额" prop="payAmount">
+              <el-input
+                v-model="queryParams.payAmount"
+                placeholder="请输入本次付款金额"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="欠付款金额" prop="unpaid">
+              <el-input
+                v-model="queryParams.unpaid"
+                placeholder="请输入欠付款金额"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>-->
       <el-form-item label="付款时间" prop="paymentDate">
         <el-date-picker clearable
-          v-model="queryParams.paymentDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择付款时间">
+                        v-model="queryParams.paymentDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择付款时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="部门ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -72,7 +65,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['finPayment:finPayment:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -83,7 +77,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['finPayment:finPayment:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -94,7 +89,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['finPayment:finPayment:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -104,27 +100,28 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['finPayment:finPayment:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="finPaymentList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
-      <el-table-column label="合同id" align="center" prop="contractId" />
-      <el-table-column label="合同名称" align="center" prop="contractName" />
-      <el-table-column label="供应商id" align="center" prop="supplierId" />
-      <el-table-column label="本次付款金额" align="center" prop="payAmount" />
-      <el-table-column label="付款方式" align="center" prop="payType" />
-      <el-table-column label="欠付款金额" align="center" prop="unpaid" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
+      <el-table-column label="合同名称" align="center" prop="contractName"/>
+      <el-table-column label="供应商" align="center" prop="supplierName"/>
+      <el-table-column label="本次付款金额" align="center" prop="payAmount"/>
+      <el-table-column label="付款方式" align="center" prop="payType"/>
+      <el-table-column label="欠付款金额" align="center" prop="unpaid" v-if="false"/>
       <el-table-column label="付款时间" align="center" prop="paymentDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.paymentDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="" align="center" prop="remark" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
+      <el-table-column label="" align="center" prop="remark" v-if="false"/>
+      <el-table-column label="部门ID" align="center" prop="deptId" v-if="false"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -133,14 +130,16 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['finPayment:finPayment:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['finPayment:finPayment:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -154,37 +153,50 @@
     />
 
     <!-- 添加或修改供应商付款对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="合同id" prop="contractId">
-          <el-input v-model="form.contractId" placeholder="请输入合同id" />
-        </el-form-item>
-        <el-form-item label="合同名称" prop="contractName">
-          <el-input v-model="form.contractName" placeholder="请输入合同名称" />
-        </el-form-item>
-        <el-form-item label="供应商id" prop="supplierId">
-          <el-input v-model="form.supplierId" placeholder="请输入供应商id" />
-        </el-form-item>
-        <el-form-item label="本次付款金额" prop="payAmount">
-          <el-input v-model="form.payAmount" placeholder="请输入本次付款金额" />
-        </el-form-item>
-        <el-form-item label="欠付款金额" prop="unpaid">
-          <el-input v-model="form.unpaid" placeholder="请输入欠付款金额" />
-        </el-form-item>
-        <el-form-item label="付款时间" prop="paymentDate">
-          <el-date-picker clearable
-            v-model="form.paymentDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择付款时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="合同id" prop="contractId">
+              <el-input v-model="form.contractId" placeholder="请输入合同id"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同名称" prop="contractName">
+              <el-input v-model="form.contractName" placeholder="请输入合同名称"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="供应商id" prop="supplierId">
+              <el-input v-model="form.supplierId" placeholder="请输入供应商id"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="本次付款金额" prop="payAmount">
+              <el-input v-model="form.payAmount" placeholder="请输入本次付款金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="欠付款金额" prop="unpaid">
+              <el-input v-model="form.unpaid" placeholder="请输入欠付款金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="付款时间" prop="paymentDate">
+              <el-date-picker clearable
+                              v-model="form.paymentDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择付款时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -195,7 +207,13 @@
 </template>
 
 <script>
-import { listFinPayment, getFinPayment, delFinPayment, addFinPayment, updateFinPayment } from "@/api/finPayment/finPayment";
+import {
+  listFinPayment,
+  getFinPayment,
+  delFinPayment,
+  addFinPayment,
+  updateFinPayment
+} from "@/api/finPayment/finPayment";
 
 export default {
   name: "FinPayment",
@@ -239,34 +257,22 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "id不能为空", trigger: "blur" }
-        ],
-        contractId: [
-          { required: true, message: "合同id不能为空", trigger: "blur" }
-        ],
-        contractName: [
-          { required: true, message: "合同名称不能为空", trigger: "blur" }
+          {required: true, message: "id不能为空", trigger: "blur"}
         ],
         supplierId: [
-          { required: true, message: "供应商id不能为空", trigger: "blur" }
+          {required: true, message: "供应商id不能为空", trigger: "blur"}
         ],
         payAmount: [
-          { required: true, message: "本次付款金额不能为空", trigger: "blur" }
+          {required: true, message: "本次付款金额不能为空", trigger: "blur"}
         ],
         payType: [
-          { required: true, message: "付款方式不能为空", trigger: "change" }
+          {required: true, message: "付款方式不能为空", trigger: "change"}
         ],
         unpaid: [
-          { required: true, message: "欠付款金额不能为空", trigger: "blur" }
+          {required: true, message: "欠付款金额不能为空", trigger: "blur"}
         ],
         paymentDate: [
-          { required: true, message: "付款时间不能为空", trigger: "blur" }
-        ],
-        remark: [
-          { required: true, message: "不能为空", trigger: "blur" }
-        ],
-        deptId: [
-          { required: true, message: "部门ID不能为空", trigger: "blur" }
+          {required: true, message: "付款时间不能为空", trigger: "blur"}
         ]
       }
     };
@@ -323,7 +329,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
