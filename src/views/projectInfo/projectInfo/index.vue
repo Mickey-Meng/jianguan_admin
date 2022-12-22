@@ -17,15 +17,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="部门ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="项目所属地区" prop="area">
+
+      <el-form-item label="地区" prop="area">
         <el-select v-model="queryParams.area" placeholder="请选择项目所属地区" clearable>
           <el-option
             v-for="dict in dict.type.sys_user_sex"
@@ -50,7 +43,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['projectInfo:projectInfo:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -61,7 +55,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['projectInfo:projectInfo:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,7 +67,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['projectInfo:projectInfo:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,16 +78,17 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['projectInfo:projectInfo:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="projectInfoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
-      <el-table-column label="客户名称" align="center" prop="customerName" />
-      <el-table-column label="项目名称" align="center" prop="projectName" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="客户名称" align="center" prop="customerName"/>
+      <el-table-column label="项目名称" align="center" prop="projectName"/>
       <el-table-column label="项目所属地区" align="center" prop="area">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.area"/>
@@ -105,14 +102,16 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['projectInfo:projectInfo:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['projectInfo:projectInfo:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -126,45 +125,69 @@
     />
 
     <!-- 添加或修改项目信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="客户id" prop="customerId">
-          <el-input v-model="form.customerId" placeholder="请输入客户id" />
-        </el-form-item>
-        <el-form-item label="客户名称" prop="customerName">
-          <el-input v-model="form.customerName" placeholder="请输入客户名称" />
-        </el-form-item>
-        <el-form-item label="项目名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入项目名称" />
-        </el-form-item>
-        <el-form-item label="项目金额" prop="projectAmount">
-          <el-input v-model="form.projectAmount" placeholder="请输入项目金额" />
-        </el-form-item>
-        <el-form-item label="项目简述" prop="projectResume">
-          <el-input v-model="form.projectResume" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="项目描述" prop="projectDistribute">
-          <el-input v-model="form.projectDistribute" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="宣传图" prop="photo">
-          <el-input v-model="form.photo" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="附件" prop="fj">
-          <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="项目所属地区" prop="area">
-          <el-select v-model="form.area" placeholder="请选择项目所属地区">
-            <el-option
-              v-for="dict in dict.type.sys_user_sex"
-              :key="dict.value"
-              :label="dict.label"
-:value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-input v-model="form.customerId"  type=hidden />
+          <el-col :span="12">
+            <el-form-item label="客户名称" prop="customerName">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.customerName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入客户名称"
+                @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="项目名称" prop="projectName">
+              <el-input v-model="form.projectName" placeholder="请输入项目名称"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="项目金额" prop="projectAmount">
+              <el-input v-model="form.projectAmount" placeholder="请输入项目金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="项目简述" prop="projectResume">
+              <el-input v-model="form.projectResume" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="项目描述" prop="projectDistribute">
+              <el-input v-model="form.projectDistribute" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="宣传图" prop="photo">
+              <el-input v-model="form.photo" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="附件" prop="fj">
+              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="项目所属地区" prop="area">
+              <el-select v-model="form.area" placeholder="请选择项目所属地区">
+                <el-option
+                  v-for="dict in dict.type.sys_user_sex"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -175,7 +198,15 @@
 </template>
 
 <script>
-import { listProjectInfo, getProjectInfo, delProjectInfo, addProjectInfo, updateProjectInfo } from "@/api/projectInfo/projectInfo";
+import {
+  listProjectInfo,
+  getProjectInfo,
+  delProjectInfo,
+  addProjectInfo,
+  updateProjectInfo
+} from "@/api/projectInfo/projectInfo";
+import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
+import formValidate from "@/plugins/formValidate/formValidate";
 
 export default {
   name: "ProjectInfo",
@@ -216,19 +247,26 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "id不能为空", trigger: "blur" }
+          {required: true, message: "id不能为空", trigger: "blur"}
         ],
         customerId: [
-          { required: true, message: "客户id不能为空", trigger: "blur" }
+          {required: true, message: "客户id不能为空", trigger: "blur"}
         ],
         customerName: [
-          { required: true, message: "客户名称不能为空", trigger: "blur" }
+          {required: true, message: "客户名称不能为空", trigger: "blur,change"}
         ],
         projectName: [
-          { required: true, message: "项目名称不能为空", trigger: "blur" }
+          {required: true, message: "项目名称不能为空", trigger: "blur"}
+        ],
+        projectAmount: [
+          {required: true, message: "项目金额不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          },
         ],
         area: [
-          { required: true, message: "项目所属地区不能为空", trigger: "change" }
+          {required: true, message: "项目所属地区不能为空", trigger: "change"}
         ]
       }
     };
@@ -287,7 +325,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -354,6 +392,47 @@ export default {
         ...this.queryParams
       }, `projectInfo_${new Date().getTime()}.xlsx`)
     }
+
+    ,
+
+
+    /*
+  *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        customerName: queryString,
+      };
+      let flag = false;
+      listBasisCustomer(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.customerName,
+              label: item.id,
+              item: {
+                id: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.customerId = item.item.id;
+      console.log(item);
+    }
+
+
   }
 };
 </script>
