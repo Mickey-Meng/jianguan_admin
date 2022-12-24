@@ -222,7 +222,7 @@
                   size="mini"
                   type="text"
                   icon="el-icon-edit"
-                  v-show="true"
+                  v-show="scope.row.action !== 'add'"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
                 >设计数量

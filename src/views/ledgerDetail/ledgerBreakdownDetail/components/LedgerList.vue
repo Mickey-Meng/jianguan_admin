@@ -209,24 +209,26 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
+      this.selectionList = selection.map(item => {
+        item.action = 'add';
+        return item;
+      });
       // console.error('selection', selection);
-      selection.forEach(row => {
-        var list = [];
-        if (this.selectionList.length) {
-          list = this.selectionList.filters(v => v.id === row.id);
-        }
-        if (list.length === 1) {
-          this.selectionList = this.selectionList.filters(v => v.id !== row.id);
-        } else {
-          row.action = 'add';
-          this.selectionList = [...this.selectionList, row];
-        }
-      })
+      // selection.forEach(row => {
+      //   var list = [];
+      //   if (this.selectionList.length) {
+      //     list = this.selectionList.filters(v => v.id === row.id);
+      //   }
+      //   if (list.length === 1) {
+      //     this.selectionList = this.selectionList.filters(v => v.id !== row.id);
+      //   } else {
+      //     row.action = 'add';
+      //     this.selectionList = [...this.selectionList, row];
+      //   }
+      // })
     },
     submitForm() {
       if (!this.selectionList.length) {
-
-        console.log("123")
         this.$message.warning('请选择台账分解清单数据后点击确定！');
         return;
       }
