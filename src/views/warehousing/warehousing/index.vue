@@ -89,12 +89,15 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="入库单号" align="center" prop="warehousingCode" />
+      <el-table-column label="采购合同号" align="center" prop="purchaseOrderId" />
       <el-table-column label="入库对接人" align="center" prop="warehousingUsername" />
       <el-table-column label="入库时间" align="center" prop="warehousingDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.warehousingDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="入库状态" align="center" prop="warehousingStatus" />
+      <el-table-column label="采购数量" align="center" prop="orderNumber" />
       <el-table-column label="产品名称" align="center" prop="proudctName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -149,14 +152,32 @@
               <el-input v-model="form.proudctId" placeholder="请输入产品id" />
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
             <el-form-item label="产品名称" prop="proudctName">
-              <el-input v-model="form.proudctName" placeholder="请输入产品名称" />
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.proudctName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入产品名称"
+                @select="handleSelect"
+              ></el-autocomplete>
             </el-form-item>
           </el-col>
+
+
           <el-col :span="12">
             <el-form-item label="入库数量" prop="warehousingNumber">
               <el-input v-model="form.warehousingNumber" placeholder="请输入入库数量" />
+            </el-form-item>
+          </el-col>  <el-col :span="12">
+            <el-form-item label="采购数量" prop="orderNumber">
+              <el-input v-model="form.orderNumber" placeholder="请输入采购数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入库状态" prop="warehousingStatus">
+              <el-input v-model="form.warehousingStatus" placeholder="请输入入库状态" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -188,6 +209,7 @@
 
 <script>
 import { listWarehousing, getWarehousing, delWarehousing, addWarehousing, updateWarehousing } from "@/api/warehousing/warehousing";
+import {listShopGoods} from "@/api/shopGoods/shopGoods";
 
 export default {
   name: "Warehousing",
@@ -220,6 +242,7 @@ export default {
         warehousingCode: undefined,
         warehousingUsername: undefined,
         warehousingDate: undefined,
+        orderNumber: undefined,
         proudctName: undefined
       },
       // 表单参数
@@ -239,6 +262,9 @@ export default {
           { required: true, message: "产品id不能为空", trigger: "blur" }
         ],
         warehousingNumber: [
+          { required: true, message: "入库数量不能为空", trigger: "blur" }
+        ],
+        orderNumber: [
           { required: true, message: "入库数量不能为空", trigger: "blur" }
         ],
         warehousingDate: [
@@ -277,11 +303,13 @@ export default {
         purchaseOrderId: undefined,
         proudctId: undefined,
         warehousingNumber: undefined,
+        warehousingStatus: undefined,
         warehousingDate: undefined,
         delFlag: undefined,
         createBy: undefined,
         createTime: undefined,
         updateBy: undefined,
+        orderNumber: undefined,
         updateTime: undefined,
         remark: undefined,
         deptId: undefined,
@@ -368,6 +396,41 @@ export default {
       this.download('warehousing/warehousing/export', {
         ...this.queryParams
       }, `warehousing_${new Date().getTime()}.xlsx`)
+    },
+    /*
+  *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        productName: queryString,
+      };
+      let flag = false;
+      listShopGoods(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.goodsName,
+              label: item.id,
+              item: {
+                id: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.proudctId = item.item.id;
+      console.log(item);
     }
   }
 };

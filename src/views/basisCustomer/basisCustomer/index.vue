@@ -27,70 +27,70 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="手机" prop="mobilePhone">
-        <el-input
-          v-model="queryParams.mobilePhone"
-          placeholder="请输入手机"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input
-          v-model="queryParams.email"
-          placeholder="请输入邮箱"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="客户所属地区" prop="area">
-        <el-input
-          v-model="queryParams.area"
-          placeholder="请输入客户所属地区"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="地址描述" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入地址描述"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="联系人1" prop="contactPersonOne">
-        <el-input
-          v-model="queryParams.contactPersonOne"
-          placeholder="请输入联系人1"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="电话1" prop="telephoneOne">
-        <el-input
-          v-model="queryParams.telephoneOne"
-          placeholder="请输入电话1"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="发票抬头" prop="invoiceLookedUp">
-        <el-input
-          v-model="queryParams.invoiceLookedUp"
-          placeholder="请输入发票抬头"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="发票税率" prop="invoiceTax">
-        <el-input
-          v-model="queryParams.invoiceTax"
-          placeholder="请输入发票税率"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>-->
+      <!--      <el-form-item label="手机" prop="mobilePhone">
+              <el-input
+                v-model="queryParams.mobilePhone"
+                placeholder="请输入手机"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input
+                v-model="queryParams.email"
+                placeholder="请输入邮箱"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="客户所属地区" prop="area">
+              <el-input
+                v-model="queryParams.area"
+                placeholder="请输入客户所属地区"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="地址描述" prop="address">
+              <el-input
+                v-model="queryParams.address"
+                placeholder="请输入地址描述"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="联系人1" prop="contactPersonOne">
+              <el-input
+                v-model="queryParams.contactPersonOne"
+                placeholder="请输入联系人1"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="电话1" prop="telephoneOne">
+              <el-input
+                v-model="queryParams.telephoneOne"
+                placeholder="请输入电话1"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="发票抬头" prop="invoiceLookedUp">
+              <el-input
+                v-model="queryParams.invoiceLookedUp"
+                placeholder="请输入发票抬头"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="发票税率" prop="invoiceTax">
+              <el-input
+                v-model="queryParams.invoiceTax"
+                placeholder="请输入发票税率"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>-->
 
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -107,7 +107,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['basisCustomer:basisCustomer:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -118,7 +119,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['basisCustomer:basisCustomer:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -129,7 +131,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['basisCustomer:basisCustomer:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -139,17 +142,18 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['basisCustomer:basisCustomer:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="basisCustomerList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-<!--      <el-table-column label="客户id" align="center" prop="id" v-if="true"/>-->
-      <el-table-column label="客户名称" align="center" prop="customerName" />
-      <el-table-column label="联系人" align="center" prop="contactPerson" />
-      <el-table-column label="手机" align="center" prop="mobilePhone" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <!--      <el-table-column label="客户id" align="center" prop="id" v-if="true"/>-->
+      <el-table-column label="客户名称" align="center" prop="customerName"/>
+      <el-table-column label="联系人" align="center" prop="contactPerson"/>
+      <el-table-column label="手机" align="center" prop="mobilePhone"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -158,14 +162,16 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['basisCustomer:basisCustomer:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['basisCustomer:basisCustomer:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -182,75 +188,92 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-<!--          <el-col :span="12">
-        <el-form-item label="客户编码" prop="customerCode">
-          <el-input v-model="form.customerCode" placeholder="请输入客户编码" />
-        </el-form-item>
-          </el-col>-->
+          <!--          <el-col :span="12">
+                  <el-form-item label="客户编码" prop="customerCode">
+                    <el-input v-model="form.customerCode" placeholder="请输入客户编码" />
+                  </el-form-item>
+                    </el-col>-->
           <el-col :span="12">
-        <el-form-item label="客户名称" prop="customerName">
-          <el-input v-model="form.customerName" placeholder="请输入客户名称" />
-        </el-form-item>
+            <el-form-item label="客户名称" prop="customerName">
+              <el-input v-model="form.customerName" placeholder="请输入客户名称"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="营业执照(税号)" prop="businessLicense">
-          <el-input v-model="form.businessLicense" placeholder="请输入营业执照(税号)" />
-        </el-form-item>
+            <el-form-item label="营业执照(税号)" prop="businessLicense">
+              <el-input v-model="form.businessLicense" placeholder="请输入营业执照(税号)"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="联系人" prop="contactPerson">
-          <el-input v-model="form.contactPerson" placeholder="请输入联系人" />
-        </el-form-item>
+            <el-form-item label="联系人" prop="contactPerson">
+              <el-input v-model="form.contactPerson" placeholder="请输入联系人"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="电话" prop="telephone">
-          <el-input v-model="form.telephone" placeholder="请输入电话" />
-        </el-form-item>
+            <el-form-item label="电话" prop="telephone">
+              <el-input v-model="form.telephone" placeholder="请输入电话"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="手机" prop="mobilePhone">
-          <el-input v-model="form.mobilePhone" placeholder="请输入手机" />
-        </el-form-item>
+            <el-form-item label="手机" prop="mobilePhone">
+              <el-input v-model="form.mobilePhone" placeholder="请输入手机"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
-        </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="客户所属地区" prop="area">
-          <el-input v-model="form.area" placeholder="请输入客户所属地区" />
-        </el-form-item>
+            <el-form-item label="客户所属地区" prop="area">
+              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="地址描述" prop="address">
-          <el-input v-model="form.address" placeholder="请输入地址描述" />
-        </el-form-item>
+            <el-form-item label="公共户开户行" prop="publicBankName">
+              <el-input v-model="form.publicBankName" placeholder="请输入公共户开户行" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+          <el-form-item label="私户开户行" prop="privateBankName">
+            <el-input v-model="form.privateBankName" placeholder="请输入私户开户行" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="公户账号" prop="publicBankNo">
+            <el-input v-model="form.publicBankNo" placeholder="请输入公户账号" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="私户账号" prop="privateBankNo">
+            <el-input v-model="form.privateBankNo" placeholder="请输入私户账号" />
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
+            <el-form-item label="地址描述" prop="address">
+              <el-input v-model="form.address" placeholder="请输入地址描述"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="联系人1" prop="contactPersonOne">
-          <el-input v-model="form.contactPersonOne" placeholder="请输入联系人1" />
-        </el-form-item>
+            <el-form-item label="紧急联系人" prop="contactPersonOne">
+              <el-input v-model="form.contactPersonOne" placeholder="请输入联系人"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="电话1" prop="telephoneOne">
-          <el-input v-model="form.telephoneOne" placeholder="请输入电话1" />
-        </el-form-item>
+            <el-form-item label="电话" prop="telephoneOne">
+              <el-input v-model="form.telephoneOne" placeholder="请输入紧急联系人电话"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="发票抬头" prop="invoiceLookedUp">
-          <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头" />
-        </el-form-item>
+            <el-form-item label="发票抬头" prop="invoiceLookedUp">
+              <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="发票税率" prop="invoiceTax">
-          <el-input v-model="form.invoiceTax" placeholder="请输入发票税率" />
-        </el-form-item>
+            <el-form-item label="发票税率" prop="invoiceTax">
+              <el-input v-model="form.invoiceTax" placeholder="请输入发票税率"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -263,7 +286,13 @@
 </template>
 
 <script>
-import { listBasisCustomer, getBasisCustomer, delBasisCustomer, addBasisCustomer, updateBasisCustomer } from "@/api/basisCustomer/basisCustomer";
+import {
+  listBasisCustomer,
+  getBasisCustomer,
+  delBasisCustomer,
+  addBasisCustomer,
+  updateBasisCustomer
+} from "@/api/basisCustomer/basisCustomer";
 
 export default {
   name: "BasisCustomer",
@@ -302,6 +331,10 @@ export default {
         email: undefined,
         area: undefined,
         address: undefined,
+        publicBankName: undefined,
+        privateBankName: undefined,
+        publicBankNo: undefined,
+        privateBankNo: undefined,
         contactPersonOne: undefined,
         telephoneOne: undefined,
         invoiceLookedUp: undefined,
@@ -314,20 +347,28 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "客户资料id不能为空", trigger: "blur" }
+          {required: true, message: "客户资料id不能为空", trigger: "blur"}
         ],
         customerName: [
-          { required: true, message: "客户名称不能为空", trigger: "blur" }
+          {required: true, message: "客户名称不能为空", trigger: "blur"}
         ],
         contactPerson: [
-          { required: true, message: "联系人不能为空", trigger: "blur" }
+          {required: true, message: "联系人不能为空", trigger: "blur"}
         ],
         mobilePhone: [
-          { required: true, message: "手机不能为空", trigger: "blur" }
+          {required: true, message: "手机不能为空", trigger: "blur"}
         ],
         area: [
-          { required: true, message: "客户所属地区不能为空", trigger: "blur" }
+          {required: true, message: "客户所属地区不能为空", trigger: "blur"}
         ],
+        publicBankName: [
+          { required: true, message: "公共户开户行不能为空", trigger: "blur" }
+        ],
+
+        publicBankNo: [
+          { required: true, message: "公户账号不能为空", trigger: "blur" }
+        ],
+
       }
     };
   },
@@ -364,6 +405,10 @@ export default {
         address: undefined,
         contactPersonOne: undefined,
         telephoneOne: undefined,
+        publicBankName: undefined,
+        privateBankName: undefined,
+        publicBankNo: undefined,
+        privateBankNo: undefined,
         invoiceLookedUp: undefined,
         invoiceTax: undefined,
         invoiceType: undefined,
@@ -390,7 +435,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */

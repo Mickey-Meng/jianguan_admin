@@ -16,7 +16,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item label="商品编码" prop="goodsCode">
         <el-input
           v-model="queryParams.goodsCode"
@@ -24,7 +24,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="商品名称" prop="goodsName">
         <el-input
           v-model="queryParams.goodsName"
@@ -139,14 +139,22 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="供应商名称" prop="supplierName">
-              <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.supplierName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入供应商名称"
+                @select="handleSelect"
+              ></el-autocomplete>
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
             <el-form-item label="商品类别ID" prop="goodsTypeId">
               <el-input v-model="form.goodsTypeId" placeholder="请输入商品类别ID" />
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
             <el-form-item label="商品编码" prop="goodsCode">
               <el-input v-model="form.goodsCode" placeholder="请输入商品编码" />
@@ -180,6 +188,11 @@
           <el-col :span="12">
             <el-form-item label="商品重量(单位:千克)" prop="goodsWeight">
               <el-input v-model="form.goodsWeight" placeholder="请输入商品重量(单位:千克)" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="商品单位" prop="goodsUnit">
+              <el-input v-model="form.goodsUnit" placeholder="商品单位" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -225,6 +238,7 @@
 
 <script>
 import { listShopGoods, getShopGoods, delShopGoods, addShopGoods, updateShopGoods } from "@/api/shopGoods/shopGoods";
+import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 
 export default {
   name: "ShopGoods",
@@ -272,7 +286,7 @@ export default {
           { required: true, message: "供应商ID不能为空", trigger: "blur" }
         ],
         supplierName: [
-          { required: true, message: "供应商名称不能为空", trigger: "blur" }
+          { required: true, message: "供应商名称不能为空", trigger: "blur,change" }
         ],
         goodsTypeId: [
           { required: true, message: "商品类别ID不能为空", trigger: "blur" }
@@ -419,7 +433,44 @@ export default {
       this.download('shopGoods/shopGoods/export', {
         ...this.queryParams
       }, `shopGoods_${new Date().getTime()}.xlsx`)
+    },
+    /*
+    *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        supplierName: queryString,
+      };
+      let flag = false;
+      listBasisSupplier(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.supplierName,
+              label: item.id,
+              item: {
+                supplierId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.supplierId = item.item.supplierId;
+      console.log(item);
     }
+
+
   }
 };
 </script>
