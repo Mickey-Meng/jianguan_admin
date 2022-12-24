@@ -24,7 +24,7 @@
         <el-table
           v-if="originData.detailBos"
           :data="originData.detailBos"
-          height="calc(100vh - 540px)"
+          height="calc(100vh - 555px)"
           :header-cell-style="headercellStyle"
           :cell-style="cellStyle"
           border
@@ -128,7 +128,6 @@ export default {
     if (this.originData.fj) {
       this.fileList = JSON.parse(this.originData.fj);
     }
-    this.originData.detailBos = [...this.originData.detailBos, ...this.originData.detailBos, ...this.originData.detailBos, ...this.originData.detailBos];
   }
 }
 </script>
