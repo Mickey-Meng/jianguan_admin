@@ -120,9 +120,20 @@
         <el-form-item label="库区名称" prop="reservoirName">
           <el-input v-model="form.reservoirName" placeholder="请输入库区名称" />
         </el-form-item>
-        <el-form-item label="所属仓库" prop="warehouseId">
-          <el-input v-model="form.warehouseId" placeholder="请输入所属仓库" />
-        </el-form-item>
+
+
+        <el-input v-model="form.warehouseId" type="hidden" />
+          <el-form-item label="所属仓库" prop="warehouseName">
+            <el-autocomplete
+              style="width: 100%"
+              v-model="form.warehouseName"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="请输入仓库名称"
+              @select="handleSelect"
+            ></el-autocomplete>
+          </el-form-item>
+
+
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -138,7 +149,7 @@
 
 <script>
 import { listWhReservoir, getWhReservoir, delWhReservoir, addWhReservoir, updateWhReservoir } from "@/api/whReservoir/whReservoir";
-
+import {listWhWarehouse} from "@/api/whWarehouse/whWarehouse";
 export default {
   name: "WhReservoir",
   data() {
@@ -304,7 +315,46 @@ export default {
       this.download('whReservoir/whReservoir/export', {
         ...this.queryParams
       }, `whReservoir_${new Date().getTime()}.xlsx`)
+    },
+
+
+    /*
+    *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        warehouseName: queryString,
+      };
+      let flag = false;
+      listWhWarehouse(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.warehouseName,
+              label: item.id,
+              item: {
+                warehouseId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.warehouseId = item.item.warehouseId;
+      console.log(item);
     }
+
+
   }
 };
 </script>

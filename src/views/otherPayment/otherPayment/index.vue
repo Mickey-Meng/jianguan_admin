@@ -3,7 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="6" :xs="24">
         <el-table :header-cell-style="headercellStyle"
-          :cell-style="cellStyle" v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+                  :cell-style="cellStyle" v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
           <el-table-column label="ID" align="center" prop="id" v-if="false"/>
           <el-table-column label="期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true"/>
           <el-table-column label="状态" align="center" prop="status" min-width="30">
@@ -147,7 +147,7 @@
         </el-row>
 
         <el-table v-loading="loading" :header-cell-style="headercellStyle"
-          :cell-style="cellStyle" :data="otherPaymentList" @selection-change="handleSelectionChange">
+                  :cell-style="cellStyle" :data="otherPaymentList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center"/>
           <el-table-column label="ID" align="center" prop="id" v-if="false"/>
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
@@ -162,8 +162,8 @@
           <el-table-column label="款项类型" align="center" prop="kxlx"/>
           <el-table-column label="款项金额" align="center" prop="kxje">
             <template slot-scope="scope">
-                {{ dealNumberFormat(scope.row.kxje) }}
-              </template>
+              {{ dealNumberFormat(scope.row.kxje) }}
+            </template>
           </el-table-column>
           <!-- <el-table-column label="附件" align="center" prop="fj"  v-if="false"/> -->
           <el-table-column label="状态" align="center" prop="status" v-if="false">
@@ -205,74 +205,94 @@
 
 
     <!-- 添加或修改其他款项对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号"/>
-        </el-form-item>
-        <el-form-item label="期次编号" prop="jlqsbh">
-          <el-select v-model="form.jlqsbh" placeholder="请选择期次">
-            <el-option
-              v-for="item in jlqsbhOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="申请编号" prop="sqbh">
-          <el-input v-model="form.sqbh" placeholder="请输入申请编号"/>
-        </el-form-item>
-        <el-form-item label="申请日期" prop="sqsj">
-          <el-date-picker clearable
-                          v-model="form.sqsj"
-                          type="datetime"
-                          value-format="yyyy-MM-dd HH:mm:ss"
-                          placeholder="请选择申请日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="所属单位" prop="ssdw">
-          <el-input v-model="form.ssdw" placeholder="请输入所属单位"/>
-        </el-form-item>
-        <el-form-item label="款项类型" prop="kxlx">
-          <el-input v-model="form.kxlx" placeholder="请输入款项类型"/>
-        </el-form-item>
-        <el-form-item label="款项金额" prop="kxje">
-          <el-input v-model="form.kxje" placeholder="请输入款项金额"/>
-        </el-form-item>
-        <el-form-item label="附件地址">
-          <el-upload
-            multiple
-            class="upload-demo"
-            :action="uploadFileUrl"
-            :before-upload="handleBeforeUpload"
-            :file-list="fileList"
-            :limit="limit"
-            :on-error="handleUploadError"
-            :on-exceed="handleExceed"
-            :on-success="handleUploadSuccess"
-            :on-preview="handlePreview"
-            :show-file-list="true"
-            :on-remove="handleDeleteFile"
+    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="标段编号" prop="bdbh">
+              <el-input v-model="form.bdbh" placeholder="请输入标段编号"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="期次编号" prop="jlqsbh">
+              <el-select v-model="form.jlqsbh" placeholder="请选择期次">
+                <el-option
+                  v-for="item in jlqsbhOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="申请编号" prop="sqbh">
+              <el-input v-model="form.sqbh" placeholder="请输入申请编号"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="申请日期" prop="sqsj">
+              <el-date-picker clearable
+                              v-model="form.sqsj"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择申请日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="所属单位" prop="ssdw">
+              <el-input v-model="form.ssdw" placeholder="请输入所属单位"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="款项类型" prop="kxlx">
+              <el-input v-model="form.kxlx" placeholder="请输入款项类型"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="款项金额" prop="kxje">
+              <el-input v-model="form.kxje" placeholder="请输入款项金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="附件地址">
+              <el-upload
+                multiple
+                class="upload-demo"
+                :action="uploadFileUrl"
+                :before-upload="handleBeforeUpload"
+                :file-list="fileList"
+                :limit="limit"
+                :on-error="handleUploadError"
+                :on-exceed="handleExceed"
+                :on-success="handleUploadSuccess"
+                :on-preview="handlePreview"
+                :show-file-list="true"
+                :on-remove="handleDeleteFile"
 
-            :before-remove="beforeRemove"
-            :headers="headers"
+                :before-remove="beforeRemove"
+                :headers="headers"
 
-            ref="fileUpload">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-              :label="dict.value"
-            >{{ dict.label }}
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
+                ref="fileUpload">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in dict.type.data_status"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{ dict.label }}
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -292,7 +312,7 @@ import {
 } from "@/api/otherPayment/otherPayment";
 import {getToken} from "@/utils/auth";
 import {listMeasurementListNo} from "@/api/measurementNo/measurementNo";
-import { dealNumberFormat } from "@/utils/utils.js";
+import {dealNumberFormat} from "@/utils/utils.js";
 
 export default {
   name: "OtherPayment",
@@ -408,18 +428,18 @@ export default {
         ],
       },
       headercellStyle: {
-          fontFamily: 'PingFangSC-Regular',
-          background: '#F7F8FB',
-          color: '#12182A',
-          fontWeight: 600,
-          height: '44px',
-          fontSize: '14px',
+        fontFamily: 'PingFangSC-Regular',
+        background: '#F7F8FB',
+        color: '#12182A',
+        fontWeight: 600,
+        height: '44px',
+        fontSize: '14px',
       },
       cellStyle: {
-          fontFamily: 'PingFangSC-Regular',
-          color: '#3A4566',
-          height: '44px',
-          fontSize: '14px',
+        fontFamily: 'PingFangSC-Regular',
+        color: '#3A4566',
+        height: '44px',
+        fontSize: '14px',
       },
       dealNumberFormat
     };
