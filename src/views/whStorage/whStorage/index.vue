@@ -25,14 +25,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所属库区" prop="reservoirId">
+<!--      <el-form-item label="所属库区" prop="reservoirId">
         <el-input
           v-model="queryParams.reservoirId"
           placeholder="请输入所属库区"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -90,8 +90,8 @@
       <el-table-column label="库位(储位)设置id" align="center" prop="id" v-if="false"/>
       <el-table-column label="库位编码" align="center" prop="storageCode" />
       <el-table-column label="库位名称" align="center" prop="storageName" />
-      <el-table-column label="库位条码" align="center" prop="storageBarcode" />
-      <el-table-column label="所属库区" align="center" prop="reservoirId" />
+      <el-table-column label="库位条码" align="center" prop="storageBarcode" v-if="false"/>
+      <el-table-column label="所属库区" align="center" prop="reservoirId"  v-if="false"/>
       <el-table-column label="空库位标识(Y是 N否)" align="center" prop="isEmpty" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -130,11 +130,17 @@
         <el-form-item label="库位名称" prop="storageName">
           <el-input v-model="form.storageName" placeholder="请输入库位名称" />
         </el-form-item>
-        <el-form-item label="库位条码" prop="storageBarcode">
+<!--        <el-form-item label="库位条码" prop="storageBarcode">
           <el-input v-model="form.storageBarcode" placeholder="请输入库位条码" />
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="所属库区" prop="reservoirId">
-          <el-input v-model="form.reservoirId" placeholder="请输入所属库区" />
+          <el-autocomplete
+            style="width: 100%"
+            v-model="form.reservoirName"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入所属库区"
+            @select="handleSelect"
+          ></el-autocomplete>
         </el-form-item>
         <el-form-item label="空库位标识" prop="isEmpty">
           <el-select v-model="form.isEmpty" placeholder="空库位标识">
@@ -172,6 +178,7 @@
 
 <script>
 import { listWhStorage, getWhStorage, delWhStorage, addWhStorage, updateWhStorage } from "@/api/whStorage/whStorage";
+import {listWhReservoir} from "@/api/whReservoir/whReservoir";
 
 export default {
   name: "WhStorage",
@@ -223,7 +230,7 @@ export default {
           { required: true, message: "库位名称不能为空", trigger: "blur" }
         ],
         reservoirId: [
-          { required: true, message: "所属库区不能为空", trigger: "blur" }
+          { required: true, message: "所属库区不能为空", trigger: "blur,change" }
         ],
         isEmpty: [
           { required: true, message: "空库位标识(Y是 N否)不能为空", trigger: "blur" }
@@ -351,7 +358,47 @@ export default {
       this.download('whStorage/whStorage/export', {
         ...this.queryParams
       }, `whStorage_${new Date().getTime()}.xlsx`)
+    },
+
+
+    /*
+    * 新增库位， 所属库区
+    *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        reservoirName: queryString,
+      };
+      let flag = false;
+      listWhReservoir(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.reservoirName,
+              label: item.id,
+              item: {
+                reservoirId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.reservoirId = item.item.reservoirId;
+      console.log(item);
     }
+
+
   }
 };
 </script>
