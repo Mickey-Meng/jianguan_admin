@@ -61,13 +61,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination
+    <!-- <pagination
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
-    />
+    /> -->
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm">确 定</el-button>
       <el-button @click="close">取 消</el-button>
@@ -77,7 +77,7 @@
 
 <script>
 import {
-  listContractBillPage,
+  listContractBillLeafPage,
   getContractBill,
   delContractBill,
   addContractBill,
@@ -116,8 +116,8 @@ export default {
       total: 0,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
         bdbh: undefined,
         zmh: undefined,
         zmmc: undefined,
@@ -148,9 +148,9 @@ export default {
     /** 查询工程量清单列表 */
     getList() {
       this.loading = true;
-      listContractBillPage(this.queryParams).then(response => {
-        this.contractBillList = response.rows;
-        this.total = response.total;
+      listContractBillLeafPage(this.queryParams).then(response => {
+        this.contractBillList = response.data;
+        // this.total = response.total;
         this.loading = false;
       });
     },

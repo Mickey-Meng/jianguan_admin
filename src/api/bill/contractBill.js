@@ -28,6 +28,15 @@ export function listContractBillPage(query) {
   })
 }
 
+// 查询工程量清单列表分页
+export function listContractBillLeafPage(query) {
+  return request({
+    url: '/bill/contractBill/getLeaflist',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询工程量清单详细
 export function getContractBill(id) {
   return request({
