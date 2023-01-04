@@ -296,7 +296,7 @@ export default {
             this.choseContractList.splice(index, 1);
         },
         handleAdd () {
-            if (this.choseContractList.length === 0) {
+            if (this.stashList.length === 0) {
                 this.$message.warning('请先在上方表格中选择数据后在添加！');
                 return;
             }
@@ -323,7 +323,7 @@ export default {
         submitForm () {
             this.$emit('getData', this.choseContractList);
             this.close();
-        }
+        },
     }
 }
 </script>
