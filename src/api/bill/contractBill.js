@@ -70,3 +70,11 @@ export function delContractBill(id) {
     method: 'delete'
   })
 }
+
+// 工程量章节汇总
+export function chapterCollectBill() {
+  return request({
+    url: '/bill/contractBill/chapter_collect',
+    method: 'get'
+  })
+}
