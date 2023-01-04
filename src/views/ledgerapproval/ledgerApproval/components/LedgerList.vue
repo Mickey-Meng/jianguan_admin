@@ -64,13 +64,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination
+    <!-- <pagination
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
-    />
+    /> -->
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm">确 定</el-button>
       <el-button @click="close">取 消</el-button>
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { listLedgerBreakdownDetail } from "@/api/ledgerDetail/ledgerBreakdownDetail";
+import { listLedgerBreakdownLeaf } from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -112,8 +112,8 @@ export default {
       total: 0,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
         bdbh: undefined,
         zmh: undefined,
         zmmc: undefined,
@@ -144,9 +144,9 @@ export default {
     /** 查询台账分解明细清单列表 */
     getList() {
       this.loading = true;
-      listLedgerBreakdownDetail(this.queryParams).then(response => {
-        this.ledgerBreakdownDetailList = response.rows;
-        this.total = response.total;
+      listLedgerBreakdownLeaf(this.queryParams).then(response => {
+        this.ledgerBreakdownDetailList = response.data;
+        // this.total = response.total;
         this.loading = false;
       });
     },

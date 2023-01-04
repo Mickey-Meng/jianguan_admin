@@ -1,6 +1,14 @@
 import request from '@/utils/request'
 
 // 查询台账分解明细列表
+export function listLedgerBreakdownLeaf(query) {
+  return request({
+    url: '/ledgerDetail/ledgerBreakdownDetail/getLeaflist',
+    method: 'get',
+    params: query
+  })
+}
+// 查询台账分解明细列表
 export function listLedgerBreakdownDetail(query) {
   return request({
     url: '/ledgerDetail/ledgerBreakdownDetail/list',
