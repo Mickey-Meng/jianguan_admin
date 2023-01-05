@@ -143,6 +143,15 @@
               >新增
               </el-button>
             </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="info"
+                plain
+                icon="el-icon-sort"
+                size="mini"
+                @click="toggleExpandAll"
+              >展开/折叠</el-button>
+            </el-col>
             <!-- <el-col :span="1.5">
               <el-button
                 type="success"
@@ -177,16 +186,24 @@
             </el-col> -->
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
           </el-row>
-          <el-table v-loading="loading"
-                    :header-cell-style="headercellStyle"
-                    :cell-style="cellStyle"
-                    :height="'calc(100vh - 205px)'"
-                    :data="ledgerBreakdownDetailList">
-            <!-- @selection-change="handleSelectionChange"> -->
-            <!-- <el-table-column type="selection" width="55" align="center" /> -->
-            <!-- <el-table-column label="标段编号" align="center" prop="bdbh" />
-            <el-table-column label="台账分解编号" align="center" prop="tzfjbh" v-if="true"/> -->
-            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120"
+       
+
+
+
+          <el-table
+            v-if="refreshTable"
+            v-loading="loading"
+            :data="ledgerBreakdownDetailList"
+            row-key="zmmc"
+            :height="'calc(100vh - 205px)'"
+            :default-expand-all="isExpandAll"
+            :header-cell-style="headercellStyle"
+            :cell-style="cellStyle"
+            :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+          >
+            <!-- <el-table-column label="台账分解编号" fixed="left" align="left" prop="tzfjbh" min-width="160"
+                             :show-overflow-tooltip="true"/> -->
+            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="160"
                              :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
             <el-table-column label="单位" align="center" prop="dw" min-width="100"/>
@@ -357,7 +374,7 @@
 
 <script>
 import {
-  listLedgerBreakdownDetail,
+  listLedgerBreakdownTree,
   getLedgerBreakdownDetail,
   delLedgerBreakdownDetail,
   addLedgerBreakdownDetail,
@@ -389,8 +406,12 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
+      // 重新渲染表格状态
+      refreshTable: true,
       // 显示搜索条件
       showSearch: true,
+      // 是否展开，默认全部展开
+      isExpandAll: true,
       // 总条数
       // total: 0,
       // 台账分解明细表格数据
@@ -511,7 +532,7 @@ export default {
     /** 查询台账分解明细列表 */
     getList() {
       this.loading = true;
-      listLedgerBreakdownDetail(this.queryParams).then(response => {
+      listLedgerBreakdownTree(this.queryParams).then(response => {
 
         this.ledgerBreakdownDetailList = response.rows;
         // this.total = response.total;
@@ -548,6 +569,14 @@ export default {
         remark: undefined
       };
       this.resetForm("form");
+    },
+     /** 展开/折叠操作 */
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
     },
     /** 搜索按钮操作 */
     handleQuery() {

@@ -287,7 +287,9 @@
                       <el-table-column
                         prop="zmmc"
                         label="子目名称"
-                        width="180">
+                        min-width="160"
+                        :show-overflow-tooltip="true"
+                        >
                       </el-table-column>
                       <el-table-column
                         prop="fhsl"
@@ -427,6 +429,7 @@ export default {
       open: false,
       // 查询参数
       queryParams: {
+        reviewCode: 2,
         pageNum: 1,
         pageSize: 10,
         bdbh: undefined,
@@ -638,6 +641,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.ledgerBreakdownDetailList = [];
       this.title = "添加计量";
       this.getLeftTree()
       this.getNowDate()

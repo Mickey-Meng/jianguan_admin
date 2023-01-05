@@ -17,6 +17,15 @@ export function listLedgerBreakdownDetail(query) {
   })
 }
 
+// 查询台账分解明细列表
+export function listLedgerBreakdownTree(query) {
+  return request({
+    url: '/ledgerDetail/ledgerBreakdownDetail/list-info',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询台账分解明细详细
 export function getLedgerBreakdownDetail(tzfjbh) {
   return request({
