@@ -79,7 +79,7 @@
 
     <el-table v-loading="loading" :data="outboundList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="出库对接人" align="center" prop="outboundUsername" />
       <el-table-column label="出库时间" align="center" prop="outboundDate" width="180">
         <template slot-scope="scope">
@@ -128,7 +128,13 @@
           <el-input v-model="form.proudctId" placeholder="请输入产品id" />
         </el-form-item>
         <el-form-item label="产品名称" prop="proudctName">
-          <el-input v-model="form.proudctName" placeholder="请输入产品名称" />
+          <el-autocomplete
+            style="width: 100%"
+            v-model="form.proudctName"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入产品名称"
+            @select="handleSelect"
+          ></el-autocomplete>
         </el-form-item>
         <el-form-item label="出库数量" prop="outboundNumber">
           <el-input v-model="form.outboundNumber" placeholder="请输入出库数量" />
@@ -157,6 +163,7 @@
 
 <script>
 import { listOutbound, getOutbound, delOutbound, addOutbound, updateOutbound } from "@/api/outbound/outbound";
+import {listShopGoods} from "@/api/shopGoods/shopGoods";
 
 export default {
   name: "Outbound",
@@ -207,7 +214,7 @@ export default {
           { required: true, message: "出库时间不能为空", trigger: "blur" }
         ],
         proudctName: [
-          { required: true, message: "产品名称不能为空", trigger: "blur" }
+          { required: true, message: "产品名称不能为空", trigger: "blur,change" }
         ]
       }
     };
@@ -329,6 +336,42 @@ export default {
       this.download('outbound/outbound/export', {
         ...this.queryParams
       }, `outbound_${new Date().getTime()}.xlsx`)
+    },
+    /*
+      * 查询产品信息
+     **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        productName: queryString,
+      };
+      let flag = false;
+      listShopGoods(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.goodsName,
+              label: item.id,
+              item: {
+                id: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.proudctId = item.item.id;
+      console.log(item);
     }
   }
 };
