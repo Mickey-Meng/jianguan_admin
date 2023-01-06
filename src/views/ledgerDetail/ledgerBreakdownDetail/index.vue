@@ -194,15 +194,13 @@
             v-if="refreshTable"
             v-loading="loading"
             :data="ledgerBreakdownDetailList"
-            row-key="zmmc"
+            row-key="id"
             :height="'calc(100vh - 205px)'"
             :default-expand-all="isExpandAll"
             :header-cell-style="headercellStyle"
             :cell-style="cellStyle"
-            :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+            :tree-props="{children: 'children'}"
           >
-            <!-- <el-table-column label="台账分解编号" fixed="left" align="left" prop="tzfjbh" min-width="160"
-                             :show-overflow-tooltip="true"/> -->
             <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="160"
                              :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
@@ -533,7 +531,6 @@ export default {
     getList() {
       this.loading = true;
       listLedgerBreakdownTree(this.queryParams).then(response => {
-
         this.ledgerBreakdownDetailList = response.rows;
         // this.total = response.total;
         this.loading = false;
@@ -577,6 +574,9 @@ export default {
       this.$nextTick(() => {
         this.refreshTable = true;
       });
+    },
+    rowKey (row) {
+      console.error('row', row);
     },
     /** 搜索按钮操作 */
     handleQuery() {
