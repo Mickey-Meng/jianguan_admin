@@ -225,7 +225,17 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="客户所属地区" prop="area">
-              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>
+              <el-cascader
+                v-model="form.area_code"
+                size="mini"
+                :options="options"
+                filterable
+                clearable
+                style="width: 100%;"
+                @change="handleChange"
+              />
+
+<!--              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>-->
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -285,6 +295,15 @@
   </div>
 </template>
 
+
+
+<style>
+.el-input--mini .el-input__inner {
+  height: 36px;
+  line-height: 28px;
+}
+</style>
+
 <script>
 import {
   listBasisCustomer,
@@ -293,6 +312,8 @@ import {
   addBasisCustomer,
   updateBasisCustomer
 } from "@/api/basisCustomer/basisCustomer";
+
+import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
 
 export default {
   name: "BasisCustomer",
@@ -308,6 +329,7 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
+      options: regionData,
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -390,6 +412,15 @@ export default {
       this.open = false;
       this.reset();
     },
+    handleChange(value) {
+      console.log(value);
+      if (value == undefined) {
+        return;
+      }
+      this.form.area = value.toString();
+
+    },
+
     // 表单重置
     reset() {
       this.form = {
@@ -402,6 +433,7 @@ export default {
         mobilePhone: undefined,
         email: undefined,
         area: undefined,
+        area_code: [],
         address: undefined,
         contactPersonOne: undefined,
         telephoneOne: undefined,
@@ -452,6 +484,13 @@ export default {
       getBasisCustomer(id).then(response => {
         this.loading = false;
         this.form = response.data;
+        console.log(response.data)
+        if (response.data.area != undefined) {
+          console.log(response.data.area)
+          this.form.area_code = response.data.area.split(",");
+          console.log(this.form.area_code)
+        }
+
         this.open = true;
         this.title = "修改客户资料";
       });

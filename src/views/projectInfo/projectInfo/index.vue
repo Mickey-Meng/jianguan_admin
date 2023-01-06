@@ -89,11 +89,10 @@
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="客户名称" align="center" prop="customerName"/>
       <el-table-column label="项目名称" align="center" prop="projectName"/>
-      <el-table-column label="项目所属地区" align="center" prop="area">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.area"/>
-        </template>
-      </el-table-column>
+
+      <el-table-column label="项目金额" align="center" prop="projectAmount"/>
+
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -177,14 +176,19 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目所属地区" prop="area">
-              <el-select v-model="form.area" placeholder="请选择项目所属地区">
-                <el-option
-                  v-for="dict in dict.type.sys_user_sex"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
-              </el-select>
+
+
+              <el-cascader
+                v-model="form.area_code"
+                size="mini"
+                :options="options"
+                filterable
+                clearable
+                style="width: 100%;"
+                @change="handleChange"
+              />
+
+
             </el-form-item>
           </el-col>
         </el-row>
@@ -207,6 +211,7 @@ import {
 } from "@/api/projectInfo/projectInfo";
 import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import formValidate from "@/plugins/formValidate/formValidate";
+import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
 
 export default {
   name: "ProjectInfo",
@@ -222,6 +227,7 @@ export default {
       // 非单个禁用
       single: true,
       // 非多个禁用
+      options: regionData,
       multiple: true,
       // 显示搜索条件
       showSearch: true,
@@ -249,9 +255,7 @@ export default {
         id: [
           {required: true, message: "id不能为空", trigger: "blur"}
         ],
-        customerId: [
-          {required: true, message: "客户id不能为空", trigger: "blur"}
-        ],
+
         customerName: [
           {required: true, message: "客户名称不能为空", trigger: "blur,change"}
         ],
@@ -308,6 +312,7 @@ export default {
         updateTime: undefined,
         remark: undefined,
         deptId: undefined,
+        area_code: [],
         area: undefined
       };
       this.resetForm("form");
@@ -340,8 +345,14 @@ export default {
       this.reset();
       const id = row.id || this.ids
       getProjectInfo(id).then(response => {
+
         this.loading = false;
         this.form = response.data;
+        if (response.data.area != undefined) {
+          console.log(response.data.area)
+          this.form.area_code = response.data.area.split(",");
+          console.log(this.form.area_code)
+        }
         this.open = true;
         this.title = "修改项目信息";
       });
@@ -370,6 +381,7 @@ export default {
           }
         }
       });
+
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -425,6 +437,13 @@ export default {
         }
       });
 
+    },
+    handleChange(value) {
+      console.log(value);
+      if (value == undefined) {
+        return;
+      }
+      this.form.area = value.toString();
     },
 
     handleSelect(item) {
