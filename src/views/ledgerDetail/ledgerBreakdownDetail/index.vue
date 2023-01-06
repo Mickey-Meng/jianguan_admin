@@ -621,24 +621,30 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          if (this.form.tzfjbh != null) {
-            updateLedgerBreakdownDetail(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          } else {
-            addLedgerBreakdownDetail(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          }
+          // if (this.form.tzfjbh != null) {
+          updateLedgerBreakdownDetail(this.form).then(response => {
+            // this.$modal.msgSuccess("修改成功");
+            this.listLedgerUpBreakdownDetail();
+          }).finally(() => {
+            this.buttonLoading = false;
+          });
+          // } else {
+          //   addLedgerBreakdownDetail(this.form).then(response => {
+          //     this.$modal.msgSuccess("新增成功");
+          //     this.open = false;
+          //     this.getList();
+          //   }).finally(() => {
+          //     this.buttonLoading = false;
+          //   });
+          // }
         }
+      });
+    },
+    listLedgerUpBreakdownDetail () {
+      listLedgerUpBreakdownDetail(this.form).then(response => {
+        this.open = false;
+        this.getList();
+        this.$modal.msgSuccess("修改成功");
       });
     },
     /** 删除按钮操作 */
@@ -689,7 +695,7 @@ export default {
       this.getList();
     },
     getSelectionData(val) {
-      this.ledgerBreakdownDetailList = [...this.ledgerBreakdownDetailList, ...val];
+      this.getList();
     },
     closeOpenAdd() {
       this.openAdd = false;

@@ -59,3 +59,21 @@ export function delLedgerBreakdownDetail(tzfjbh) {
     method: 'delete'
   })
 }
+
+// 台账分解明细批量保存
+export function listLedgerBreakdownAddBatch(data) {
+  return request({
+    url: '/ledgerDetail/ledgerBreakdownDetail/addBatch',
+    method: 'post',
+    data: data
+  })
+}
+
+// 台账分解明细审批
+export function listLedgerUpBreakdownDetail(data) {
+  return request({
+    url: '/ledgerDetail/ledgerBreakdownDetail/upBreakdownDetail',
+    method: 'post',
+    data: data
+  })
+}

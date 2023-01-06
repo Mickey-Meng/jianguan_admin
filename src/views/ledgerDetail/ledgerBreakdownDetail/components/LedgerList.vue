@@ -69,20 +69,15 @@
       @pagination="getList"
     /> -->
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitForm">确 定</el-button>
+      <el-button type="primary" :disabled="loading" @click="submitForm">确 定</el-button>
       <el-button @click="close">取 消</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  listContractBillLeafPage,
-  getContractBill,
-  delContractBill,
-  addContractBill,
-  updateContractBill
-} from "@/api/bill/contractBill";
+import { listContractBillLeafPage } from "@/api/bill/contractBill";
+import { listLedgerBreakdownAddBatch } from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -210,30 +205,22 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.selectionList = selection.map(item => {
-        item.action = 'add';
+        item.id = null;
         return item;
       });
-      // console.error('selection', selection);
-      // selection.forEach(row => {
-      //   var list = [];
-      //   if (this.selectionList.length) {
-      //     list = this.selectionList.filters(v => v.id === row.id);
-      //   }
-      //   if (list.length === 1) {
-      //     this.selectionList = this.selectionList.filters(v => v.id !== row.id);
-      //   } else {
-      //     row.action = 'add';
-      //     this.selectionList = [...this.selectionList, row];
-      //   }
-      // })
     },
     submitForm() {
       if (!this.selectionList.length) {
         this.$message.warning('请选择台账分解清单数据后点击确定！');
         return;
       }
-      this.$emit('getSelectionData', this.selectionList);
-      this.close();
+      this.loading = true;
+      listLedgerBreakdownAddBatch(this.selectionList).then(response => {
+        this.close();
+      }).finally(() => {
+        this.loading = false;
+      });
+      this.$emit('getSelectionData');
     },
   }
 };
