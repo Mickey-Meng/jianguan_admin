@@ -112,8 +112,8 @@
     />
 
     <!-- 添加或修改商品库存信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="商品信息id" prop="goodsId">
           <el-input v-model="form.goodsId" placeholder="请输入商品信息id" />
         </el-form-item>

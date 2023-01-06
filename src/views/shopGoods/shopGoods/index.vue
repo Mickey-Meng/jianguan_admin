@@ -101,6 +101,8 @@
       <el-table-column label="商品编码" align="center" prop="goodsCode" />
       <el-table-column label="商品名称" align="center" prop="goodsName" />
       <el-table-column label="商品单位" align="center" prop="goodsUnit" />
+      <el-table-column label="安全库存" align="center" prop="safetyStock" />
+      <el-table-column label="实时库存" align="center" prop="stockNumber" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -221,6 +223,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="安全库存" prop="safetyStock">
+              <el-input v-model="form.safetyStock" placeholder="请输入安全库存" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+          <el-form-item label="实时库存" prop="stockNumber">
+            <el-input v-model="form.stockNumber" placeholder="请输入实时库存" />
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
             </el-form-item>
@@ -300,6 +312,9 @@ export default {
         goodsSearchstandard: [
           { required: true, message: "商品规格不能为空", trigger: "blur" }
         ],
+        safetyStock: [
+          { required: true, message: "安全库存不能为空", trigger: "blur" }
+        ],
         goodsUnit: [
           { required: true, message: "商品单位【关联字典管理】不能为空", trigger: "change" }
         ],
@@ -344,6 +359,8 @@ export default {
         sellingPrice: undefined,
         wholesalePrice: undefined,
         isCost: undefined,
+        safetyStock: undefined,
+        stockNumber: undefined,
         delFlag: undefined,
         createBy: undefined,
         createTime: undefined,
