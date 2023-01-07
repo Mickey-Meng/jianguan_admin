@@ -242,7 +242,7 @@
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
                 >设计数量
                 </el-button>
-                <el-button
+                <!-- <el-button
                   size="mini"
                   type="text"
                   icon="el-icon-edit"
@@ -250,7 +250,7 @@
                   @click="save(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
                 >保存
-                </el-button>
+                </el-button> -->
                 <el-button
                   size="mini"
                   type="text"
@@ -663,26 +663,20 @@ export default {
         this.loading = false;
       });
     },
-    // 保存逻辑
-    save(row) {
-
-      row.tzfjbh = this.queryParams.tzfjbh;
-      console.log(row);
-      addLedgerBreakdownDetail(row).then(response => {
-        this.$modal.msgSuccess("保存成功");
-        this.open = false;
-        this.getList();
-      }).finally(() => {
-        this.buttonLoading = false;
-      });
-
-
-
-
-
-      // 保存成功后刷新表格数据
-      // TODO
-    },
+    // // 保存逻辑
+    // save(row) {
+    //   row.tzfjbh = this.queryParams.tzfjbh;
+    //   console.log(row);
+    //   addLedgerBreakdownDetail(row).then(response => {
+    //     this.$modal.msgSuccess("保存成功");
+    //     this.open = false;
+    //     this.getList();
+    //   }).finally(() => {
+    //     this.buttonLoading = false;
+    //   });
+    //   // 保存成功后刷新表格数据
+    //   // TODO
+    // },
     /** 导出按钮操作 */
     handleExport() {
       this.download('ledgerDetail/ledgerBreakdownDetail/export', {

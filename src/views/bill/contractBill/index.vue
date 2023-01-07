@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-tabs v-model="activeName">
       <el-tab-pane label="合同清单" name="first">
-        <contract-list/>
+        <contract-list v-if="activeName === 'first'"/>
       </el-tab-pane>
       <el-tab-pane label="章节汇总" name="second">
-        <sections-list/>
+        <sections-list v-if="activeName === 'second'"/>
       </el-tab-pane>
     </el-tabs>
   </div>
