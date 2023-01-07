@@ -42,3 +42,12 @@ export function delLedgerApproval(id) {
     method: 'delete'
   })
 }
+
+// 查询台账报审上报
+export function ledgerApprovalUp(data) {
+  return request({
+    url: '/ledgerapproval/ledgerApproval/up',
+    method: 'post',
+    data: data
+  })
+}

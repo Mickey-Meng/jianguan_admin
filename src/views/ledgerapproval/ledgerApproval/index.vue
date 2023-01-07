@@ -144,7 +144,7 @@
         </el-row>
         <el-table v-loading="loading" :header-cell-style="headercellStyle"
           :cell-style="cellStyle" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
-          <!-- <el-table-column type="selection" width="55" align="center" /> -->
+          <el-table-column type="selection" width="55" align="center" />
           <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
           <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" :show-overflow-tooltip="true"/>
@@ -159,7 +159,7 @@
 
           <el-table-column label="单位" align="center" min-width="80" prop="dw"  :show-overflow-tooltip="true"/>
           <el-table-column label="设计数量" align="center" min-width="100" prop="sjsl" :show-overflow-tooltip="true" />
-          <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl" :show-overflow-tooltip="true"/>
+          <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl"  :show-overflow-tooltip="true"/>
           <el-table-column label="已计量数量" align="center" min-width="120" prop="yjlsl" :show-overflow-tooltip="true"/>
 
           <el-table-column label="数据状态" align="center" min-width="80" prop="dataStatus">
@@ -210,7 +210,7 @@
 </template>
 
 <script>
-import { listLedgerApproval, getLedgerApproval, delLedgerApproval, addLedgerApproval, updateLedgerApproval } from "@/api/ledgerapproval/ledgerApproval";
+import { listLedgerApproval, getLedgerApproval, delLedgerApproval, addLedgerApproval, updateLedgerApproval, ledgerApprovalUp } from "@/api/ledgerapproval/ledgerApproval";
 import { listLedgerApprovalNo } from "@/api/approval/ledgerApprovalNo";
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import LedgerList from './components/LedgerList';
@@ -301,6 +301,7 @@ export default {
           height: '44px',
           fontSize: '14px',
       },
+      selection: []
     };
   },
   created() {
@@ -354,9 +355,10 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+      // this.ids = selection.map(item => item.id)
+      this.selection = selection;
+      // this.single = selection.length!==1
+      // this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -365,42 +367,17 @@ export default {
       this.title = "添加台账报审";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.loading = true;
-      this.reset();
-      const id = row.id || this.ids
-      getLedgerApproval(id).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改台账报审";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          this.buttonLoading = true;
-          if (this.form.id != null) {
-            updateLedgerApproval(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          } else {
-            addLedgerApproval(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          }
-        }
-      });
-    },
+    // handleUpdate(row) {
+    //   this.loading = true;
+    //   this.reset();
+    //   const id = row.id || this.ids
+    //   getLedgerApproval(id).then(response => {
+    //     this.loading = false;
+    //     this.form = response.data;
+    //     this.open = true;
+    //     this.title = "修改台账报审";
+    //   });
+    // },
     /** 删除按钮操作 */
     handleDelete(row, index) {
       this.ledgerApprovalList.splice(index, 1);
@@ -420,6 +397,11 @@ export default {
     submitData () {
       // TODO
       // 对接上报接口
+      ledgerApprovalUp(this.selection).then(response => {
+        this.selection = [];
+        this.getList()
+        this.$message.success('上报成功');
+      });
     },
     /** 导出按钮操作 */
     handleExport() {
