@@ -356,7 +356,11 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       // this.ids = selection.map(item => item.id)
-      this.selection = selection;
+      this.selection = selection.map(item => {
+        item.id = null;
+        item.sqqc = this.queryParams.sqqc;
+        return item;
+      });
       // this.single = selection.length!==1
       // this.multiple = !selection.length
     },
