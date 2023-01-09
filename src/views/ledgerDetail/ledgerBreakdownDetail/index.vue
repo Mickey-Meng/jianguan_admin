@@ -643,9 +643,11 @@ export default {
     listLedgerUpBreakdownDetail () {
       const arr = [ this.form ]
       listLedgerUpBreakdownDetail(arr).then(response => {
-        this.open = false;
-        this.getList();
         this.$modal.msgSuccess("修改成功");
+        setTimeout(() => {
+          this.open = false;
+          this.getList();
+        }, 1000)
       });
     },
     /** 删除按钮操作 */
