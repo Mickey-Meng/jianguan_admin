@@ -139,6 +139,7 @@
                 icon="el-icon-plus"
                 size="mini"
                 @click="handleAdd"
+                :disabled="disabled"
                 v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:add']"
               >新增
               </el-button>
@@ -187,9 +188,6 @@
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
           </el-row>
        
-
-
-
           <el-table
             v-if="refreshTable"
             v-loading="loading"
@@ -277,11 +275,11 @@
 
     <!-- 添加台账分解明细 -->
     <el-dialog :title="'添加清单'" :visible.sync="openAdd" width="1050px" append-to-body>
-      <ledger-list v-if="openAdd" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
+      <ledger-list v-if="openAdd" :tzfjbh="queryParams.tzfjbh" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
     </el-dialog>
     <!-- 修改台账分解明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="form" v-if="open" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="ID" prop="id">
@@ -376,7 +374,8 @@ import {
   getLedgerBreakdownDetail,
   delLedgerBreakdownDetail,
   addLedgerBreakdownDetail,
-  updateLedgerBreakdownDetail
+  updateLedgerBreakdownDetail,
+  listLedgerUpBreakdownDetail
 } from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import {listLedgerBreakdown} from "@/api/ledger/ledgerBreakdown";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -507,7 +506,8 @@ export default {
         padding: '0 14px',
         fontSize: '14px',
       },
-      dealNumberFormat
+      dealNumberFormat,
+      disabled: true // 新增按钮 默认禁止编辑
     };
   },
   created() {
@@ -641,10 +641,13 @@ export default {
       });
     },
     listLedgerUpBreakdownDetail () {
-      listLedgerUpBreakdownDetail(this.form).then(response => {
-        this.open = false;
-        this.getList();
+      const arr = [ this.form ]
+      listLedgerUpBreakdownDetail(arr).then(response => {
         this.$modal.msgSuccess("修改成功");
+        setTimeout(() => {
+          this.open = false;
+          this.getList();
+        }, 1000)
       });
     },
     /** 删除按钮操作 */
@@ -684,6 +687,11 @@ export default {
       }, `ledgerBreakdownDetail_${new Date().getTime()}.xlsx`)
     },
     selectTree(row) {
+      if(!row.children) {
+        this.disabled = false;
+      } else {
+        this.disabled = true;
+      }
       // console.error('选中的数据', row);
       this.queryParams.tzfjbh = row.tzfjbh;
       this.getList();
