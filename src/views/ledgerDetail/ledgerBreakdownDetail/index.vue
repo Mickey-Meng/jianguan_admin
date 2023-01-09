@@ -279,7 +279,7 @@
     </el-dialog>
     <!-- 修改台账分解明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="form" v-if="open" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="ID" prop="id">
@@ -374,7 +374,8 @@ import {
   getLedgerBreakdownDetail,
   delLedgerBreakdownDetail,
   addLedgerBreakdownDetail,
-  updateLedgerBreakdownDetail
+  updateLedgerBreakdownDetail,
+  listLedgerUpBreakdownDetail
 } from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import {listLedgerBreakdown} from "@/api/ledger/ledgerBreakdown";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -640,7 +641,8 @@ export default {
       });
     },
     listLedgerUpBreakdownDetail () {
-      listLedgerUpBreakdownDetail(this.form).then(response => {
+      const arr = [ this.form ]
+      listLedgerUpBreakdownDetail(arr).then(response => {
         this.open = false;
         this.getList();
         this.$modal.msgSuccess("修改成功");
