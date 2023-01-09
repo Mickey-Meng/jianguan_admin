@@ -400,6 +400,8 @@ export default {
   methods: {
     /** 查询客户资料列表 */
     getList() {
+
+      console.log(this.options)
       this.loading = true;
       listBasisCustomer(this.queryParams).then(response => {
         this.basisCustomerList = response.rows;

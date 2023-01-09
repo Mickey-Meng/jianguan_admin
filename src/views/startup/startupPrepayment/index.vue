@@ -534,7 +534,8 @@ export default {
       const id = row.id || this.ids
       getStartupPrepayment(id).then(response => {
         this.loading = false;
-        if (response.data.fj != "") {
+        console.log(response.data)
+        if (response.data.fj != ""&&response.data.fj != undefined) {
           this.fileList = JSON.parse(response.data.fj);
         }
 
