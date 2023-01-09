@@ -139,6 +139,7 @@
                 icon="el-icon-plus"
                 size="mini"
                 @click="handleAdd"
+                :disabled="disabled"
                 v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:add']"
               >新增
               </el-button>
@@ -187,9 +188,6 @@
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
           </el-row>
        
-
-
-
           <el-table
             v-if="refreshTable"
             v-loading="loading"
@@ -277,7 +275,7 @@
 
     <!-- 添加台账分解明细 -->
     <el-dialog :title="'添加清单'" :visible.sync="openAdd" width="1050px" append-to-body>
-      <ledger-list v-if="openAdd" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
+      <ledger-list v-if="openAdd" :tzfjbh="queryParams.tzfjbh" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
     </el-dialog>
     <!-- 修改台账分解明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
@@ -507,7 +505,8 @@ export default {
         padding: '0 14px',
         fontSize: '14px',
       },
-      dealNumberFormat
+      dealNumberFormat,
+      disabled: true // 新增按钮 默认禁止编辑
     };
   },
   created() {
@@ -684,6 +683,11 @@ export default {
       }, `ledgerBreakdownDetail_${new Date().getTime()}.xlsx`)
     },
     selectTree(row) {
+      if(!row.children) {
+        this.disabled = false;
+      } else {
+        this.disabled = true;
+      }
       // console.error('选中的数据', row);
       this.queryParams.tzfjbh = row.tzfjbh;
       this.getList();

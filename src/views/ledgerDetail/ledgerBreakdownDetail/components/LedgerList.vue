@@ -92,6 +92,10 @@ export default {
       type: Function,
       default: () => {
       }
+    },
+    tzfjbh: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -206,6 +210,7 @@ export default {
     handleSelectionChange(selection) {
       this.selectionList = selection.map(item => {
         item.id = null;
+        item.tzfjbh = this.tzfjbh;
         return item;
       });
     },
