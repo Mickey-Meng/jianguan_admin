@@ -71,16 +71,17 @@
 
     <el-table v-loading="loading" :data="finWagesList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="" align="center" prop="id" v-if="true"/>
+      <el-table-column label="" align="center" prop="id" v-if="false"/>
       <el-table-column label="月份" align="center" prop="payDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.payDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="员工姓名" align="center" prop="empName" />
       <el-table-column label="出勤天数" align="center" prop="attendanceDays" />
       <el-table-column label="加班天数" align="center" prop="workOvertimeDays" />
+      <el-table-column label="工资" align="center" prop="preTaxPay" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="员工姓名" align="center" prop="empName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

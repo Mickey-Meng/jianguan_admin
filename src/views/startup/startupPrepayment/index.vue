@@ -305,12 +305,12 @@ export default {
     // 大小限制(MB)
     fileSize: {
       type: Number,
-      default: 5,
+      default: 10,
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc", "xls", "ppt", "txt", "pdf"],
+      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
     },
     // 是否显示提示
     isShowTip: {
@@ -534,7 +534,8 @@ export default {
       const id = row.id || this.ids
       getStartupPrepayment(id).then(response => {
         this.loading = false;
-        if (response.data.fj != "") {
+        console.log(response.data)
+        if (response.data.fj != ""&&response.data.fj != undefined) {
           this.fileList = JSON.parse(response.data.fj);
         }
 

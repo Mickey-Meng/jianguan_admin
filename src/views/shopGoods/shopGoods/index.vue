@@ -152,8 +152,19 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="商品类别ID" prop="goodsTypeId">
-              <el-input v-model="form.goodsTypeId" placeholder="请输入商品类别ID" />
+
+            <el-form-item label="商品类别ID" prop="area">
+              <el-cascader
+                v-model="form.goodsTypeId"
+                size="mini"
+                :options="options"
+                filterable
+                clearable
+                style="width: 100%;"
+                @change="handleChange"
+              />
+
+              <!--              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>-->
             </el-form-item>
           </el-col>
 
@@ -249,8 +260,9 @@
 </template>
 
 <script>
-import { listShopGoods, getShopGoods, delShopGoods, addShopGoods, updateShopGoods } from "@/api/shopGoods/shopGoods";
+import { listShopGoods, getShopGoods, delShopGoods, addShopGoods, updateShopGoods ,goodsTree} from "@/api/shopGoods/shopGoods";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+import {regionData} from "element-china-area-data";
 
 export default {
   name: "ShopGoods",
@@ -266,6 +278,7 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
+      options: [],
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -323,9 +336,29 @@ export default {
   },
   created() {
     this.getList();
+    this.goodsTree();
   },
   methods: {
     /** 查询商品信息列表 */
+    handleChange(value) {
+      console.log(value);
+      if (value == undefined) {
+        return;
+      }
+
+      var valueElement = value[value.length-1];
+      console.log(valueElement)
+      this.form.goodsTypeId = valueElement.toString();
+
+    },
+    goodsTree(){
+      console.log("response")
+      goodsTree().then(response => {
+        console.log("response")
+        this.options = response;
+        console.log(response)
+      });
+    },
     getList() {
       this.loading = true;
       listShopGoods(this.queryParams).then(response => {

@@ -167,15 +167,50 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="供应商id" prop="supplierId">
+            <el-form-item label="供应商id" prop="contractName" type="hidden">
               <el-input v-model="form.supplierId" placeholder="请输入供应商id"/>
             </el-form-item>
           </el-col>
+
+
+
+          <el-col :span="12">
+            <el-form-item label="供应商名称" prop="supplierId">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.supplierName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入供应商名称"
+                @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+
+
+
+
           <el-col :span="12">
             <el-form-item label="本次付款金额" prop="payAmount">
               <el-input v-model="form.payAmount" placeholder="请输入本次付款金额"/>
             </el-form-item>
           </el-col>
+
+
+          <el-col :span="12">
+            <el-form-item label="付款方式" prop="payType">
+              <el-select v-model="form.payType" placeholder="请选择付款方式">
+                <el-option
+                  v-for="dict in dict.type.pay_type"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+
+
           <el-col :span="12">
             <el-form-item label="欠付款金额" prop="unpaid">
               <el-input v-model="form.unpaid" placeholder="请输入欠付款金额"/>
@@ -214,9 +249,11 @@ import {
   addFinPayment,
   updateFinPayment
 } from "@/api/finPayment/finPayment";
+import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 
 export default {
   name: "FinPayment",
+  dicts: ['pay_type'],
   data() {
     return {
       // 按钮loading
@@ -259,9 +296,7 @@ export default {
         id: [
           {required: true, message: "id不能为空", trigger: "blur"}
         ],
-        supplierId: [
-          {required: true, message: "供应商id不能为空", trigger: "blur"}
-        ],
+
         payAmount: [
           {required: true, message: "本次付款金额不能为空", trigger: "blur"}
         ],
@@ -395,6 +430,41 @@ export default {
       this.download('finPayment/finPayment/export', {
         ...this.queryParams
       }, `finPayment_${new Date().getTime()}.xlsx`)
+    },
+    /*
+    *    **/
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        supplierName: queryString,
+      };
+      let flag = false;
+      listBasisSupplier(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.supplierName,
+              label: item.id,
+              item: {
+                supplierId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.supplierId = item.item.supplierId;
+      console.log(item);
     }
   }
 };

@@ -57,12 +57,12 @@ export default {
     // 大小限制(MB)
     fileSize: {
        type: Number,
-      default: 5,
+      default: 10,
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["png", "jpg", "jpeg"],
+      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
     },
     // 是否显示提示
     isShowTip: {
