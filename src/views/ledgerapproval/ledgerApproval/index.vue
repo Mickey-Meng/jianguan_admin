@@ -313,7 +313,7 @@ export default {
     getList() {
       this.loading = true;
       listLedgerApproval(this.queryParams).then(response => {
-        this.ledgerApprovalList = response.rows;
+        this.ledgerApprovalList = respons.rows;
         // this.total = response.total;
       }).finally(() => {
         this.loading = false;
@@ -399,7 +399,15 @@ export default {
       // });
     },
     submitData () {
-      // TODO
+      if (!this.selection.length) {
+        this.$message.warning('请选择要上报的数据！');
+        return;
+      }
+      this.selection = this.selection.map(item => {
+        item.breakdownId = item.id;
+        item.id = null;
+        return item;
+      })
       // 对接上报接口
       ledgerApprovalUp(this.selection).then(response => {
         this.selection = [];

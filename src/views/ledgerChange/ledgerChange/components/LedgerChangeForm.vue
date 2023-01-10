@@ -414,7 +414,10 @@ export default {
     // 获取添加的清单
     getChoseList (val) {
       this.contractBillList = []
-      this.contractBillList = val;
+      this.contractBillList = val.map(item => {
+        item.id = null;
+        return item;
+      });
     }
   }
 };

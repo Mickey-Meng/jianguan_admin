@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询台账报审列表
 export function listLedgerApproval(query) {
   return request({
-    url: '/ledgerapproval/ledgerApproval/list',
+    url: '/ledgerapproval/ledgerApproval/listMeaLedgerApprovalVo',
     method: 'get',
     params: query
   })
