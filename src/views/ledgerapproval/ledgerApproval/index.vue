@@ -142,7 +142,7 @@
           </el-col> -->
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
-        <el-table v-loading="loading" :header-cell-style="headercellStyle"
+        <el-table :height="'calc(100vh - 205px)'" v-loading="loading" :header-cell-style="headercellStyle"
           :cell-style="cellStyle" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
           <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
@@ -313,7 +313,7 @@ export default {
     getList() {
       this.loading = true;
       listLedgerApproval(this.queryParams).then(response => {
-        this.ledgerApprovalList = respons.rows;
+        this.ledgerApprovalList = response.rows;
         // this.total = response.total;
       }).finally(() => {
         this.loading = false;
@@ -357,7 +357,6 @@ export default {
     handleSelectionChange(selection) {
       // this.ids = selection.map(item => item.id)
       this.selection = selection.map(item => {
-        item.id = null;
         item.sqqc = this.queryParams.sqqc;
         return item;
       });
@@ -408,11 +407,14 @@ export default {
         item.id = null;
         return item;
       })
+      this.loading = true;
       // 对接上报接口
       ledgerApprovalUp(this.selection).then(response => {
         this.selection = [];
         this.getList()
         this.$message.success('上报成功');
+      }).catch(() => {
+        this.loading = false;
       });
     },
     /** 导出按钮操作 */
