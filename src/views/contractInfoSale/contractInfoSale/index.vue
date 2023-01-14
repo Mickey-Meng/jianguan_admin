@@ -650,7 +650,7 @@ export default {
       }
       return strs != "" ? strs.substr(0, strs.length - 1) : "";
     },
-    /** 导出按钮操作 */
+    /*/!** 导出按钮操作 *!/
     handleExport() {
       this.download('contractInfoPurchase/contractInfoPurchase/export', {
         ...this.queryParams
@@ -658,8 +658,8 @@ export default {
     },
 
 
-    /*
-    *    **/
+    /!*
+    *    **!/
     querySearchAsync(queryString, cb) {
       const queryParams = {
         supplierName: queryString,
@@ -687,7 +687,7 @@ export default {
         }
       });
 
-    },
+    },*/
 
     handleSelect(item) {
       this.form.supplierId = item.item.supplierId;
