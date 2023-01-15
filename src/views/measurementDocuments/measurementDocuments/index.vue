@@ -174,58 +174,101 @@
           </el-col> -->
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
-
-        <el-table v-loading="loading" :header-cell-style="headercellStyle"
-          :cell-style="cellStyle" :data="measurementDocumentsList" @selection-change="handleSelectionChange">
-          <!-- <el-table-column type="selection" width="55" align="center" /> -->
-          <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-          <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
-          <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
-          <el-table-column label="台账分解编号" align="center" min-width="110" prop="tzfjbh" />
-          <el-table-column label="凭证编号" align="center" min-width="100" prop="pzbh" />
-          <el-table-column label="计量类型" align="center" min-width="100" prop="jllx" />
-          <el-table-column label="计量日期" align="center" min-width="140" prop="jlrq" width="180">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="交工证书" align="center" min-width="100" prop="jgzs" v-if="false" />
-          <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" />
-          <el-table-column label="计算式" align="center" min-width="140" prop="jss" v-if="false"/>
-          <el-table-column label="计量比例" align="center" min-width="140" prop="jlbl" v-if="false"/>
-          <el-table-column label="附件地址" align="center" min-width="140" prop="fj" v-if="false"/>
-          <el-table-column label="状态" align="center" min-width="100" prop="status">
-            <template slot-scope="scope">
-              <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
-                v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
-              >删除</el-button>
-            </template>
-          </el-table-column> -->
-        </el-table>
-
-        <pagination
-          v-show="total>0"
-          :total="total"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="getList"
-        />
+        <div class="table-list">
+          <div class="table1">
+            <el-table :height="'calc(100vh - 570px)'" v-loading="loading" :header-cell-style="headercellStyle"
+              :cell-style="cellStyle" highlight-current-row :data="measurementDocumentsList" @selection-change="handleSelectionChange" @row-click="queryMeasureAbout">
+              <!-- <el-table-column type="selection" width="55" align="center" /> -->
+              <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+              <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
+              <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
+              <el-table-column label="台账分解编号" align="center" min-width="110" prop="tzfjbh" v-if="false"/>
+              <el-table-column label="凭证编号" align="center" min-width="100" prop="pzbh" />
+              <el-table-column label="计量类型" align="center" min-width="100" prop="jllx" />
+              <el-table-column label="计量日期" align="center" min-width="140" prop="jlrq" width="180" v-if="false">
+                <template slot-scope="scope">
+                  <span>{{ parseTime(scope.row.jlrq, '{y}-{m}-{d}') }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="交工证书" align="center" min-width="100" prop="jgzs" v-if="false" />
+              <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" />
+              <el-table-column label="计算式" align="center" min-width="140" prop="jss" v-if="false"/>
+              <el-table-column label="计量比例" align="center" min-width="140" prop="jlbl" v-if="false"/>
+              <el-table-column label="附件地址" align="center" min-width="140" prop="fj" v-if="false"/>
+              <el-table-column label="状态" align="center" min-width="100" prop="status">
+                <template slot-scope="scope">
+                  <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+                </template>
+              </el-table-column>
+              <el-table-column label="计量前置条件" align="center">
+                <el-table-column label="资料" align="center" width="60">
+                  <template>
+                    <span class="circle"></span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="质量" align="center" width="60">
+                  <template>
+                    <span class="circle"></span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="进度" align="center" width="60">
+                  <template>
+                    <span class="circle"></span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="安全" align="center" width="60">
+                  <template>
+                    <span class="circle"></span>
+                  </template>
+                </el-table-column>
+              </el-table-column>
+              <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    type="text"
+                    icon="el-icon-edit"
+                    @click="handleUpdate(scope.row)"
+                    v-hasPermi="['measurementDocuments:measurementDocuments:edit']"
+                  >修改</el-button>
+                  <el-button
+                    size="mini"
+                    type="text"
+                    icon="el-icon-delete"
+                    @click="handleDelete(scope.row)"
+                    v-hasPermi="['measurementDocuments:measurementDocuments:remove']"
+                  >删除</el-button>
+                </template>
+              </el-table-column> -->
+            </el-table>
+            <pagination
+              v-show="total>0"
+              :total="total"
+              :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize"
+              @pagination="getList"
+            />
+          </div>
+          <div class="table2">
+            <el-tabs type="card" v-model="activeName">
+              <el-tab-pane label="计量相关" name="first">
+                <measure-about ref="measureAbout"/>
+              </el-tab-pane>
+              <el-tab-pane label="附件相关" name="second">
+              </el-tab-pane>
+              <el-tab-pane label="资料相关" name="third">
+              </el-tab-pane>
+              <el-tab-pane label="进度相关" name="fouth">
+              </el-tab-pane>
+              <el-tab-pane label="质量相关" name="fifth">
+              </el-tab-pane>
+              <el-tab-pane label="安全相关" name="six">
+              </el-tab-pane>
+            </el-tabs>
+            
+          </div>
+        </div>
+        
       </el-col>
     </el-row>
    
@@ -380,12 +423,13 @@ import { listLedgerBreakdownDetail} from "@/api/ledgerDetail/ledgerBreakdownDeta
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import upload from '@/components/FileUpload';
+import measureAbout from './componenets/measureAbout';
 
 export default {
   name: "MeasurementDocuments",
   dicts: ['data_status'],
   components: {
-    upload
+    upload, measureAbout
   },
   data() {
     return {
@@ -491,19 +535,20 @@ export default {
       },
       currentRow: null,
       headercellStyle: {
-          fontFamily: 'PingFangSC-Regular',
-          background: '#F7F8FB',
-          color: '#12182A',
-          fontWeight: 600,
-          height: '44px',
-          fontSize: '14px',
+        fontFamily: 'PingFangSC-Regular',
+        background: '#F7F8FB',
+        color: '#12182A',
+        fontWeight: 600,
+        height: '44px',
+        fontSize: '14px',
       },
       cellStyle: {
-          fontFamily: 'PingFangSC-Regular',
-          color: '#3A4566',
-          height: '44px',
-          fontSize: '14px',
+        fontFamily: 'PingFangSC-Regular',
+        color: '#3A4566',
+        height: '44px',
+        fontSize: '14px',
       },
+      activeName: 'first'
     };
   },
   created() {
@@ -729,28 +774,47 @@ export default {
       }, `measurementDocuments_${new Date().getTime()}.xlsx`)
     },
     handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        console.log(files);
-        console.log(fileList);
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      }
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      console.log(files);
+      console.log(fileList);
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${ file.name }？`);
+    },
+    queryMeasureAbout (row) {
+      this.$refs.measureAbout.measurementAboutList(row.id);
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
 .app-container {
   height: 100%;
-  .el-table {
-    height: calc(100vh - 270px);
-    overflow: auto;
+  .table-list {
+    .table1 {
+      height: calc(100vh - 510px);
+      min-height: 150px;
+      > .el-table {
+        min-height: 100px;
+      }
+      .circle {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: red;
+        box-shadow: 0 0 3px 0 #ccc;
+      }
+    }
+    .table2 {
+      height: 310px;
+    }
   }
 }
 .left-tree {

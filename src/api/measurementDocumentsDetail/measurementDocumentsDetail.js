@@ -42,3 +42,13 @@ export function delMeasurementDocumentsDetail(id) {
     method: 'delete'
   })
 }
+
+
+// 查询计量相关数据
+export function measurementAboutList(query) {
+  return request({
+    url: '/measurementDocumentsDetail/measurementDocumentsDetail/list',
+    method: 'get',
+    params: query
+  })
+}
