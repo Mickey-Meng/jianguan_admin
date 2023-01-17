@@ -386,9 +386,7 @@ export default {
         contactDate: [
           {required: true, message: "合同签订时间不能为空", trigger: "blur"}
         ],
-        retentionDate: [
-          {required: true, message: "质保金到期时间不能为空", trigger: "blur"}
-        ],
+
         rate: [
           {required: true, message: "税率不能为空", trigger: "blur"}
         ],
@@ -549,7 +547,7 @@ export default {
               value: item.customerName,
               label: item.id,
               item: {
-                id: item.id,
+                customerId: item.id,
               }
             };
           });
@@ -563,6 +561,10 @@ export default {
         }
       });
 
+    },
+    handleSelect(item) {
+      this.form.customerId = item.item.customerId;
+      console.log(item);
     },
 
 
@@ -689,10 +691,6 @@ export default {
 
     },*/
 
-    handleSelect(item) {
-      this.form.supplierId = item.item.supplierId;
-      console.log(item);
-    },
 
     handleRemove(file, fileList) {
       console.log(file, fileList);

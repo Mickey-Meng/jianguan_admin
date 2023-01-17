@@ -85,6 +85,8 @@
       <el-table-column label="供应商名称" align="center" prop="supplierName" />
       <el-table-column label="联系人" align="center" prop="contactPerson" />
       <el-table-column label="手机" align="center" prop="mobilePhone" />
+      <el-table-column label="总欠款金额" align="center" prop="unpaid" />
+      <el-table-column label="欠发票金额" align="center" prop="uninvoiceAmount" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -173,6 +175,23 @@
         </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="总付款金额" prop="payed">
+              <el-input v-model="form.payed" placeholder="请输入总付款金额" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+          <el-form-item label="总欠款金额" prop="unpaid">
+            <el-input v-model="form.unpaid" placeholder="请输入总欠款金额" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="已开发票金额" prop="invoiceAmount">
+            <el-input v-model="form.invoiceAmount" placeholder="请输入已开发票金额" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="欠发票金额" prop="uninvoiceAmount">
+            <el-input v-model="form.uninvoiceAmount" placeholder="请输入欠发票金额" />
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
         <el-form-item label="" label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -222,6 +241,10 @@ export default {
         supplierName: undefined,
         contactPerson: undefined,
         mobilePhone: undefined,
+        payed: undefined,
+        unpaid: undefined,
+        invoiceAmount: undefined,
+        uninvoiceAmount: undefined,
       },
       // 表单参数
       form: {},
@@ -284,7 +307,11 @@ export default {
         updateBy: undefined,
         updateTime: undefined,
         remark: undefined,
-        deptId: undefined
+        deptId: undefined,
+        payed: undefined,
+        unpaid: undefined,
+        invoiceAmount: undefined,
+        uninvoiceAmount: undefined,
       };
       this.resetForm("form");
     },

@@ -213,7 +213,7 @@
 
           <el-col :span="12">
             <el-form-item label="欠付款金额" prop="unpaid">
-              <el-input v-model="form.unpaid" placeholder="请输入欠付款金额"/>
+              <el-input v-model="form.unpaid" placeholder="请输入欠付款金额" readonly="true"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -293,10 +293,6 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        id: [
-          {required: true, message: "id不能为空", trigger: "blur"}
-        ],
-
         payAmount: [
           {required: true, message: "本次付款金额不能为空", trigger: "blur"}
         ],
@@ -447,6 +443,7 @@ export default {
               label: item.id,
               item: {
                 supplierId: item.id,
+                unpaid: item.unpaid,
               }
             };
           });
@@ -464,6 +461,7 @@ export default {
 
     handleSelect(item) {
       this.form.supplierId = item.item.supplierId;
+      this.form.unpaid = item.item.unpaid;
       console.log(item);
     }
   }
