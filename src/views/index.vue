@@ -48,6 +48,8 @@ export default {
 <style scoped lang="scss">
 .home {
   background: #f8f6f6;
+  padding: 0 20px;
+  height: 100%;
   .col-item {
     margin-bottom: 20px;
   }
