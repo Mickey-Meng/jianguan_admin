@@ -423,7 +423,7 @@ import { listLedgerBreakdownDetail} from "@/api/ledgerDetail/ledgerBreakdownDeta
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import upload from '@/components/FileUpload';
-import measureAbout from './componenets/measureAbout';
+import measureAbout from '@/views/measurementDocuments/measurementDocuments/components/measureAbout';
 
 export default {
   name: "MeasurementDocuments",
