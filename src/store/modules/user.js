@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken,setSsoToken } from '@/utils/auth'
 
 const user = {
   state: {
@@ -38,6 +38,10 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
           setToken(res.data.token)
+
+          var s = encodeURIComponent(res.data.ssoToken);
+          console.log("==========="+s);
+          setSsoToken(s);
           commit('SET_TOKEN', res.data.token)
           resolve()
         }).catch(error => {
