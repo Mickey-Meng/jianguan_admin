@@ -1,6 +1,6 @@
 <template>
   <div>
-    <panel :title="'我的待办列表'" iconClass="funnel">
+    <panel :title="'我的待办列表'" iconClass="more">
       <div slot="body">
         <div class="content">
           <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" label-width="70px">

@@ -54,7 +54,7 @@
         }
     }
     .body {
-        height: calc("100% - 40px");
+        height: calc(100% - 40px)
     }
 }
 </style>
