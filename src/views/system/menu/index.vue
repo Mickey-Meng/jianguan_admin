@@ -53,6 +53,7 @@
       v-loading="loading"
       :data="menuList"
       row-key="menuId"
+      :height="'calc(100vh - 205px)'"
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
@@ -451,3 +452,6 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+@import '@/assets/styles/page-table.scss';
+</style>
