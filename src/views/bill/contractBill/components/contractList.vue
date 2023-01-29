@@ -550,7 +550,7 @@ export default {
   .app-container {
     height: 100%;
     .el-table {
-      height: calc(100% - 100px);
+      height: calc(100% - 70px);
       overflow: auto;
     }
   }

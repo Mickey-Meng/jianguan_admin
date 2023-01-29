@@ -34,7 +34,7 @@ export default {
     .el-tabs {
       height: 100%;
       ::v-deep .el-tabs__content {
-        height: calc(100% - 15px);
+        height: calc(100% - 30px);
         >div {
           height: 100%;
         }

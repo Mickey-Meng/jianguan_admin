@@ -3,8 +3,8 @@
     <panel :title="'我的待办列表'" iconClass="more">
       <div slot="body">
         <div class="content">
-          <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-            <!-- <el-form-item label="流程名称" prop="procDefName">
+          <!-- <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+            <el-form-item label="流程名称" prop="procDefName">
               <el-input
                 v-model="queryParams.procDefName"
                 placeholder="请输入名称"
@@ -12,7 +12,7 @@
                 size="small"
                 @keyup.enter.native="handleQuery"
               />
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item label="开始时间" prop="deployTime">
               <el-date-picker clearable size="small"
                               v-model="queryParams.deployTime"
@@ -25,7 +25,7 @@
               <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
               <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
             </el-form-item>
-          </el-form>
+          </el-form> -->
 
           <el-table v-loading="loading" :data="todoList">
             <!-- <el-table-column type="selection" width="55" align="center"/> -->
