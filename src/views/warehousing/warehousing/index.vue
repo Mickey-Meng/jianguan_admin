@@ -96,7 +96,12 @@
           <span>{{ parseTime(scope.row.warehousingDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="入库状态" align="center" prop="warehousingStatus" />
+      <el-table-column prop="warehousingStatus" label="入库状态" width="80">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.warehousing_status" :value="scope.row.warehousingStatus"/>
+        </template>
+      </el-table-column>
+
       <el-table-column label="采购数量" align="center" prop="orderNumber" />
       <el-table-column label="产品名称" align="center" prop="proudctName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -180,6 +185,22 @@
               <el-input v-model="form.warehousingStatus" placeholder="请输入入库状态" />
             </el-form-item>
           </el-col>
+
+
+
+          <el-col :span="12">
+            <el-form-item label="入库状态" prop="warehousingStatus">
+              <el-select v-model="form.warehousingStatus" placeholder="请输入入库状态">
+                <el-option
+                  v-for="dict in dict.type.warehousing_status"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="12">
             <el-form-item label="入库时间" prop="warehousingDate">
               <el-date-picker clearable
@@ -213,6 +234,7 @@ import {listShopGoods} from "@/api/shopGoods/shopGoods";
 
 export default {
   name: "Warehousing",
+  dicts: ['warehousing_status'],
   data() {
     return {
       // 按钮loading
