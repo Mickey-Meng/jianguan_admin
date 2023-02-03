@@ -111,7 +111,7 @@
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
       <el-table-column label="合同名称" align="center" prop="contractName"/>
-      <el-table-column label="供应商" align="center" prop="supplierName"/>
+      <el-table-column label="供应商" align="center" width="360" prop="supplierName"/>
       <el-table-column label="本次付款金额" align="center" prop="payAmount"/>
       <el-table-column prop="payType" label="付款方式" width="80">
         <template slot-scope="scope">
@@ -119,7 +119,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="欠付款金额" align="center" prop="unpaid" v-if="false"/>
+      <el-table-column label="欠付款金额" align="center" prop="unpaid"  />
       <el-table-column label="付款时间" align="center" prop="paymentDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.paymentDate, '{y}-{m}-{d}') }}</span>
@@ -177,8 +177,6 @@
             </el-form-item>
           </el-col>
 
-
-
           <el-col :span="12">
             <el-form-item label="供应商名称" prop="supplierId">
               <el-autocomplete
@@ -191,15 +189,11 @@
             </el-form-item>
           </el-col>
 
-
-
-
           <el-col :span="12">
             <el-form-item label="本次付款金额" prop="payAmount">
               <el-input v-model="form.payAmount" placeholder="请输入本次付款金额"/>
             </el-form-item>
           </el-col>
-
 
           <el-col :span="12">
             <el-form-item label="付款方式" prop="payType">
@@ -217,10 +211,18 @@
 
 
           <el-col :span="12">
-            <el-form-item label="欠付款金额" prop="unpaid">
-              <el-input v-model="form.unpaid" placeholder="请输入欠付款金额" readonly="true"/>
+            <el-form-item label="已付款金额" prop="unpaid">
+              <el-input v-model="form.payed" placeholder="" readonly="true"/>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="欠付款金额" prop="unpaid">
+              <el-input v-model="form.unpaid" placeholder="" readonly="true"/>
+            </el-form-item>
+          </el-col>
+
+
+
           <el-col :span="12">
             <el-form-item label="付款时间" prop="paymentDate">
               <el-date-picker clearable
