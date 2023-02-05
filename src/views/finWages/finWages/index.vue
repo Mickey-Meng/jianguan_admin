@@ -142,7 +142,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="基础工资" prop="basePay">
-              <el-input v-model="form.basePay" placeholder="请输入基础工资" />
+              <el-input v-model="form.basePay" placeholder="请输入基础工资" onchange="updatePreTaxPay" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -167,7 +167,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="出差天数" prop="evectionDays">
-              <el-input v-model="form.evectionDays" placeholder="请输入出差天数" />
+              <el-input v-model="form.evectionDays" placeholder="请输入出差天数" onchange="updatePreTaxPay"  />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -394,6 +394,11 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
+    updatePreTaxPay(){
+
+      this.form.preTaxPay = this.form.evectionMoney + this.form.basePay;
+    }
+    ,
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -454,6 +459,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
+
       this.download('finWages/finWages/export', {
         ...this.queryParams
       }, `finWages_${new Date().getTime()}.xlsx`)
