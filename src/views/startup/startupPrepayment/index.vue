@@ -292,6 +292,7 @@ import {
 import {getToken} from "@/utils/auth";
 import {listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import { dealNumberFormat } from "@/utils/utils.js";
+import { delOss } from "@/api/system/oss";
 export default {
   name: "StartupPrepayment",
   props: {
@@ -459,7 +460,7 @@ export default {
       console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+      this.$download.oss(file.ossId)
     },
     handleExceed(files, fileList) {
       console.log(files);
@@ -652,9 +653,10 @@ export default {
     },
     // 删除文件
     handleDeleteFile(index) {
-      let ossId = this.fileList[index].ossId;
-      delOss(ossId);
-      this.fileList.splice(index, 1);
+
+      delOss(index.ossId);
+      this.fileList = this.fileList.filter(t => t.uid !== index.uid);
+      // this.fileList.splice(index, 1);
       this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理

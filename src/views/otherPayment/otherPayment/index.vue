@@ -311,6 +311,7 @@ import {
   updateOtherPayment
 } from "@/api/otherPayment/otherPayment";
 import {getToken} from "@/utils/auth";
+import { delOss } from "@/api/system/oss";
 import {listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import {dealNumberFormat} from "@/utils/utils.js";
 
@@ -508,6 +509,8 @@ export default {
     },
     handlePreview(file) {
       console.log(file);
+      this.$download.oss(file.ossId)
+      // location.href = file.url;
     },
     handleExceed(files, fileList) {
       console.log(files);
@@ -664,9 +667,9 @@ export default {
     },
     // 删除文件
     handleDeleteFile(index) {
-      let ossId = this.fileList[index].ossId;
-      delOss(ossId);
-      this.fileList.splice(index, 1);
+      console.log(index);
+      delOss(index.ossId);
+      this.fileList = this.fileList.filter(t => t.uid !== index.uid);
       this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理
