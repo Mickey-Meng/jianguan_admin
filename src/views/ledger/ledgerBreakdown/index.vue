@@ -58,8 +58,8 @@
           plain
           icon="el-icon-sort"
           size="mini"
-          @click="toggleExpandAll"
-        >展开/折叠</el-button>
+          @click="unload"
+        >折叠</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -69,10 +69,11 @@
       v-loading="loading"
       :data="ledgerBreakdownList"
       row-key="tzfjbh"
-      :default-expand-all="isExpandAll"
+      lazy
       :header-cell-style="headercellStyle"
       :cell-style="cellStyle"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      :load="load"
+      ref="table"
     >
       <el-table-column label="台账分解编号" align="left" prop="tzfjbh" />
       <el-table-column label="台账分解名称" align="center" prop="tzfjmc" />
@@ -172,6 +173,7 @@ export default {
       loading: true,
       // 显示搜索条件
       showSearch: true,
+      ledgerBreakdownListCopy: [],
       // 台账分解表格数据
       ledgerBreakdownList: [],
       // 台账分解树选项
@@ -183,7 +185,7 @@ export default {
       // 是否展开，默认全部展开
       isExpandAll: true,
       // 重新渲染表格状态
-      refreshTable: true,
+      refreshTable: false,
       // 查询参数
       queryParams: {
         bdbh: undefined,
@@ -250,10 +252,60 @@ export default {
     /** 查询台账分解列表 */
     getList() {
       this.loading = true;
+      this.refreshTable = false;
       listLedgerBreakdown(this.queryParams).then(response => {
-        this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
+        this.ledgerBreakdownListCopy = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
+        const ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
+        this.ledgerBreakdownList = JSON.parse(JSON.stringify(ledgerBreakdownList)).map(item => {
+          item.hasChildren = item.children && item.children.length > 0;
+          item.children = null;
+          item.idList = [ item.id ];
+          return item;
+        })
+        console.error('ledgerBreakdownList', this.ledgerBreakdownList);
         this.loading = false;
+        this.refreshTable = true;
       });
+    },
+    load (tree, treeNode, resolve) {
+      const idCopy = JSON.parse(JSON.stringify(tree.idList));
+      // 查找下一层数据
+      let resolveArr = this.ledgerBreakdownListCopy;
+      let id;
+      while(id = tree.idList.shift()) {
+        const tarItem = resolveArr.find(item => item.id === id);
+        tarItem.loadedChildren = true;
+        resolveArr = tarItem.children
+      }
+      // 处理下一层数据的属性
+      resolveArr = JSON.parse(JSON.stringify(resolveArr))
+      resolveArr.forEach(item => {
+        item.hasChildren = item.children && item.children.length > 0
+        item.children = null
+        // 此处需要深拷贝，以防各个item的idList混乱
+        item.idList = JSON.parse(JSON.stringify(idCopy))
+        item.idList.push(item.id)
+      })
+
+      // 标识已经加载子节点
+      tree.loadedChildren = true
+
+      // 渲染子节点
+      resolve(resolveArr)
+    },
+    unload () {
+      this.refreshTable = false
+      // eslint-disable-next-line
+      this.$nextTick(() => this.refreshTable = true)
+      this.ledgerBreakdownList = JSON.parse(JSON.stringify(this.ledgerBreakdownListCopy)).map(item => {
+        // hasChildren 表示需要展示一个箭头图标
+        item.hasChildren = item.children && item.children.length > 0
+        // 只展示一层
+        item.children = null
+        // 记住层级关系
+        item.idList = [item.id]
+        return item
+      })
     },
     /** 转换台账分解数据结构 */
     normalizer(node) {
@@ -270,7 +322,7 @@ export default {
     getTreeselect() {
       listLedgerBreakdown().then(response => {
         this.ledgerBreakdownOptions = [];
-        const data = { tzfjbh: 0, tzfjmc: '顶级节点', children: [] };
+        const data = { tzfjbh: 0, tzfjbhParent: null, tzfjmc: '顶级节点', children: [] };
         data.children = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
         this.ledgerBreakdownOptions.push(data);
       });
