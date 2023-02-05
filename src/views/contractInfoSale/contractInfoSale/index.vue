@@ -287,7 +287,7 @@ import {
   listContractInfoSale,  getContractInfoSale,  delContractInfoSale,  addContractInfoSale,  updateContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
 import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
-
+import { delOss } from "@/api/system/oss";
 import {getToken} from "@/utils/auth";
 export default {
   name: "ContractInfoSale",
@@ -619,9 +619,10 @@ export default {
     },
     // 删除文件
     handleDeleteFile(index) {
-      let ossId = this.fileList[index].ossId;
-      delOss(ossId);
-      this.fileList.splice(index, 1);
+      console.log(index)
+      console.log(this.fileList);
+      delOss(index.ossId);
+      this.fileList = this.fileList.filter(t => t.uid !== index.uid);
       this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理
@@ -696,7 +697,7 @@ export default {
       console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+      this.$download.oss(file.ossId)
     },
     handleExceed(files, fileList) {
       console.log(files);

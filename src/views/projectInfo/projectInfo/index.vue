@@ -248,7 +248,7 @@ import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import formValidate from "@/plugins/formValidate/formValidate";
 import {getToken} from "@/utils/auth";
 import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
-
+import { delOss } from "@/api/system/oss";
 export default {
   name: "ProjectInfo",
   dicts: ['sys_user_sex'],
@@ -410,7 +410,7 @@ export default {
       console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+      this.$download.oss(file.ossId)
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -589,9 +589,8 @@ export default {
     },
     // 删除文件
     handleDeleteFile(index) {
-      let ossId = this.fileList[index].ossId;
-      delOss(ossId);
-      this.fileList.splice(index, 1);
+      delOss(index.ossId);
+      this.fileList = this.fileList.filter(t => t.uid !== index.uid);
       this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理

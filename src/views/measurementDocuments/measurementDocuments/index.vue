@@ -777,7 +777,7 @@ export default {
       console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+      this.$download.oss(file.ossId)
     },
     handleExceed(files, fileList) {
       console.log(files);
