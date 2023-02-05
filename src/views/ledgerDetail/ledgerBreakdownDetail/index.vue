@@ -193,11 +193,12 @@
             v-loading="loading"
             :data="ledgerBreakdownDetailList"
             row-key="id"
+            lazy
             :height="'calc(100vh - 205px)'"
-            :default-expand-all="isExpandAll"
             :header-cell-style="headercellStyle"
             :cell-style="cellStyle"
-            :tree-props="{children: 'children'}"
+            :load="load"
+            ref="table"
           >
             <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="160"
                              :show-overflow-tooltip="true"/>
@@ -411,6 +412,7 @@ export default {
       isExpandAll: true,
       // 总条数
       // total: 0,
+      ledgerBreakdownDetailListCopy: [],
       // 台账分解明细表格数据
       ledgerBreakdownDetailList: [],
       // 弹出层标题
@@ -530,11 +532,59 @@ export default {
     /** 查询台账分解明细列表 */
     getList() {
       this.loading = true;
+      this.refreshTable = false;
       listLedgerBreakdownTree(this.queryParams).then(response => {
-        this.ledgerBreakdownDetailList = response.rows;
-        // this.total = response.total;
+        this.ledgerBreakdownDetailListCopy = response.rows;
+        this.ledgerBreakdownDetailList = JSON.parse(JSON.stringify(response.rows)).map(item => {
+          item.hasChildren = item.children && item.children.length > 0;
+          item.children = null;
+          item.idList = [ item.id ];
+          return item;
+        })
         this.loading = false;
+        this.refreshTable = true;
+        // this.total = response.total;
       });
+    },
+    load (tree, treeNode, resolve) {
+      const idCopy = JSON.parse(JSON.stringify(tree.idList));
+      // 查找下一层数据
+      let resolveArr = this.ledgerBreakdownDetailListCopy;
+      let id;
+      while(id = tree.idList.shift()) {
+        const tarItem = resolveArr.find(item => item.id === id);
+        tarItem.loadedChildren = true;
+        resolveArr = tarItem.children
+      }
+      // 处理下一层数据的属性
+      resolveArr = JSON.parse(JSON.stringify(resolveArr))
+      resolveArr.forEach(item => {
+        item.hasChildren = item.children && item.children.length > 0
+        item.children = null
+        // 此处需要深拷贝，以防各个item的idList混乱
+        item.idList = JSON.parse(JSON.stringify(idCopy))
+        item.idList.push(item.id)
+      })
+
+      // 标识已经加载子节点
+      tree.loadedChildren = true
+
+      // 渲染子节点
+      resolve(resolveArr)
+    },
+    unload () {
+      this.refreshTable = false
+      // eslint-disable-next-line
+      this.$nextTick(() => this.refreshTable = true)
+      this.ledgerBreakdownDetailList = JSON.parse(JSON.stringify(this.ledgerBreakdownDetailListCopy)).map(item => {
+        // hasChildren 表示需要展示一个箭头图标
+        item.hasChildren = item.children && item.children.length > 0
+        // 只展示一层
+        item.children = null
+        // 记住层级关系
+        item.idList = [item.id]
+        return item
+      })
     },
     // 取消按钮
     cancel() {

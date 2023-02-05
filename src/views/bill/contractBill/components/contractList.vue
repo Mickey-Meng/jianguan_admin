@@ -48,8 +48,8 @@
           plain
           icon="el-icon-sort"
           size="mini"
-          @click="toggleExpandAll"
-        >展开/折叠</el-button>
+          @click="unload"
+        >折叠</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -59,15 +59,16 @@
       v-loading="loading"
       :data="contractBillList"
       row-key="zmh"
-      :default-expand-all="isExpandAll"
+      lazy
       :height="'cacl(100vh - 205px)'"
       :header-cell-style="headercellStyle"
       :cell-style="cellStyle"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      :load="load"
+      ref="table"
     >
       <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="160" :show-overflow-tooltip="true"/>
-      <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh" />
-      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc" />
+      <el-table-column label="子目号" align="center" min-width="120" prop="zmh" :show-overflow-tooltip="true"/>
+      <el-table-column label="子目名称" align="center" min-width="180" prop="zmmc" :show-overflow-tooltip="true"/>
       <el-table-column label="单位" align="center" min-width="80" prop="dw" />
       <el-table-column label="合同单价" align="center" min-width="120" prop="htdj">
         <template slot-scope="scope">
@@ -255,6 +256,8 @@ export default {
       showSearch: true,
       // 工程量清单表格数据
       contractBillList: [],
+      // 工程量清单表格数据
+      contractBillListCopy: [],
       // 工程量清单树选项
       contractBillOptions: [],
       // 弹出层标题
@@ -264,7 +267,7 @@ export default {
       // 是否展开，默认全部展开
       isExpandAll: false,
       // 重新渲染表格状态
-      refreshTable: true,
+      refreshTable: false,
       // 查询参数
       queryParams: {
         bdbh: '',
@@ -391,11 +394,60 @@ export default {
   methods: {
     /** 查询工程量清单列表 */
     getList() {
+      this.refreshTable = false;
       this.loading = true;
       listContractBill(this.queryParams).then(response => {
-        this.contractBillList = this.handleTree(response.data, "zmh", "zmhParent");
+        this.contractBillListCopy = this.handleTree(response.data, "zmh", "zmhParent");
+        const contractBillList = this.handleTree(response.data, "zmh", "zmhParent");
+        this.contractBillList = JSON.parse(JSON.stringify(contractBillList)).map(item => {
+          item.hasChildren = item.children && item.children.length > 0;
+          item.children = null;
+          item.idList = [ item.id ];
+          return item;
+        })
         this.loading = false;
+        this.refreshTable = true;
       });
+    },
+    load (tree, treeNode, resolve) {
+      const idCopy = JSON.parse(JSON.stringify(tree.idList));
+      // 查找下一层数据
+      let resolveArr = this.contractBillListCopy;
+      let id;
+      while(id = tree.idList.shift()) {
+        const tarItem = resolveArr.find(item => item.id === id);
+        tarItem.loadedChildren = true;
+        resolveArr = tarItem.children
+      }
+      // 处理下一层数据的属性
+      resolveArr = JSON.parse(JSON.stringify(resolveArr))
+      resolveArr.forEach(item => {
+        item.hasChildren = item.children && item.children.length > 0
+        item.children = null
+        // 此处需要深拷贝，以防各个item的idList混乱
+        item.idList = JSON.parse(JSON.stringify(idCopy))
+        item.idList.push(item.id)
+      })
+
+      // 标识已经加载子节点
+      tree.loadedChildren = true
+
+      // 渲染子节点
+      resolve(resolveArr)
+    },
+    unload () {
+      this.refreshTable = false
+      // eslint-disable-next-line
+      this.$nextTick(() => this.refreshTable = true)
+      this.contractBillList = JSON.parse(JSON.stringify(this.contractBillListCopy)).map(item => {
+        // hasChildren 表示需要展示一个箭头图标
+        item.hasChildren = item.children && item.children.length > 0
+        // 只展示一层
+        item.children = null
+        // 记住层级关系
+        item.idList = [item.id]
+        return item
+      })
     },
     /** 转换工程量清单数据结构 */
     normalizer(node) {
