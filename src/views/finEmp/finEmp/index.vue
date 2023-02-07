@@ -17,6 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="手机号" prop="mobilePhone">
+        <el-input
+          v-model="queryParams.mobilePhone"
+          placeholder="请输入手机号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -80,7 +88,10 @@
         </template>
       </el-table-column>
       <el-table-column label="基础工资" align="center" prop="empBasepay" />
-      <el-table-column label="身份证号码" align="center" prop="empId" />
+      <el-table-column label="身份证号码" align="center" prop="empId" width="220" />
+      <el-table-column label="手机号" align="center" prop="mobilePhone" />
+      <el-table-column label="紧急联系人" align="center" prop="emergencyContact" />
+      <el-table-column label="紧急联系人电话" align="center" prop="emergencyPhone" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -111,13 +122,18 @@
 
     <!-- 添加或修改员工信息管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-col :span="12">
         <el-form-item label="姓名" prop="empName">
           <el-input v-model="form.empName" placeholder="请输入姓名" />
         </el-form-item>
+        </el-col>
+        <el-col :span="12">
         <el-form-item label="年龄" prop="empAge">
           <el-input v-model="form.empAge" placeholder="请输入年龄" />
         </el-form-item>
+        </el-col>
+        <el-col :span="12">
         <el-form-item label="性别" prop="empGender">
           <el-select v-model="form.empGender" placeholder="请选择性别">
             <el-option
@@ -128,6 +144,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        </el-col>
+        <el-col :span="12">
         <el-form-item label="入职日期" prop="empRzDate">
           <el-date-picker clearable
             v-model="form.empRzDate"
@@ -136,18 +154,37 @@
             placeholder="请选择入职日期">
           </el-date-picker>
         </el-form-item>
+        </el-col>
+        <el-col :span="12">
         <el-form-item label="基础工资" prop="empBasepay">
           <el-input v-model="form.empBasepay" placeholder="请输入基础工资" />
         </el-form-item>
+        </el-col>
+        <el-col :span="12">
         <el-form-item label="身份证号码" prop="empId">
           <el-input v-model="form.empId" placeholder="请输入身份证号码" />
-        </el-form-item>
+        </el-form-item></el-col>
+        <el-col :span="12">
         <el-form-item label="家庭住址" prop="empAddr">
           <el-input v-model="form.empAddr" placeholder="请输入家庭住址" />
+        </el-form-item></el-col>
+        <el-col :span="12">
+          <el-form-item label="手机号" prop="mobilePhone">
+            <el-input v-model="form.mobilePhone" placeholder="请输入手机号" />
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
+        <el-form-item label="紧急联系人" prop="emergencyContact">
+          <el-input v-model="form.emergencyContact" placeholder="请输入紧急联系人" />
         </el-form-item>
+      </el-col><el-col :span="12">
+        <el-form-item label="紧急联系人电话" prop="emergencyPhone">
+          <el-input v-model="form.emergencyPhone" placeholder="请输入紧急联系人电话" />
+        </el-form-item>
+      </el-col><el-col :span="12">
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+        </el-form-item></el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
