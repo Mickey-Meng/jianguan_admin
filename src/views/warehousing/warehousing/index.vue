@@ -190,7 +190,7 @@
 
           <el-col :span="12">
             <el-form-item label="入库状态" prop="warehousingStatus">
-              <el-select v-model="form.warehousingStatus" placeholder="请输入入库状态">
+              <el-select style="width: 100%" v-model="form.warehousingStatus" placeholder="请输入入库状态">
                 <el-option
                   v-for="dict in dict.type.warehousing_status"
                   :key="dict.value"

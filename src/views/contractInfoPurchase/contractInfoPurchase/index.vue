@@ -140,8 +140,8 @@
     />
 
     <!-- 添加或修改采购合同 对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+    <el-dialog :title="title" :visible.sync="open" width="1150px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="合同编码" prop="contractCode">
@@ -173,14 +173,14 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="总金额" prop="amount">
-              <el-input v-model="form.amount" placeholder="请输入总金额"/>
+              <el-input v-model="form.amount" :disabled="true" placeholder="请输入总金额"/>
             </el-form-item>
           </el-col>
 
 
           <el-col :span="12">
             <el-form-item label="合同是否已签订" prop="contractStatus">
-              <el-select v-model="form.contractStatus" placeholder="请选择合同是否已签订">
+              <el-select style="width: 100%" v-model="form.contractStatus" placeholder="请选择合同是否已签订">
                 <el-option
                   v-for="dict in dict.type.sys_yes_no"
                   :key="dict.value"
@@ -208,33 +208,17 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="附件地址">
-              <el-upload
-
-                multiple
-                class="upload-demo"
-                :action="uploadFileUrl"
-                :before-upload="handleBeforeUpload"
-                :file-list="fileList"
-                :limit="limit"
-                :on-error="handleUploadError"
-                :on-exceed="handleExceed"
-                :on-success="handleUploadSuccess"
-                :on-preview="handlePreview"
-                :show-file-list="true"
-                :on-remove="handleDeleteFile"
-                :before-remove="beforeRemove"
-                :headers="headers"
-                ref="fileUpload"
-              >
-                <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
-              </el-upload>
+              <upload @input="getFileList"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="" label="备注" prop="remark">
+            <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue" label-position="right" label-width="140px" child-label-width="120px" :data="form">
+            </wti-form>
           </el-col>
         </el-row>
       </el-form>
@@ -258,10 +242,15 @@ import {getToken} from "@/utils/auth";
 
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import { delOss } from "@/api/system/oss";
-
+import fields from './fields';
+import upload from '@/components/FileUpload';
+import calc from '@/utils/calc.js'
 export default {
   name: "ContractInfoPurchase",
   dicts: ['sys_yes_no'],
+  components: {
+    upload
+  },
   props: {
     // 值
     value: [String, Object, Array],
@@ -327,7 +316,9 @@ export default {
         contactDate: undefined,
       },
       // 表单参数
-      form: {},
+      form: {
+        qlWarehousingVos: []
+      },
       // 表单校验
       rules: {
         id: [
@@ -345,7 +336,8 @@ export default {
         amount: [
           {required: true, message: "总金额不能为空", trigger: "blur"}
         ],
-      }
+      },
+      fields
     };
   },
   created() {
@@ -471,98 +463,12 @@ export default {
         this.loading = false;
       });
     },
-    // 上传前校检格式和大小
-    handleBeforeUpload(file) {
-      // 校检文件类型
-      if (this.fileType) {
-        let fileExtension = "";
-        if (file.name.lastIndexOf(".") > -1) {
-          fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
-        }
-        const isTypeOk = this.fileType.some((type) => {
-          if (file.type.indexOf(type) > -1) return true;
-          if (fileExtension && fileExtension.indexOf(type) > -1) return true;
-          return false;
-        });
-        if (!isTypeOk) {
-          this.$modal.msgError(`文件格式不正确, 请上传${this.fileType.join("/")}格式文件!`);
-          return false;
-        }
-      }
-      // 校检文件大小
-      if (this.fileSize) {
-        const isLt = file.size / 1024 / 1024 < this.fileSize;
-        if (!isLt) {
-          this.$modal.msgError(`上传文件大小不能超过 ${this.fileSize} MB!`);
-          return false;
-        }
-      }
-      this.$modal.loading("正在上传文件，请稍候...");
-      this.number++;
-      return true;
-    },
-
-    // 上传失败
-    handleUploadError(err) {
-      this.$modal.msgError("上传图片失败，请重试");
-      this.$modal.closeLoading();
-    },
-    // 上传成功回调
-    handleUploadSuccess(res, file) {
-      if (res.code === 200) {
-        this.uploadList.push({name: res.data.fileName, url: res.data.url, ossId: res.data.ossId});
-        this.uploadedSuccessfully();
-      } else {
-        this.number--;
-        this.$modal.closeLoading();
-        this.$modal.msgError(res.msg);
-        this.$refs.fileUpload.handleRemove(file);
-        this.uploadedSuccessfully();
-      }
-    },
-    // 删除文件
-    handleDeleteFile(index) {
-
-      delOss(index.ossId);
-      this.fileList = this.fileList.filter(t => t.uid !== index.uid);
-      this.$emit("input", this.listToString(this.fileList));
-    },
-    // 上传结束处理
-    uploadedSuccessfully() {
-      if (this.number > 0 && this.uploadList.length === this.number) {
-        this.fileList = this.fileList.concat(this.uploadList);
-        this.uploadList = [];
-        this.number = 0;
-        this.$emit("input", this.listToString(this.fileList));
-        this.$modal.closeLoading();
-      }
-    },
-    // 获取文件名称
-    getFileName(name) {
-      // 如果是url那么取最后的名字 如果不是直接返回
-      if (name.lastIndexOf("/") > -1) {
-        return name.slice(name.lastIndexOf("/") + 1);
-      } else {
-        return name;
-      }
-    },
-    // 对象转成指定字符串分隔
-    listToString(list, separator) {
-      let strs = "";
-      separator = separator || ",";
-      for (let i in list) {
-        strs += list[i].ossId + separator;
-      }
-      return strs != "" ? strs.substr(0, strs.length - 1) : "";
-    },
     /** 导出按钮操作 */
     handleExport() {
       this.download('contractInfoPurchase/contractInfoPurchase/export', {
         ...this.queryParams
       }, `contractInfoPurchase_${new Date().getTime()}.xlsx`)
     },
-
-
     /*
     *    **/
     querySearchAsync(queryString, cb) {
@@ -598,23 +504,28 @@ export default {
       this.form.supplierId = item.item.supplierId;
       console.log(item);
     },
-
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    updateValue (params) {
+      if (params) {
+        const key = Object.keys(params)[0];
+        if (key === 'qlWarehousingVos') {
+          let num = []
+          params[key].forEach((item, index) => {
+            item.finAmount1 = calc.mul(item.warehousingNumber, item.finAmount)
+            num.push(Number(item.finAmount1))
+            // this.$refs.wtiForm.$refs.qlWarehousingVos[index].updateFormData({'finAmount1': item.finAmount1});
+          })
+          let sum = num[0];
+          if (num.length > 1) {
+            sum = calc.add(...num)
+          }
+          this.form.amount = sum
+        }
+      }
     },
-    handlePreview(file) {
-      this.$download.oss(file.ossId)
+    getFileList (val) {
+      this.fileList = [];
+      this.fileList = val;
     },
-    handleExceed(files, fileList) {
-      console.log(files);
-      console.log(fileList);
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    }
-    ,
-
   }
 };
 </script>
