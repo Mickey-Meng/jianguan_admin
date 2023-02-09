@@ -5,7 +5,7 @@ const fields = [
         'label': '',
         'children': [
             {
-                'key': 'qlWarehousingVos',
+                'key': 'qlWarehousingBos',
                 'type': 'child-form', // 小型表单
                 'headerLabel': '商品明细',
                 'childrenForm': [
@@ -65,7 +65,7 @@ const fields = [
                     },
                     {
                         'type': 'money-input',
-                        'key': 'finAmount', // 1
+                        'key': 'price', // 1
                         'label': '单价',
                         'rules': [
                             {
@@ -78,7 +78,7 @@ const fields = [
                     },
                     {
                         'type': 'number-input',
-                        'key': 'warehousingNumber', // 1
+                        'key': 'orderNumber', // 1
                         'label': '数量',
                         'rules': [
                             {
@@ -91,7 +91,7 @@ const fields = [
                     },
                     {
                         'type': 'money-input',
-                        'key': 'finAmount1', // 1
+                        'key': 'amount', // 1
                         'label': '总额',
                         'rules': [
                             {

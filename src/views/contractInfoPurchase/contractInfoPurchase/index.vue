@@ -141,7 +141,7 @@
 
     <!-- 添加或修改采购合同 对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1150px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
+      <el-form v-if="open" ref="form" :model="form" :rules="rules" label-width="130px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="合同编码" prop="contractCode">
@@ -317,7 +317,7 @@ export default {
       },
       // 表单参数
       form: {
-        qlWarehousingVos: []
+        qlWarehousingBos: []
       },
       // 表单校验
       rules: {
@@ -361,23 +361,15 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: undefined,
         contractCode: undefined,
         contractName: undefined,
-        contractStatus: undefined,
         supplierName: undefined,
         supplierId: undefined,
         amount: undefined,
         contactDate: undefined,
         rate: undefined,
         fj: undefined,
-        delFlag: undefined,
-        createBy: undefined,
-        createTime: undefined,
-        updateBy: undefined,
-        updateTime: undefined,
         remark: undefined,
-        deptId: undefined
       };
       this.resetForm("form");
     },
@@ -426,6 +418,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.qlWarehousingBos = this.$refs.wtiForm.formData.qlWarehousingBos;
           this.form.fj = JSON.stringify(this.fileList);
           this.buttonLoading = true;
           if (this.form.id != null) {
@@ -507,12 +500,11 @@ export default {
     updateValue (params) {
       if (params) {
         const key = Object.keys(params)[0];
-        if (key === 'qlWarehousingVos') {
+        if (key === 'qlWarehousingBos') {
           let num = []
           params[key].forEach((item, index) => {
-            item.finAmount1 = calc.mul(item.warehousingNumber, item.finAmount)
-            num.push(Number(item.finAmount1))
-            // this.$refs.wtiForm.$refs.qlWarehousingVos[index].updateFormData({'finAmount1': item.finAmount1});
+            item.amount = calc.mul(item.orderNumber, item.price)
+            num.push(Number(item.amount))
           })
           let sum = num[0];
           if (num.length > 1) {
