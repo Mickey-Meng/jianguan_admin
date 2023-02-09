@@ -36,6 +36,7 @@ const fields = [
                                             label: item.id,
                                             item: {
                                                 proudctId: item.id,
+                                                price: item.costPrice
                                             }
                                         };
                                     });
@@ -50,7 +51,7 @@ const fields = [
                             });
                         },
                         'mainShowKey': 'proudctName',
-                        'autoCompleteKeys': [ 'proudctId' ],
+                        'autoCompleteKeys': [ 'proudctId', 'price' ],
                         onSelect (row) {
                             console.log('onSelect', row);
                         },
