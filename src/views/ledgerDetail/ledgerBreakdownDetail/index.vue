@@ -236,7 +236,8 @@
                   size="mini"
                   type="text"
                   icon="el-icon-edit"
-                  v-show="scope.row.action !== 'add'"
+                  :disabled="['1', '2'].includes(scope.row.reviewCode)"
+                  v-show="!scope.row.hasChildren"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
                 >设计数量
@@ -254,6 +255,8 @@
                   size="mini"
                   type="text"
                   icon="el-icon-delete"
+                  :disabled="['1', '2'].includes(scope.row.reviewCode)"
+                  v-show="!scope.row.hasChildren"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:remove']"
                 >删除
@@ -705,7 +708,7 @@ export default {
       const tzfjbhs = row.tzfjbh || this.ids;
       this.$modal.confirm('是否确认删除台账分解明细编号为"' + tzfjbhs + '"的数据项？').then(() => {
         this.loading = true;
-        return delLedgerBreakdownDetail(tzfjbhs);
+        return delLedgerBreakdownDetail(row.id);
       }).then(() => {
         this.loading = false;
         this.getList();
