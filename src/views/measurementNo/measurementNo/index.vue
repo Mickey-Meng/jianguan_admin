@@ -122,21 +122,21 @@
     <el-table v-loading="loading" :header-cell-style="headercellStyle"
       :cell-style="cellStyle" :data="measurementNoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" min-width="120" :show-overflow-tooltip="true" v-if="true"/>
+      <el-table-column label="ID" align="center" prop="id" min-width="120" :show-overflow-tooltip="true" v-if="false"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
       <el-table-column label="计量期数编号" align="center" prop="jlqsbh" />
-      <el-table-column label="计量期数文字表达" align="center" min-width="120" prop="jlqs" />
-      <el-table-column label="开始日期" align="center" prop="ksrq" width="180">
+      <el-table-column label="计量期数文字表达" align="center" min-width="150" prop="jlqs" />
+      <el-table-column label="开始日期" align="center" prop="ksrq" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.ksrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束日期" align="center" prop="jsrq" width="150">
+      <el-table-column label="结束日期" align="center" prop="jsrq" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.jsrq, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="默认日期" align="center" prop="mrrq" width="150">
+      <el-table-column label="默认日期" align="center" prop="mrrq" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mrrq, '{y}-{m}-{d}') }}</span>
         </template>

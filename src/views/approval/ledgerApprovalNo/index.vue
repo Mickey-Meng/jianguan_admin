@@ -106,7 +106,6 @@
           <span>{{ parseTime(scope.row.sbsj, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="申报状态" align="center" prop="spzt" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
