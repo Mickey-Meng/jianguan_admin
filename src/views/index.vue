@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       // 版本号
+      message: '暂无公告'
     };
   },
   methods: {
