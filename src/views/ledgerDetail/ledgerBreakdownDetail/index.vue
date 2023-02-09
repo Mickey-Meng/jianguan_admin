@@ -240,7 +240,7 @@
                   v-show="!scope.row.hasChildren"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ledgerDetail:ledgerBreakdownDetail:edit']"
-                >设计数量
+                >分解数量
                 </el-button>
                 <!-- <el-button
                   size="mini"
@@ -317,7 +317,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="设计数量" prop="sjsl">
-              <el-input v-model="form.sjsl" placeholder="请输入设计数量"/>
+              <el-input :disabled="true" v-model="form.sjsl" placeholder="请输入设计数量"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -675,6 +675,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           // if (this.form.tzfjbh != null) {
+          this.form.reviewCode = '1';
           updateLedgerBreakdownDetail(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
             this.listLedgerUpBreakdownDetail();

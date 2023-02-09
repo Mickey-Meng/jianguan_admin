@@ -131,7 +131,8 @@ export default {
         zsl: undefined,
         zje: undefined,
         status: undefined,
-        parentId: undefined
+        parentId: undefined,
+        reviewCode: '2'
       },
       // 选中的数据集合
       selectionList: []
@@ -187,7 +188,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      // this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
