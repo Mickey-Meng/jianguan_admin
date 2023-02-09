@@ -119,7 +119,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="欠付款金额" align="center" prop="unpaid"  />
+      <el-table-column label="欠付款金额" align="center" prop="unpaid"/>
       <el-table-column label="付款时间" align="center" prop="paymentDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.paymentDate, '{y}-{m}-{d}') }}</span>
@@ -209,7 +209,6 @@
           </el-col>
 
 
-
           <el-col :span="12">
             <el-form-item label="已付款金额" prop="unpaid">
               <el-input v-model="form.payed" placeholder="" readonly="true"/>
@@ -220,7 +219,6 @@
               <el-input v-model="form.unpaid" placeholder="" readonly="true"/>
             </el-form-item>
           </el-col>
-
 
 
           <el-col :span="12">
@@ -306,9 +304,7 @@ export default {
         payType: [
           {required: true, message: "付款方式不能为空", trigger: "change"}
         ],
-        unpaid: [
-          {required: true, message: "欠付款金额不能为空", trigger: "blur"}
-        ],
+
         paymentDate: [
           {required: true, message: "付款时间不能为空", trigger: "blur"}
         ]
@@ -343,6 +339,7 @@ export default {
         payAmount: undefined,
         payType: undefined,
         unpaid: undefined,
+        payed: undefined,
         paymentDate: undefined,
         delFlag: undefined,
         createBy: undefined,
@@ -450,6 +447,7 @@ export default {
               label: item.id,
               item: {
                 supplierId: item.id,
+                payed: item.payed,
                 unpaid: item.unpaid,
               }
             };
@@ -469,6 +467,7 @@ export default {
     handleSelect(item) {
       this.form.supplierId = item.item.supplierId;
       this.form.unpaid = item.item.unpaid;
+      this.form.payed = item.item.payed;
       console.log(item);
     }
   }

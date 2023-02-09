@@ -157,9 +157,9 @@
             placeholder="请选择申报日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="申报状态" prop="spzt">
+<!--        <el-form-item label="申报状态" prop="spzt">
           <el-input v-model="form.spzt" placeholder="请输入申报状态" />
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
@@ -213,7 +213,6 @@ export default {
         bdbh: undefined,
         sqqc: undefined,
         sbsj: undefined,
-        spzt: undefined,
         status: undefined,
       },
       // 表单参数
@@ -232,9 +231,7 @@ export default {
         sbsj: [
           { required: true, message: "申报日期不能为空", trigger: "blur" }
         ],
-        spzt: [
-          { required: true, message: "申报状态不能为空", trigger: "blur" }
-        ],
+
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
@@ -280,7 +277,6 @@ export default {
         bdbh: undefined,
         sqqc: undefined,
         sbsj: undefined,
-        spzt: undefined,
         status: "0",
         createBy: undefined,
         createTime: undefined,
