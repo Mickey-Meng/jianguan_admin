@@ -326,8 +326,8 @@
     />
 
     <!-- 添加或修改合同条款对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+    <el-dialog :title="title" :visible.sync="open" width="1200px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="220px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="标段编号" prop="bdbh">
@@ -366,7 +366,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="合同总金额" prop="htzje">
+            <el-form-item label="合同总金额(元)" prop="htzje">
               <el-input v-model="form.htzje" placeholder="请输入合同总金额" />
             </el-form-item>
           </el-col>
@@ -376,52 +376,52 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="工程量清单金额" prop="gclqdje">
+            <el-form-item label="工程量清单金额(元)" prop="gclqdje">
               <el-input v-model="form.gclqdje" placeholder="请输入工程量清单金额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="开工预付款金额" prop="kgyfkje">
+            <el-form-item label="开工预付款金额(元)" prop="kgyfkje">
               <el-input v-model="form.kgyfkje" placeholder="请输入开工预付款金额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="暂列金金额" prop="zljje">
+            <el-form-item label="暂列金金额(元)" prop="zljje">
               <el-input v-model="form.zljje" placeholder="请输入暂列金金额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="合同工期" prop="htgq">
+            <el-form-item label="合同工期(天)" prop="htgq">
               <el-input v-model="form.htgq" placeholder="请输入合同工期" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="开工预付款起扣比例" prop="kgyfkqkbl">
+            <el-form-item label="开工预付款起扣比例(%)" prop="kgyfkqkbl">
               <el-input v-model="form.kgyfkqkbl" placeholder="请输入开工预付款起扣比例" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="开工预付款截止比例" prop="kgyfkjzbl">
+            <el-form-item label="开工预付款截止比例(%)" prop="kgyfkjzbl">
               <el-input v-model="form.kgyfkjzbl" placeholder="请输入开工预付款截止比例" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="质保金扣款比例" prop="zbjkkbl">
+            <el-form-item label="质保金扣款比例(%)" prop="zbjkkbl">
               <el-input v-model="form.zbjkkbl" placeholder="请输入质保金扣款比例" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="农民工工资保证金扣款比例" prop="nmggzbzjkkbl">
+            <el-form-item label="农民工工资保证金扣款比例(%)" prop="nmggzbzjkkbl">
               <el-input v-model="form.nmggzbzjkkbl" placeholder="请输入农民工工资保证金扣款比例" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="质保金总额" prop="zbjze">
+            <el-form-item label="质保金总额(元)" prop="zbjze">
               <el-input v-model="form.zbjze" placeholder="请输入质保金总额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="计日工金额" prop="jrgje">
+            <el-form-item label="计日工金额(元)" prop="jrgje">
               <el-input v-model="form.jrgje" placeholder="请输入计日工金额" />
             </el-form-item>
           </el-col>
@@ -455,7 +455,7 @@
               <el-input v-model="form.clyfkkhgd" type="textarea" placeholder="请输入内容" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+<!--          <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
@@ -465,10 +465,11 @@
                 >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              <el-input v-model="form.status" type="hidden" value="0" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -595,7 +596,7 @@ export default {
           },
         ],
         htgq: [
-          { required: true, message: "合同工期)不能为空", trigger: "blur" }
+          { required: true, message: "合同工期不能为空", trigger: "blur" }
         ],
         kgyfkqkbl: [
           { required: true, message: "开工预付款起扣比例不能为空", trigger: "blur" }

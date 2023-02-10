@@ -82,7 +82,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="供应商管理id" align="center" prop="id" v-if="false"/>
       <el-table-column label="供应商编码" align="center" prop="supplierCode" />
-      <el-table-column label="供应商名称" align="center" prop="supplierName" />
+      <el-table-column label="供应商名称" align="center" prop="supplierName" width="300"/>
       <el-table-column label="联系人" align="center" prop="contactPerson" />
       <el-table-column label="手机" align="center" prop="mobilePhone" />
       <el-table-column label="总欠款金额" align="center" prop="unpaid" />
