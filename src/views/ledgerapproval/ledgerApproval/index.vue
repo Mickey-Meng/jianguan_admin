@@ -8,13 +8,13 @@
             <el-table-column label="ID" align="center" prop="id" v-if="false"/>
             <el-table-column label="申报期数" align="center" prop="sqqc" min-width="80" :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                {{ '第' + scope.row.sqqc + '期' }}
+                {{ scope.row.sqqc }}
               </template>
             </el-table-column>
             <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
-            <el-table-column label="状态" align="center" prop="status" min-width="40">
+            <el-table-column label="状态" align="center" prop="reviewCode" min-width="40">
               <template slot-scope="scope">
-                <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+                <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
               </template>
             </el-table-column>
           </el-table>
@@ -144,13 +144,13 @@
         </el-row>
         <el-table :height="'calc(100vh - 205px)'" v-loading="loading" :header-cell-style="headercellStyle"
           :cell-style="cellStyle" :data="ledgerApprovalList" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" align="center" />
+          <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
-          <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" :show-overflow-tooltip="true"/>
+          <el-table-column label="工程部位" align="center" min-width="180" prop="gcbw" :show-overflow-tooltip="true"/>
 
 
-          <el-table-column label="子目号" align="center" min-width="120" prop="zmh"  :show-overflow-tooltip="true"/>
+          <el-table-column label="子目号" align="center" min-width="100" prop="zmh"  :show-overflow-tooltip="true"/>
           <el-table-column label="子目名称" align="center" min-width="120" prop="zmmc" :show-overflow-tooltip="true"/>
 
 
@@ -162,9 +162,9 @@
           <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl"  :show-overflow-tooltip="true"/>
           <el-table-column label="已计量数量" align="center" min-width="120" prop="yjlsl" :show-overflow-tooltip="true"/>
 
-          <el-table-column label="数据状态" align="center" min-width="80" prop="dataStatus">
+          <el-table-column label="上报状态" align="center" min-width="80" prop="reviewCode">
             <template slot-scope="scope">
-              <dict-tag :options="dict.type.data_status" :value="scope.row.dataStatus"/>
+              <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
             </template>
           </el-table-column>
           <!-- <el-table-column label="申报状态" align="center" prop="spzt" /> -->
@@ -186,6 +186,7 @@
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
+                :disabled="['1', '2'].includes(scope.row.reviewCode)"
                 @click="handleDelete(scope.row, scope.$index)"
                 v-hasPermi="['ledgerapproval:ledgerApproval:remove']"
               >删除</el-button>
@@ -216,7 +217,7 @@ import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import LedgerList from './components/LedgerList';
 export default {
   name: "LedgerApproval",
-  dicts: ['data_status'],
+  dicts: ['data_status', 'review_code'],
   components: {
     LedgerList
   },
@@ -278,7 +279,7 @@ export default {
           { required: true, message: "工程部位不能为空", trigger: "blur" }
         ],
         dataStatus: [
-          { required: true, message: "数据状态不能为空", trigger: "blur" }
+          { required: true, message: "上报状态不能为空", trigger: "blur" }
         ],
         spzt: [
           { required: true, message: "申报状态不能为空", trigger: "blur" }
@@ -398,10 +399,19 @@ export default {
       // });
     },
     submitData () {
-      if (!this.selection.length) {
-        this.$message.warning('请选择要上报的数据！');
+      // if (!this.selection.length) {
+      //   this.$message.warning('请选择要上报的数据！');
+      //   return;
+      // }
+      if (['1', '2'].includes(this.queryParams.reviewCode)) {
+        const msg = {
+          '1': '正在上报中',
+          '2': '已上报完成'
+        };
+        this.$message.warning(`选中的当前期次${msg[this.queryParams.reviewCode]}，不可重复上报!`);
         return;
       }
+      this.handleSelectionChange(this.ledgerApprovalList);
       this.selection = this.selection.map(item => {
         item.breakdownId = item.id;
         item.id = null;
@@ -425,6 +435,7 @@ export default {
     },
     rowQsClick(record,index){ 
       this.queryParams.sqqc = record.sqqc;
+      this.queryParams.reviewCode = record.reviewCode;
       // this.queryParams.pageNum = 1;
       this.getList();
     },
