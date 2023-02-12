@@ -162,11 +162,11 @@
           <el-table-column label="分解数量" align="center" min-width="100" prop="fjsl"  :show-overflow-tooltip="true"/>
           <el-table-column label="已计量数量" align="center" min-width="120" prop="yjlsl" :show-overflow-tooltip="true"/>
 
-          <el-table-column label="上报状态" align="center" min-width="80" prop="reviewCode">
+          <!-- <el-table-column label="上报状态" align="center" min-width="80" prop="reviewCode">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- <el-table-column label="申报状态" align="center" prop="spzt" /> -->
           <!-- <el-table-column label="状态" align="center" prop="status">
             <template slot-scope="scope">
