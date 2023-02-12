@@ -443,6 +443,8 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
+      this.$modal.msgSuccess("暂不支持删除操作");
+      return ;
       const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除采购合同 编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
