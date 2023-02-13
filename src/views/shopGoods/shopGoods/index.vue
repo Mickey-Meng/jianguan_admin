@@ -134,11 +134,7 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="供应商ID" prop="supplierId">
-              <el-input v-model="form.supplierId" placeholder="请输入供应商ID" />
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="供应商名称" prop="supplierName">
               <el-autocomplete
@@ -150,7 +146,11 @@
               ></el-autocomplete>
             </el-form-item>
           </el-col>
-
+          <el-col :span="12">
+            <el-form-item label="供应商ID" prop="supplierId">
+              <el-input v-model="form.supplierId" placeholder="请输入供应商ID" />
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
 
             <el-form-item label="商品类别ID" prop="area">
@@ -194,12 +194,23 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="所属库位名称" prop="supplierName">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.storageName"
+                :fetch-suggestions="queryStorageNameSearchAsync"
+                placeholder="请输入所属库位名称"
+                @select="handleSelectStorageName"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="所属库位主键" prop="storageId">
               <el-input v-model="form.storageId" placeholder="请输入所属库位主键" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="商品重量(单位:千克)" prop="goodsWeight">
+            <el-form-item label="商品重量(千克)" prop="goodsWeight">
               <el-input v-model="form.goodsWeight" placeholder="请输入商品重量(单位:千克)" />
             </el-form-item>
           </el-col>
@@ -262,6 +273,7 @@
 <script>
 import { listShopGoods, getShopGoods, delShopGoods, addShopGoods, updateShopGoods ,goodsTree} from "@/api/shopGoods/shopGoods";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+import {listWhStorage} from "@/api/whStorage/whStorage";
 import {regionData} from "element-china-area-data";
 
 export default {
@@ -318,6 +330,9 @@ export default {
         ],
         goodsCode: [
           { required: true, message: "商品编码不能为空", trigger: "blur" }
+        ],
+        costPrice: [
+          { required: true, message: "商品成本价（进价）不能为空", trigger: "blur" }
         ],
         goodsName: [
           { required: true, message: "商品名称不能为空", trigger: "blur" }
@@ -486,6 +501,35 @@ export default {
     },
     /*
     *    **/
+    queryStorageNameSearchAsync(queryString, cb) {
+      const queryParams = {
+        storageName: queryString,
+      };
+      let flag = false;
+      listWhStorage(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.storageName,
+              label: item.id,
+              item: {
+                storageId: item.id,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
     querySearchAsync(queryString, cb) {
       const queryParams = {
         supplierName: queryString,
@@ -513,6 +557,10 @@ export default {
         }
       });
 
+    },
+    handleSelectStorageName(item){
+      this.form.storageId = item.item.storageId;
+      console.log(item);
     },
 
     handleSelect(item) {
