@@ -205,6 +205,7 @@ import Treeselect from '@riophae/vue-treeselect'
 import ledgerBreakdown from './../processForm/forms/ledgerBreakdown';
 import measurementDocuments from './../processForm/forms/measurementDocuments';
 import ledgerChange from './../processForm/forms/ledgerChange';
+import ledgerApproval from './../processForm/forms/ledgerApproval';
 export default {
   name: "Detail",
   components: {
@@ -213,7 +214,8 @@ export default {
     Treeselect,
     ledgerBreakdown,
     measurementDocuments,
-    ledgerChange
+    ledgerChange,
+    ledgerApproval
   },
   props: {},
   computed: {
