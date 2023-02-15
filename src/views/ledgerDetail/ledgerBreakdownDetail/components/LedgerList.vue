@@ -222,10 +222,10 @@ export default {
       this.loading = true;
       listLedgerBreakdownAddBatch(this.selectionList).then(response => {
         this.close();
+        this.$emit('getSelectionData');
       }).finally(() => {
         this.loading = false;
       });
-      this.$emit('getSelectionData');
     },
   }
 };
