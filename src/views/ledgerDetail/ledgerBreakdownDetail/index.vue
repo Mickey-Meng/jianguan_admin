@@ -200,7 +200,7 @@
             :load="load"
             ref="table"
           >
-            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120"
+            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="140"
                              :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
             <el-table-column label="单位" align="center" prop="dw" min-width="80"/>

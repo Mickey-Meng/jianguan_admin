@@ -265,13 +265,13 @@
               <el-tab-pane label="安全相关" name="six">
               </el-tab-pane>
             </el-tabs>
-            
+
           </div>
         </div>
-        
+
       </el-col>
     </el-row>
-   
+
     <el-dialog :title="title" :visible.sync="open" width="1500px" append-to-body>
       <el-row v-if="open" :gutter="24">
           <el-col :span="6">
@@ -286,7 +286,7 @@
             <el-row :gutter="24">
               <el-col :span="24">
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                  <el-col :span="12"> 
+                  <el-col :span="12">
                   <el-form-item label="凭证编号" prop="pzbh">
                     <el-input v-model="form.pzbh" placeholder="请输入凭证编号" />
                     </el-form-item>
@@ -336,7 +336,7 @@
                       </el-table-column>
                       <el-table-column
                         prop="fhsl"
-                        label="复合数量">
+                        label="复核数量">
                       </el-table-column>
                       <el-table-column
                         prop="yjlsl"
@@ -440,10 +440,10 @@ export default {
       // 中间计量期数管理表格数据
       measurementNoList: [],
       // 遮罩层
-      qsloading: true,     
+      qsloading: true,
       jlqsbhOptions:[],
       //选中期数
-      xzQsId: "", 
+      xzQsId: "",
       ledgerBreakdownList: [],
       InfoTableData:[],
       treeProps: {
@@ -665,12 +665,12 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
-    rowQsClick(record,index){ 
+    rowQsClick(record,index){
       this.currentRow = record;
       this.queryParams.jlqsbh = record.jlqsbh;
       this.queryParams.pageNum = 1;
       this.getList();
-    }, 
+    },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
