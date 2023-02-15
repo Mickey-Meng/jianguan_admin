@@ -187,7 +187,7 @@
             </el-col> -->
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
           </el-row>
-       
+
           <el-table
             v-if="refreshTable"
             v-loading="loading"
@@ -200,35 +200,36 @@
             :load="load"
             ref="table"
           >
-            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="160"
+            <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120"
                              :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
-            <el-table-column label="单位" align="center" prop="dw" min-width="100"/>
+            <el-table-column label="单位" align="center" prop="dw" min-width="80"/>
             <el-table-column label="合同单价" align="center" prop="htdj" min-width="160">
               <template slot-scope="scope">
                 {{ dealNumberFormat(scope.row.htdj) }}
               </template>
             </el-table-column>
-            <el-table-column label="设计数量" align="center" prop="sjsl" min-width="140"/>
-            <el-table-column label="分解数量" align="center" prop="fjsl" min-width="140"/>
-            <el-table-column label="变更数量" align="center" prop="bgsl" min-width="140"/>
-            <el-table-column label="复核数量" align="center" prop="fhsl" min-width="140"/>
+            <el-table-column label="设计数量" align="center" prop="sjsl" min-width="110"/>
+            <el-table-column label="分解数量" align="center" prop="fjsl" min-width="110"/>
+            <el-table-column label="变更数量" align="center" prop="bgsl" min-width="110"/>
+            <el-table-column label="复核数量" align="center" prop="fhsl" min-width="110"/>
             <el-table-column label="已计量数量" align="center" prop="yjlsl" min-width="120"/>
-            <el-table-column label="复核金额" align="center" prop="fhje" min-width="140">
+            <el-table-column label="复核金额" align="center" prop="fhje" min-width="110">
               <template slot-scope="scope">
                 {{ dealNumberFormat(scope.row.fhje) }}
               </template>
             </el-table-column>
-            <el-table-column label="分解类型" align="center" prop="fjlx" min-width="120">
+            <el-table-column label="分解类型" align="center" prop="fjlx" min-width="110">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.change_status" :value="scope.row.fjlx"/>
               </template>
             </el-table-column>
-            <el-table-column label="状态" align="center" prop="status" min-width="80">
+            <el-table-column label="审批状态" align="center" prop="reviewCode" min-width="110">
               <template slot-scope="scope">
-                <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+                <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
               </template>
             </el-table-column>
+
             <el-table-column label="操作" align="left" fixed="right" class-name="small-padding fixed-width"
                              min-width="200">
               <template slot-scope="scope">
@@ -350,6 +351,7 @@
               <el-input :disabled="true" v-model="form.fjlx" placeholder="请输入状态"/>
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group :disabled="true" v-model="form.status">
@@ -388,7 +390,7 @@ import LedgerList from './components/LedgerList';
 import { dealNumberFormat } from "@/utils/utils.js";
 export default {
   name: "LedgerBreakdownDetail",
-  dicts: ['data_status'],
+  dicts: ['data_status', 'review_code'],
   components: {
     MultilevelTree,
     LedgerList
