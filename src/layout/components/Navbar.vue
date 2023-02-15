@@ -22,7 +22,7 @@
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-
+        <span style="font-size: 16px" class="right-menu-item">{{ name }}</span>
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -72,7 +72,7 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'device'
+      'device',
     ]),
     setting: {
       get() {
@@ -88,6 +88,11 @@ export default {
     topNav: {
       get() {
         return this.$store.state.settings.topNav
+      }
+    },
+    name: {
+      get () {
+        return this.$store.state.user.name;
       }
     }
   },
