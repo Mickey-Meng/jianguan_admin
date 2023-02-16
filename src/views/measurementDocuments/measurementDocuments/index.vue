@@ -195,9 +195,9 @@
               <el-table-column label="计算式" align="center" min-width="140" prop="jss" v-if="false"/>
               <el-table-column label="计量比例" align="center" min-width="140" prop="jlbl" v-if="false"/>
               <el-table-column label="附件地址" align="center" min-width="140" prop="fj" v-if="false"/>
-              <el-table-column label="状态" align="center" min-width="100" prop="status">
+              <el-table-column label="审批状态" align="center" min-width="100" prop="reviewCode">
                 <template slot-scope="scope">
-                  <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+                  <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
                 </template>
               </el-table-column>
               <el-table-column label="计量前置条件" align="center">
@@ -427,7 +427,7 @@ import measureAbout from '@/views/measurementDocuments/measurementDocuments/comp
 
 export default {
   name: "MeasurementDocuments",
-  dicts: ['data_status'],
+  dicts: ['review_code'],
   components: {
     upload, measureAbout
   },

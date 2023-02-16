@@ -12,7 +12,7 @@
               </template>
             </el-table-column>
             <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
-            <el-table-column label="状态" align="center" prop="reviewCode" min-width="40">
+            <el-table-column label="审批状态" align="center" prop="reviewCode" min-width="40">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
               </template>
@@ -433,7 +433,7 @@ export default {
         ...this.queryParams
       }, `ledgerApproval_${new Date().getTime()}.xlsx`)
     },
-    rowQsClick(record,index){ 
+    rowQsClick(record,index){
       this.queryParams.sqqc = record.sqqc;
       this.queryParams.reviewCode = record.reviewCode;
       // this.queryParams.pageNum = 1;

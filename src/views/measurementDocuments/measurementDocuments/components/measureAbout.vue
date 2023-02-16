@@ -5,7 +5,7 @@
             <el-table-column label="子目号" align="center" prop="zmh" min-width="140" :show-overflow-tooltip="true"/>
             <el-table-column label="子目名称" align="center" prop="meaContractBill.zmmc" min-width="140" :show-overflow-tooltip="true"/>
             <el-table-column label="单位" align="center" prop="meaContractBill.dw" min-width="100"/>
-            <el-table-column label="可设量数量" align="center" prop="ksjsl" min-width="140"/>
+            <el-table-column label="合同数量" align="center" prop="meaContractBill.htsl" min-width="140"/>
             <el-table-column label="本期计量数量" align="center" prop="bqjlsl" min-width="140"/>
             <el-table-column label="累计数量" align="center" prop="meaContractBill.shsl" min-width="140"/>
             <el-table-column label="累计计量比例" align="center" prop="ljjlbl" min-width="140"/>
@@ -47,7 +47,7 @@ export default {
             }).finally(() => {
                 this.loading = false;
             })
-        } 
+        }
     }
 }
 </script>
