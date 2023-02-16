@@ -280,7 +280,7 @@
 
     <!-- 添加台账分解明细 -->
     <el-dialog :title="'添加清单'" :visible.sync="openAdd" width="1050px" append-to-body>
-      <ledger-list v-if="openAdd" :tzfjbh="queryParams.tzfjbh" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
+      <ledger-list v-if="openAdd" :tzfjbh="queryParams.tzfjbh" :bdbhList="bdbhList" :close="closeOpenAdd" @getSelectionData="getSelectionData"/>
     </el-dialog>
     <!-- 修改台账分解明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
@@ -514,7 +514,8 @@ export default {
         fontSize: '14px',
       },
       dealNumberFormat,
-      disabled: true // 新增按钮 默认禁止编辑
+      disabled: true, // 新增按钮 默认禁止编辑
+      bdbhList: []
     };
   },
   created() {
@@ -539,6 +540,16 @@ export default {
       this.loading = true;
       this.refreshTable = false;
       listLedgerBreakdownTree(this.queryParams).then(response => {
+        let bdbhList = []
+        response.rows.forEach(item => {
+          if (item.children && item.children.length) {
+            const bdbhList1 = item.children.map(v => {
+              return v.zmh;
+            })
+            bdbhList = [...bdbhList, ...bdbhList1];
+          }
+        })
+        this.bdbhList = bdbhList;
         this.ledgerBreakdownDetailListCopy = response.rows;
         this.ledgerBreakdownDetailList = JSON.parse(JSON.stringify(response.rows)).map(item => {
           item.hasChildren = item.children && item.children.length > 0;

@@ -96,6 +96,10 @@ export default {
     tzfjbh: {
       type: String,
       default: ''
+    },
+    bdbhList: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -137,7 +141,8 @@ export default {
         parentId: undefined
       },
       // 选中的数据集合
-      selectionList: []
+      selectionList: [],
+      zmhList: []
     };
   },
   created() {
@@ -208,6 +213,16 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
+      this.zmhList = [];
+      selection.map(item => {
+        if (this.bdbhList.includes(item.zmh)) {
+          this.zmhList.push(item.zmh);
+        }
+      })
+      if (this.zmhList.length) {
+        this.$message.error(`子母号 ${this.zmhList.join('/')} 已存在分解明细中，不可重复添加清单！`);
+        return;
+      }
       this.selectionList = selection.map(item => {
         item.id = null;
         item.tzfjbh = this.tzfjbh;
@@ -215,6 +230,10 @@ export default {
       });
     },
     submitForm() {
+      if (this.zmhList.length) {
+        this.$message.error(`子母号 ${this.zmhList.join('/')} 已存在分解明细中，不可重复添加清单！`);
+        return;
+      }
       if (!this.selectionList.length) {
         this.$message.warning('请选择台账分解清单数据后点击确定！');
         return;

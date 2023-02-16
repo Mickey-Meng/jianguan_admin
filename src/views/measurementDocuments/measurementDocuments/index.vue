@@ -298,7 +298,7 @@
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="工程部位" prop="gcbw">
-                    <el-input v-model="form.gcbw" placeholder="请输入工程部位" />
+                    <el-input v-model="form.gcbw" :disabled="true" placeholder="请输入工程部位" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
@@ -419,7 +419,7 @@
 </template>
 <script>
 import { listMeasurementDocuments, getMeasurementDocuments, delMeasurementDocuments, addMeasurementDocuments, updateMeasurementDocuments } from "@/api/measurementDocuments/measurementDocuments";
-import { listLedgerBreakdownDetail} from "@/api/ledgerDetail/ledgerBreakdownDetail";
+import { listLedgerBreakdownDetail } from "@/api/ledgerDetail/ledgerBreakdownDetail";
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import upload from '@/components/FileUpload';
@@ -579,21 +579,27 @@ export default {
         this.loading = false;
       });
     },
-    getTreeInfoList(){
-      listLedgerBreakdownDetail(this.queryParams).then(response => {
-        this.ledgerBreakdownDetailList = response.rows.map(item => {
-          item.id = '';
-          item.bqjlsl = '';
-          return item;
-        });
+    getTreeInfoList(tzfjbh){
+      const params = {
+        tzfjbh,
+        queryType: 'e'
+      }
+      listLedgerBreakdownDetail(params).then(response => {
+        if (response.rows.length) {
+          this.ledgerBreakdownDetailList = response.rows.map(item => {
+            item.id = '';
+            item.bqjlsl = '';
+            return item;
+          });
+          this.form.gcbw = this.ledgerBreakdownDetailList[0].fjmulu
+        }
         // this.total = response.total;
         this.treeloading = false;
       });
     },
     handleNodeClick(data) {
         console.log(data);
-        this.queryParams.tzfjbh = data.tzfjbh;
-        this.getTreeInfoList();
+        this.getTreeInfoList(data.tzfjbh);
     },
     selectTree (row) {
       console.error('选中的数据', row);
