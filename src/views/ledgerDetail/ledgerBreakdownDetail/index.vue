@@ -684,6 +684,10 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      if (this.form.fjsl > this.form.sjsl) {
+        this.$message.error('分解数量不得超过设计数量！')
+        return;
+      }
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
