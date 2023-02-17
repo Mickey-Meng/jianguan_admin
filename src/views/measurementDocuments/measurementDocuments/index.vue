@@ -520,9 +520,7 @@ export default {
         gcbw: [
           { required: true, message: "工程部位不能为空", trigger: "blur" }
         ],
-        jss: [
-          { required: true, message: "计算式不能为空", trigger: "blur" }
-        ],
+
         jlbl: [
           { required: true, message: "计量比例不能为空", trigger: "blur" }
         ],
@@ -582,11 +580,13 @@ export default {
     getTreeInfoList(tzfjbh){
       const params = {
         tzfjbh,
-        queryType: 'e'
+        queryType: 'e',
+        reviewCode: 2
       }
       listLedgerBreakdownDetail(params).then(response => {
         if (response.rows.length) {
           this.ledgerBreakdownDetailList = response.rows.map(item => {
+            item.meaLedgerBreakdownDetailId = item.id;// add by yangaogao  将查询出来的台账分解明细数据的编号，赋值给中间计量明细表中的外键
             item.id = '';
             item.bqjlsl = '';
             return item;
@@ -599,6 +599,7 @@ export default {
     },
     handleNodeClick(data) {
         console.log(data);
+      this.queryParams.tzfjbh = data.tzfjbh;
         this.getTreeInfoList(data.tzfjbh);
     },
     selectTree (row) {
@@ -742,6 +743,8 @@ export default {
             this.form.detailBos = this.ledgerBreakdownDetailList;
             this.form.fj = JSON.stringify(this.fileList);
             this.form.tzfjbh = this.queryParams.tzfjbh;
+            // add by yangaogao 20230217
+            this.form.meaLedgerBreakdownDetailId = this.queryParams.id;
             addMeasurementDocuments(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
