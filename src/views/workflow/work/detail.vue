@@ -36,7 +36,7 @@
           </el-row>
           <el-row :gutter="10" type="flex" justify="center" >
             <el-col :span="1.5">
-              <el-button icon="el-icon-circle-check" type="success" @click="handleComplete">通过</el-button>
+              <el-button icon="el-icon-circle-check" type="success" @click="goBack">通过</el-button>
             </el-col>
             <el-col :span="1.5">
               <el-button icon="el-icon-chat-line-square" type="primary" @click="handleDelegate">委派</el-button>

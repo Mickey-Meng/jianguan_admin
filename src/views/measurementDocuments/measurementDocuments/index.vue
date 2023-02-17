@@ -718,7 +718,7 @@ export default {
             this.$message.warning('计量数据不能为空');
             return;
           }
-          const flag = false;
+          let flag = false;
           this.ledgerBreakdownDetailList.forEach(item => {
             if (!item.bqjlsl) {
               flag = true;

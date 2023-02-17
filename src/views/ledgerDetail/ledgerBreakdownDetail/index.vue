@@ -151,7 +151,7 @@
                 icon="el-icon-sort"
                 size="mini"
                 @click="toggleExpandAll"
-              >展开/折叠</el-button>
+              >收起</el-button>
             </el-col>
             <!-- <el-col :span="1.5">
               <el-button
