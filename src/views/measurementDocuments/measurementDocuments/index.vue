@@ -136,9 +136,19 @@
               plain
               icon="el-icon-plus"
               size="mini"
-              @click="handleAdd"
+              @click="handleAdd('1')"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
             >设计计量</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd('0')"
+              v-hasPermi="['measurementDocuments:measurementDocuments:add']"
+            >变更计量</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -283,7 +293,7 @@
     </el-row>
 
     <el-dialog :title="title" :visible.sync="open" width="1500px" append-to-body>
-      <el-row v-if="open" :gutter="24">
+      <el-row class="rows" v-if="open" :gutter="24">
           <el-col :span="6">
           <el-tree
             :data="ledgerBreakdownList"
@@ -556,7 +566,8 @@ export default {
         height: '44px',
         fontSize: '14px',
       },
-      activeName: 'first'
+      activeName: 'first',
+      fjlx: ''
     };
   },
   created() {
@@ -591,7 +602,8 @@ export default {
       const params = {
         tzfjbh,
         queryType: 'e',
-        reviewCode: 2
+        reviewCode: 2,
+        fjlx: this.fjlx
       }
       listLedgerBreakdownDetail(params).then(response => {
         if (response.rows.length) {
@@ -608,9 +620,9 @@ export default {
       });
     },
     handleNodeClick(data) {
-        console.log(data);
+      console.log(data);
       this.queryParams.tzfjbh = data.tzfjbh;
-        this.getTreeInfoList(data.tzfjbh);
+      this.getTreeInfoList(data.tzfjbh);
     },
     selectTree (row) {
       console.error('选中的数据', row);
@@ -619,7 +631,10 @@ export default {
      /** 查询台账分解列表 */
      getLeftTree() {
       this.loading = true;
-      listLedgerBreakdown().then(response => {
+      const params = {
+        fjlx: this.fjlx
+      }
+      listLedgerBreakdown(params).then(response => {
         this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
         console.log("tree",this.ledgerBreakdownList);
       }).finally(() => {
@@ -700,11 +715,15 @@ export default {
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd(fjlx) {
       this.reset();
       this.open = true;
       this.ledgerBreakdownDetailList = [];
       this.title = "添加计量";
+      if (fjlx === '0') {
+        this.title = "变更计量";
+      }
+      this.fjlx = fjlx;
       this.getLeftTree()
       this.getNowDate()
     },
@@ -846,6 +865,12 @@ export default {
   padding: 0 10px;
   .el-table {
     height: 100%;
+  }
+}
+.rows {
+  .el-tree {
+    overflow: auto;
+    height: calc(100vh - 230px);
   }
 }
 </style>
