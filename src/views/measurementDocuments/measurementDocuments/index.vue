@@ -138,7 +138,17 @@
               size="mini"
               @click="handleAdd"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
-            >新增</el-button>
+            >设计计量</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-lock"
+              size="mini"
+              @click="handleLock"
+              v-hasPermi="['measurementDocuments:measurementDocuments:add']"
+            >锁定</el-button>
           </el-col>
           <!-- <el-col :span="1.5">
             <el-button
@@ -697,6 +707,9 @@ export default {
       this.title = "添加计量";
       this.getLeftTree()
       this.getNowDate()
+    },
+    handleLock () {
+
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
