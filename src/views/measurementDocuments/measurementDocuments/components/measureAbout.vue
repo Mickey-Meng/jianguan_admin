@@ -8,13 +8,21 @@
             <el-table-column label="分解数量" align="center" prop="meaLedgerBreakdownDetail.fjsl" min-width="140"/>
             <el-table-column label="本期计量数量" align="center" prop="bqjlsl" min-width="140"/>
             <el-table-column label="累计数量" align="center" prop="meaLedgerBreakdownDetail.yjlsl" min-width="140"/>
-            <el-table-column label="累计计量比例" align="center" prop="ljjlbl" min-width="140"/>
+            <el-table-column label="累计计量比例" align="center" prop="ljjlbl" min-width="160">
+                <template slot-scope="scope">
+                    <el-progress
+                        :percentage="scope.row.ljjlbl"
+                        :show-text="true"
+                        :color="'#0F63FF'"/>
+                </template>
+            </el-table-column>
         </el-table>
     </div>
 </template>
 
 <script>
 import { measurementAboutList } from '@/api/measurementDocumentsDetail/measurementDocumentsDetail';
+import calc from '@/utils/calc.js'
 export default {
     data () {
         return {
@@ -43,7 +51,14 @@ export default {
             }
             this.loading = true;
             measurementAboutList(params).then(response => {
-                this.tableData = response.rows;
+                if (response.rows.length) {
+                    this.tableData = response.rows.map(item => {
+                        const ljjlbl = calc.div(item.meaLedgerBreakdownDetail.yjlsl || 0, item.meaLedgerBreakdownDetail.fjsl || 0)
+                        item.ljjlbl = Number(ljjlbl.toFixed(4)) * 100;
+                        console.error('ljjlbl', item.ljjlbl);
+                        return item;
+                    })
+                }
             }).finally(() => {
                 this.loading = false;
             })
