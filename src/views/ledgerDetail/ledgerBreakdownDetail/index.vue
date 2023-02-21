@@ -327,6 +327,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="变更分解数量" prop="bgfjsl">
+              <el-input v-model="form.bgfjsl" placeholder="请输入变更分解数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="变更数量" prop="bgsl">
               <el-input :disabled="true" v-model="form.bgsl" placeholder="请输入变更数量"/>
             </el-form-item>
@@ -437,6 +442,7 @@ export default {
         htdj: undefined,
         sjsl: undefined,
         fjsl: undefined,
+        bgfjsl: undefined,
         bgsl: undefined,
         fhsl: undefined,
         yjlsl: undefined,
@@ -620,6 +626,7 @@ export default {
         sjsl: undefined,
         fjsl: undefined,
         bgsl: undefined,
+        bgfjsl: undefined,
         fhsl: undefined,
         yjlsl: undefined,
         fhje: undefined,
