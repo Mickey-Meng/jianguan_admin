@@ -102,7 +102,7 @@
       <el-table-column label="总金额" align="center" prop="zje" /> -->
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.bil_source" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" prop="remark" />
@@ -192,7 +192,7 @@
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
-                  v-for="dict in dict.type.data_status"
+                  v-for="dict in dict.type.bil_source"
                   :key="dict.value"
                   :label="dict.value"
                 >{{dict.label}}</el-radio>
@@ -242,7 +242,7 @@ import { dealNumberFormat } from "@/utils/utils.js";
 import formValidate from '@/plugins/formValidate/formValidate'
 export default {
   name: "ContractBill",
-  dicts: ['data_status'],
+  dicts: ['bil_source'],
   components: {
     Treeselect
   },
@@ -538,7 +538,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       console.error('row', row);
-      this.isLeaf = row.children === undefined; 
+      this.isLeaf = row.children === undefined;
 	    this.loading = true;
       this.reset();
       this.getTreeselect();
