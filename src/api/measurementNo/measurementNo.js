@@ -50,3 +50,12 @@ export function delMeasurementNo(id) {
     method: 'delete'
   })
 }
+
+// 查询中间计量期数管理列表
+export function lockingMeaMeasurementNo(query) {
+  return request({
+    url: '/measurementNo/measurementNo/lockingMeaMeasurementNo',
+    method: 'get',
+    params: query
+  })
+}

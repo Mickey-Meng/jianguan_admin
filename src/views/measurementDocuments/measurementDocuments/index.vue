@@ -137,6 +137,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd('1')"
+              :disabled="lockStatus === '1'"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
             >设计计量</el-button>
           </el-col>
@@ -147,6 +148,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd('0')"
+              :disabled="lockStatus === '1'"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
             >变更计量</el-button>
           </el-col>
@@ -157,6 +159,7 @@
               icon="el-icon-lock"
               size="mini"
               @click="handleLock"
+              :disabled="lockStatus === '1'"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
             >锁定</el-button>
           </el-col>
@@ -440,7 +443,7 @@
 <script>
 import { listMeasurementDocuments, getMeasurementDocuments, delMeasurementDocuments, addMeasurementDocuments, updateMeasurementDocuments } from "@/api/measurementDocuments/measurementDocuments";
 import { listLedgerBreakdownDetail } from "@/api/ledgerDetail/ledgerBreakdownDetail";
-import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
+import { listMeasurementListNo, lockingMeaMeasurementNo } from "@/api/measurementNo/measurementNo";
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import upload from '@/components/FileUpload';
 import measureAbout from '@/views/measurementDocuments/measurementDocuments/components/measureAbout';
@@ -567,7 +570,8 @@ export default {
         fontSize: '14px',
       },
       activeName: 'first',
-      fjlx: ''
+      fjlx: '',
+      lockStatus: ''
     };
   },
   created() {
@@ -700,6 +704,7 @@ export default {
     rowQsClick(record,index){
       this.currentRow = record;
       this.queryParams.jlqsbh = record.jlqsbh;
+      this.lockStatus = record.status;
       this.queryParams.pageNum = 1;
       this.getList();
     },
@@ -728,7 +733,18 @@ export default {
       this.getNowDate()
     },
     handleLock () {
-
+      const params = {
+        meaMeasurementNo: this.queryParams.jlqsbh
+      }
+      lockingMeaMeasurementNo(params).then(res => {
+        console.error('res', res);
+        if (res.msg ==='1') {
+          this.$message.success('锁定成功！')
+          this.$tab.refreshPage()
+        } else {
+          this.$message.error(res.msg)
+        }
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
