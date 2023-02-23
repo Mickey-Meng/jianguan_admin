@@ -102,7 +102,7 @@
       <el-table-column label="总金额" align="center" prop="zje" /> -->
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.bil_source" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.bil_source" :value="scope.row.isChange"/>
         </template>
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" prop="remark" />
