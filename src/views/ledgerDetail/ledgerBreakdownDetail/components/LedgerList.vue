@@ -55,9 +55,9 @@
       <el-table-column label="合同金额" align="center" min-width="110" prop="htje"/>
       <el-table-column label="修正金额" align="center" min-width="110" prop="xzje"/>
       <el-table-column label="审核金额" align="center" min-width="110" prop="shje"/>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="清单来源" align="center" prop="isChange">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.bil_source" :value="scope.row.isChange"/>
         </template>
       </el-table-column>
     </el-table>
@@ -83,7 +83,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "ContractBill",
-  dicts: ['data_status'],
+  dicts: ['bil_source'],
   components: {
     Treeselect
   },
