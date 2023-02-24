@@ -270,6 +270,9 @@ export default {
         getTreeList () {
             this.loading = true;
             listContractBillTree(this.queryParams).then(response => {
+                response.data.forEach(item => {
+                    item.zmmc = item.zmmc + ' [' + item.zmh + ']'
+                })
                 this.treeList = this.handleTree(response.data, "zmh", "zmhParent");
                 this.loading = false;
             });  

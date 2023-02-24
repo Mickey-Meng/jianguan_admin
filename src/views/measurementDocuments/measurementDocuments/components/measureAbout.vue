@@ -53,9 +53,12 @@ export default {
             measurementAboutList(params).then(response => {
                 if (response.rows.length) {
                     this.tableData = response.rows.map(item => {
-                        const ljjlbl = calc.div(item.meaLedgerBreakdownDetail.yjlsl || 0, item.meaLedgerBreakdownDetail.fjsl || 0)
-                        item.ljjlbl = Number(ljjlbl.toFixed(4)) * 100;
-                        console.error('ljjlbl', item.ljjlbl);
+                        if (item.meaLedgerBreakdownDetail) {
+                            const ljjlbl = calc.div(item.meaLedgerBreakdownDetail.yjlsl || 0, item.meaLedgerBreakdownDetail.fjsl || 0)
+                            item.ljjlbl = calc.mul(Number(ljjlbl.toFixed(4)), 100);
+                        } else {
+                            item.ljjlbl = 0
+                        }
                         return item;
                     })
                 }

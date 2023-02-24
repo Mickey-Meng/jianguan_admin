@@ -160,7 +160,7 @@
     </el-row>
 
     <div class="table-area">
-      <el-table v-loading="loading" :height="'calc(100vh - 510px)'" :data="ledgerChangeList"
+      <el-table v-loading="loading" :height="'calc(100vh - 540px)'" :data="ledgerChangeList"
                 @selection-change="handleSelectionChange" @row-click="row_click">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
