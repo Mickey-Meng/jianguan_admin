@@ -89,7 +89,7 @@
             <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="相关附件" prop="fj">
             <upload @input="getFileList"/>
           </el-form-item>
@@ -110,7 +110,7 @@
     </el-col>
     <el-table
       :data="getContractBillList"
-      :height="'calc(100vh - 550px)'"
+      :height="'calc(100vh - 580px)'"
       @selection-change="handleSelectionChange"
     >
       <el-table-column fixed="left" type="index" label="序号" width="55" align="left"/>
