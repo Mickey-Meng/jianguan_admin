@@ -136,7 +136,7 @@
               plain
               icon="el-icon-plus"
               size="mini"
-              @click="handleAdd('1')"
+              @click="handleAdd('0')"
               :disabled="lockStatus === '1'"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
             >设计计量</el-button>
@@ -147,7 +147,7 @@
               plain
               icon="el-icon-plus"
               size="mini"
-              @click="handleAdd('0')"
+              @click="handleAdd('1')"
               :disabled="lockStatus === '1'"
               v-hasPermi="['measurementDocuments:measurementDocuments:add']"
             >变更计量</el-button>
@@ -636,7 +636,9 @@ export default {
      getLeftTree() {
       this.loading = true;
       const params = {
-        fjlx: this.fjlx
+        // fjlx: this.fjlx
+        // modify by yangaogao   查询左侧树节点的时候，暂时不区分是否是变更清单，在查询明细的时候加筛选。
+        // 后期需要优化，优化为，先查询有哪些明细是变更的，然后反推获取对应的树
       }
       listLedgerBreakdown(params).then(response => {
         this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
@@ -726,7 +728,7 @@ export default {
       this.ledgerBreakdownDetailList = [];
       this.title = "添加计量";
       if (fjlx === '0') {
-        this.title = "变更计量";
+        this.title = "添加计量";
       }
       this.fjlx = fjlx;
       this.getLeftTree()
