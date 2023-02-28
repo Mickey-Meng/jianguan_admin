@@ -570,7 +570,7 @@ export default {
         fontSize: '14px',
       },
       activeName: 'first',
-      fjlx: '',
+      isChange: '',
       lockStatus: ''
     };
   },
@@ -607,7 +607,7 @@ export default {
         tzfjbh,
         queryType: 'e',
         reviewCode: 2,
-        fjlx: this.fjlx
+        isChange: this.isChange
       }
       listLedgerBreakdownDetail(params).then(response => {
         if (response.rows.length) {
@@ -722,15 +722,15 @@ export default {
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd(fjlx) {
+    handleAdd(isChange) {
       this.reset();
       this.open = true;
       this.ledgerBreakdownDetailList = [];
-      this.title = "添加计量";
-      if (fjlx === '0') {
-        this.title = "添加计量";
+      this.title = "变更计量";
+      if (isChange === '0') {
+        this.title = "设计计量";
       }
-      this.fjlx = fjlx;
+      this.isChange = isChange;
       this.getLeftTree()
       this.getNowDate()
     },
