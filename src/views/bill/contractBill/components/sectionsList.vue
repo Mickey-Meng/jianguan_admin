@@ -21,18 +21,18 @@
     </el-row>
     <el-table v-loading="loading" :header-cell-style="headercellStyle"
       :cell-style="cellStyle" :data="ledgerApprovalNoList">
-      <el-table-column label="章节号" align="center" prop="zmmc" />
-      <el-table-column label="合同金额" align="center" prop="zje" min-width="100" :show-overflow-tooltip="true">
+      <el-table-column label="一级子目录" align="center" prop="zmmc" />
+      <el-table-column label="原始清单金额" align="center" prop="zje" min-width="100" :show-overflow-tooltip="true">
         <template slot-scope="scope">
         {{ dealNumberFormat(Number(scope.row.zje)) }}
         </template>
       </el-table-column>
-      <el-table-column label="修正金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true">
+      <el-table-column label="变更清单金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true">
         <template slot-scope="scope">
         {{ dealNumberFormat(Number(scope.row.xzje)) }}
         </template>
       </el-table-column>
-      <el-table-column label="审核金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
+      <el-table-column label="分解总金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
         <template slot-scope="scope">
         {{ dealNumberFormat(Number(scope.row.shje)) }}
         </template>

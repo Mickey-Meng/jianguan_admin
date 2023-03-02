@@ -159,12 +159,16 @@
             </template>
           </el-table-column>
           <el-table-column label="所属单位" align="center" prop="ssdw" v-if="false"/>
-          <el-table-column label="款项类型" align="center" prop="kxlx"/>
-          <el-table-column label="款项金额" align="center" prop="kxje">
+
+          <el-table-column prop="kxlx" label="款项类型" width="80">
             <template slot-scope="scope">
-              {{ dealNumberFormat(scope.row.kxje) }}
+              <dict-tag :options="dict.type.mea_kxlx" :value="scope.row.kxlx"/>
             </template>
           </el-table-column>
+
+          <el-table-column label="款项金额" align="center" prop="kxje"/>
+          <el-table-column label="备注" align="center" prop="remark"/>
+
           <!-- <el-table-column label="附件" align="center" prop="fj"  v-if="false"/> -->
           <el-table-column label="状态" align="center" prop="status" v-if="false">
             <template slot-scope="scope">
@@ -245,14 +249,31 @@
               <el-input v-model="form.ssdw" placeholder="请输入所属单位"/>
             </el-form-item>
           </el-col>
+
+
+
           <el-col :span="12">
             <el-form-item label="款项类型" prop="kxlx">
-              <el-input v-model="form.kxlx" placeholder="请输入款项类型"/>
+              <el-select v-model="form.kxlx" placeholder="请选择款项类型">
+                <el-option
+                  v-for="dict in dict.type.mea_kxlx"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
+
+
           <el-col :span="12">
             <el-form-item label="款项金额" prop="kxje">
               <el-input v-model="form.kxje" placeholder="请输入款项金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -311,7 +332,7 @@ import {
   updateOtherPayment
 } from "@/api/otherPayment/otherPayment";
 import {getToken} from "@/utils/auth";
-import { delOss } from "@/api/system/oss";
+import {delOss} from "@/api/system/oss";
 import {listMeasurementListNo} from "@/api/measurementNo/measurementNo";
 import {dealNumberFormat} from "@/utils/utils.js";
 
@@ -333,7 +354,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
+      default: () => ["doc", "docx", "xls", "ppt", "txt", "pdf", "png", "jpg", "jpeg", "xlsx"],
     },
     // 是否显示提示
     isShowTip: {
@@ -341,7 +362,7 @@ export default {
       default: true
     }
   },
-  dicts: ['data_status'],
+  dicts: ['data_status', 'mea_kxlx'],
   data() {
     return {
       // 中间计量期数管理表格数据
@@ -569,6 +590,7 @@ export default {
 
         this.form.fj = JSON.stringify(this.fileList);
         if (valid) {
+
           if (this.xzQsId == "") {
             this.$modal.confirm("请选择期数");
           }

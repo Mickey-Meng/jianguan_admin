@@ -17,10 +17,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="计量期数文字表达" prop="jlqs">
+<!--      <el-form-item label="计量期数" prop="jlqs">
         <el-input
           v-model="queryParams.jlqs"
-          placeholder="请输入计量期数文字表达"
+          placeholder="请输入计量期数"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -125,7 +125,7 @@
       <el-table-column label="ID" align="center" prop="id" min-width="120" :show-overflow-tooltip="true" v-if="false"/>
       <el-table-column label="标段编号" align="center" prop="bdbh" />
       <el-table-column label="计量期数编号" align="center" prop="jlqsbh" />
-      <el-table-column label="计量期数文字表达" align="center" min-width="150" prop="jlqs" />
+      <el-table-column label="计量期数" align="center" min-width="150" prop="jlqs" />
       <el-table-column label="开始日期" align="center" prop="ksrq" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.ksrq, '{y}-{m}-{d}') }}</span>
@@ -184,8 +184,8 @@
         <el-form-item label="计量期数编号" prop="jlqsbh">
           <el-input v-model="form.jlqsbh" placeholder="请输入计量期数编号" />
         </el-form-item>
-        <el-form-item label="计量期数文字表达" prop="jlqs">
-          <el-input v-model="form.jlqs" placeholder="请输入计量期数文字表达" />
+        <el-form-item label="计量期数" prop="jlqs">
+          <el-input v-model="form.jlqs" placeholder="请输入计量期数" />
         </el-form-item>
         <el-form-item label="开始日期" prop="ksrq">
           <el-date-picker clearable
@@ -287,7 +287,7 @@ export default {
           { required: true, message: "计量期数编号不能为空", trigger: "blur" }
         ],
         jlqs: [
-          { required: true, message: "计量期数文字表达不能为空", trigger: "blur" }
+          { required: true, message: "计量期数不能为空", trigger: "blur" }
         ],
         ksrq: [
           { required: true, message: "开始日期不能为空", trigger: "blur" }

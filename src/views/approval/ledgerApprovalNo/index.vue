@@ -111,7 +111,7 @@
           <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -128,7 +128,7 @@
             v-hasPermi="['approval:ledgerApprovalNo:remove']"
           >删除</el-button>
         </template>
-      </el-table-column>-->
+      </el-table-column>
     </el-table>
 
     <pagination

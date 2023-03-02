@@ -212,13 +212,12 @@
             <el-table-column label="设计数量" align="center" prop="sjsl" min-width="110"/>
             <el-table-column label="分解数量" align="center" prop="fjsl" min-width="110"/>
             <el-table-column label="变更数量" align="center" prop="bgsl" min-width="110"/>
-            <el-table-column label="复核数量" align="center" prop="fhsl" min-width="110"/>
+<!--            <el-table-column label="复核数量" align="center" prop="fhsl" min-width="110"/>-->
             <el-table-column label="已计量数量" align="center" prop="yjlsl" min-width="120"/>
-            <el-table-column label="复核金额" align="center" prop="fhje" min-width="110">
+<!--            <el-table-column label="复核金额" align="center" prop="fhje" min-width="110">
               <template slot-scope="scope">
                 {{ dealNumberFormat(scope.row.fhje) }}
-              </template>
-            </el-table-column>
+              </template>-->
             <el-table-column label="分解类型" align="center" prop="fjlx" min-width="110">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.change_status" :value="scope.row.fjlx"/>

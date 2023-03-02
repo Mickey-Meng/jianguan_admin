@@ -158,13 +158,13 @@
             </template>
           </el-table-column>
           <el-table-column label="申请类型" align="center" prop="sqlx"/>
-          <el-table-column label="申请次数" align="center" prop="sqcs" v-if="false"/>
+          <el-table-column label="申请次数" align="center" prop="sqcs" />
           <el-table-column label="预付款金额" align="center" prop="yukje">
             <template slot-scope="scope">
                 {{ dealNumberFormat(scope.row.yukje) }}
               </template>
           </el-table-column>
-          <el-table-column label="申请依据" align="center" prop="sqyj" v-if="false"/>
+          <el-table-column label="申请依据" align="center" prop="sqyj"  />
           <el-table-column label="附件地址" align="center" prop="fj" v-if="false"/>
           <el-table-column label="状态" align="center" prop="status" v-if="false"/>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
