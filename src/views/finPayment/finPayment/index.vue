@@ -119,6 +119,7 @@
         </template>
       </el-table-column>
 
+
       <el-table-column label="欠付款金额" align="center" prop="unpaid"/>
       <el-table-column label="付款时间" align="center" prop="paymentDate" width="180">
         <template slot-scope="scope">
