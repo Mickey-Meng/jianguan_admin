@@ -698,7 +698,8 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           // if (this.form.tzfjbh != null) {
-          this.form.reviewCode = '1';
+          // 注释原因：分解台帐后，不修改审批状态，删除了台账分解的审批流
+          // this.form.reviewCode = '1';
           updateLedgerBreakdownDetail(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
             this.listLedgerUpBreakdownDetail();

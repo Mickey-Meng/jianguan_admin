@@ -71,9 +71,9 @@ export function listLedgerBreakdownAddBatch(data) {
 
 // 台账分解明细审批
 export function listLedgerUpBreakdownDetail(data) {
-  return request({
-    url: '/ledgerDetail/ledgerBreakdownDetail/upBreakdownDetail',
-    method: 'post',
-    data: data
-  })
+  // return request({
+  //   url: '/ledgerDetail/ledgerBreakdownDetail/upBreakdownDetail',
+  //   method: 'post',
+  //   data: data
+  // })
 }

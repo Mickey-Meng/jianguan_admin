@@ -421,7 +421,8 @@ export default {
       // 对接上报接口
       ledgerApprovalUp(this.selection).then(response => {
         this.selection = [];
-        this.getList()
+        this.getList();
+        this.getPeriodsList();
         this.$message.success('上报成功');
       }).catch(() => {
         this.loading = false;
