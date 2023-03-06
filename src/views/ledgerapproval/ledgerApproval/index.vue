@@ -2,23 +2,34 @@
   <div class="app-container">
     <el-row :gutter="10">
       <el-col :span="6">
-        <div class="left-tree">
-          <el-table ref="table" :header-cell-style="headercellStyle"
-            :cell-style="cellStyle" v-loading="qsloading" highlight-current-row :data="measurementNoList" @row-click="rowQsClick">
-            <el-table-column label="ID" align="center" prop="id" v-if="false"/>
-            <el-table-column label="申报期数" align="center" prop="sqqc" min-width="80" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                {{ scope.row.sqqc }}
-              </template>
-            </el-table-column>
-            <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
-            <el-table-column label="审批状态" align="center" prop="reviewCode" min-width="40">
-              <template slot-scope="scope">
-                <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+          <div class="left-tree">
+            <!-- 新增台账树 -->
+            <div style="height: 50%">
+              <el-table ref="table" :header-cell-style="headercellStyle"
+                        :cell-style="cellStyle" v-loading="qsloading" highlight-current-row :data="measurementNoList" @row-click="rowQsClick">
+                <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+                <el-table-column label="申报期数" align="center" prop="sqqc" min-width="80" :show-overflow-tooltip="true">
+                  <template slot-scope="scope">
+                    {{ scope.row.sqqc }}
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="申报日期" align="center" prop="date"/> -->
+                <el-table-column label="审批状态" align="center" prop="reviewCode" min-width="40">
+                  <template slot-scope="scope">
+                    <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="down-tree" style="height: 50%">
+              <el-tree
+                :data="ledgerBreakdownList"
+                :props="treeProps"
+                accordion
+                @node-click="handleNodeClick">
+              </el-tree>
+            </div>
+          </div>
       </el-col>
       <el-col :span="18">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
@@ -214,6 +225,8 @@
 import { listLedgerApproval, getLedgerApproval, delLedgerApproval, addLedgerApproval, updateLedgerApproval, ledgerApprovalUp } from "@/api/ledgerapproval/ledgerApproval";
 import { listLedgerApprovalNo } from "@/api/approval/ledgerApprovalNo";
 import { listMeasurementListNo} from "@/api/measurementNo/measurementNo";
+// 引入台账树
+import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import LedgerList from './components/LedgerList';
 export default {
   name: "LedgerApproval",
@@ -258,6 +271,12 @@ export default {
         dataStatus: undefined,
         spzt: undefined,
         status: undefined,
+      },
+      // 引入台账树
+      treeProps: {
+        id: 'id',
+        label: 'tzfjmc',
+        children: 'children'
       },
       // 表单参数
       form: {},
@@ -307,6 +326,8 @@ export default {
   },
   created() {
     this.getPeriodsList();
+    // 创建台账树
+    this.getLeftTree();
     // this.getList();
   },
   methods: {
@@ -352,6 +373,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      // 重置时，清楚台账树的查询条件
+      this.queryParams.tzfjbh = undefined;
       this.handleQuery();
     },
     // 多选框选中数据
@@ -422,6 +445,7 @@ export default {
       ledgerApprovalUp(this.selection).then(response => {
         this.selection = [];
         this.getList();
+        // 上报成功后，刷新左侧申报期次列表
         this.getPeriodsList();
         this.$message.success('上报成功');
       }).catch(() => {
@@ -438,6 +462,31 @@ export default {
       this.queryParams.sqqc = record.sqqc;
       this.queryParams.reviewCode = record.reviewCode;
       // this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 查询台账分解列表 */
+    getLeftTree() {
+      debugger;
+      this.loading = true;
+      const params = {
+        // fjlx: this.fjlx
+        // modify by yangaogao   查询左侧树节点的时候，暂时不区分是否是变更清单，在查询明细的时候加筛选。
+        // 后期需要优化，优化为，先查询有哪些明细是变更的，然后反推获取对应的树
+      }
+      listLedgerBreakdown(params).then(response => {
+        this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
+        console.log("tree",this.ledgerBreakdownList);
+      }).finally(() => {
+        // TODO
+        // if (this.ledgerBreakdownList.length) {
+        //   this.queryParams.tzfjbh = this.ledgerBreakdownList[0].tzfjbh;
+        // }
+      });
+    },
+    // 点击台账树，刷新右侧列表
+    handleNodeClick(data) {
+      console.log(data);
+      this.queryParams.tzfjbh = data.tzfjbh;
       this.getList();
     },
      /** 查询中间计量期数管理列表 */
@@ -483,5 +532,10 @@ export default {
     .el-table {
       height: 100%;
     }
+  }
+  // 台账树央视
+  .down-tree {
+    display: block;
+    overflow-y: scroll;
   }
 </style>
