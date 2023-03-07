@@ -158,7 +158,7 @@
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <!-- <el-table-column label="主键id" align="center" prop="id" v-if="true"/> -->
           <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
-          <el-table-column label="工程部位" align="center" min-width="180" prop="gcbw" :show-overflow-tooltip="true"/>
+          <el-table-column label="工程部位" align="center" min-width="180" prop="fjmulu" :show-overflow-tooltip="true"/>
 
 
           <el-table-column label="子目号" align="center" min-width="100" prop="zmh"  :show-overflow-tooltip="true"/>
