@@ -3,8 +3,8 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-form-item label="变更编号" prop="bgbh">
-            <el-input v-model="form.bgbh" placeholder="请输入变更编号"/>
+          <el-form-item label="变更编号" prop="bgbhName">
+            <el-input v-model="form.bgbhName" placeholder="请输入变更编号"/>
           </el-form-item>
         </el-col>
         <el-col :span="6">

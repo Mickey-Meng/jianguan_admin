@@ -43,7 +43,8 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="left"/>
-      <el-table-column label="子目号" fixed="left" align="left" prop="zmh" min-width="120" :show-overflow-tooltip="true"/>
+      <el-table-column label="工程部位" fixed="left" align="center" prop="fjmulu" min-width="280" :show-overflow-tooltip="true"/>
+      <el-table-column label="子目号"  align="left" prop="zmh" min-width="120" :show-overflow-tooltip="true"/>
       <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
       <el-table-column label="单位" align="center" prop="dw" min-width="100" :show-overflow-tooltip="true"/>
       <el-table-column label="合同单价" align="center" prop="htdj" min-width="140"/>

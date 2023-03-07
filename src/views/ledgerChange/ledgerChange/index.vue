@@ -5,110 +5,12 @@
          <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="变更编号" prop="bgbh">
             <el-input
-              v-model="queryParams.bgbh"
+              v-model="queryParams.bgbhName"
               placeholder="请输入变更编号"
               clearable
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <!--      <el-form-item label="变更事项" prop="bgsx">
-                  <el-input
-                    v-model="queryParams.bgsx"
-                    placeholder="请输入变更事项"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="变更等级" prop="bgdj">
-                  <el-input
-                    v-model="queryParams.bgdj"
-                    placeholder="请输入变更等级"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="变更类型" prop="bglx">
-                  <el-input
-                    v-model="queryParams.bglx"
-                    placeholder="请输入变更类型"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="桩号" prop="zh">
-                  <el-input
-                    v-model="queryParams.zh"
-                    placeholder="请输入桩号"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="子目号" prop="zmh">
-                  <el-input
-                    v-model="queryParams.zmh"
-                    placeholder="请输入子目号"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="工程部位" prop="gcbw">
-                  <el-input
-                    v-model="queryParams.gcbw"
-                    placeholder="请输入工程部位"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="图号" prop="th">
-                  <el-input
-                    v-model="queryParams.th"
-                    placeholder="请输入图号"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="申请日期" prop="sqrq">
-                  <el-date-picker clearable
-                    v-model="queryParams.sqrq"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="请选择申请日期">
-                  </el-date-picker>
-                </el-form-item>
-                <el-form-item label="变更金额" prop="bgje">
-                  <el-input
-                    v-model="queryParams.bgje"
-                    placeholder="请输入变更金额"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="变更原因" prop="bgyy">
-                  <el-input
-                    v-model="queryParams.bgyy"
-                    placeholder="请输入变更原因"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="计算式" prop="jss">
-                  <el-input
-                    v-model="queryParams.jss"
-                    placeholder="请输入计算式"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="状态" prop="status">
-                  <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-                    <el-option
-                      v-for="dict in dict.type.data_status"
-                      :key="dict.value"
-                      :label="dict.label"
-                      :value="dict.value"
-                    />
-                  </el-select>
-                </el-form-item>-->
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -165,6 +67,7 @@
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
         <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140" :show-overflow-tooltip="true"/>
+        <el-table-column label="变更编号名称" align="center" prop="bgbhName" />
         <el-table-column label="变更事项" align="center" prop="bgsx" min-width="140" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="150" :show-overflow-tooltip="true"/>
         <!-- <el-table-column label="桩号" align="center" prop="zh" />
@@ -207,7 +110,7 @@
       </el-table>
       <el-table v-loading="loading" :height="'calc(100vh - 555px)'" style="margin-top: 24px;" :data="ledgerChangeDetailList">
         <el-table-column label="标段编号" align="center" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
-        <el-table-column label="变更编号" align="center" prop="bgbh" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="变更编号" align="center" prop="bgbhName" min-width="100" :show-overflow-tooltip="true"/>
         <el-table-column label="子目号" align="center" prop="zmh" v-if="true"/>
         <el-table-column label="子目名称" align="center" prop="zmmc" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="120" :show-overflow-tooltip="true"/>
@@ -379,7 +282,7 @@ export default {
         id: [
           {required: true, message: "ID不能为空", trigger: "blur"}
         ],
-        bgbh: [
+        bgbhName: [
           {required: true, message: "变更编号不能为空", trigger: "blur"}
         ],
         bgsx: [
