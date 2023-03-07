@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询台账分解明细列表
 export function listLedgerBreakdownLeaf(query) {
   return request({
-    url: '/ledgerDetail/ledgerBreakdownDetail/getLeaflist',
+    url: '/ledgerDetail/ledgerBreakdownDetail/queryBreakdownDetails',
     method: 'get',
     params: query
   })
