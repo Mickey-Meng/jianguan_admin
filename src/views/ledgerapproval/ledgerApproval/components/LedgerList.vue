@@ -132,7 +132,8 @@ export default {
         zje: undefined,
         status: undefined,
         parentId: undefined,
-        reviewCode: '2'
+        // 台账分解流程取消，台账分解不再查询状态为2的数据，改为查询状态为0的数据
+        reviewCode: '0'
       },
       // 选中的数据集合
       selectionList: []
@@ -225,8 +226,8 @@ export default {
         this.$message.warning('请选择台账分解清单数据后点击确定！');
         return;
       }
-      this.$emit('getSelectionData', this.selectionList); 
-      this.close();   
+      this.$emit('getSelectionData', this.selectionList);
+      this.close();
     },
   }
 };
