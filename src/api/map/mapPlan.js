@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询地图方案管理列表
-export function listPlan(query) {
+export function listMapPlan(query) {
   return request({
     url: '/map/mapPlan/list',
     method: 'get',
@@ -10,7 +10,7 @@ export function listPlan(query) {
 }
 
 // 查询地图方案管理详细
-export function getPlan(id) {
+export function getMapPlan(id) {
   return request({
     url: '/map/mapPlan/' + id,
     method: 'get'
@@ -18,7 +18,7 @@ export function getPlan(id) {
 }
 
 // 新增地图方案管理
-export function addPlan(data) {
+export function addMapPlan(data) {
   return request({
     url: '/map/plan',
     method: 'post',
@@ -27,7 +27,7 @@ export function addPlan(data) {
 }
 
 // 修改地图方案管理
-export function updatePlan(data) {
+export function updateMapPlan(data) {
   return request({
     url: '/map/plan',
     method: 'put',
@@ -36,9 +36,17 @@ export function updatePlan(data) {
 }
 
 // 删除地图方案管理
-export function delPlan(id) {
+export function delMapPlan(id) {
   return request({
     url: '/map/mapPlan/' + id,
     method: 'delete'
+  })
+}
+
+// 查询地图方案下拉树结构
+export function getMapPlanTree() {
+  return request({
+    url: '/map/mapPlan/getMapPlanTree',
+    method: 'get'
   })
 }

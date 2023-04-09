@@ -55,3 +55,12 @@ export function changeServerStatus(id, status) {
     data: data
   })
 }
+
+export function importMapConfig(mapServerIds) {
+  return request({
+    url: '/map/mapServerConfig/importMapConfig',
+    method: 'put',
+    data: data
+  })
+}
+
