@@ -20,7 +20,7 @@ export function getMapServerConfig(id) {
 // 新增地图服务注册
 export function addMapServerConfig(data) {
   return request({
-    url: '/map/mapServerConfig',
+    url: '/map/mapServerConfig/add',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addMapServerConfig(data) {
 // 修改地图服务注册
 export function updateMapServerConfig(data) {
   return request({
-    url: '/map/mapServerConfig',
+    url: '/map/mapServerConfig/update',
     method: 'put',
     data: data
   })
@@ -38,29 +38,17 @@ export function updateMapServerConfig(data) {
 // 删除地图服务注册
 export function delMapServerConfig(id) {
   return request({
-    url: '/map/mapServerConfig/' + id,
+    url: '/map/mapServerConfig/delete/' + id,
     method: 'delete'
   })
 }
 
-// 用户状态修改
-export function changeServerStatus(id, status) {
-  const data = {
-    id,
-    status
-  }
+// 地图服务状态修改
+export function changeStatusOrVisiable(id, status) {
   return request({
-    url: '/map/mapServerConfig/changeStatus',
+    url: '/map/mapServerConfig/changeStatusOrVisiable',
     method: 'put',
-    data: data
-  })
-}
-
-export function importMapConfig(mapServerIds) {
-  return request({
-    url: '/map/mapServerConfig/importMapConfig',
-    method: 'put',
-    data: data
+    data: { id, status }
   })
 }
 

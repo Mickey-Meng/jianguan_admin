@@ -1,6 +1,6 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入地图服务" :visible.sync="visible" width="800px" top="5vh" append-to-body>
+  <el-dialog title="导入地图服务" :visible.sync="visible" width="65%" top="15vh" append-to-body>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true">
       <el-form-item label="服务名称" prop="serverName">
         <el-input
@@ -60,8 +60,10 @@
 </template>
 
 <script>
-import { listMapServerConfig, importMapConfig } from "@/api/map/mapServerConfig";
+import { listMapServerConfig } from "@/api/map/mapServerConfig";
+import { importMapConfig } from "@/api/map/mapPlanServer";
 export default {
+  props: ['mapPlanId'],
   data() {
     return {
       // 遮罩层
@@ -120,7 +122,7 @@ export default {
         this.$modal.msgError("请选择要导入的地图服务配置数据");
         return;
       }
-      importMapConfig({ mapServerIds: mapServerIds }).then(res => {
+      importMapConfig({ serverIds: mapServerIds, planId: this.mapPlanId }).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;

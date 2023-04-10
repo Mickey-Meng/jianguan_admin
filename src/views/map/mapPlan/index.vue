@@ -30,18 +30,18 @@
       <!--关联的地图服务数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="方案名称" prop="planName">
+          <el-form-item label="服务名称" prop="serverName">
             <el-input
-              v-model="queryParams.planName"
-              placeholder="请输入方案名称"
+              v-model="queryParams.serverName"
+              placeholder="请输入服务名称"
               clearable
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="分组类型" prop="groupType">
+          <el-form-item label="服务类型" prop="serverType">
             <el-input
-              v-model="queryParams.groupType"
-              placeholder="请输入分组类型"
+              v-model="queryParams.serverType"
+              placeholder="请输入服务类型"
               clearable
               @keyup.enter.native="handleQuery"
             />
@@ -65,7 +65,7 @@
               v-hasPermi="['map:mapServerConfig:list']"
             >导入地图服务数据</el-button>
           </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="gettMapServerConfigList"></right-toolbar>
         </el-row>
 
         <el-table v-loading="loading" :data="mapServerConfigList" @selection-change="handleSelectionChange">
@@ -81,7 +81,7 @@
             v-model="scope.row.visiable"
             active-value="0"
             inactive-value="1"
-            @change="handleStatusChange(scope.row)"
+            @change="handleVisiableChange(scope.row)"
           ></el-switch>
         </template>
       </el-table-column>
@@ -95,7 +95,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:mapServerConfig:remove']"
+            v-hasPermi="['system:planServer:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -106,7 +106,7 @@
           :total="total"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
-          @pagination="getList"
+          @pagination="gettMapServerConfigList"
         />
       </el-col>
     </el-row>
@@ -146,12 +146,13 @@
       </div>
     </el-dialog>
     <!-- 导入地图服务列表-->
-    <import-map-config ref="importMapConfig" @ok="handleQuery" />
+    <import-map-config :mapPlanId="currentMapPlanId" ref="importMapConfig" @ok="handleQuery" />
   </div>
 </template>
 
 <script>
-import { listMapPlan, getMapPlan, delMapPlan, addMapPlan, updateMapPlan, getMapPlanTree } from "@/api/map/mapPlan";
+import { getMapPlan, delMapPlan, addMapPlan, updateMapPlan, getMapPlanTree } from "@/api/map/mapPlan";
+import { listMapServerConfigByPlanId, delPlanServer } from "@/api/map/mapPlanServer";
 import importMapConfig from "./importMapConfig";
 
 export default {
@@ -162,15 +163,20 @@ export default {
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
-      loading: true,
+      loading: false,
       // 方案树选项
       mapPlanTreeData: undefined,
       defaultProps: {
         children: "children",
         label: "label"
       },
+      
       // 方案名称
       mapPlanName: undefined,
+      // 当前操作的地图方案ID
+      currentMapPlanId: undefined,
+      // 关联的地图服务列表数据
+      mapServerConfigList: [],
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -191,13 +197,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        planName: undefined,
-        parentId: undefined,
-        level: undefined,
-        group: undefined,
-        status: undefined,
-        orderNumber: undefined,
-        groupType: undefined,
+        planId: undefined,
+        serverName: undefined,
+        serverType: undefined,
       },
       // 表单参数
       form: {},
@@ -237,11 +239,10 @@ export default {
     }
   },
   created() {
-    this.getList();
     this.getMapPlanTree();
   },
   methods: {
-    /** 查询部门下拉树结构 */
+    /** 查询地图方案树结构 */
     getMapPlanTree() {
       getMapPlanTree().then(response => {
         this.mapPlanTreeData = response.data;
@@ -254,17 +255,22 @@ export default {
     },
     // 节点单击事件
     handleNodeClick(data) {
-      this.queryParams.parentId = data.id;
+      this.currentMapPlanId = data.id;
+      this.queryParams.planId = data.id;
       this.handleQuery();
     },
-    /** 查询地图方案管理列表 */
-    getList() {
-      this.loading = true;
-      listMapPlan(this.queryParams).then(response => {
-        this.planList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+    /** 查询地图方案对应的地图服务列表 */
+    gettMapServerConfigList() {
+      if(this.queryParams.planId === undefined) {
+        this.$modal.msgError("请先左侧选择所要操作的地图方案.");
+      } else {
+        this.loading = true;
+        listMapServerConfigByPlanId(this.queryParams).then(response => {
+          this.mapServerConfigList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        });
+      }
     },
     // 取消按钮
     cancel() {
@@ -292,7 +298,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.gettMapServerConfigList();
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -300,13 +306,25 @@ export default {
       this.handleQuery();
     },
 
-    /** 打开导入表弹窗 */
+    /** 打开导入地图服务数据弹窗 */
     openImportMapConfig() {
-      this.$refs.importMapConfig.show();
+      if (this.currentMapPlanId === undefined) {
+        this.$modal.msgError("请先选择所要导入的地图方案.");
+      } else {
+        this.$refs.importMapConfig.show();
+      }
     },
-
-
-
+    // 用户状态修改
+    handleVisiableChange(row) {
+      let text = row.visiable === "0" ? "启用" : "停用";
+      this.$modal.confirm('确认要"' + text + '""' + row.serverName + '"服务吗？').then(function() {
+        return changeStatusOrVisiable(row.id, row.visiable);
+      }).then(() => {
+        this.$modal.msgSuccess(text + "成功");
+      }).catch(function() {
+        row.visiable = row.visiable === "0" ? "1" : "0";
+      });
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
@@ -340,7 +358,7 @@ export default {
             updateMapPlan(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
-              this.getList();
+              this.gettMapServerConfigList();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -348,7 +366,7 @@ export default {
             addMapPlan(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
-              this.getList();
+              this.gettMapServerConfigList();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -361,10 +379,10 @@ export default {
       const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除地图方案管理编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
-        return delMapPlan(ids);
+        return delPlanServer(ids);
       }).then(() => {
         this.loading = false;
-        this.getList();
+        this.gettMapServerConfigList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
       }).finally(() => {

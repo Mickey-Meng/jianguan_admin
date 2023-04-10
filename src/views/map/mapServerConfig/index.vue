@@ -388,7 +388,7 @@ export default {
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要"' + text + '""' + row.serverName + '"服务吗？').then(function() {
-        return changeServerStatus(row.id, row.status);
+        return changeStatusOrVisiable(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
