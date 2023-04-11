@@ -14,13 +14,36 @@
           />
         </div>
         <div class="head-container">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-button
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+                v-hasPermi="['map:mapPlan:add']"
+              >新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="info"
+                plain
+                icon="el-icon-sort"
+                size="mini"
+                @click="toggleExpandAll"
+              >展开/折叠</el-button>
+            </el-col>
+          </el-row>
+
           <el-tree
+            v-if="refreshTable"
             :data="mapPlanTreeData"
             :props="defaultProps"
             :expand-on-click-node="false"
             :filter-node-method="filterNode"
             ref="tree"
-            default-expand-all
+            :default-expand-all="isExpandAll"
             highlight-current
             @node-click="handleNodeClick"
           />
@@ -152,6 +175,7 @@
 
 <script>
 import { getMapPlan, delMapPlan, addMapPlan, updateMapPlan, getMapPlanTree } from "@/api/map/mapPlan";
+import { changeStatusOrVisiable } from "@/api/map/mapServerConfig";
 import { listMapServerConfigByPlanId, delPlanServer } from "@/api/map/mapPlanServer";
 import importMapConfig from "./importMapConfig";
 
@@ -193,6 +217,10 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否展开，默认全部折叠
+      isExpandAll: false,
+      // 重新渲染表格状态
+      refreshTable: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -314,11 +342,11 @@ export default {
         this.$refs.importMapConfig.show();
       }
     },
-    // 用户状态修改
+    // 用户是否可见修改
     handleVisiableChange(row) {
-      let text = row.visiable === "0" ? "启用" : "停用";
-      this.$modal.confirm('确认要"' + text + '""' + row.serverName + '"服务吗？').then(function() {
-        return changeStatusOrVisiable(row.id, row.visiable);
+      let text = row.visiable === "0" ? "可见" : "隐藏";
+      this.$modal.confirm('确认要设置' + row.serverName + '服务为'+ text + '吗？').then(function() {
+        return changeStatusOrVisiable({ id: row.serverId, visiable: row.visiable });
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
@@ -330,6 +358,14 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
+    },
+    /** 展开/折叠操作 */
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
     },
     /** 新增按钮操作 */
     handleAdd() {

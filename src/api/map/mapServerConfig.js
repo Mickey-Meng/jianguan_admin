@@ -44,11 +44,11 @@ export function delMapServerConfig(id) {
 }
 
 // 地图服务状态修改
-export function changeStatusOrVisiable(id, status) {
+export function changeStatusOrVisiable(data) {
   return request({
     url: '/map/mapServerConfig/changeStatusOrVisiable',
     method: 'put',
-    data: { id, status }
+    data: data
   })
 }
 

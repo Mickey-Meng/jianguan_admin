@@ -126,14 +126,23 @@
       <el-table-column label="服务编码" align="center" prop="serverCode" />
       <el-table-column label="服务地址" align="center" prop="serverUrl" width="150"/>
       <el-table-column label="服务类型" align="center" prop="serverType" />
-      <el-table-column label="是否可见" align="center" prop="visiable" />
+      <el-table-column label="是否可见" align="center" prop="visiable" >
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.visiable"
+            active-value="0"
+            inactive-value="1"
+            @change="handleChangeStatusOrVisiable('visiable', scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
             active-value="0"
             inactive-value="1"
-            @change="handleStatusChange(scope.row)"
+            @change="handleChangeStatusOrVisiable('status', scope.row)"
           ></el-switch>
         </template>
       </el-table-column>
@@ -262,7 +271,7 @@
 </template>
 
 <script>
-import { listMapServerConfig, getMapServerConfig, delMapServerConfig, addMapServerConfig, updateMapServerConfig, changeServerStatus } from "@/api/map/mapServerConfig";
+import { listMapServerConfig, getMapServerConfig, delMapServerConfig, addMapServerConfig, updateMapServerConfig, changeStatusOrVisiable } from "@/api/map/mapServerConfig";
 
 export default {
   name: "MapServerConfig",
@@ -275,6 +284,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 日期范围
+      dateRange: "",
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -335,7 +346,7 @@ export default {
     /** 查询地图服务注册列表 */
     getList() {
       this.loading = true;
-      listMapServerConfig(this.queryParams).then(response => {
+      listMapServerConfig(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
         this.mapServerConfigList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -384,15 +395,30 @@ export default {
       this.multiple = !selection.length
     },
 
-    // 用户状态修改
-    handleStatusChange(row) {
-      let text = row.status === "0" ? "启用" : "停用";
-      this.$modal.confirm('确认要"' + text + '""' + row.serverName + '"服务吗？').then(function() {
-        return changeStatusOrVisiable(row.id, row.status);
+    // 用户状态Or是否可见修改
+    handleChangeStatusOrVisiable(type, row) {
+      let confirmMessage = '确认要"' + (row.status === "0" ? "启用" : "停用") + '""' + row.serverName + '"服务吗？';
+      let data = {
+        id: row.id,
+        status: row.status
+      }
+      if ('visiable' === type) {
+        confirmMessage = '确认要设置' + row.serverName + '服务为'+ (row.visiable === "0" ? "可见" : "隐藏") + '吗？';
+        data = {
+          id: row.id,
+          status: row.visiable
+        }
+      }
+      this.$modal.confirm(confirmMessage).then(function() {
+        return changeStatusOrVisiable(data);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
-        row.status = row.status === "0" ? "1" : "0";
+        if ('visiable' === type) {
+          row.visiable = row.visiable === "0" ? "1" : "0";
+        } else {
+          row.status = row.status === "0" ? "1" : "0";
+        }
       });
     },
     /** 新增按钮操作 */
