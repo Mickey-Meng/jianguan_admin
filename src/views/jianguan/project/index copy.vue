@@ -1,158 +1,150 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20">
-      <!--项目树列表-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input
-            v-model="projectName"
-            placeholder="请输入项目名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-              <el-button
-                type="info"
-                plain
-                icon="el-icon-sort"
-                size="mini"
-                @click="toggleExpandAll"
-              >展开/折叠</el-button>
-            </el-col>
-          </el-row>
-
-          <el-tree
-            v-if="refreshTable"
-            :data="projectTreeData"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            ref="tree"
-            :default-expand-all="isExpandAll"
-            highlight-current
-            @node-click="handleNodeClick"
-          />
-        </div>
-      </el-col>
-
-      <!--关联的地图项目数据-->
-      <el-col :span="20" :xs="24">
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="项目名称" prop="projectName">
-            <el-input
-              v-model="queryParams.projectName"
-              placeholder="请输入项目名称"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="项目类型" prop="serverType">
-            <el-input
-              v-model="queryParams.serverType"
-              placeholder="请输入项目类型"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
-
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-              v-hasPermi="['jg:project:add']"
-            >新增</el-button>
-          </el-col>
-          
-          <el-col :span="1.5">
-            <el-button
-              type="danger"
-              plain
-              icon="el-icon-delete"
-              size="mini"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['jg:project:remove']"
-            >删除</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              @click="handleExport"
-              v-hasPermi="['jg:project:export']"
-            >导出</el-button>
-          </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-        </el-row>
-
-        <el-table v-loading="loading" :data="projectInfoList" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="名称" align="center" prop="projectName" :show-overflow-tooltip="true" width="100"/>
-          <el-table-column label="编码" align="center" prop="projectCode" />
-          <el-table-column label="父级ID" align="center" prop="parentId" />
-          <el-table-column label="部门类型" align="center" prop="projectArea" />
-          <el-table-column label="级别" align="center" prop="groupLevel" />
-          <el-table-column label="状态" align="center" prop="status" />
-          <el-table-column label="是否显示" align="center" prop="visible" />
-          <el-table-column label="顺序" align="center" prop="orderNum" />
-          <el-table-column label="组织ID" align="center" prop="groupId" :show-overflow-tooltip="true"/>
-          <el-table-column label="是否自管" align="center" prop="isAuto" />
-          <el-table-column label="项目照片" align="center" prop="projectPic" />
-          <el-table-column label="合同号" align="center" prop="contractNum" />
-          <el-table-column label="坐标" align="center" prop="coordinate" />
-          <el-table-column label="投资金额" align="center" prop="investment" />
-          <el-table-column label="项目类型" align="center" prop="projectType" />
-          <el-table-column label="项目点" align="center" prop="projectPoint" :show-overflow-tooltip="true"/>
-          <el-table-column label="项目线" align="center" prop="projectLine" />
-          <el-table-column label="项目面" align="center" prop="projectSurface" />
-          <el-table-column label="项目简介" align="center" prop="introduction" :show-overflow-tooltip="true" />
-          <el-table-column label="备注" align="center" prop="remark" />
-          <el-table-column label="操作" align="center" width="150" fixed="right ">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['jg:project:edit']"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
-                v-hasPermi="['jg:project:remove']"
-              >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <pagination
-          v-show="total>0"
-          :total="total"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="getList"
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="名称" prop="projectName">
+        <el-input
+          v-model="queryParams.projectName"
+          placeholder="请输入名称"
+          clearable
+          @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="编码" prop="projectCode">
+        <el-input
+          v-model="queryParams.projectCode"
+          placeholder="请输入编码"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="父级ID" prop="parentId">
+        <el-input
+          v-model="queryParams.parentId"
+          placeholder="请输入父级ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="部门类型" prop="projectArea">
+        <el-input
+          v-model="queryParams.projectArea"
+          placeholder="请输入部门类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      
+      <el-form-item label="合同号" prop="contractNum">
+        <el-input
+          v-model="queryParams.contractNum"
+          placeholder="请输入合同号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['jg:project:add']"
+        >新增</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['jg:project:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['jg:project:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['jg:project:export']"
+        >导出</el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
+
+    <el-table v-loading="loading" :data="projectInfoList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="主键" align="center" prop="id" v-if="true"/>
+      <el-table-column label="名称" align="center" prop="projectName" />
+      <el-table-column label="编码" align="center" prop="projectCode" />
+      <el-table-column label="父级ID" align="center" prop="parentId" />
+      <el-table-column label="部门类型" align="center" prop="projectArea" />
+      <el-table-column label="级别" align="center" prop="groupLevel" />
+      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="是否显示" align="center" prop="visible" />
+      <el-table-column label="顺序" align="center" prop="orderNum" />
+      <el-table-column label="组织ID" align="center" prop="groupId" />
+      <el-table-column label="是否自管" align="center" prop="isAuto" />
+      <el-table-column label="项目照片" align="center" prop="projectPic" />
+      <el-table-column label="合同号" align="center" prop="contractNum" />
+      <el-table-column label="坐标" align="center" prop="coordinate" />
+      <el-table-column label="投资金额" align="center" prop="investment" />
+      <el-table-column label="项目类型" align="center" prop="projectType" />
+      <el-table-column label="项目点" align="center" prop="projectPoint" />
+      <el-table-column label="项目线" align="center" prop="projectLine" />
+      <el-table-column label="项目面" align="center" prop="projectSurface" />
+      <el-table-column label="项目简介" align="center" prop="introduction" :show-overflow-tooltip="true" />
+      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150" fixed="right ">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['jg:project:edit']"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['jg:project:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 添加或修改项目信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
@@ -240,32 +232,20 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-    
   </div>
 </template>
 
 <script>
-import { getProjectTree, listProjectInfo, getProjectInfo, delProjectInfo, addProjectInfo, updateProjectInfo } from "@/api/jianguan/project/project";
+import { listProjectInfo, getProjectInfo, delProjectInfo, addProjectInfo, updateProjectInfo } from "@/api/jianguan/project/project";
 
 export default {
-  name: "jgProject",
+  name: "ProjectInfo",
   data() {
     return {
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
-      loading: false,
-      // 项目树选项
-      projectTreeData: undefined,
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
-      
-      // 项目名称
-      projectName: undefined,
-      // 项目列表
-      projectInfoList: undefined,
+      loading: true,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -276,23 +256,35 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 地图项目管理表格数据
-      planList: [],
+      // 项目信息表格数据
+      projectInfoList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 是否展开，默认全部折叠
-      isExpandAll: false,
-      // 重新渲染表格状态
-      refreshTable: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        serverName: undefined,
-        serverType: undefined,
-        parentId: undefined
+        projectName: undefined,
+        projectCode: undefined,
+        parentId: undefined,
+        projectArea: undefined,
+        groupLevel: undefined,
+        status: undefined,
+        visible: undefined,
+        orderNum: undefined,
+        groupId: undefined,
+        isAuto: undefined,
+        projectPic: undefined,
+        contractNum: undefined,
+        coordinate: undefined,
+        investment: undefined,
+        projectType: undefined,
+        projectPoint: undefined,
+        projectLine: undefined,
+        projectSurface: undefined,
+        introduction: undefined,
       },
       // 表单参数
       form: {},
@@ -364,44 +356,18 @@ export default {
       }
     };
   },
-  watch: {
-    // 根据名称筛选部门树
-    projectName(val) {
-      this.$refs.tree.filter(val);
-    }
-  },
   created() {
-    this.getProjectTree();
+    this.getList();
   },
   methods: {
-    /** 查询地图项目树结构 */
-    getProjectTree() {
-      getProjectTree().then(response => {
-        this.projectTreeData = response.data;
-      });
-    },
-    // 筛选节点
-    filterNode(value, data) {
-      if (!value) return true;
-      return data.label.indexOf(value) !== -1;
-    },
-    // 节点单击事件
-    handleNodeClick(data) {
-      this.queryParams.parentId = data.id;
-      this.handleQuery();
-    },
-    /** 查询地图项目对应的地图项目列表 */
+    /** 查询项目信息列表 */
     getList() {
-      if(this.queryParams.parentId === undefined) {
-        this.$modal.msgError("请先左侧选择所要操作的项目.");
-      } else {
-        this.loading = true;
-        listProjectInfo(this.queryParams).then(response => {
-          this.projectInfoList = response.rows;
-          this.total = response.total;
-          this.loading = false;
-        });
-      }
+      this.loading = true;
+      listProjectInfo(this.queryParams).then(response => {
+        this.projectInfoList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
     },
     // 取消按钮
     cancel() {
@@ -449,31 +415,11 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-
-    // 用户是否可见修改
-    handleVisiableChange(row) {
-      let text = row.visiable === "0" ? "可见" : "隐藏";
-      this.$modal.confirm('确认要设置' + row.serverName + '项目为'+ text + '吗？').then(function() {
-        return changeStatusOrVisiable({ id: row.serverId, visiable: row.visiable });
-      }).then(() => {
-        this.$modal.msgSuccess(text + "成功");
-      }).catch(function() {
-        row.visiable = row.visiable === "0" ? "1" : "0";
-      });
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
-    },
-    /** 展开/折叠操作 */
-    toggleExpandAll() {
-      this.refreshTable = false;
-      this.isExpandAll = !this.isExpandAll;
-      this.$nextTick(() => {
-        this.refreshTable = true;
-      });
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -535,7 +481,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/jg/project/export', {
+      this.download('system/projectInfo/export', {
         ...this.queryParams
       }, `projectInfo_${new Date().getTime()}.xlsx`)
     }

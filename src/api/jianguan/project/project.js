@@ -42,3 +42,12 @@ export function delProjectInfo(id) {
     method: 'delete'
   })
 }
+
+// 查询项目机构树
+export function getProjectTree() {
+  return request({
+    url: '/system/jg/project/getProjectTree',
+    method: 'get'
+  })
+}
+

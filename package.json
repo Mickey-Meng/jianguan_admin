@@ -1,10 +1,12 @@
 {
-  "name": "ruoyi-flowable-plus",
+  "name": "jianguan3.0",
   "version": "0.7.0",
-  "description": "RuoYi-Flowable-Plus后台管理系统",
+  "description": "建管3.0后台管理系统",
   "author": "KonBAI",
   "license": "MIT",
   "scripts": {
+    "show_node_version": "node -v",
+    "npm_install ": "npm install",
     "dev": "vue-cli-service serve",
     "build:prod": "vue-cli-service build",
     "preview": "node build/index.js --preview",
@@ -31,8 +33,8 @@
     "management-system"
   ],
   "repository": {
-    "type": "git",
-    "url": "https://gitee.com/KonBAI-Q/ruoyi-flowable-plus.git"
+    "type": "",
+    "url": ""
   },
   "dependencies": {
     "@babel/parser": "^7.7.4",

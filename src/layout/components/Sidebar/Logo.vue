@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: 'RuoYi-Flowable-Plus',
+      title: '建管3.0',
       logo: logoImg
     }
   }
