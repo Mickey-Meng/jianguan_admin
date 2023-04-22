@@ -9,6 +9,15 @@ export function listRole(query) {
   })
 }
 
+// 查询角色列表
+export function listAllRole() {
+  return request({
+    url: '/system/role/allList',
+    method: 'get'
+  })
+}
+
+
 // 查询角色详细
 export function getRole(roleId) {
   return request({

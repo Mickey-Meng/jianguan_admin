@@ -163,6 +163,18 @@
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="form.roleName" placeholder="请输入角色名称" />
         </el-form-item>
+
+        <el-form-item label="上级角色" prop="parentId">
+          <treeselect
+            v-model="form.parentId"
+            :options="roleTreeOptions"
+            :normalizer="normalizer"
+            :show-count="true"
+            @select="handleTreeSelected"
+            placeholder="选择上级角色"
+          />
+        </el-form-item>
+
         <el-form-item prop="roleKey">
           <span slot="label">
             <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
@@ -254,12 +266,15 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, deptTreeSelect } from "@/api/system/role";
+import { listRole, listAllRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, deptTreeSelect } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "Role",
   dicts: ['sys_normal_disable'],
+  components: { Treeselect },
   data() {
     return {
       // 遮罩层
@@ -274,6 +289,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      // 角色树数据
+      roleTreeOptions: [],
       // 角色表格数据
       roleList: [],
       // 弹出层标题
@@ -336,6 +353,9 @@ export default {
         ],
         roleKey: [
           { required: true, message: "权限字符不能为空", trigger: "blur" }
+        ],
+        roleLevel: [
+          { required: true, message: "父级角色不能为空", trigger: "blur" }
         ],
         roleSort: [
           { required: true, message: "角色顺序不能为空", trigger: "blur" }
@@ -499,12 +519,29 @@ export default {
         this.form.deptCheckStrictly = value ? 1: 0;
       }
     },
+    /** 转换项目数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.roleId,
+        label: node.roleName,
+        children: node.children
+      };
+    },
+    handleTreeSelected(data){
+      console.log(data);
+    },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
       this.getMenuTreeselect();
       this.open = true;
       this.title = "添加角色";
+      listAllRole().then(response => {
+        this.roleTreeOptions = this.handleTree(response.data, "roleId");
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

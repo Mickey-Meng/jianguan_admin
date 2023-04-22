@@ -1,6 +1,14 @@
 import request from '@/utils/request'
 
 // 查询项目信息列表
+export function listPageProjectInfo(query) {
+  return request({
+    url: '/system/jg/project/page',
+    method: 'get',
+    params: query
+  })
+}
+// 查询项目信息列表
 export function listProjectInfo(query) {
   return request({
     url: '/system/jg/project/list',
