@@ -130,7 +130,7 @@
           <el-table-column label="项目名称" align="center" prop="projectName" :show-overflow-tooltip="true" width="100"/>
           <el-table-column label="项目编码" align="center" prop="projectCode" />
           <el-table-column label="项目上级" align="center" prop="parentId" />
-          <el-table-column label="项目级别" align="center" prop="projectArea" />
+          <el-table-column label="项目区域" align="center" prop="projectArea" />
           <el-table-column label="状态" align="center" prop="status" />
           <el-table-column label="是否显示" align="center" prop="visible" />
           <el-table-column label="顺序" align="center" prop="orderNum" />
@@ -209,8 +209,8 @@
             </el-col>
             
             <el-col :span="12">
-              <el-form-item label="项目级别">
-                <el-select v-model="form.projectArea" placeholder="请选择项目级别">
+              <el-form-item label="项目区域">
+                <el-select v-model="form.projectArea" placeholder="请选项目区域">
                   <el-option
                     v-for="dict in dict.type.jg_project_area"
                     :key="dict.value"
@@ -284,7 +284,7 @@
           
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="投资金额" prop="investment">
+              <el-form-item label="投资金额(元)" prop="investment">
                 <el-input-number v-model="form.investment" controls-position="right" :min="0" />
               </el-form-item>
             </el-col>

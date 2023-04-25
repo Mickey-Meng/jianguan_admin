@@ -58,3 +58,14 @@ export function delMenu(menuId) {
     method: 'delete'
   })
 }
+/**
+ * 重置菜单
+ * @param {} menuId 
+ * @returns 
+ */
+export function resetMenuTable() {
+  return request({
+    url: '/system/menu/reset',
+    method: 'post'
+  })
+}

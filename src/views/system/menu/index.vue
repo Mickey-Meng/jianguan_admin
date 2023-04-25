@@ -45,6 +45,7 @@
           @click="toggleExpandAll"
         >展开/折叠</el-button>
       </el-col>
+      <!-- [重置]触发函数：handleReset 权限点['system:menu:reset'] -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -276,7 +277,7 @@
 </template>
 
 <script>
-import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
+import { listMenu, getMenu, delMenu, addMenu, updateMenu, resetMenuTable } from "@/api/system/menu";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import IconSelect from "@/components/IconSelect";
@@ -448,7 +449,17 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
-    }
+    },
+
+    /** 重置按钮操作 */
+    handleReset() {
+      this.$modal.confirm('是否确认重置菜单表的数据？').then(function() {
+        return resetMenuTable();
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("重置成功");
+      }).catch(() => {});
+    }    
   }
 };
 </script>

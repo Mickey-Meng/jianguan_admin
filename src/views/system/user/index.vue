@@ -74,7 +74,7 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery('query')">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
         </el-form>
@@ -270,7 +270,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
+              <el-select v-model="form.postIds" multiple placeholder="请选择岗位" @change="$forceUpdate()">
                 <el-option
                   v-for="item in postOptions"
                   :key="item.postId"
@@ -283,7 +283,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择角色" @change="$forceUpdate()">
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.roleId"
@@ -528,13 +528,19 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery(type) {
       this.queryParams.pageNum = 1;
+      // 如果是点击查询，则不关联部门ID
+      if (type === 'query') {
+        console.log('不关联部门ID');
+        this.queryParams.deptId = undefined;
+      }
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
+      this.queryParams.deptId = undefined;
       this.resetForm("queryForm");
       this.handleQuery();
     },
