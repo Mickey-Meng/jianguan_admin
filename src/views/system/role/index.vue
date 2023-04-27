@@ -94,10 +94,27 @@
           v-hasPermi="['system:role:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-sort"
+          size="mini"
+          @click="toggleExpandAll"
+        >展开/折叠</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
+    <el-table
+      v-if="refreshTable"
+      v-loading="loading"
+      :data="roleList"
+      row-key="roleId"
+      :height="'calc(100vh - 205px)'"
+      :default-expand-all="isExpandAll"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="角色编号" prop="roleId" width="120" />
       <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
@@ -119,7 +136,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope" v-if="scope.row.roleId !== 1">
+        <template slot-scope="scope" v-if="scope.row.roleKey !== 'top'">
           <el-button
             size="mini"
             type="text"
@@ -328,14 +345,16 @@ export default {
           label: "仅本人数据权限"
         }
       ],
+      // 是否展开，默认全部折叠
+      isExpandAll: false,
+      // 重新渲染表格状态
+      refreshTable: true,
       // 菜单列表
       menuOptions: [],
       // 部门列表
       deptOptions: [],
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
         roleName: undefined,
         roleKey: undefined,
         status: undefined
@@ -370,9 +389,8 @@ export default {
     /** 查询角色列表 */
     getList() {
       this.loading = true;
-      listRole(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.roleList = response.rows;
-          this.total = response.total;
+      listAllRole(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+          this.roleList = this.handleTree(response.data, "roleId");
           this.loading = false;
         }
       );
@@ -381,6 +399,9 @@ export default {
     getMenuTreeselect() {
       menuTreeselect().then(response => {
         this.menuOptions = response.data;
+        listAllRole().then(response => {
+          this.roleTreeOptions = this.handleTree(response.data, "roleId");
+        });
       });
     },
     // 所有菜单节点数据
@@ -405,6 +426,9 @@ export default {
     getRoleMenuTreeselect(roleId) {
       return roleMenuTreeselect(roleId).then(response => {
         this.menuOptions = response.data.menus;
+        listAllRole().then(response => {
+          this.roleTreeOptions = this.handleTree(response.data, "roleId");
+        });
         return response;
       });
     },
@@ -435,6 +459,14 @@ export default {
     cancelDataScope() {
       this.openDataScope = false;
       this.reset();
+    },
+    /** 展开/折叠操作 */
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
     },
     // 表单重置
     reset() {
@@ -642,4 +674,6 @@ export default {
   }
 };
 </script>
-
+<style lang="scss" scoped>
+@import '@/assets/styles/page-table.scss';
+</style>

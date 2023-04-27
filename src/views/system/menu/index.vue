@@ -296,6 +296,8 @@ export default {
       menuList: [],
       // 菜单树选项
       menuOptions: [],
+      // 资源类型,0-运维;1-Web菜单;2-App菜单
+      sourceType: 0,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -306,6 +308,7 @@ export default {
       refreshTable: true,
       // 查询参数
       queryParams: {
+        sourceType: 0,
         menuName: undefined,
         visible: undefined
       },
@@ -334,8 +337,13 @@ export default {
       this.form.icon = name;
     },
     /** 查询菜单列表 */
-    getList() {
+    getList() {      
       this.loading = true;
+      let sourceType = this.$route.name.split("=")[1];
+      if (sourceType !== undefined) {
+        this.sourceType = sourceType;
+        this.queryParams.sourceType = sourceType;
+      }
       listMenu(this.queryParams).then(response => {
         this.menuList = this.handleTree(response.data, "menuId");
         this.loading = false;
@@ -378,7 +386,8 @@ export default {
         isFrame: "1",
         isCache: "0",
         visible: "0",
-        status: "0"
+        status: "0",
+        sourceType: this.sourceType
       };
       this.resetForm("form");
     },
@@ -425,6 +434,7 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.sourceType = this.sourceType;
           if (this.form.menuId != undefined) {
             updateMenu(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

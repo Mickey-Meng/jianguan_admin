@@ -297,6 +297,13 @@
         </el-row>
         <el-row>
           <el-col :span="24">
+            <el-form-item label="角色名称">
+              <el-input v-model="form.roleNames" type="textarea"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="备注">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
@@ -523,7 +530,8 @@ export default {
         status: "0",
         remark: undefined,
         postIds: [],
-        roleIds: []
+        roleIds: [],
+        roleNames: []
       };
       this.resetForm("form");
     },
@@ -584,6 +592,7 @@ export default {
         this.roleOptions = response.data.roles;
         this.form.postIds = response.data.postIds;
         this.form.roleIds = response.data.roleIds;
+        this.form.roleNames = response.data.roleNames;
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
