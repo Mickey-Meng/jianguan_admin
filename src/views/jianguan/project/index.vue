@@ -129,18 +129,47 @@
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="项目名称" align="center" prop="projectName" :show-overflow-tooltip="true" width="100"/>
           <el-table-column label="项目编码" align="center" prop="projectCode" />
-          <el-table-column label="项目上级" align="center" prop="parentId" />
-          <el-table-column label="项目区域" align="center" prop="projectArea" />
-          <el-table-column label="状态" align="center" prop="status" />
-          <el-table-column label="是否显示" align="center" prop="visible" />
-          <el-table-column label="顺序" align="center" prop="orderNum" />
+          <el-table-column label="项目区域" align="center" prop="projectArea" >
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.jg_project_area" :value="scope.row.projectArea"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" align="center" prop="status" >
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否显示" align="center" prop="visible" >
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_show_hide" :value="scope.row.visible"/>
+            </template>
+          </el-table-column>
           <el-table-column label="组织机构" align="center" prop="groupId" :show-overflow-tooltip="true"/>
-          <el-table-column label="是否自管" align="center" prop="isAuto" />
-          <el-table-column label="项目照片" align="center" prop="projectPic" />
+          <el-table-column label="是否自管" align="center" prop="isAuto" >
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.jg_yes_no" :value="scope.row.isAuto"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="项目照片" align="center" prop="projectPic" >
+            <template slot-scope="scope">
+              <el-image
+                v-if="checkFileSuffix(scope.row.projectPic)"
+                style="width: 100px; height: 100px;"
+                :src="scope.row.url"
+                :preview-src-list="[scope.row.projectPic]"/>
+              <span v-text="scope.row.projectPic"
+                    v-if="!checkFileSuffix(scope.row.projectPic)"/>
+            </template>
+          </el-table-column>
+
           <el-table-column label="合同号" align="center" prop="contractNum" />
           <el-table-column label="坐标" align="center" prop="coordinate" />
           <el-table-column label="投资金额" align="center" prop="investment" />
-          <el-table-column label="项目类型" align="center" prop="projectType" />
+          <el-table-column label="项目类型" align="center" prop="projectType" >
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.jg_project_type" :value="scope.row.projectType"/>
+            </template>
+          </el-table-column>
           <el-table-column label="项目点" align="center" prop="projectPoint" :show-overflow-tooltip="true"/>
           <el-table-column label="项目线" align="center" prop="projectLine" />
           <el-table-column label="项目面" align="center" prop="projectSurface" />
@@ -162,6 +191,13 @@
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['jg:project:remove']"
               >删除</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleRelatedDept(scope.row)"
+                v-hasPermi="['jg:project:related']"
+              >关联部门</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -261,8 +297,13 @@
             <el-col :span="12">
               <el-form-item label="是否自管" prop="isAuto">
                 <el-radio-group v-model="form.isAuto">
-                  <el-radio label="0">是</el-radio>
-                  <el-radio label="1">否</el-radio>
+                  <el-radio
+                    v-for="dict in dict.type.jg_yes_no"
+                    :key="dict.value"
+                    :label="dict.value"
+                  >
+                    {{dict.label}}
+                  </el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -371,7 +412,8 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-    
+    <!-- 关联部门列表-->
+    <related-project-dept :project="currentProject" ref="relatedProjectDept" @ok="doRelatedDept" />
   </div>
 </template>
 
@@ -383,11 +425,12 @@ import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import { getToken } from "@/utils/auth";
 import { checkFileType, checkFileSize, getFileName, listOssIdToString } from "@/utils/upload";
+import relatedProjectDept from "./relatedProjectDept";
 
 export default {
   name: "jgProject",
-  components: { Treeselect },
-  dicts: ['sys_show_hide', 'sys_normal_disable','jg_project_area','jg_project_type'],
+  components: { Treeselect, relatedProjectDept },
+  dicts: ['sys_show_hide', 'sys_normal_disable','jg_project_area','jg_project_type', 'jg_yes_no'],
   data() {
     return {
       // 按钮loading
@@ -405,7 +448,8 @@ export default {
       projectTreeOptions: [],
       // 部门下拉树
       deptTreeOptions: [],
-
+      // 当前操作的项目ID
+      currentProject: undefined,
       /**************************** */
       //上传后的文件列表
       fileList: [],
@@ -591,7 +635,13 @@ export default {
       this.resetForm("form");
       this.uploadList = [],
       // 文件列表
-      this.fileList = []
+      this.fileList = [],
+      listProjectInfo().then(response => {
+        this.projectTreeOptions = this.handleTree(response.data, "id");
+      });
+      listDept().then(response => {
+        this.deptTreeOptions = this.handleTree(response.data, "id");
+      });
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -638,13 +688,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加项目信息";
-      listProjectInfo().then(response => {
-        this.projectTreeOptions = this.handleTree(response.data, "id");
-      });
-      listDept().then(response => {
-        this.deptTreeOptions = this.handleTree(response.data, "id");
-      });
+      this.title = "添加项目信息";      
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -705,7 +749,28 @@ export default {
       }, `projectInfo_${new Date().getTime()}.xlsx`)
     },
 
+    /**
+     * 关联部门
+     * @param {*} row 
+     */     
+    handleRelatedDept(row) {
+      this.currentProject = row;
+      this.$refs.relatedProjectDept.show();
+    },
+
+    doRelatedDept() {
+      console.log("关联部门doRelatedDept...");
+    },
     /************************* 上传相关 **************************** */
+    checkFileSuffix(projectPicUrl) {
+      if (projectPicUrl !== undefined) {
+        let fileSuffix = projectPicUrl.substring(projectPicUrl.lastIndexOf('.') + 1 );
+        return this.allowFileTypes.some(type => {
+          return fileSuffix.indexOf(type) > -1;
+        });
+      }
+      return false;
+    },
     // 上传前校检格式和大小
     handleBeforeUpload(file) {
       // 校检文件类型

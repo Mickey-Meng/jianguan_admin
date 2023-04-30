@@ -59,3 +59,16 @@ export function getProjectTree() {
   })
 }
 
+/**
+ * 关联部门
+ * @param {*} data 
+ * @returns 
+ */
+export function doRelatedDept(data) {
+  return request({
+    url: '/system/jg/project/relatedDept',
+    method: 'post',
+    data: data
+  })
+}
+ 
