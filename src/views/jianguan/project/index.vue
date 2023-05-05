@@ -75,7 +75,7 @@
               style="width: 240px"
             >
               <el-option
-                v-for="dict in dict.type.sys_normal_disable"
+                v-for="dict in dict.type.jg_project_status"
                 :key="dict.value"
                 :label="dict.label"
                 :value="dict.value"
@@ -136,7 +136,7 @@
           </el-table-column>
           <el-table-column label="状态" align="center" prop="status" >
             <template slot-scope="scope">
-              <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
+              <dict-tag :options="dict.type.jg_project_status" :value="scope.row.status"/>
             </template>
           </el-table-column>
           <el-table-column label="是否显示" align="center" prop="visible" >
@@ -175,7 +175,7 @@
           <el-table-column label="项目面" align="center" prop="projectSurface" />
           <el-table-column label="项目简介" align="center" prop="introduction" :show-overflow-tooltip="true" />
           <el-table-column label="备注" align="center" prop="remark" />
-          <el-table-column label="操作" align="center" width="150" fixed="right">
+          <el-table-column label="操作" align="center" width="200" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -191,10 +191,10 @@
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['jg:project:remove']"
               >删除</el-button>
-              <el-button
+              <el-button v-if="scope.row.groupLevel === 3"
                 size="mini"
                 type="text"
-                icon="el-icon-delete"
+                icon="el-icon-circle-check"
                 @click="handleRelatedDept(scope.row)"
                 v-hasPermi="['jg:project:related']"
               >关联部门</el-button>
@@ -430,7 +430,7 @@ import relatedProjectDept from "./relatedProjectDept";
 export default {
   name: "jgProject",
   components: { Treeselect, relatedProjectDept },
-  dicts: ['sys_show_hide', 'sys_normal_disable','jg_project_area','jg_project_type', 'jg_yes_no'],
+  dicts: ['sys_show_hide', 'jg_project_status','jg_project_area','jg_project_type', 'jg_yes_no'],
   data() {
     return {
       // 按钮loading

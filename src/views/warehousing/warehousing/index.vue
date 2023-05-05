@@ -148,6 +148,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="入库复核人" prop="warehousingReleaseuser">
+              <el-input v-model="form.warehousingReleaseuser" placeholder="请输入入库复核人" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="采购订单id" prop="purchaseOrderId">
               <el-input v-model="form.purchaseOrderId" placeholder="请输入采购订单id" />
             </el-form-item>
@@ -180,13 +185,6 @@
               <el-input v-model="form.orderNumber" placeholder="请输入采购数量" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="入库状态" prop="warehousingStatus">
-              <el-input v-model="form.warehousingStatus" placeholder="请输入入库状态" />
-            </el-form-item>
-          </el-col>
-
-
 
           <el-col :span="12">
             <el-form-item label="入库状态" prop="warehousingStatus">
@@ -211,6 +209,87 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="到货日期" prop="arrivalDate">
+              <el-date-picker clearable
+                              v-model="form.arrivalDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择到货日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col><el-col :span="12">
+          <el-form-item label="采购员" prop="purchaser">
+            <el-input v-model="form.purchaser" placeholder="请输入采购员" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="合同id(后期隐藏)" prop="contractId">
+            <el-input v-model="form.contractId" placeholder="请输入采购合同id" />
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
+            <el-form-item label="采购合同编码" prop="contractCode">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.contractCode"
+                :fetch-suggestions="queryContractSearchAsync"
+                placeholder="请输入合同编号"
+                @select="handleContractSelect"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+          <el-form-item label="供应商名称" prop="supplierName">
+            <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="供应商电话" prop="mobilePhone">
+            <el-input v-model="form.mobilePhone" placeholder="请输入供应商电话" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="供应商地址" prop="address">
+            <el-input v-model="form.address" placeholder="请输入供应商地址" />
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
+            <el-form-item label="基准价" prop="basePrice">
+              <el-input v-model="form.basePrice" placeholder="请输入基准价" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+          <el-form-item label="进货价" prop="incomePrice">
+            <el-input v-model="form.incomePrice" placeholder="请输入进货价" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="附加价格" prop="extraPrice">
+            <el-input v-model="form.extraPrice" placeholder="请输入附加价格" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="进货基准价截图" prop="fj">
+            <upload @input="getFileList"/>
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
+          <el-form-item label="进货日期，默认系统当天日期" prop="incomeDate">
+            <el-date-picker clearable
+                            v-model="form.incomeDate"
+                            type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="请选择进货日期，默认系统当天日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+          <el-col :span="12">
+            <el-form-item label="最后付款日期" prop="lastPaymentDate">
+              <el-date-picker clearable
+                              v-model="form.lastPaymentDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择最后付款日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -231,6 +310,8 @@
 <script>
 import { listWarehousing, getWarehousing, delWarehousing, addWarehousing, updateWarehousing } from "@/api/warehousing/warehousing";
 import {listShopGoods} from "@/api/shopGoods/shopGoods";
+import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase"
 
 export default {
   name: "Warehousing",
@@ -294,6 +375,21 @@ export default {
         ],
         proudctName: [
           { required: true, message: "产品名称不能为空", trigger: "blur" }
+        ],
+        arrivalDate: [
+          { required: true, message: "到货日期不能为空", trigger: "blur" }
+        ],
+        purchaser: [
+          { required: true, message: "采购员不能为空", trigger: "blur" }
+        ],
+        contractId: [
+          { required: true, message: "采购合同id不能为空", trigger: "blur" }
+        ],
+        contractCode: [
+          { required: true, message: "采购合同编码不能为空", trigger: "blur" }
+        ],
+        supplierName: [
+          { required: true, message: "供应商名称不能为空", trigger: "blur" }
         ]
       }
     };
@@ -335,7 +431,14 @@ export default {
         updateTime: undefined,
         remark: undefined,
         deptId: undefined,
-        proudctName: undefined
+        proudctName: undefined,
+        arrivalDate: undefined,
+        purchaser: undefined,
+        contractId: undefined,
+        contractCode: undefined,
+        supplierName: undefined,
+        mobilePhone: undefined,
+        address: undefined
       };
       this.resetForm("form");
     },
@@ -453,7 +556,55 @@ export default {
     handleSelect(item) {
       this.form.proudctId = item.item.id;
       console.log(item);
-    }
+    },
+
+    /*
+    *    **/
+    queryContractSearchAsync(queryString, cb) {
+      const queryParams = {
+        contractCode: queryString,
+      };
+      let flag = false;
+      listContractInfoPurchase(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.contractCode,
+              label: item.id,
+              item: {
+                id: item.id,
+                contractCode: item.contractCode,
+                supplierName: item.supplierName,
+                mobilePhone: item.mobilePhone,
+                contractId: item.id,
+                purchaser: item.purchaser,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+    handleContractSelect(item) {
+      this.form.contractCode = item.item.contractCode;
+      this.form.supplierName = item.item.supplierName;
+      this.form.mobilePhone = item.item.mobilePhone;
+      this.form.contractId = item.item.contractId;
+      this.form.purchaser = item.item.purchaser;
+      console.log(item);
+    },
+    getFileList (val) {
+      this.fileList = [];
+      this.fileList = val;
+    },
   }
 };
 </script>

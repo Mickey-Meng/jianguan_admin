@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询出库管理列表
 export function listOutbound(query) {
   return request({
-    url: '/outbound/outbound/list',
+    url: '/ql/outbound/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listOutbound(query) {
 // 查询出库管理详细
 export function getOutbound(id) {
   return request({
-    url: '/outbound/outbound/' + id,
+    url: '/ql/outbound/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getOutbound(id) {
 // 新增出库管理
 export function addOutbound(data) {
   return request({
-    url: '/outbound/outbound',
+    url: '/ql/outbound',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addOutbound(data) {
 // 修改出库管理
 export function updateOutbound(data) {
   return request({
-    url: '/outbound/outbound',
+    url: '/ql/outbound',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateOutbound(data) {
 // 删除出库管理
 export function delOutbound(id) {
   return request({
-    url: '/outbound/outbound/' + id,
+    url: '/ql/outbound/' + id,
     method: 'delete'
   })
 }

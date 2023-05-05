@@ -9,14 +9,18 @@
                 @keyup.enter.native="handleQuery"
               />
             </el-form-item>-->
-      <el-form-item label="合同名称" prop="contractName">
+
+      <el-form-item label="合同编号" prop="contractCode">
         <el-input
-          v-model="queryParams.contractName"
-          placeholder="请输入合同名称"
+          v-model="queryParams.contractCode"
+          placeholder="请输入合同编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
+
+
       <el-form-item label="供应商" prop="supplierName">
         <el-input
           v-model="queryParams.supplierName"
@@ -110,7 +114,7 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
-      <el-table-column label="合同名称" align="center" prop="contractName"/>
+      <el-table-column label="合同编号" align="center" prop="contractCode"/>
       <el-table-column label="供应商" align="center" width="360" prop="supplierName"/>
       <el-table-column label="本次付款金额" align="center" prop="payAmount"/>
       <el-table-column prop="payType" label="付款方式" width="80">
@@ -162,33 +166,65 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-          <el-col :span="12">
+<!--          <el-col :span="12">
             <el-form-item label="合同id" prop="contractId">
               <el-input v-model="form.contractId" placeholder="请输入合同id"/>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="合同名称" prop="contractName">
-              <el-input v-model="form.contractName" placeholder="请输入合同名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="供应商id" prop="contractName" type="hidden">
-              <el-input v-model="form.supplierId" placeholder="请输入供应商id"/>
-            </el-form-item>
-          </el-col>
+          </el-col>-->
 
           <el-col :span="12">
-            <el-form-item label="供应商名称" prop="supplierId">
+            <el-form-item label="采购合同编码" prop="contractCode">
+              <el-input v-model="form.contractCode" placeholder="请输入采购合同编码"/>
+              <input v-model="form.contractId" placeholder="请输入合同id" type="hidden"/>
+
+            </el-form-item>
+          </el-col>
+<!--
+
+          <el-col :span="12">
+            <el-form-item label="采购合同编码" prop="contractCode">
               <el-autocomplete
                 style="width: 100%"
-                v-model="form.supplierName"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="请输入供应商名称"
-                @select="handleSelect"
+                v-model="form.contractCode"
+                :fetch-suggestions="queryContractSearchAsync"
+                placeholder="请输入合同编号"
+                @select="handleContractSelect"
               ></el-autocomplete>
             </el-form-item>
           </el-col>
+-->
+
+          <el-col :span="12">
+            <el-form-item label="入库单号" prop="warehousingCode">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.warehousingCode"
+                :fetch-suggestions="queryWarehousingSearchAsync"
+                placeholder="请输入合同编号"
+                @select="handleWarehousingSelect"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+
+
+          <el-col :span="12">
+            <el-form-item label="供应商名称" prop="supplierName"  >
+              <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
+              <input v-model="form.supplierId" type="hidden"/>
+            </el-form-item>
+          </el-col>
+
+          <!--          <el-col :span="12">
+                      <el-form-item label="供应商名称" prop="supplierName">
+                        <el-autocomplete
+                          style="width: 100%"
+                          v-model="form.supplierName"
+                          :fetch-suggestions="querySearchAsync"
+                          placeholder="请输入供应商名称"
+                          @select="handleSelect"
+                        ></el-autocomplete>
+                      </el-form-item>
+                    </el-col>-->
 
           <el-col :span="12">
             <el-form-item label="本次付款金额" prop="payAmount">
@@ -233,6 +269,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="付款账号" prop="accountNo">
+              <el-input v-model="form.accountNo" placeholder="请输入付款账号" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+          <el-form-item label="开户银行" prop="bankName">
+            <el-input v-model="form.bankName" placeholder="请输入开户银行" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="发票编号" prop="invoiceNo">
+            <el-input v-model="form.invoiceNo" placeholder="请输入发票编号" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="附件" prop="fj">
+            <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
+
+          <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
@@ -256,6 +310,8 @@ import {
   updateFinPayment
 } from "@/api/finPayment/finPayment";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase";
+import {listWarehousing} from "@/api/warehousing/warehousing";
 
 export default {
   name: "FinPayment",
@@ -287,13 +343,15 @@ export default {
         pageNum: 1,
         pageSize: 10,
         contractId: undefined,
-        contractName: undefined,
         supplierId: undefined,
         payAmount: undefined,
         payType: undefined,
         unpaid: undefined,
         paymentDate: undefined,
-        deptId: undefined
+        deptId: undefined,
+        accountNo: undefined,
+        bankName: undefined,
+        invoiceNo: undefined
       },
       // 表单参数
       form: {},
@@ -305,9 +363,17 @@ export default {
         payType: [
           {required: true, message: "付款方式不能为空", trigger: "change"}
         ],
-
         paymentDate: [
           {required: true, message: "付款时间不能为空", trigger: "blur"}
+        ],
+        accountNo: [
+          { required: true, message: "付款账号不能为空", trigger: "blur" }
+        ],
+        bankName: [
+          { required: true, message: "开户银行不能为空", trigger: "blur" }
+        ],
+        invoiceNo: [
+          { required: true, message: "发票编号不能为空", trigger: "blur" }
         ]
       }
     };
@@ -335,7 +401,6 @@ export default {
       this.form = {
         id: undefined,
         contractId: undefined,
-        contractName: undefined,
         supplierId: undefined,
         payAmount: undefined,
         payType: undefined,
@@ -348,7 +413,11 @@ export default {
         updateBy: undefined,
         updateTime: undefined,
         remark: undefined,
-        deptId: undefined
+        deptId: undefined,
+        accountNo: undefined,
+        bankName: undefined,
+        invoiceNo: undefined,
+        fj: undefined
       };
       this.resetForm("form");
     },
@@ -433,7 +502,6 @@ export default {
       }, `finPayment_${new Date().getTime()}.xlsx`)
     },
     /*
-    *    **/
     querySearchAsync(queryString, cb) {
       const queryParams = {
         supplierName: queryString,
@@ -469,6 +537,101 @@ export default {
       this.form.supplierId = item.item.supplierId;
       this.form.unpaid = item.item.unpaid;
       this.form.payed = item.item.payed;
+      console.log(item);
+    },
+
+
+    queryContractSearchAsync(queryString, cb) {
+      const queryParams = {
+        contractCode: queryString,
+      };
+      let flag = false;
+      listContractInfoPurchase(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.contractCode,
+              label: item.id,
+              item: {
+                id: item.id,
+                contractCode: item.contractCode,
+                contractName: item.contractName,
+                supplierName: item.supplierName,
+                supplierId: item.supplierId,
+                mobilePhone: item.mobilePhone,
+                contractId: item.id,
+                purchaser: item.purchaser,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+    handleContractSelect(item) {
+      this.form.contractCode = item.item.contractCode;
+      this.form.contractName = item.item.contractName;
+      this.form.supplierName = item.item.supplierName;
+      this.form.supplierId = item.item.supplierId;
+      this.form.mobilePhone = item.item.mobilePhone;
+      this.form.contractId = item.item.contractId;
+      this.form.purchaser = item.item.purchaser;
+      console.log(item);
+    },
+    */
+
+    /*
+   * 根据入库单编号进行关联
+   * **/
+    queryWarehousingSearchAsync(queryString, cb) {
+      const queryParams = {
+        warehousingCode: queryString,
+      };
+      let flag = false;
+      listWarehousing(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.warehousingCode,
+              label: item.id,
+              item: {
+                id: item.id,
+                contractCode: item.contractCode,
+                supplierName: item.supplierName,
+                supplierId: item.supplierId,
+                mobilePhone: item.mobilePhone,
+                contractId: item.id,
+                purchaser: item.purchaser,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+    handleWarehousingSelect(item) {
+      this.form.contractCode = item.item.contractCode;
+      this.form.supplierName = item.item.supplierName;
+      this.form.supplierId = item.item.supplierId;
+      this.form.mobilePhone = item.item.mobilePhone;
+      this.form.contractId = item.item.contractId;
+      this.form.purchaser = item.item.purchaser;
       console.log(item);
     }
   }

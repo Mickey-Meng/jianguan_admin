@@ -18,16 +18,6 @@
         />
       </el-form-item>
 
-      <el-form-item label="地区" prop="area">
-        <el-select v-model="queryParams.area" placeholder="请选择项目所属地区" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_user_sex"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -89,9 +79,8 @@
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="客户名称" align="center" prop="customerName"/>
       <el-table-column label="项目名称" align="center" prop="projectName"/>
-
       <el-table-column label="项目金额" align="center" prop="projectAmount"/>
-
+      <el-table-column label="项目类型" align="center" prop="projectType" />
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -144,6 +133,21 @@
               <el-input v-model="form.projectName" placeholder="请输入项目名称"/>
             </el-form-item>
           </el-col>
+
+
+          <el-col :span="12">
+            <el-form-item label="项目类型" prop="projectType">
+              <el-select v-model="form.projectType" placeholder="请选择项目类型">
+                <el-option
+                  v-for="dict in dict.type.project_type"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="12">
             <el-form-item label="项目金额" prop="projectAmount">
               <el-input v-model="form.projectAmount" placeholder="请输入项目金额"/>
@@ -165,10 +169,21 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-
+            <el-form-item label="项目所属地区" prop="area">
+              <el-cascader
+                v-model="form.area_code"
+                size="mini"
+                :options="options"
+                filterable
+                clearable
+                style="width: 100%;"
+                @change="handleChange"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="附件地址">
               <el-upload
-
                 multiple
                 class="upload-demo"
                 :action="uploadFileUrl"
@@ -202,23 +217,7 @@
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="项目所属地区" prop="area">
 
-
-              <el-cascader
-                v-model="form.area_code"
-                size="mini"
-                :options="options"
-                filterable
-                clearable
-                style="width: 100%;"
-                @change="handleChange"
-              />
-
-
-            </el-form-item>
-          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -251,7 +250,7 @@ import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
 import { delOss } from "@/api/system/oss";
 export default {
   name: "ProjectInfo",
-  dicts: ['sys_user_sex'],
+  dicts: ['sys_user_sex','project_type'],
   props: {
     // 值
     value: [String, Object, Array],

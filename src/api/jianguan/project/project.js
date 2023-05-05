@@ -71,4 +71,15 @@ export function doRelatedDept(data) {
     data: data
   })
 }
+/**
+ * 根据项目ID查询项目关联的部门数据
+ * @param {*} id 
+ * @returns 
+ */
+export function getProjectDept(id) {
+  return request({
+    url: '/system/jg/project/projectDept/' + id,
+    method: 'get'
+  })
+}
  

@@ -33,6 +33,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="商品品牌" prop="goodsBrand">
+        <el-input
+          v-model="queryParams.goodsBrand"
+          placeholder="请输入商品品牌"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
       <el-form-item label="商品规格" prop="goodsSearchstandard">
         <el-input
           v-model="queryParams.goodsSearchstandard"
@@ -101,6 +110,7 @@
       <el-table-column label="商品编码" align="center" prop="goodsCode" />
       <el-table-column label="商品名称" align="center" prop="goodsName" />
       <el-table-column label="商品单位" align="center" prop="goodsUnit" />
+      <el-table-column label="商品品牌" align="center" prop="goodsBrand" />
       <el-table-column label="安全库存" align="center" prop="safetyStock" />
       <el-table-column label="实时库存" align="center" prop="stockNumber" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -178,6 +188,12 @@
               <el-input v-model="form.goodsName" placeholder="请输入商品名称" />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="商品品牌" prop="goodsBrand">
+              <el-input v-model="form.goodsBrand" placeholder="请输入商品品牌" />
+            </el-form-item>
+          </el-col>
+
           <el-col :span="12">
             <el-form-item label="商品条码" prop="goodsBarcode">
               <el-input v-model="form.goodsBarcode" placeholder="请输入商品条码" />

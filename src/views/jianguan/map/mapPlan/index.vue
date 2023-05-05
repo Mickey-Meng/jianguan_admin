@@ -82,7 +82,7 @@
             <el-button
               type="warning"
               plain
-              icon="el-icon-import"
+              icon="el-icon-download"
               size="mini"
               @click="openImportMapConfig"
               v-hasPermi="['map:mapServerConfig:list']"

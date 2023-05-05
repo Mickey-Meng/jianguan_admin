@@ -3,6 +3,7 @@
   <el-dialog title="关联部门" :visible.sync="visible" width="65%" top="15vh" append-to-body>
     <h4 class="form-header h4">项目信息</h4>
     <el-row>
+      <el-form ref="form" :model="project" label-width="80px">
       <el-col :span="8" :offset="2">
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="project.projectName" disabled />
@@ -13,6 +14,7 @@
           <el-input  v-model="project.projectCode" disabled />
         </el-form-item>
       </el-col>
+    </el-form>
     </el-row>
     
     <el-row>
@@ -22,7 +24,7 @@
         v-loading="loading"
         :data="deptList"
         row-key="deptId"
-        :default-expand-all="isExpandAll"
+        :default-expand-all="true"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
         @selection-change="handleSelectionChange"
       >
@@ -51,11 +53,10 @@
 </template>
 
 <script>
-import { listDept } from "@/api/system/dept";
-import { doRelatedDept } from "@/api/jianguan/project/project";
+import { getProjectDept, doRelatedDept } from "@/api/jianguan/project/project";
 
 export default {
-  props: ['project', 'projectId'],
+  props: ['project'],
   dicts: ['sys_normal_disable'],
   data() {
     return {
@@ -63,7 +64,7 @@ export default {
       visible: false,
       loading: true,
       // 是否展开，默认全部展开
-      isExpandAll: false,
+      isExpandAll: true,
       // 重新渲染表格状态
       refreshTable: true,
       // 选中数组值
@@ -75,8 +76,7 @@ export default {
   methods: {
     // 显示弹框
     show() {
-      this.getList();
-      this.visible = true;
+      this.getProjectDept();
     },
     clickRow(row) {
       this.$refs.table.toggleRowSelection(row);
@@ -87,10 +87,22 @@ export default {
       this.deptIds = selection.map(item => item.deptId);
     },
     // 查询表数据
-    getList() {
-      console.log("getList...");
-      listDept().then(response => {
+    getProjectDept() {
+      this.deptIds = [];
+      this.visible = true;
+      this.loading = true;
+      getProjectDept(this.project.id).then(response => {
         this.deptList = this.handleTree(response.data, "deptId");
+        console.log("getProjectDept->getProjectDept...");
+        console.log(this.deptList);
+        this.$nextTick(() => {
+          this.deptList.forEach((row) => {
+            if (row.relatedProject === '1') {
+              console.log(row);
+              this.$refs.table.toggleRowSelection(row);
+            }
+          });
+        });
         this.loading = false;
       });
     },
@@ -111,7 +123,7 @@ export default {
       }
       console.log("handleDoRelatedDept...");
       console.log({ deptIds: deptIds, projectId: this.project.id });
-      doRelatedDept({ deptIds: deptIds, projectId: this.projectId }).then(res => {
+      doRelatedDept({ deptIds: deptIds, projectId: this.project.id }).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;

@@ -227,7 +227,37 @@
               <el-input v-model="form.area" placeholder="请输入发货地"/>
             </el-form-item>
           </el-col>
-
+          <el-col :span="12">
+            <el-form-item label="客户联系人" prop="contactPerson">
+              <el-input v-model="form.contactPerson" placeholder="请输入供应商联系人" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+          <el-form-item label="客户联系方式" prop="mobilePhone">
+            <el-input v-model="form.mobilePhone" placeholder="请输入供应商联系方式" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="销售人员" prop="purchaser">
+            <el-input v-model="form.purchaser" placeholder="请输入采购人员" />
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="开始时间" prop="startDate">
+            <el-date-picker clearable
+                            v-model="form.startDate"
+                            type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="请选择开始时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col><el-col :span="12">
+          <el-form-item label="结束时间" prop="endDate">
+            <el-date-picker clearable
+                            v-model="form.endDate"
+                            type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="请选择结束时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
 
           <el-col :span="12">
             <el-form-item label="合同是否已签订" prop="contractStatus">
@@ -548,6 +578,8 @@ export default {
               label: item.id,
               item: {
                 customerId: item.id,
+                mobilePhone: item.mobilePhone,
+                contactPerson: item.contactPerson,
               }
             };
           });
@@ -564,6 +596,8 @@ export default {
     },
     handleSelect(item) {
       this.form.customerId = item.item.customerId;
+      this.form.contactPerson = item.item.contactPerson;
+      this.form.mobilePhone = item.item.mobilePhone;
       console.log(item);
     },
 
