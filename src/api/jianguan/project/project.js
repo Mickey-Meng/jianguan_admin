@@ -76,10 +76,11 @@ export function doRelatedDept(data) {
  * @param {*} id 
  * @returns 
  */
-export function getProjectDept(id) {
+export function getProjectDept(id,queryParams) {
   return request({
     url: '/system/jg/project/projectDept/' + id,
-    method: 'get'
+    method: 'get',
+    params: queryParams
   })
 }
  

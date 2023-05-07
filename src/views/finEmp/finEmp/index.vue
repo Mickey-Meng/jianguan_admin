@@ -129,6 +129,7 @@
     <!-- 添加或修改员工信息管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="姓名" prop="empName">
             <el-input v-model="form.empName" placeholder="请输入姓名"/>
@@ -161,6 +162,11 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
+          <el-col :span="12">
+            <el-form-item label="部门" prop="deptName">
+              <el-input v-model="form.deptName" placeholder="请输入部门描述" />
+            </el-form-item>
+          </el-col>
         <el-col :span="12">
           <el-form-item label="基础工资" prop="empBasepay">
             <el-input v-model="form.empBasepay" placeholder="请输入基础工资"/>
@@ -196,7 +202,10 @@
             <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
           </el-form-item>
         </el-col>
+        </el-row>
       </el-form>
+
+
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -259,6 +268,12 @@ export default {
         empId: [
           {required: true, message: "身份证号码不能为空", trigger: "blur"}
         ],
+        mobilePhone: [
+          {required: true, message: "手机号不能为空", trigger: "blur"}
+        ],
+        deptName: [
+          {required: true, message: "部门不能为空", trigger: "blur"}
+        ],
       }
     };
   },
@@ -289,6 +304,7 @@ export default {
         empGender: undefined,
         empRzDate: undefined,
         empBasepay: undefined,
+        deptName: undefined,
         empId: undefined,
         empAddr: undefined,
         delFlag: undefined,

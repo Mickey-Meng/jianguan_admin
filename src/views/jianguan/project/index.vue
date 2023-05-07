@@ -633,9 +633,9 @@ export default {
         remark: undefined
       };
       this.resetForm("form");
-      this.uploadList = [],
+      this.uploadList = [];
       // 文件列表
-      this.fileList = [],
+      this.fileList = [];
       listProjectInfo().then(response => {
         this.projectTreeOptions = this.handleTree(response.data, "id");
       });

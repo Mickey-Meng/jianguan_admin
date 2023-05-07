@@ -17,23 +17,17 @@
     </el-form>
     </el-row>
     
-    <!--
-      列表树相关参数：
-        v-if="refreshTable"
-        :default-expand-all="true"
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-    -->
     <el-row>
       <h4 class="form-header h4">部门信息</h4>
-      <el-table 
+      <el-table
         v-if="refreshTable"
-        v-loading="loading" 
-        :row-key="row => row.deptId" 
-        @row-click="clickRow" 
-        ref="deptTreeTable" 
-        @selection-change="handleSelectionChange" 
-        :data="deptList">
-
+        v-loading="loading"
+        :data="deptList"
+        row-key="deptId"
+        :default-expand-all="true"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
         <el-table-column label="序号" type="index" align="center"/>
         <el-table-column prop="deptName" label="部门名称" width="500"></el-table-column>
@@ -51,16 +45,9 @@
       </el-table>
     </el-row>
 
-    <pagination
-        v-show="total>0"
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="getProjectDeptList"
-      />
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="handleDoRelatedDept">确 定</el-button>
-      <el-button @click="handleClose">取 消</el-button>
+      <el-button @click="visible = false">取 消</el-button>
     </div>
   </el-dialog>
 </template>
@@ -76,10 +63,6 @@ export default {
       // 遮罩层
       visible: false,
       loading: true,
-      // 分页信息
-      total: 0,
-      pageNum: 1,
-      pageSize: 10,
       // 是否展开，默认全部展开
       isExpandAll: true,
       // 重新渲染表格状态
@@ -87,19 +70,13 @@ export default {
       // 选中数组值
       deptIds: [],
       // 表数据
-      deptList: [],
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10
-      }
+      deptList: []
     };
   },
   methods: {
     // 显示弹框
     show() {
-      this.deptList = [];
-      this.getProjectDeptList();
+      this.getProjectDept();
     },
     clickRow(row) {
       this.$refs.table.toggleRowSelection(row);
@@ -110,20 +87,19 @@ export default {
       this.deptIds = selection.map(item => item.deptId);
     },
     // 查询表数据
-    getProjectDeptList() {
+    getProjectDept() {
+      this.deptIds = [];
       this.visible = true;
       this.loading = true;
-      getProjectDept(this.project.id, this.queryParams).then(response => {
-        // this.deptList = this.handleTree(response.data, "deptId");
-        this.deptList = response.data.deptPageList.rows;
-        this.total = response.total;
+      getProjectDept(this.project.id).then(response => {
+        this.deptList = this.handleTree(response.data, "deptId");
         console.log("getProjectDept->getProjectDept...");
         console.log(this.deptList);
         this.$nextTick(() => {
           this.deptList.forEach((row) => {
             if (row.relatedProject === '1') {
               console.log(row);
-              this.$refs.deptTreeTable.toggleRowSelection(row);
+              this.$refs.table.toggleRowSelection(row);
             }
           });
         });
@@ -138,13 +114,9 @@ export default {
         this.refreshTable = true;
       });
     },
-    handleClose () {
-      this.visible = false;
-      this.deptIds = [];
-    },
     /** 导入按钮操作 */
     handleDoRelatedDept() {
-      const deptIds = Array.from(new Set(this.deptIds)).join(",");
+      const deptIds = this.deptIds.join(",");
       if (deptIds == "") {
         this.$modal.msgError("请选择要关联的部门数据");
         return;

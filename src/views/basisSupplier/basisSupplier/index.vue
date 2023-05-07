@@ -41,7 +41,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['basisSupplier:basisSupplier:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -52,7 +53,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['basisSupplier:basisSupplier:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -63,7 +65,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['basisSupplier:basisSupplier:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -73,20 +76,18 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['basisSupplier:basisSupplier:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="basisSupplierList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="供应商管理id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="供应商编码" align="center" prop="supplierCode" />
       <el-table-column label="供应商名称" align="center" prop="supplierName" width="300"/>
-      <el-table-column label="联系人" align="center" prop="contactPerson" />
-      <el-table-column label="手机" align="center" prop="mobilePhone" />
-      <el-table-column label="总欠款金额" align="center" prop="unpaid" />
-      <el-table-column label="欠发票金额" align="center" prop="uninvoiceAmount" />
+      <el-table-column label="联系人" align="center" prop="contactPerson"/>
+      <el-table-column label="手机" align="center" prop="mobilePhone"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -95,14 +96,23 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['basisSupplier:basisSupplier:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['basisSupplier:basisSupplier:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleContract(scope.row)"
+          >查看合同
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -119,82 +129,85 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
+          <!--          <el-col :span="12">
+                  <el-form-item label="单位关联主键" prop="warehouseId">
+                    <el-input v-model="form.warehouseId" placeholder="请输入单位关联主键" />
+                  </el-form-item>
+                    </el-col>-->
 <!--          <el-col :span="12">
-        <el-form-item label="单位关联主键" prop="warehouseId">
-          <el-input v-model="form.warehouseId" placeholder="请输入单位关联主键" />
-        </el-form-item>
+            <el-form-item label="供应商编码" prop="supplierCode">
+              <el-input v-model="form.supplierCode" placeholder="请输入供应商编码"/>
+            </el-form-item>
           </el-col>-->
           <el-col :span="12">
-        <el-form-item label="供应商编码" prop="supplierCode">
-          <el-input v-model="form.supplierCode" placeholder="请输入供应商编码" />
-        </el-form-item>
+            <el-form-item label="供应商名称" prop="supplierName">
+              <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="供应商名称" prop="supplierName">
-          <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
-        </el-form-item>
+            <el-form-item label="联系人" prop="contactPerson">
+              <el-input v-model="form.contactPerson" placeholder="请输入联系人"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="联系人" prop="contactPerson">
-          <el-input v-model="form.contactPerson" placeholder="请输入联系人" />
-        </el-form-item>
+            <el-form-item label="电话" prop="telephone">
+              <el-input v-model="form.telephone" placeholder="请输入电话"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="电话" prop="telephone">
-          <el-input v-model="form.telephone" placeholder="请输入电话" />
-        </el-form-item>
-          </el-col>
-          <el-col :span="12">
-        <el-form-item label="手机" prop="mobilePhone">
-          <el-input v-model="form.mobilePhone" placeholder="请输入手机" />
-        </el-form-item>
-          </el-col>
-          <el-col :span="12">
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
-        </el-form-item>
-          </el-col>
-          <el-col :span="12">
-        <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入地址" />
-        </el-form-item>
+            <el-form-item label="手机" prop="mobilePhone">
+              <el-input v-model="form.mobilePhone" placeholder="请输入手机"/>
+            </el-form-item>
           </el-col>
 <!--          <el-col :span="12">
-        <el-form-item label="级别(关联字典)" prop="supplierLevel">
-          <el-input v-model="form.supplierLevel" placeholder="请输入级别(关联字典)" />
-        </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱"/>
+            </el-form-item>
           </el-col>-->
           <el-col :span="12">
-        <el-form-item label="发票抬头" prop="invoiceLookedUp">
-          <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头" />
-        </el-form-item>
+            <el-form-item label="地址" prop="address">
+              <el-input v-model="form.address" placeholder="请输入地址"/>
+            </el-form-item>
+          </el-col>
+          <!--          <el-col :span="12">
+                  <el-form-item label="级别(关联字典)" prop="supplierLevel">
+                    <el-input v-model="form.supplierLevel" placeholder="请输入级别(关联字典)" />
+                  </el-form-item>
+                    </el-col>-->
+<!--          <el-col :span="12">
+            <el-form-item label="发票抬头" prop="invoiceLookedUp">
+              <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-        <el-form-item label="发票税率" prop="invoiceTax">
-          <el-input v-model="form.invoiceTax" placeholder="请输入发票税率" />
-        </el-form-item>
+            <el-form-item label="发票税率" prop="invoiceTax">
+              <el-input v-model="form.invoiceTax" placeholder="请输入发票税率"/>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="总付款金额" prop="payed">
-              <el-input v-model="form.payed" placeholder="请输入总付款金额" />
+              <el-input v-model="form.payed" placeholder="请输入总付款金额"/>
             </el-form-item>
-          </el-col><el-col :span="12">
-          <el-form-item label="总欠款金额" prop="unpaid">
-            <el-input v-model="form.unpaid" placeholder="请输入总欠款金额" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="已开发票金额" prop="invoiceAmount">
-            <el-input v-model="form.invoiceAmount" placeholder="请输入已开发票金额" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="欠发票金额" prop="uninvoiceAmount">
-            <el-input v-model="form.uninvoiceAmount" placeholder="请输入欠发票金额" />
-          </el-form-item>
-        </el-col>
+          </el-col>
           <el-col :span="12">
-        <el-form-item label="" label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+            <el-form-item label="总欠款金额" prop="unpaid">
+              <el-input v-model="form.unpaid" placeholder="请输入总欠款金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="已开发票金额" prop="invoiceAmount">
+              <el-input v-model="form.invoiceAmount" placeholder="请输入已开发票金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="欠发票金额" prop="uninvoiceAmount">
+              <el-input v-model="form.uninvoiceAmount" placeholder="请输入欠发票金额"/>
+            </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
+            <el-form-item label="" label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -207,7 +220,13 @@
 </template>
 
 <script>
-import { listBasisSupplier, getBasisSupplier, delBasisSupplier, addBasisSupplier, updateBasisSupplier } from "@/api/basisSupplier/basisSupplier";
+import {
+  listBasisSupplier,
+  getBasisSupplier,
+  delBasisSupplier,
+  addBasisSupplier,
+  updateBasisSupplier
+} from "@/api/basisSupplier/basisSupplier";
 
 export default {
   name: "BasisSupplier",
@@ -237,7 +256,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        supplierCode: undefined,
         supplierName: undefined,
         contactPerson: undefined,
         mobilePhone: undefined,
@@ -251,17 +269,15 @@ export default {
       // 表单校验
       rules: {
 
-        supplierCode: [
-          { required: true, message: "供应商编码不能为空", trigger: "blur" }
-        ],
+
         supplierName: [
-          { required: true, message: "供应商名称不能为空", trigger: "blur" }
+          {required: true, message: "供应商名称不能为空", trigger: "blur"}
         ],
         contactPerson: [
-          { required: true, message: "联系人不能为空", trigger: "blur" }
+          {required: true, message: "联系人不能为空", trigger: "blur"}
         ],
         mobilePhone: [
-          { required: true, message: "手机不能为空", trigger: "blur" }
+          {required: true, message: "手机不能为空", trigger: "blur"}
         ],
 
       }
@@ -290,7 +306,6 @@ export default {
       this.form = {
         id: undefined,
         warehouseId: undefined,
-        supplierCode: undefined,
         supplierName: undefined,
         contactPerson: undefined,
         telephone: undefined,
@@ -308,10 +323,6 @@ export default {
         updateTime: undefined,
         remark: undefined,
         deptId: undefined,
-        payed: undefined,
-        unpaid: undefined,
-        invoiceAmount: undefined,
-        uninvoiceAmount: undefined,
       };
       this.resetForm("form");
     },
@@ -328,7 +339,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -388,6 +399,12 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    /** 删除按钮操作 */
+    handleContract(row) {
+
+        this.$modal.msgSuccess("暂未开放");
+
     },
     /** 导出按钮操作 */
     handleExport() {

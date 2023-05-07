@@ -174,7 +174,7 @@
 
           <el-col :span="12">
             <el-form-item label="采购合同编码" prop="contractCode">
-              <el-input v-model="form.contractCode" placeholder="请输入采购合同编码"/>
+              <el-input v-model="form.contractCode" placeholder="通过入库单带出合同编码" readonly="readonly"/>
               <input v-model="form.contractId" placeholder="请输入合同id" type="hidden"/>
 
             </el-form-item>

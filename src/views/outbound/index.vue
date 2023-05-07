@@ -236,7 +236,26 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="附件--销售基准价截图" prop="fj">
-              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
+              <el-upload
+                  multiple
+                  class="upload-demo"
+                  :action="uploadFileUrl"
+                  :before-upload="handleBeforeUpload"
+                  :file-list="fileList"
+                  :limit="fileLimit"
+                  :on-error="handleUploadError"
+                  :on-exceed="handleExceed"
+                  :on-success="handleUploadSuccess"
+                  :on-preview="handlePreview"
+                  :show-file-list="true"
+                  :on-remove="handleDeleteFile"
+                  :before-remove="beforeRemove"
+                  :headers="headers"
+                  ref="fileUpload"
+                >
+                  <el-button size="small" type="primary"  :disabled ="isDisabled">点击上传</el-button>
+                   <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -300,7 +319,9 @@ import {listOutbound, getOutbound, delOutbound, addOutbound, updateOutbound} fro
 import {listShopGoods} from "@/api/shopGoods/shopGoods";
 import {getBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
-
+import { delOss } from "@/api/system/oss";
+import { getToken } from "@/utils/auth";
+import { checkFileType, checkFileSize, getFileName, listOssIdToString } from "@/utils/upload";
 export default {
   name: "Outbound",
   data() {
@@ -325,6 +346,28 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      /**************************** */
+      //上传后的文件列表
+      fileList: [],
+      // 允许的文件类型
+      allowFileTypes: [ "png", "jpg",  "jpeg"],
+      // 运行上传文件大小，单位 M
+      allowMaxFileSize: 1,
+      // 附件数量限制
+      fileLimit: 10,
+      // 已上传的文件大小
+      fileNumber: 0,
+      // 已上传的文件列表
+      uploadList:[],
+      // 文件列表
+      fileList:[],
+      // 文件上传地址
+      uploadFileUrl: process.env.VUE_APP_BASE_API + "/system/oss/upload", // 上传的图片服务器地址
+      headers: { 
+        Authorization: "Bearer " + getToken() 
+      },
+      isDisabled: false,
+      /**************************** */
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -481,6 +524,9 @@ export default {
         deptId: undefined
       };
       this.resetForm("form");
+      this.uploadList = [];
+      // 文件列表
+      this.fileList = [];
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -651,6 +697,96 @@ export default {
 
           };
       })
+    },
+    /************************* 上传相关 **************************** */
+    checkFileSuffix(fileName) {
+      if (fileName !== undefined) {
+        let fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1 );
+        return this.allowFileTypes.some(type => {
+          return fileSuffix.indexOf(type) > -1;
+        });
+      }
+      return false;
+    },
+    // 上传前校检格式和大小
+    handleBeforeUpload(file) {
+      // 校检文件类型
+      let isTypePass = checkFileType(file, this.allowFileTypes);
+      // 校检文件大小
+      let isSizePass = checkFileSize(file, this.allowMaxFileSize);
+      console.log("isTypePass:" + isTypePass + " | isSizePass:" + isSizePass);
+      if (isTypePass && isSizePass) {
+        this.fileNumber++;
+        this.$modal.loading("正在上传文件，请稍候...");
+      }
+      return isTypePass && isSizePass;
+    },
+
+    // 上传失败
+    handleUploadError(err) {
+      this.$modal.msgError("上传文件失败，请重试");
+      this.$modal.closeLoading();
+    },
+    // 上传成功回调
+    handleUploadSuccess(res, file) {
+      console.log("upload->handleUploadSuccess...");
+      console.log(res);
+      if (res.code === 200) {
+        this.uploadList.push({name: res.data.fileName, url: res.data.url, ossId: res.data.ossId});
+        this.uploadedSuccessfully();
+      } else {
+        this.fileNumber--;
+        this.$modal.closeLoading();
+        this.$modal.msgError(res.msg);
+        this.$refs.fileUpload.handleRemove(file);
+        this.uploadedSuccessfully();
+      }
+    },
+    // 删除文件
+    handleDeleteFile(data) {
+      console.log("upload->handleDeleteFile...");
+      console.log(data);
+      delOss(data.ossId);
+      this.fileList = this.fileList.filter(t => t.uid !== data.uid);
+      let ossIds = listOssIdToString(this.fileList);
+      this.$emit("input", ossIds);
+      this.from.fj = ossIds;
+      this.fileNumber--;
+      if (this.fileNumber === 0) {
+        this.isDisabled = false;
+      }
+    },
+    // 上传结束处理
+    uploadedSuccessfully() {
+      console.log("upload->uploadedSuccessfully...");
+      console.log("fileNumber:" + this.fileNumber + " | uploadList.length:" + this.uploadList.length);
+      if (this.fileNumber > 0 && this.uploadList.length === this.fileNumber) {
+        this.fileList = this.fileList.concat(this.uploadList);
+        this.uploadList = [];
+        this.fileNumber = 0;
+        let ossIds = listOssIdToString(this.fileList);
+        this.$emit("input", ossIds);
+        this.form.fj = ossIds;
+        this.isDisabled = true;
+        this.$modal.closeLoading();
+      } else {
+        $modal.msgError(`最多上传${this.fileLimit}个文件!`);
+      }
+    },
+
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      this.$download.oss(file.ossId)
+    },
+    handleExceed(files, fileList) {
+      console.log(files);
+      console.log(fileList);
+      this.$message.warning(`当前限制可上传 ${this.fileLimit}个文件，当前已上传 ${files.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
     }
 
 

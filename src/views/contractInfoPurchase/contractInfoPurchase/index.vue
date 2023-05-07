@@ -179,41 +179,39 @@
 
           <el-col :span="12">
             <el-form-item label="供应商联系人" prop="contactPerson">
-              <el-input v-model="form.contactPerson" placeholder="请输入供应商联系人" />
+              <el-input v-model="form.contactPerson" placeholder="请输入供应商联系人"/>
             </el-form-item>
-          </el-col><el-col :span="12">
-          <el-form-item label="供应商联系方式" prop="mobilePhone">
-            <el-input v-model="form.mobilePhone" placeholder="请输入供应商联系方式" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="采购人员" prop="purchaser">
-            <el-input v-model="form.purchaser" placeholder="请输入采购人员" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="总金额" prop="amount">
-            <el-input v-model="form.amount" placeholder="请输入总金额" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-
-        </el-col><el-col :span="12">
-          <el-form-item label="开始时间" prop="startDate">
-            <el-date-picker clearable
-                            v-model="form.startDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择开始时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="结束时间" prop="endDate">
-            <el-date-picker clearable
-                            v-model="form.endDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择结束时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="供应商联系方式" prop="mobilePhone">
+              <el-input v-model="form.mobilePhone" placeholder="请输入供应商联系方式"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="采购人员" prop="purchaser">
+              <el-input v-model="form.purchaser" placeholder="请输入采购人员"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开始时间" prop="startDate">
+              <el-date-picker clearable
+                              v-model="form.startDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择开始时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="结束时间" prop="endDate">
+              <el-date-picker clearable
+                              v-model="form.endDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择结束时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
 
           <el-col :span="12">
             <el-form-item label="合同是否已签订" prop="contractStatus">
@@ -239,8 +237,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="税率" prop="rate">
-              <el-input v-model="form.rate" placeholder="请输入税率"/>
+            <el-form-item label="税率（%）" prop="rate">
+              <el-input v-model="form.rate" placeholder="请输入数字"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -254,7 +252,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue" label-position="right" label-width="140px" child-label-width="120px" :data="form">
+            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
+                      label-position="right" label-width="140px" child-label-width="120px" :data="form">
             </wti-form>
           </el-col>
         </el-row>
@@ -278,10 +277,11 @@ import {
 import {getToken} from "@/utils/auth";
 
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
-import { delOss } from "@/api/system/oss";
+import {delOss} from "@/api/system/oss";
 import fields from './fields';
 import upload from '@/components/FileUpload';
 import calc from '@/utils/calc.js'
+
 export default {
   name: "ContractInfoPurchase",
   dicts: ['sys_yes_no'],
@@ -304,7 +304,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
+      default: () => ["doc", "docx", "xls", "ppt", "txt", "pdf", "png", "jpg", "jpeg", "xlsx"],
     },
     // 是否显示提示
     isShowTip: {
@@ -444,7 +444,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         console.log(response.data)
-        if (response.data.fj != ""&&response.data.fj != undefined) {
+        if (response.data.fj != "" && response.data.fj != undefined) {
           this.fileList = JSON.parse(response.data.fj);
         }
         this.open = true;
@@ -480,8 +480,11 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
+      /*
+        yangaogao 20230506  当时给麒麟做的时候，加了暂不支持，应该是为了避免应付款不好计算的问题。
+        合肥供应链需要支持删除。先注释掉控制
       this.$modal.msgSuccess("暂不支持删除操作");
-      return ;
+      return ;*/
       const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除采购合同 编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
@@ -540,7 +543,7 @@ export default {
       this.form.mobilePhone = item.item.mobilePhone;
       console.log(item);
     },
-    updateValue (params) {
+    updateValue(params) {
       if (params) {
         const key = Object.keys(params)[0];
         if (key === 'qlWarehousingBos') {
@@ -557,7 +560,7 @@ export default {
         }
       }
     },
-    getFileList (val) {
+    getFileList(val) {
       this.fileList = [];
       this.fileList = val;
     },

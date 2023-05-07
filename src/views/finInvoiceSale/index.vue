@@ -1,14 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="合同id" prop="contractId">
-        <el-input
-          v-model="queryParams.contractId"
-          placeholder="请输入合同id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="合同编号" prop="contractCode">
         <el-input
           v-model="queryParams.contractCode"
@@ -17,22 +10,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="合同名称" prop="contractName">
-        <el-input
-          v-model="queryParams.contractName"
-          placeholder="请输入合同名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="客户id" prop="customerId">
-        <el-input
-          v-model="queryParams.customerId"
-          placeholder="请输入客户id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="客户名称" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
@@ -49,7 +27,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="本次开票金额" prop="invoiceAmount">
+      <el-form-item label="开票金额" prop="invoiceAmount">
         <el-input
           v-model="queryParams.invoiceAmount"
           placeholder="请输入本次开票金额"
@@ -59,10 +37,10 @@
       </el-form-item>
       <el-form-item label="开票日期" prop="invoiceDate">
         <el-date-picker clearable
-          v-model="queryParams.invoiceDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择开票日期">
+                        v-model="queryParams.invoiceDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择开票日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -80,7 +58,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['ql:finInvoiceSale:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -91,7 +70,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['ql:finInvoiceSale:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -102,7 +82,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['ql:finInvoiceSale:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -112,29 +93,27 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['ql:finInvoiceSale:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="finInvoiceSaleList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
-      <el-table-column label="合同id" align="center" prop="contractId" />
-      <el-table-column label="合同编号" align="center" prop="contractCode" />
-      <el-table-column label="合同名称" align="center" prop="contractName" />
-      <el-table-column label="客户id" align="center" prop="customerId" />
-      <el-table-column label="客户名称" align="center" prop="customerName" />
-      <el-table-column label="发票编号" align="center" prop="invoiceNo" />
-      <el-table-column label="本次开票金额" align="center" prop="invoiceAmount" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
+      <el-table-column label="合同编号" align="center" prop="contractCode"/>
+      <el-table-column label="合同名称" align="center" prop="contractName"/>
+      <el-table-column label="客户id" align="center" prop="customerId" v-if="false"/>
+      <el-table-column label="客户名称" align="center" prop="customerName"/>
+      <el-table-column label="发票编号" align="center" prop="invoiceNo"/>
+      <el-table-column label="开票金额" align="center" prop="invoiceAmount"/>
       <el-table-column label="开票日期" align="center" prop="invoiceDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.invoiceDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="附件" align="center" prop="fj" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -143,14 +122,16 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['ql:finInvoiceSale:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['ql:finInvoiceSale:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -166,57 +147,66 @@
     <!-- 添加或修改销售开票对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
-          <el-row :gutter="20">
-<el-col :span="12">
-        <el-form-item label="合同id" prop="contractId">
-          <el-input v-model="form.contractId" placeholder="请输入合同id" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="合同编号" prop="contractCode">
-          <el-input v-model="form.contractCode" placeholder="请输入合同编号" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="合同名称" prop="contractName">
-          <el-input v-model="form.contractName" placeholder="请输入合同名称" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="客户id" prop="customerId">
-          <el-input v-model="form.customerId" placeholder="请输入客户id" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="客户名称" prop="customerName">
-          <el-input v-model="form.customerName" placeholder="请输入客户名称" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="发票编号" prop="invoiceNo">
-          <el-input v-model="form.invoiceNo" placeholder="请输入发票编号" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="本次开票金额" prop="invoiceAmount">
-          <el-input v-model="form.invoiceAmount" placeholder="请输入本次开票金额" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="开票日期" prop="invoiceDate">
-          <el-date-picker clearable
-            v-model="form.invoiceDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择开票日期">
-          </el-date-picker>
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="附件" prop="fj">
-          <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
-</el-col>          </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="合同编号" prop="contractCode">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.contractCode"
+                :fetch-suggestions="queryContractSaleSearchAsync"
+                placeholder="请输入合同编号"
+                @select="handleContractSaleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+            <input v-model="form.contractId" type="hidden"/>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="合同名称" prop="contractName">
+              <el-input v-model="form.contractName" placeholder="请输入合同名称"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="客户id" prop="customerId">
+              <el-input v-model="form.customerId" placeholder="请输入客户id"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="客户名称" prop="customerName">
+              <el-input v-model="form.customerName" placeholder="请输入客户名称"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票编号" prop="invoiceNo">
+              <el-input v-model="form.invoiceNo" placeholder="请输入发票编号"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="本次开票金额" prop="invoiceAmount">
+              <el-input v-model="form.invoiceAmount" placeholder="请输入本次开票金额"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开票日期" prop="invoiceDate">
+              <el-date-picker clearable
+                              v-model="form.invoiceDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择开票日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="附件" prop="fj">
+              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -228,7 +218,14 @@
 </template>
 
 <script>
-import { listFinInvoiceSale, getFinInvoiceSale, delFinInvoiceSale, addFinInvoiceSale, updateFinInvoiceSale } from "@/api/finInvoiceSale/finInvoiceSale";
+import {
+  listFinInvoiceSale,
+  getFinInvoiceSale,
+  delFinInvoiceSale,
+  addFinInvoiceSale,
+  updateFinInvoiceSale
+} from "@/api/finInvoiceSale/finInvoiceSale";
+import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
 
 export default {
   name: "FinInvoiceSale",
@@ -272,31 +269,31 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "id不能为空", trigger: "blur" }
+          {required: true, message: "id不能为空", trigger: "blur"}
         ],
         contractId: [
-          { required: true, message: "合同id不能为空", trigger: "blur" }
+          {required: true, message: "合同id不能为空", trigger: "blur"}
         ],
         contractCode: [
-          { required: true, message: "合同编号不能为空", trigger: "blur" }
+          {required: true, message: "合同编号不能为空", trigger: "onchange"}
         ],
         contractName: [
-          { required: true, message: "合同名称不能为空", trigger: "blur" }
+          {required: true, message: "合同名称不能为空", trigger: "blur"}
         ],
         customerId: [
-          { required: true, message: "客户id不能为空", trigger: "blur" }
+          {required: true, message: "客户id不能为空", trigger: "blur"}
         ],
         customerName: [
-          { required: true, message: "客户名称不能为空", trigger: "blur" }
+          {required: true, message: "客户名称不能为空", trigger: "blur"}
         ],
         invoiceNo: [
-          { required: true, message: "发票编号不能为空", trigger: "blur" }
+          {required: true, message: "发票编号不能为空", trigger: "blur"}
         ],
         invoiceAmount: [
-          { required: true, message: "本次开票金额不能为空", trigger: "blur" }
+          {required: true, message: "本次开票金额不能为空", trigger: "blur"}
         ],
         invoiceDate: [
-          { required: true, message: "开票日期不能为空", trigger: "blur" }
+          {required: true, message: "开票日期不能为空", trigger: "blur"}
         ],
       }
     };
@@ -355,7 +352,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -421,7 +418,51 @@ export default {
       this.download('ql/finInvoiceSale/export', {
         ...this.queryParams
       }, `finInvoiceSale_${new Date().getTime()}.xlsx`)
-    }
+    },
+
+
+    //关联销售合同
+
+    queryContractSaleSearchAsync(queryString, cb) {
+      const queryParams = {
+        contractCode: queryString,
+      };
+      let flag = false;
+      listContractInfoSale(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.contractCode,
+              label: item.id,
+              item: {
+                id: item.id,
+                contractCode: item.contractCode,
+                customerName: item.customerName,
+                customerId: item.customerId,
+                contractName: item.contractName,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleContractSaleSelect(item) {
+      this.form.contractCode = item.item.contractCode;
+      this.form.customerName = item.item.customerName;
+      this.form.customerId = item.item.customerId;
+      this.form.contractName = item.item.contractName;
+    },
+
   }
 };
 </script>

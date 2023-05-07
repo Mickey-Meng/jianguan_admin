@@ -64,6 +64,7 @@
           <svg-icon :icon-class="scope.row.icon" />
         </template>
       </el-table-column>
+      <el-table-column prop="menuCode" label="菜单编码" :show-overflow-tooltip="true" width="160"></el-table-column>
       <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
       <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
@@ -156,6 +157,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="菜单编码" prop="menuCode">
+              <el-input v-model="form.menuCode" placeholder="请输入菜单编码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="显示排序" prop="orderNum">
               <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
             </el-form-item>
@@ -174,7 +180,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="12" v-if="form.menuType != 'F'">
+          <el-col :span="24" v-if="form.menuType != 'F'">
             <el-form-item prop="path">
               <span slot="label">
                 <el-tooltip content="访问的路由地址，如：`user`，如外网地址需内链访问则以`http(s)://`开头" placement="top">
@@ -185,7 +191,7 @@
               <el-input v-model="form.path" placeholder="请输入路由地址" />
             </el-form-item>
           </el-col>
-          <el-col :span="12" v-if="form.menuType == 'C'">
+          <el-col :span="24" v-if="form.menuType == 'C'">
             <el-form-item prop="component">
               <span slot="label">
                 <el-tooltip content="访问的组件路径，如：`system/user/index`，默认在`views`目录下" placement="top">
@@ -196,6 +202,17 @@
               <el-input v-model="form.component" placeholder="请输入组件路径" />
             </el-form-item>
           </el-col>
+          <el-col :span="24" v-if="form.menuType == 'C'">
+            <el-form-item prop="queryParam">
+              <el-input v-model="form.queryParam" placeholder="请输入路由参数" maxlength="255" />
+              <span slot="label">
+                <el-tooltip content='访问路由的默认传递参数，如：`{"id": 1, "name": "ry"}`' placement="top">
+                <i class="el-icon-question"></i>
+                </el-tooltip>
+                路由参数
+              </span>
+            </el-form-item>
+          </el-col>
           <el-col :span="12" v-if="form.menuType != 'M'">
             <el-form-item prop="perms">
               <el-input v-model="form.perms" placeholder="请输入权限标识" maxlength="100" />
@@ -204,17 +221,6 @@
                 <i class="el-icon-question"></i>
                 </el-tooltip>
                 权限字符
-              </span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12" v-if="form.menuType == 'C'">
-            <el-form-item prop="queryParam">
-              <el-input v-model="form.queryParam" placeholder="请输入路由参数" maxlength="255" />
-              <span slot="label">
-                <el-tooltip content='访问路由的默认传递参数，如：`{"id": 1, "name": "ry"}`' placement="top">
-                <i class="el-icon-question"></i>
-                </el-tooltip>
-                路由参数
               </span>
             </el-form-item>
           </el-col>
@@ -232,6 +238,9 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+        </el-row>
+        
+        <el-row>
           <el-col :span="12" v-if="form.menuType != 'F'">
             <el-form-item prop="visible">
               <span slot="label">
@@ -381,6 +390,7 @@ export default {
         menuId: undefined,
         parentId: 0,
         menuName: undefined,
+        menuCode: undefined,
         icon: undefined,
         menuType: "M",
         orderNum: undefined,
