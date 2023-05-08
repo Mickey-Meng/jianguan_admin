@@ -80,7 +80,7 @@
       <el-table-column label="客户名称" align="center" prop="customerName"/>
       <el-table-column label="项目名称" align="center" prop="projectName"/>
       <el-table-column label="项目金额" align="center" prop="projectAmount"/>
-      <el-table-column label="项目类型" align="center" prop="projectType" />
+      <el-table-column label="项目类型" align="center" prop="projectType"/>
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -116,8 +116,8 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-          <el-input v-model="form.customerId"  type=hidden />
-          <el-col :span="12">
+
+<!--          <el-col :span="12">
             <el-form-item label="客户名称" prop="customerName">
               <el-autocomplete
                 style="width: 100%"
@@ -127,14 +127,12 @@
                 @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="项目名称" prop="projectName">
               <el-input v-model="form.projectName" placeholder="请输入项目名称"/>
             </el-form-item>
           </el-col>
-
-
           <el-col :span="12">
             <el-form-item label="项目类型" prop="projectType">
               <el-select v-model="form.projectType" placeholder="请选择项目类型">
@@ -148,11 +146,11 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+<!--          <el-col :span="12">
             <el-form-item label="项目金额" prop="projectAmount">
               <el-input v-model="form.projectAmount" placeholder="请输入项目金额"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="项目简述" prop="projectResume">
               <el-input v-model="form.projectResume" type="textarea" placeholder="请输入内容"/>
@@ -163,12 +161,28 @@
               <el-input v-model="form.projectDistribute" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
-            <el-form-item label="宣传图" prop="photo">
-              <el-input v-model="form.photo" type="textarea" placeholder="请输入内容"/>
+            <el-form-item label="项目开工日期" prop="projectStartDate">
+              <el-date-picker clearable
+                              v-model="form.projectStartDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择项目开工日期">
+              </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="项目工期(天)" prop="projectDays">
+              <el-input v-model="form.projectDays" placeholder="请输入项目工期(天)"/>
+            </el-form-item>
+          </el-col>
+<!--          <el-col :span="12">
+            <el-form-item label="宣传图" prop="photo">
+              <el-input v-model="form.photo" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>-->
+<!--          <el-col :span="12">
             <el-form-item label="项目所属地区" prop="area">
               <el-cascader
                 v-model="form.area_code"
@@ -205,13 +219,13 @@
               </el-upload>
             </el-form-item>
 
-<!--            <el-form-item label="附件" prop="fj">-->
-<!--              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>-->
-<!--            </el-form-item>-->
-<!--            -->
+            &lt;!&ndash;            <el-form-item label="附件" prop="fj">&ndash;&gt;
+            &lt;!&ndash;              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>&ndash;&gt;
+            &lt;!&ndash;            </el-form-item>&ndash;&gt;
+            &lt;!&ndash;            &ndash;&gt;
 
 
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
@@ -246,11 +260,12 @@ import {
 import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import formValidate from "@/plugins/formValidate/formValidate";
 import {getToken} from "@/utils/auth";
-import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
-import { delOss } from "@/api/system/oss";
+import {regionData, CodeToText, TextToCode} from 'element-china-area-data'
+import {delOss} from "@/api/system/oss";
+
 export default {
   name: "ProjectInfo",
-  dicts: ['sys_user_sex','project_type'],
+  dicts: ['sys_user_sex', 'project_type'],
   props: {
     // 值
     value: [String, Object, Array],
@@ -267,7 +282,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
+      default: () => ["doc", "docx", "xls", "ppt", "txt", "pdf", "png", "jpg", "jpeg", "xlsx"],
     },
     // 是否显示提示
     isShowTip: {
@@ -323,10 +338,6 @@ export default {
       rules: {
         id: [
           {required: true, message: "id不能为空", trigger: "blur"}
-        ],
-
-        customerName: [
-          {required: true, message: "客户名称不能为空", trigger: "blur,change"}
         ],
         projectName: [
           {required: true, message: "项目名称不能为空", trigger: "blur"}
@@ -436,7 +447,7 @@ export default {
           this.form.area_code = response.data.area.split(",");
           console.log(this.form.area_code)
         }
-        if (response.data.fj != ""&&response.data.fj !=null&&response.data.fj !=undefined) {
+        if (response.data.fj != "" && response.data.fj != null && response.data.fj != undefined) {
           this.fileList = JSON.parse(response.data.fj);
         }
         this.open = true;

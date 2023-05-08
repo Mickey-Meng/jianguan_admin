@@ -236,26 +236,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="附件--销售基准价截图" prop="fj">
-              <el-upload
-                  multiple
-                  class="upload-demo"
-                  :action="uploadFileUrl"
-                  :before-upload="handleBeforeUpload"
-                  :file-list="fileList"
-                  :limit="fileLimit"
-                  :on-error="handleUploadError"
-                  :on-exceed="handleExceed"
-                  :on-success="handleUploadSuccess"
-                  :on-preview="handlePreview"
-                  :show-file-list="true"
-                  :on-remove="handleDeleteFile"
-                  :before-remove="beforeRemove"
-                  :headers="headers"
-                  ref="fileUpload"
-                >
-                  <el-button size="small" type="primary"  :disabled ="isDisabled">点击上传</el-button>
-                   <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                </el-upload>
+              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -319,9 +300,7 @@ import {listOutbound, getOutbound, delOutbound, addOutbound, updateOutbound} fro
 import {listShopGoods} from "@/api/shopGoods/shopGoods";
 import {getBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
-import { delOss } from "@/api/system/oss";
-import { getToken } from "@/utils/auth";
-import { checkFileType, checkFileSize, getFileName, listOssIdToString } from "@/utils/upload";
+
 export default {
   name: "Outbound",
   data() {
@@ -346,28 +325,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      /**************************** */
-      //上传后的文件列表
-      fileList: [],
-      // 允许的文件类型
-      allowFileTypes: [ "png", "jpg",  "jpeg"],
-      // 运行上传文件大小，单位 M
-      allowMaxFileSize: 1,
-      // 附件数量限制
-      fileLimit: 10,
-      // 已上传的文件大小
-      fileNumber: 0,
-      // 已上传的文件列表
-      uploadList:[],
-      // 文件列表
-      fileList:[],
-      // 文件上传地址
-      uploadFileUrl: process.env.VUE_APP_BASE_API + "/system/oss/upload", // 上传的图片服务器地址
-      headers: { 
-        Authorization: "Bearer " + getToken() 
-      },
-      isDisabled: false,
-      /**************************** */
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -524,9 +481,6 @@ export default {
         deptId: undefined
       };
       this.resetForm("form");
-      this.uploadList = [];
-      // 文件列表
-      this.fileList = [];
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -698,6 +652,78 @@ export default {
           };
       })
     },
+    // 关联采购合同
+    queryContractPurchaseSearchAsync(queryString, cb) {
+      const queryParams = {
+        contractCode: queryString,
+      };
+      let flag = false;
+      listContractInfoPurchase(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.contractCode,
+              label: item.id,
+              item: {
+                id: item.id,
+                purchaseContractCode: item.contractCode,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleContractPurchaseSelect(item) {
+      this.form.purchaseContractCode  = item.item.purchaseContractCode;
+
+    },
+
+
+    //  关联项目信息
+    queryProjectInfoSearchAsync(queryString, cb) {
+      const queryParams = {
+        projectName: queryString,
+      };
+      let flag = false;
+      listProjectInfo(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.projectName,
+              label: item.id,
+              item: {
+                id: item.id,
+                projectName: item.projectName,
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleProjectInfoSelect(item) {
+      this.form.projectId = item.item.id;
+      this.form.projectName = item.item.projectName;
+    },
     /************************* 上传相关 **************************** */
     checkFileSuffix(fileName) {
       if (fileName !== undefined) {
@@ -788,9 +814,6 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     }
-
-
-
-  }
+    }
 };
 </script>

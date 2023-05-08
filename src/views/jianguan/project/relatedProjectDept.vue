@@ -16,7 +16,7 @@
       </el-col>
     </el-form>
     </el-row>
-    
+
     <!--
       列表树相关参数：
         v-if="refreshTable"
@@ -25,14 +25,14 @@
     -->
     <el-row>
       <h4 class="form-header h4">部门信息</h4>
-      <el-table 
+      <el-table
         v-if="refreshTable"
-        v-loading="loading" 
-        :row-key="row => row.deptId" 
-        @row-click="clickRow" 
-        ref="deptTreeTable" 
-        @selection-change="handleSelectionChange" 
-        :data="deptList">
+        v-loading="loading"
+        :row-key="row => row.deptId"
+        @row-click="clickRow"
+        ref="deptTreeTable"
+        @selection-change="handleSelectionChange"
+        :data="deptList.slice((pageNum-1)*pageSize, pageNum*pageSize)">
 
         <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
         <el-table-column label="序号" type="index" align="center"/>
@@ -51,13 +51,16 @@
       </el-table>
     </el-row>
 
-    <pagination
+    <!-- 分页格式
+        pagination
         v-show="total>0"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
         @pagination="getProjectDeptList"
-      />
+    -->
+    <pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" />
+
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="handleDoRelatedDept">确 定</el-button>
       <el-button @click="handleClose">取 消</el-button>
@@ -98,7 +101,7 @@ export default {
   methods: {
     // 显示弹框
     show() {
-      this.deptList = [];
+      this.clearRowSelection();
       this.getProjectDeptList();
     },
     clickRow(row) {
@@ -114,9 +117,13 @@ export default {
       this.visible = true;
       this.loading = true;
       getProjectDept(this.project.id, this.queryParams).then(response => {
-        // this.deptList = this.handleTree(response.data, "deptId");
-        this.deptList = response.data.deptPageList.rows;
-        this.total = response.total;
+        // this.deptList = this.handleTree(response.data, "deptId"); // 部门树格式
+        /** 分页数据
+          this.deptList = response.data.deptPageList.rows;
+          this.total = response.data.deptPageList.total;
+        **/
+        this.deptList = response.data.deptAllList;
+        this.total = this.deptList.length;
         console.log("getProjectDept->getProjectDept...");
         console.log(this.deptList);
         this.$nextTick(() => {
@@ -138,9 +145,21 @@ export default {
         this.refreshTable = true;
       });
     },
+    /**
+     * 关闭弹框
+     */
     handleClose () {
       this.visible = false;
-      this.deptIds = [];
+      this.clearRowSelection();
+    },
+    /**
+     * 清空勾选的数据
+     */
+    clearRowSelection() {
+      if (this.deptIds.length > 0) {
+        this.deptIds = [];
+        this.$refs.deptTreeTable.clearSelection(row);
+      }
     },
     /** 导入按钮操作 */
     handleDoRelatedDept() {

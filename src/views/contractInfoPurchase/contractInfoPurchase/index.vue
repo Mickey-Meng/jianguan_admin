@@ -163,14 +163,10 @@
                 placeholder="请输入供应商名称"
                 @select="handleSelect"
               ></el-autocomplete>
+              <input v-model="form.supplierId" type="hidden"/>
             </el-form-item>
           </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="供应商id" prop="supplierId">
-              <el-input v-model="form.supplierId" placeholder="请输入供应商id"/>
-            </el-form-item>
-          </el-col>
+ 
           <el-col :span="12">
             <el-form-item label="总金额" prop="amount">
               <el-input v-model="form.amount" :disabled="true" placeholder="请输入总金额"/>

@@ -85,8 +85,8 @@
     <el-table v-loading="loading" :data="warehousingList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="入库单号" align="center" prop="warehousingCode"/>
-      <el-table-column label="采购合同号" align="center" prop="purchaseOrderId"/>
+      <el-table-column label="单据编号" align="center" prop="warehousingCode"/>
+      <el-table-column label="采购合同号" align="center" prop="contractCode"/>
       <el-table-column label="入库对接人" align="center" prop="warehousingUsername"/>
 
 <!--      <el-table-column prop="warehousingStatus" label="入库状态" width="80">
@@ -95,7 +95,7 @@
         </template>
       </el-table-column>-->
 
-      <el-table-column label="采购数量" align="center" prop="orderNumber"/>
+      <el-table-column label="采购员" align="center" prop="purchaser"/>
       <el-table-column label="产品名称" align="center" prop="proudctName"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -167,7 +167,18 @@
             <input v-model="form.proudctId" type="hidden"/>
 
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="商品规格" prop="goodsSearchstandard">
+              <el-input v-model="form.goodsSearchstandard" placeholder="请输入商品规格"/>
+              <input v-model="form.proudctId" type="hidden"/>
 
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="商品单位" prop="goodsUnit">
+              <el-input v-model="form.goodsUnit" placeholder="请输入商品单位【关联字典管理】"/>
+            </el-form-item>
+          </el-col>
 
 <!--          <el-col :span="12">
             <el-form-item label="入库数量" prop="warehousingNumber">
@@ -254,6 +265,9 @@
               <el-input v-model="form.address" placeholder="请输入供应商地址"/>
             </el-form-item>
           </el-col>
+
+
+
           <el-col :span="12">
             <el-form-item label="基准价" prop="basePrice">
               <el-input v-model="form.basePrice" placeholder="请输入基准价"/>
@@ -379,7 +393,7 @@ export default {
           {required: true, message: "入库数量不能为空", trigger: "blur"}
         ],
         proudctName: [
-          {required: true, message: "产品名称不能为空", trigger: "blur"}
+          {required: true, message: "产品名称不能为空", trigger: "onchange"}
         ],
         arrivalDate: [
           {required: true, message: "到货日期不能为空", trigger: "blur"}
@@ -391,7 +405,7 @@ export default {
           {required: true, message: "采购合同id不能为空", trigger: "blur"}
         ],
         contractCode: [
-          {required: true, message: "采购合同编码不能为空", trigger: "blur"}
+          {required: true, message: "采购合同编码不能为空", trigger: "blur,onchange"}
         ],
         basePrice: [
           {required: true, message: "基准价不能为空", trigger: "blur"}
@@ -403,7 +417,7 @@ export default {
           {required: true, message: "附加价不能为空", trigger: "blur"}
         ],
         supplierName: [
-          {required: true, message: "供应商名称不能为空", trigger: "blur"}
+          {required: true, message: "供应商名称不能为空", trigger: "blur,onchange"}
         ],
         amount: [
           {required: true, message: "金额不能为空", trigger: "blur"}
@@ -558,6 +572,9 @@ export default {
               label: item.id,
               item: {
                 id: item.id,
+                goodsUnit: item.goodsUnit,
+                goodsSearchstandard: item.goodsSearchstandard,
+                customerId: item.customerId,
               }
             };
           });
@@ -575,6 +592,8 @@ export default {
 
     handleSelect(item) {
       this.form.proudctId = item.item.id;
+      this.form.goodsUnit = item.item.goodsUnit;
+      this.form.goodsSearchstandard = item.item.goodsSearchstandard;
       console.log(item);
     },
 

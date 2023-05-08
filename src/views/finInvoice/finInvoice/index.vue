@@ -162,8 +162,8 @@
                       </el-form-item>
                     </el-col>-->
           <el-col :span="12">
-            <el-form-item label="本次开票金额" prop="invoiceAmount">
-              <el-input v-model="form.invoiceAmount" placeholder="请输入本次开票金额"/>
+            <el-form-item label="含税金额" prop="invoiceAmount">
+              <el-input v-model="form.invoiceAmount" placeholder="请输入含税金额"/>
             </el-form-item>
           </el-col>
 <!--          <el-col :span="12">

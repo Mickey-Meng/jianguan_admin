@@ -9,43 +9,43 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="商品类别ID" prop="goodsTypeId">
+<!--      <el-form-item label="产品类别ID" prop="goodsTypeId">
         <el-input
           v-model="queryParams.goodsTypeId"
-          placeholder="请输入商品类别ID"
+          placeholder="请输入产品类别ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="商品编码" prop="goodsCode">
+      <el-form-item label="产品编码" prop="goodsCode">
         <el-input
           v-model="queryParams.goodsCode"
-          placeholder="请输入商品编码"
+          placeholder="请输入产品编码"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>-->
-      <el-form-item label="商品名称" prop="goodsName">
+      <el-form-item label="产品名称" prop="goodsName">
         <el-input
           v-model="queryParams.goodsName"
-          placeholder="请输入商品名称"
+          placeholder="请输入产品名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="商品品牌" prop="goodsBrand">
+      <el-form-item label="品牌" prop="goodsBrand">
         <el-input
           v-model="queryParams.goodsBrand"
-          placeholder="请输入商品品牌"
+          placeholder="请输入品牌"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
 
-      <el-form-item label="商品规格" prop="goodsSearchstandard">
+      <el-form-item label="规格" prop="goodsSearchstandard">
         <el-input
           v-model="queryParams.goodsSearchstandard"
-          placeholder="请输入商品规格"
+          placeholder="请输入产品规格"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -105,14 +105,13 @@
     <el-table v-loading="loading" :data="shopGoodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="产品编码" align="center" prop="goodsCode" />
+      <el-table-column label="产品名称" align="center" prop="goodsName" />
+      <el-table-column label="品牌" align="center" prop="goodsBrand" />
       <el-table-column label="供应商名称" align="center" prop="supplierName" />
-      <el-table-column label="商品类别" align="center" prop="goodsTypeId" />
-      <el-table-column label="商品编码" align="center" prop="goodsCode" />
-      <el-table-column label="商品名称" align="center" prop="goodsName" />
-      <el-table-column label="商品单位" align="center" prop="goodsUnit" />
-      <el-table-column label="商品品牌" align="center" prop="goodsBrand" />
-      <el-table-column label="安全库存" align="center" prop="safetyStock" />
-      <el-table-column label="实时库存" align="center" prop="stockNumber" />
+      <el-table-column label="规格" align="center" prop="goodsSearchstandard" />
+      <el-table-column label="单位" align="center" prop="goodsUnit" />
+      <el-table-column label="预警库存" align="center" prop="safetyStock" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -140,7 +139,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <!-- 添加或修改商品信息对话框 -->
+    <!-- 添加或修改产品信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
@@ -155,15 +154,11 @@
                 @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
+            <input v-model="form.supplierId" type="hidden" />
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="供应商ID" prop="supplierId">
-              <el-input v-model="form.supplierId" placeholder="请输入供应商ID" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
 
-            <el-form-item label="商品类别ID" prop="area">
+<!--          <el-col :span="12">
+            <el-form-item label="产品类别ID" prop="area">
               <el-cascader
                 v-model="form.goodsTypeId"
                 size="mini"
@@ -173,40 +168,39 @@
                 style="width: 100%;"
                 @change="handleChange"
               />
-
-              <!--              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>-->
+              &lt;!&ndash;              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>&ndash;&gt;
             </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="商品编码" prop="goodsCode">
-              <el-input v-model="form.goodsCode" placeholder="请输入商品编码" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="商品名称" prop="goodsName">
-              <el-input v-model="form.goodsName" placeholder="请输入商品名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="商品品牌" prop="goodsBrand">
-              <el-input v-model="form.goodsBrand" placeholder="请输入商品品牌" />
-            </el-form-item>
-          </el-col>
+          </el-col>-->
 
           <el-col :span="12">
-            <el-form-item label="商品条码" prop="goodsBarcode">
-              <el-input v-model="form.goodsBarcode" placeholder="请输入商品条码" />
+            <el-form-item label="产品编码" prop="goodsCode">
+              <el-input v-model="form.goodsCode" placeholder="请输入产品编码" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="商品规格" prop="goodsSearchstandard">
-              <el-input v-model="form.goodsSearchstandard" placeholder="请输入商品规格" />
+            <el-form-item label="产品名称" prop="goodsName">
+              <el-input v-model="form.goodsName" placeholder="请输入产品名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="商品颜色" prop="goodsColor">
-              <el-input v-model="form.goodsColor" placeholder="请输入商品颜色" />
+            <el-form-item label="产品品牌" prop="goodsBrand">
+              <el-input v-model="form.goodsBrand" placeholder="请输入产品品牌" />
+            </el-form-item>
+          </el-col>
+<!--
+          <el-col :span="12">
+            <el-form-item label="产品条码" prop="goodsBarcode">
+              <el-input v-model="form.goodsBarcode" placeholder="请输入产品条码" />
+            </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
+            <el-form-item label="规格" prop="goodsSearchstandard">
+              <el-input v-model="form.goodsSearchstandard" placeholder="请输入规格" />
+            </el-form-item>
+          </el-col>
+<!--          <el-col :span="12">
+            <el-form-item label="产品颜色" prop="goodsColor">
+              <el-input v-model="form.goodsColor" placeholder="请输入产品颜色" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -226,16 +220,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="商品重量(千克)" prop="goodsWeight">
-              <el-input v-model="form.goodsWeight" placeholder="请输入商品重量(单位:千克)" />
+            <el-form-item label="产品重量(千克)" prop="goodsWeight">
+              <el-input v-model="form.goodsWeight" placeholder="请输入产品重量(单位:千克)" />
+            </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
+            <el-form-item label="产品单位" prop="goodsUnit">
+              <el-input v-model="form.goodsUnit" placeholder="产品单位" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="商品单位" prop="goodsUnit">
-              <el-input v-model="form.goodsUnit" placeholder="商品单位" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+<!--          <el-col :span="12">
             <el-form-item label="成本价" prop="costPrice">
               <el-input v-model="form.costPrice" placeholder="请输入成本价" />
             </el-form-item>
@@ -259,17 +253,17 @@
             <el-form-item label="成本价锁定" prop="isCost">
               <el-input v-model="form.isCost" placeholder="请输入成本价锁定" />
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="安全库存" prop="safetyStock">
               <el-input v-model="form.safetyStock" placeholder="请输入安全库存" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+<!--          <el-col :span="12">
           <el-form-item label="实时库存" prop="stockNumber">
             <el-input v-model="form.stockNumber" placeholder="请输入实时库存" />
           </el-form-item>
-        </el-col>
+        </el-col>-->
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -311,7 +305,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 商品信息表格数据
+      // 产品信息表格数据
       shopGoodsList: [],
       // 弹出层标题
       title: "",
@@ -342,25 +336,25 @@ export default {
           { required: true, message: "供应商名称不能为空", trigger: "blur,change" }
         ],
         goodsTypeId: [
-          { required: true, message: "商品类别ID不能为空", trigger: "blur" }
+          { required: true, message: "产品类别ID不能为空", trigger: "blur" }
         ],
         goodsCode: [
-          { required: true, message: "商品编码不能为空", trigger: "blur" }
+          { required: true, message: "产品编码不能为空", trigger: "blur" }
         ],
         costPrice: [
-          { required: true, message: "商品成本价（进价）不能为空", trigger: "blur" }
+          { required: true, message: "产品成本价（进价）不能为空", trigger: "blur" }
         ],
         goodsName: [
-          { required: true, message: "商品名称不能为空", trigger: "blur" }
+          { required: true, message: "产品名称不能为空", trigger: "blur" }
         ],
-        goodsSearchstandard: [
-          { required: true, message: "商品规格不能为空", trigger: "blur" }
+        goodsBrand: [
+          { required: true, message: "产品品牌不能为空", trigger: "blur" }
         ],
         safetyStock: [
           { required: true, message: "安全库存不能为空", trigger: "blur" }
         ],
         goodsUnit: [
-          { required: true, message: "商品单位【关联字典管理】不能为空", trigger: "change" }
+          { required: true, message: "产品单位不能为空", trigger: "change" }
         ],
       }
     };
@@ -370,7 +364,7 @@ export default {
     this.goodsTree();
   },
   methods: {
-    /** 查询商品信息列表 */
+    /** 查询产品信息列表 */
     handleChange(value) {
       console.log(value);
       if (value == undefined) {
@@ -455,7 +449,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加商品信息";
+      this.title = "添加产品信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -466,7 +460,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改商品信息";
+        this.title = "修改产品信息";
       });
     },
     /** 提交按钮 */
@@ -497,7 +491,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除商品信息编号为"' + ids + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除产品信息编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
         return delShopGoods(ids);
       }).then(() => {

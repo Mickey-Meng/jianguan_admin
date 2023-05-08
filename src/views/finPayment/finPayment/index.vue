@@ -124,7 +124,6 @@
       </el-table-column>
 
 
-      <el-table-column label="欠付款金额" align="center" prop="unpaid"/>
       <el-table-column label="付款时间" align="center" prop="paymentDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.paymentDate, '{y}-{m}-{d}') }}</span>
@@ -174,7 +173,7 @@
 
           <el-col :span="12">
             <el-form-item label="采购合同编码" prop="contractCode">
-              <el-input v-model="form.contractCode" placeholder="通过入库单带出合同编码" readonly="readonly"/>
+              <el-input v-model="form.contractCode" placeholder="通过入库单 带出合同编码" readonly="readonly"/>
               <input v-model="form.contractId" placeholder="请输入合同id" type="hidden"/>
 
             </el-form-item>
@@ -245,19 +244,6 @@
             </el-form-item>
           </el-col>
 
-
-          <el-col :span="12">
-            <el-form-item label="已付款金额" prop="unpaid">
-              <el-input v-model="form.payed" placeholder="" readonly="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="欠付款金额" prop="unpaid">
-              <el-input v-model="form.unpaid" placeholder="" readonly="true"/>
-            </el-form-item>
-          </el-col>
-
-
           <el-col :span="12">
             <el-form-item label="付款时间" prop="paymentDate">
               <el-date-picker clearable
@@ -281,7 +267,7 @@
             <el-input v-model="form.invoiceNo" placeholder="请输入发票编号" />
           </el-form-item>
         </el-col><el-col :span="12">
-          <el-form-item label="附件" prop="fj">
+          <el-form-item label="银行流水截图" prop="fj">
             <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
           </el-form-item>
         </el-col>
@@ -346,7 +332,6 @@ export default {
         supplierId: undefined,
         payAmount: undefined,
         payType: undefined,
-        unpaid: undefined,
         paymentDate: undefined,
         deptId: undefined,
         accountNo: undefined,
@@ -404,7 +389,6 @@ export default {
         supplierId: undefined,
         payAmount: undefined,
         payType: undefined,
-        unpaid: undefined,
         payed: undefined,
         paymentDate: undefined,
         delFlag: undefined,

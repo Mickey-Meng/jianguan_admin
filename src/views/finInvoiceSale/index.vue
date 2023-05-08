@@ -201,7 +201,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="附件" prop="fj">
+            <el-form-item label="银行流水截图" prop="fj">
               <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
@@ -461,6 +461,7 @@ export default {
       this.form.customerName = item.item.customerName;
       this.form.customerId = item.item.customerId;
       this.form.contractName = item.item.contractName;
+      this.form.contractId = item.item.id;
     },
 
   }

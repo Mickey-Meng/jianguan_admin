@@ -82,7 +82,7 @@
               />
             </el-select>
           </el-form-item>
-          
+
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -100,7 +100,7 @@
               v-hasPermi="['jg:project:add']"
             >新增</el-button>
           </el-col>
-          
+
           <el-col :span="1.5">
             <el-button
               type="danger"
@@ -175,7 +175,7 @@
           <el-table-column label="项目面" align="center" prop="projectSurface" />
           <el-table-column label="项目简介" align="center" prop="introduction" :show-overflow-tooltip="true" />
           <el-table-column label="备注" align="center" prop="remark" />
-          <el-table-column label="操作" align="center" width="200" fixed="right">
+          <el-table-column label="操作" align="center" width="180" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -191,13 +191,19 @@
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['jg:project:remove']"
               >删除</el-button>
-              <el-button v-if="scope.row.groupLevel === 3"
-                size="mini"
-                type="text"
-                icon="el-icon-circle-check"
-                @click="handleRelatedDept(scope.row)"
-                v-hasPermi="['jg:project:related']"
-              >关联部门</el-button>
+
+              <el-dropdown v-if="scope.row.groupLevel === 3" size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['jg:project:item', 'jg:project:related']">
+                <span class="el-dropdown-link">
+                  <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="handleProjectItem" icon="el-icon-s-operation"
+                    v-hasPermi="['jg:project:queryItem']">项目详情</el-dropdown-item>
+                  <el-dropdown-item command="handleRelatedDept" icon="el-icon-connection"
+                    v-hasPermi="['jg:project:related']">关联部门</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+
             </template>
           </el-table-column>
         </el-table>
@@ -243,7 +249,7 @@
                 />
               </el-form-item>
             </el-col>
-            
+
             <el-col :span="12">
               <el-form-item label="项目区域">
                 <el-select v-model="form.projectArea" placeholder="请选项目区域">
@@ -286,7 +292,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
+
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="显示排序" prop="orderNum">
@@ -308,7 +314,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
+
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="合同号" prop="contractNum">
@@ -322,7 +328,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
+
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="投资金额(元)" prop="investment">
@@ -336,7 +342,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
+
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="项目线" prop="projectLine">
@@ -350,7 +356,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
+
           <el-row :gutter="20">
             <el-col :span="12">
                 <el-form-item label="项目简介" prop="introduction">
@@ -379,9 +385,13 @@
                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
               </el-form-item>
             </el-col>
-
+            
             <el-col :span="12">
               <el-form-item label="项目照片">
+                <image-upload v-model="form.projectPic"/>
+              </el-form-item>
+              
+              <el-form-item label="项目照片" v-if="false">
                 <el-upload
                   multiple
                   class="upload-demo"
@@ -412,6 +422,8 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <!-- 项目详情-->
+    <project-item :project="currentProject" ref="projectItem" @ok="doProjectItem" />
     <!-- 关联部门列表-->
     <related-project-dept :project="currentProject" ref="relatedProjectDept" @ok="doRelatedDept" />
   </div>
@@ -425,11 +437,12 @@ import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import { getToken } from "@/utils/auth";
 import { checkFileType, checkFileSize, getFileName, listOssIdToString } from "@/utils/upload";
+import projectItem from "./projectItem";
 import relatedProjectDept from "./relatedProjectDept";
 
 export default {
   name: "jgProject",
-  components: { Treeselect, relatedProjectDept },
+  components: { Treeselect, projectItem, relatedProjectDept },
   dicts: ['sys_show_hide', 'jg_project_status','jg_project_area','jg_project_type', 'jg_yes_no'],
   data() {
     return {
@@ -467,8 +480,8 @@ export default {
       fileList:[],
       // 文件上传地址
       uploadFileUrl: process.env.VUE_APP_BASE_API + "/system/oss/upload", // 上传的图片服务器地址
-      headers: { 
-        Authorization: "Bearer " + getToken() 
+      headers: {
+        Authorization: "Bearer " + getToken()
       },
       isDisabled: false,
       /**************************** */
@@ -552,7 +565,7 @@ export default {
         this.projectTreeData = response.data;
       });
     },
-    
+
     // 筛选节点
     filterNode(value, data) {
       if (!value) return true;
@@ -688,7 +701,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加项目信息";      
+      this.title = "添加项目信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -734,7 +747,7 @@ export default {
         this.loading = true;
         return delProjectInfo(ids);
       }).then(() => {
-        this.loading = false;        
+        this.loading = false;
         this.$modal.msgSuccess("删除成功");
         this.refreshTreeAndTable();
       }).catch(() => {
@@ -748,16 +761,26 @@ export default {
         ...this.queryParams
       }, `projectInfo_${new Date().getTime()}.xlsx`)
     },
-
-    /**
-     * 关联部门
-     * @param {*} row 
-     */     
-    handleRelatedDept(row) {
+    // 更多操作触发
+    handleCommand(command, row) {
       this.currentProject = row;
-      this.$refs.relatedProjectDept.show();
+      switch (command) {
+        case "handleProjectItem":
+          // 项目详情操作
+          this.$refs.projectItem.show();
+          break;
+        case "handleRelatedDept":
+          // 关联部门
+          this.$refs.relatedProjectDept.show();
+          break;
+        default:
+          break;
+      }
     },
 
+    doProjectItem() {
+      console.log("项目详情doProjectItem...");
+    },
     doRelatedDept() {
       console.log("关联部门doRelatedDept...");
     },
@@ -851,6 +874,6 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     }
-  }  
+  }
 };
 </script>

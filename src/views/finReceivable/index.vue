@@ -199,7 +199,7 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="附件" prop="fj">
+            <el-form-item label="银行流水截图" prop="fj">
               <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
@@ -450,7 +450,7 @@ export default {
               value: item.contractCode,
               label: item.id,
               item: {
-                id: item.id,
+                contractId: item.id,
                 contractCode: item.contractCode,
                 customerName: item.customerName,
                 customerId: item.customerId,
@@ -472,6 +472,7 @@ export default {
 
     handleContractSaleSelect(item) {
       this.form.contractCode = item.item.contractCode;
+      this.form.contractId = item.item.contractId;
       this.form.customerName = item.item.customerName;
       this.form.customerId = item.item.customerId;
       this.form.contractName = item.item.contractName;

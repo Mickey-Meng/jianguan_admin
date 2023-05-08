@@ -61,8 +61,8 @@ export function getProjectTree() {
 
 /**
  * 关联部门
- * @param {*} data 
- * @returns 
+ * @param {*} data
+ * @returns
  */
 export function doRelatedDept(data) {
   return request({
@@ -73,8 +73,8 @@ export function doRelatedDept(data) {
 }
 /**
  * 根据项目ID查询项目关联的部门数据
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function getProjectDept(id,queryParams) {
   return request({
@@ -83,4 +83,21 @@ export function getProjectDept(id,queryParams) {
     params: queryParams
   })
 }
- 
+
+// 查询项目详情详细
+export function getProjectItem(projectId) {
+  return request({
+    url: '/system/jg/project/projectItem/' + projectId,
+    method: 'get'
+  })
+}
+
+// 保存项目详情
+export function saveProjectItem(data) {
+  return request({
+    url: '/system/jg/project/saveProjectItem/',
+    method: 'post',
+    data: data
+  })
+}
+
