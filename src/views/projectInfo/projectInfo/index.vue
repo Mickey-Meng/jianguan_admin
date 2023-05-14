@@ -77,10 +77,21 @@
     <el-table v-loading="loading" :data="projectInfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="客户名称" align="center" prop="customerName"/>
       <el-table-column label="项目名称" align="center" prop="projectName"/>
-      <el-table-column label="项目金额" align="center" prop="projectAmount"/>
-      <el-table-column label="项目类型" align="center" prop="projectType"/>
+
+      <el-table-column label="项目类型" align="center" prop="projectType">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.project_type" :value="scope.row.projectType"/>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="项目工期(天)" align="center" prop="projectDays"/>
+      <el-table-column label="开工日期" align="center" prop="projectStartDate" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.projectStartDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

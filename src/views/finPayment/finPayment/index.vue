@@ -114,8 +114,8 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
-      <el-table-column label="合同编号" align="center" prop="contractCode"/>
-      <el-table-column label="供应商" align="center" width="360" prop="supplierName"/>
+<!--      <el-table-column label="合同编号" align="center" prop="contractCode"/>-->
+<!--      <el-table-column label="供应商" align="center" width="360" prop="supplierName"/>-->
       <el-table-column label="本次付款金额" align="center" prop="payAmount"/>
       <el-table-column prop="payType" label="付款方式" width="80">
         <template slot-scope="scope">
@@ -149,6 +149,13 @@
             v-hasPermi="['finPayment:finPayment:remove']"
           >删除
           </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleReport(scope.row)"
+          >报表
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -170,67 +177,68 @@
               <el-input v-model="form.contractId" placeholder="请输入合同id"/>
             </el-form-item>
           </el-col>-->
+          <!--
+                    <el-col :span="12" v-show="false">
+                      <el-form-item label="采购合同编码" prop="contractCode">
+                        <el-input v-model="form.contractCode" placeholder="通过入库单 带出合同编码" readonly="readonly"/>
+                        <input v-model="form.contractId" placeholder="请输入合同id" type="hidden"/>
 
-          <el-col :span="12">
-            <el-form-item label="采购合同编码" prop="contractCode">
-              <el-input v-model="form.contractCode" placeholder="通过入库单 带出合同编码" readonly="readonly"/>
-              <input v-model="form.contractId" placeholder="请输入合同id" type="hidden"/>
+                      </el-form-item>
+                    </el-col>
+                    -->
+          <!--
 
-            </el-form-item>
-          </el-col>
-<!--
-
-          <el-col :span="12">
-            <el-form-item label="采购合同编码" prop="contractCode">
-              <el-autocomplete
-                style="width: 100%"
-                v-model="form.contractCode"
-                :fetch-suggestions="queryContractSearchAsync"
-                placeholder="请输入合同编号"
-                @select="handleContractSelect"
-              ></el-autocomplete>
-            </el-form-item>
-          </el-col>
--->
-
-          <el-col :span="12">
-            <el-form-item label="入库单号" prop="warehousingCode">
-              <el-autocomplete
-                style="width: 100%"
-                v-model="form.warehousingCode"
-                :fetch-suggestions="queryWarehousingSearchAsync"
-                placeholder="请输入合同编号"
-                @select="handleWarehousingSelect"
-              ></el-autocomplete>
-            </el-form-item>
-          </el-col>
-
-
-          <el-col :span="12">
-            <el-form-item label="供应商名称" prop="supplierName"  >
-              <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
-              <input v-model="form.supplierId" type="hidden"/>
-            </el-form-item>
-          </el-col>
-
-          <!--          <el-col :span="12">
-                      <el-form-item label="供应商名称" prop="supplierName">
+                    <el-col :span="12">
+                      <el-form-item label="采购合同编码" prop="contractCode">
                         <el-autocomplete
                           style="width: 100%"
-                          v-model="form.supplierName"
-                          :fetch-suggestions="querySearchAsync"
-                          placeholder="请输入供应商名称"
-                          @select="handleSelect"
+                          v-model="form.contractCode"
+                          :fetch-suggestions="queryContractSearchAsync"
+                          placeholder="请输入合同编号"
+                          @select="handleContractSelect"
                         ></el-autocomplete>
                       </el-form-item>
-                    </el-col>-->
+                    </el-col>
+          -->
+          <!--
+                    <el-col :span="12" v-show="false">
+                      <el-form-item label="入库单号" prop="warehousingCode">
+                        <el-autocomplete
+                          style="width: 100%"
+                          v-model="form.warehousingCode"
+                          :fetch-suggestions="queryWarehousingSearchAsync"
+                          placeholder="请输入入库单号"
+                          @select="handleWarehousingSelect"
+                        ></el-autocomplete>
+                      </el-form-item>
+                    </el-col>
 
+
+                    <el-col :span="12" v-show="false">
+                      <el-form-item label="供应商名称" prop="supplierName"  >
+                        <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
+                        <input v-model="form.supplierId" type="hidden"/>
+                      </el-form-item>
+                    </el-col>
+          -->
+                    <!--          <el-col :span="12">
+                                <el-form-item label="供应商名称" prop="supplierName">
+                                  <el-autocomplete
+                                    style="width: 100%"
+                                    v-model="form.supplierName"
+                                    :fetch-suggestions="querySearchAsync"
+                                    placeholder="请输入供应商名称"
+                                    @select="handleSelect"
+                                  ></el-autocomplete>
+                                </el-form-item>
+                              </el-col>-->
+        <!--
           <el-col :span="12">
             <el-form-item label="本次付款金额" prop="payAmount">
               <el-input v-model="form.payAmount" placeholder="请输入本次付款金额"/>
             </el-form-item>
           </el-col>
-
+-->
           <el-col :span="12">
             <el-form-item label="付款方式" prop="payType">
               <el-select v-model="form.payType" placeholder="请选择付款方式">
@@ -266,16 +274,25 @@
           <el-form-item label="发票编号" prop="invoiceNo">
             <el-input v-model="form.invoiceNo" placeholder="请输入发票编号" />
           </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="银行流水截图" prop="fj">
-            <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
         </el-col>
+
 
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
+          </el-col>
+
+          <el-col :span="24">
+            <el-form-item label="银行流水截图" prop="fj">
+              <image-upload v-model="form.fj" ></image-upload>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="24">
+            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
+                      label-position="right" label-width="140px" child-label-width="120px" :data="form">
+            </wti-form>
           </el-col>
         </el-row>
       </el-form>
@@ -298,6 +315,7 @@ import {
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase";
 import {listWarehousing} from "@/api/warehousing/warehousing";
+import fields from './fields';
 
 export default {
   name: "FinPayment",
@@ -313,7 +331,7 @@ export default {
       // 非单个禁用
       single: true,
       // 非多个禁用
-      multiple: true,
+      // multiple: true,
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -339,12 +357,14 @@ export default {
         invoiceNo: undefined
       },
       // 表单参数
-      form: {},
+      form: {
+        paymentWarehousingRels: []
+      },
       // 表单校验
       rules: {
-        payAmount: [
-          {required: true, message: "本次付款金额不能为空", trigger: "blur"}
-        ],
+        // payAmount: [
+        //   {required: true, message: "本次付款金额不能为空", trigger: "blur"}
+        // ],
         payType: [
           {required: true, message: "付款方式不能为空", trigger: "change"}
         ],
@@ -359,14 +379,18 @@ export default {
         ],
         invoiceNo: [
           { required: true, message: "发票编号不能为空", trigger: "blur" }
-        ]
-      }
+        ],
+      },
+      fields
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    updateValue(params) {
+
+    },
     /** 查询供应商付款列表 */
     getList() {
       this.loading = true;
@@ -443,6 +467,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.paymentWarehousingRels = this.$refs.wtiForm.formData.paymentWarehousingRels;
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateFinPayment(this.form).then(response => {
@@ -463,6 +488,10 @@ export default {
           }
         }
       });
+    },
+    // 跳转到报表页面
+    handleReport(row) {
+      this.$router.push("/finPayment?view=816077347061714944&warehousingCode=" + row.warehousingCode);
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -575,6 +604,7 @@ export default {
     /*
    * 根据入库单编号进行关联
    * **/
+    /*
     queryWarehousingSearchAsync(queryString, cb) {
       const queryParams = {
         warehousingCode: queryString,
@@ -618,6 +648,7 @@ export default {
       this.form.purchaser = item.item.purchaser;
       console.log(item);
     }
+  */
   }
 };
 </script>

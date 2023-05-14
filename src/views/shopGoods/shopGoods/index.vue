@@ -9,22 +9,22 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="产品类别ID" prop="goodsTypeId">
-        <el-input
-          v-model="queryParams.goodsTypeId"
-          placeholder="请输入产品类别ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="产品编码" prop="goodsCode">
-        <el-input
-          v-model="queryParams.goodsCode"
-          placeholder="请输入产品编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>-->
+      <!--      <el-form-item label="产品类别ID" prop="goodsTypeId">
+              <el-input
+                v-model="queryParams.goodsTypeId"
+                placeholder="请输入产品类别ID"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="产品编码" prop="goodsCode">
+              <el-input
+                v-model="queryParams.goodsCode"
+                placeholder="请输入产品编码"
+                clearable
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>-->
       <el-form-item label="产品名称" prop="goodsName">
         <el-input
           v-model="queryParams.goodsName"
@@ -65,7 +65,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['shopGoods:shopGoods:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -76,7 +77,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['shopGoods:shopGoods:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -87,7 +89,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['shopGoods:shopGoods:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -97,21 +100,22 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['shopGoods:shopGoods:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="shopGoodsList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="产品编码" align="center" prop="goodsCode" />
-      <el-table-column label="产品名称" align="center" prop="goodsName" />
-      <el-table-column label="品牌" align="center" prop="goodsBrand" />
-      <el-table-column label="供应商名称" align="center" prop="supplierName" />
-      <el-table-column label="规格" align="center" prop="goodsSearchstandard" />
-      <el-table-column label="单位" align="center" prop="goodsUnit" />
-      <el-table-column label="预警库存" align="center" prop="safetyStock" />
+      <el-table-column label="产品编码" align="center" prop="goodsCode"/>
+      <el-table-column label="产品名称" align="center" prop="goodsName"/>
+      <el-table-column label="品牌" align="center" prop="goodsBrand"/>
+      <el-table-column label="供应商名称" align="center" prop="supplierName"/>
+      <el-table-column label="规格" align="center" prop="goodsSearchstandard"/>
+      <el-table-column label="单位" align="center" prop="goodsUnit"/>
+      <el-table-column label="预警库存" align="center" prop="safetyStock"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -120,14 +124,23 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['shopGoods:shopGoods:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['shopGoods:shopGoods:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleReport(scope.row)"
+          >报表
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -154,119 +167,119 @@
                 @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
-            <input v-model="form.supplierId" type="hidden" />
+            <input v-model="form.supplierId" type="hidden"/>
           </el-col>
 
-<!--          <el-col :span="12">
-            <el-form-item label="产品类别ID" prop="area">
-              <el-cascader
-                v-model="form.goodsTypeId"
-                size="mini"
-                :options="options"
-                filterable
-                clearable
-                style="width: 100%;"
-                @change="handleChange"
-              />
-              &lt;!&ndash;              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>&ndash;&gt;
-            </el-form-item>
-          </el-col>-->
+          <!--          <el-col :span="12">
+                      <el-form-item label="产品类别ID" prop="area">
+                        <el-cascader
+                          v-model="form.goodsTypeId"
+                          size="mini"
+                          :options="options"
+                          filterable
+                          clearable
+                          style="width: 100%;"
+                          @change="handleChange"
+                        />
+                        &lt;!&ndash;              <el-input v-model="form.area" placeholder="请输入客户所属地区"/>&ndash;&gt;
+                      </el-form-item>
+                    </el-col>-->
 
           <el-col :span="12">
             <el-form-item label="产品编码" prop="goodsCode">
-              <el-input v-model="form.goodsCode" placeholder="请输入产品编码" />
+              <el-input v-model="form.goodsCode" placeholder="请输入产品编码"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="产品名称" prop="goodsName">
-              <el-input v-model="form.goodsName" placeholder="请输入产品名称" />
+              <el-input v-model="form.goodsName" placeholder="请输入产品名称"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="产品品牌" prop="goodsBrand">
-              <el-input v-model="form.goodsBrand" placeholder="请输入产品品牌" />
+              <el-input v-model="form.goodsBrand" placeholder="请输入产品品牌"/>
             </el-form-item>
           </el-col>
-<!--
-          <el-col :span="12">
-            <el-form-item label="产品条码" prop="goodsBarcode">
-              <el-input v-model="form.goodsBarcode" placeholder="请输入产品条码" />
-            </el-form-item>
-          </el-col>-->
+          <!--
+                    <el-col :span="12">
+                      <el-form-item label="产品条码" prop="goodsBarcode">
+                        <el-input v-model="form.goodsBarcode" placeholder="请输入产品条码" />
+                      </el-form-item>
+                    </el-col>-->
           <el-col :span="12">
             <el-form-item label="规格" prop="goodsSearchstandard">
-              <el-input v-model="form.goodsSearchstandard" placeholder="请输入规格" />
+              <el-input v-model="form.goodsSearchstandard" placeholder="请输入规格"/>
             </el-form-item>
           </el-col>
-<!--          <el-col :span="12">
-            <el-form-item label="产品颜色" prop="goodsColor">
-              <el-input v-model="form.goodsColor" placeholder="请输入产品颜色" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="所属库位名称" prop="supplierName">
-              <el-autocomplete
-                style="width: 100%"
-                v-model="form.storageName"
-                :fetch-suggestions="queryStorageNameSearchAsync"
-                placeholder="请输入所属库位名称"
-                @select="handleSelectStorageName"
-              ></el-autocomplete>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="所属库位主键" prop="storageId">
-              <el-input v-model="form.storageId" placeholder="请输入所属库位主键" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="产品重量(千克)" prop="goodsWeight">
-              <el-input v-model="form.goodsWeight" placeholder="请输入产品重量(单位:千克)" />
-            </el-form-item>
-          </el-col>-->
+          <!--          <el-col :span="12">
+                      <el-form-item label="产品颜色" prop="goodsColor">
+                        <el-input v-model="form.goodsColor" placeholder="请输入产品颜色" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="所属库位名称" prop="supplierName">
+                        <el-autocomplete
+                          style="width: 100%"
+                          v-model="form.storageName"
+                          :fetch-suggestions="queryStorageNameSearchAsync"
+                          placeholder="请输入所属库位名称"
+                          @select="handleSelectStorageName"
+                        ></el-autocomplete>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="所属库位主键" prop="storageId">
+                        <el-input v-model="form.storageId" placeholder="请输入所属库位主键" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="产品重量(千克)" prop="goodsWeight">
+                        <el-input v-model="form.goodsWeight" placeholder="请输入产品重量(单位:千克)" />
+                      </el-form-item>
+                    </el-col>-->
           <el-col :span="12">
             <el-form-item label="产品单位" prop="goodsUnit">
-              <el-input v-model="form.goodsUnit" placeholder="产品单位" />
+              <el-input v-model="form.goodsUnit" placeholder="产品单位"/>
             </el-form-item>
           </el-col>
-<!--          <el-col :span="12">
+          <el-col :span="12">
             <el-form-item label="成本价" prop="costPrice">
-              <el-input v-model="form.costPrice" placeholder="请输入成本价" />
+              <el-input v-model="form.costPrice" placeholder="请输入成本价"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="零售价" prop="retailPrice">
-              <el-input v-model="form.retailPrice" placeholder="请输入零售价" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="销售价" prop="sellingPrice">
-              <el-input v-model="form.sellingPrice" placeholder="请输入销售价" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="批发价" prop="wholesalePrice">
-              <el-input v-model="form.wholesalePrice" placeholder="请输入批发价" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="成本价锁定" prop="isCost">
-              <el-input v-model="form.isCost" placeholder="请输入成本价锁定" />
-            </el-form-item>
-          </el-col>-->
+          <!--       <el-col :span="12">
+                 <el-form-item label="零售价" prop="retailPrice">
+                   <el-input v-model="form.retailPrice" placeholder="请输入零售价" />
+                 </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                 <el-form-item label="销售价" prop="sellingPrice">
+                   <el-input v-model="form.sellingPrice" placeholder="请输入销售价" />
+                 </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                 <el-form-item label="批发价" prop="wholesalePrice">
+                   <el-input v-model="form.wholesalePrice" placeholder="请输入批发价" />
+                 </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                 <el-form-item label="成本价锁定" prop="isCost">
+                   <el-input v-model="form.isCost" placeholder="请输入成本价锁定" />
+                 </el-form-item>
+               </el-col>-->
           <el-col :span="12">
             <el-form-item label="安全库存" prop="safetyStock">
-              <el-input v-model="form.safetyStock" placeholder="请输入安全库存" />
+              <el-input v-model="form.safetyStock" placeholder="请输入安全库存"/>
             </el-form-item>
           </el-col>
-<!--          <el-col :span="12">
-          <el-form-item label="实时库存" prop="stockNumber">
-            <el-input v-model="form.stockNumber" placeholder="请输入实时库存" />
-          </el-form-item>
-        </el-col>-->
+          <!--          <el-col :span="12">
+                    <el-form-item label="实时库存" prop="stockNumber">
+                      <el-input v-model="form.stockNumber" placeholder="请输入实时库存" />
+                    </el-form-item>
+                  </el-col>-->
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
 
@@ -281,7 +294,14 @@
 </template>
 
 <script>
-import { listShopGoods, getShopGoods, delShopGoods, addShopGoods, updateShopGoods ,goodsTree} from "@/api/shopGoods/shopGoods";
+import {
+  listShopGoods,
+  getShopGoods,
+  delShopGoods,
+  addShopGoods,
+  updateShopGoods,
+  goodsTree
+} from "@/api/shopGoods/shopGoods";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {listWhStorage} from "@/api/whStorage/whStorage";
 import {regionData} from "element-china-area-data";
@@ -327,34 +347,31 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "id不能为空", trigger: "blur" }
+          {required: true, message: "id不能为空", trigger: "blur"}
         ],
         supplierId: [
-          { required: true, message: "供应商ID不能为空", trigger: "blur" }
+          {required: true, message: "供应商ID不能为空", trigger: "blur"}
         ],
         supplierName: [
-          { required: true, message: "供应商名称不能为空", trigger: "blur,change" }
+          {required: true, message: "供应商名称不能为空", trigger: "blur,change"}
         ],
         goodsTypeId: [
-          { required: true, message: "产品类别ID不能为空", trigger: "blur" }
+          {required: true, message: "产品类别ID不能为空", trigger: "blur"}
         ],
         goodsCode: [
-          { required: true, message: "产品编码不能为空", trigger: "blur" }
-        ],
-        costPrice: [
-          { required: true, message: "产品成本价（进价）不能为空", trigger: "blur" }
+          {required: true, message: "产品编码不能为空", trigger: "blur"}
         ],
         goodsName: [
-          { required: true, message: "产品名称不能为空", trigger: "blur" }
+          {required: true, message: "产品名称不能为空", trigger: "blur"}
         ],
         goodsBrand: [
-          { required: true, message: "产品品牌不能为空", trigger: "blur" }
+          {required: true, message: "产品品牌不能为空", trigger: "blur"}
         ],
         safetyStock: [
-          { required: true, message: "安全库存不能为空", trigger: "blur" }
+          {required: true, message: "安全库存不能为空", trigger: "blur"}
         ],
         goodsUnit: [
-          { required: true, message: "产品单位不能为空", trigger: "change" }
+          {required: true, message: "产品单位不能为空", trigger: "change"}
         ],
       }
     };
@@ -371,12 +388,12 @@ export default {
         return;
       }
 
-      var valueElement = value[value.length-1];
+      var valueElement = value[value.length - 1];
       console.log(valueElement)
       this.form.goodsTypeId = valueElement.toString();
 
     },
-    goodsTree(){
+    goodsTree() {
       console.log("response")
       goodsTree().then(response => {
         console.log("response")
@@ -442,7 +459,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -502,6 +519,10 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    // 跳转到报表页面
+    handleReport(row) {
+      this.$router.push("/shopGoods?view=815942048834867200&goodsCode=" + row.goodsCode);
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -568,7 +589,7 @@ export default {
       });
 
     },
-    handleSelectStorageName(item){
+    handleSelectStorageName(item) {
       this.form.storageId = item.item.storageId;
       console.log(item);
     },

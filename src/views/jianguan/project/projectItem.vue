@@ -233,15 +233,21 @@
         show() {
             this.loading = true;
             this.reset();
+            this.open = true;
+            this.title = "项目详情";
+            console.log("获取到的ID:" + this.project.id);
             getProjectItem(this.project.id).then(response => {
                 this.loading = false;
                 // 项目主键、项目名称、项目编码从项目表带过来
-                response.data.id = this.project.id;
-                response.data.projectName = this.project.projectName;
-                response.data.projectCode = this.project.projectCode;
-                this.form = response.data;
-                this.open = true;
-                this.title = "项目详情";
+                const projectData = response.data;
+                projectData.id = this.project.id;
+                projectData.projectName = this.project.projectName;
+                projectData.projectCode = this.project.projectCode;
+                console.log("this.project");
+                console.log(this.project);
+                console.log("projectData");
+                console.log(projectData);
+                this.form = projectData;
             });
         },
         /** 提交按钮 */
@@ -249,6 +255,7 @@
             this.$refs["form"].validate(valid => {
                 if (valid) {
                     this.buttonLoading = true;
+                    console.log(this.form);
                     if (this.form.id != null) {
                         saveProjectItem(this.form).then(response => {
                             this.$modal.msgSuccess("保存成功");

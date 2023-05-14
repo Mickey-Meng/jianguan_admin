@@ -27,7 +27,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开票金额" prop="invoiceAmount">
+<!--      <el-form-item label="开票金额" prop="invoiceAmount">
         <el-input
           v-model="queryParams.invoiceAmount"
           placeholder="请输入本次开票金额"
@@ -42,7 +42,7 @@
                         value-format="yyyy-MM-dd"
                         placeholder="请选择开票日期">
         </el-date-picker>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -165,15 +165,12 @@
               <el-input v-model="form.contractName" placeholder="请输入合同名称"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="客户id" prop="customerId">
-              <el-input v-model="form.customerId" placeholder="请输入客户id"/>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="客户名称" prop="customerName">
               <el-input v-model="form.customerName" placeholder="请输入客户名称"/>
             </el-form-item>
+            <input v-model="form.customerId"  type="hidden"/>
           </el-col>
           <el-col :span="12">
             <el-form-item label="发票编号" prop="invoiceNo">
@@ -181,7 +178,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="本次开票金额" prop="invoiceAmount">
+            <el-form-item label="含税金额" prop="invoiceAmount">
               <el-input v-model="form.invoiceAmount" placeholder="请输入本次开票金额"/>
             </el-form-item>
           </el-col>
@@ -202,7 +199,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="银行流水截图" prop="fj">
-              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
+              <image-upload v-model="form.fj" ></image-upload>
             </el-form-item>
           </el-col>
 

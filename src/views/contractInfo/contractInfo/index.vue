@@ -41,7 +41,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="合同总金额" prop="htzje">
+      <el-form-item label="合同总金额（元）" prop="htzje">
         <el-input
           v-model="queryParams.htzje"
           placeholder="请输入合同总金额"
@@ -261,7 +261,7 @@
       <el-table-column label="标段编号" align="center" min-width="100" prop="bdbh" />
       <el-table-column label="合同编号" align="center" min-width="100" prop="htbh" />
       <el-table-column label="项目名称" align="center" min-width="120" prop="xmmc" />
-      <el-table-column label="合同总金额" align="center" min-width="100" prop="htzje">
+      <el-table-column label="合同总金额（元）" align="center" min-width="100" prop="htzje">
         <template slot-scope="scope">
           <div>
             {{ dealNumberFormat(scope.row.htzje) }}

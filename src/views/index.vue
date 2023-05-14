@@ -30,7 +30,8 @@ import todoList from '@/views/workspace/todoList';
 export default {
   name: "Index",
   components: {
-    todo, commonFunctions, todoList
+
+    // todo, commonFunctions, todoList
   },
   data() {
     return {

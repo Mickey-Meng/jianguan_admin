@@ -69,6 +69,13 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
+        <el-upload
+          :action="uploadUrl"
+        >
+          <el-button size="small" type="primary">导入</el-button>
+        </el-upload>
+      </el-col>
+      <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -114,6 +121,14 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['warehousing:warehousing:remove']"
           >删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleReport(scope.row)"
+            v-hasPermi="['warehousing:warehousing:remove']"
+          >报表
           </el-button>
         </template>
       </el-table-column>
@@ -289,7 +304,7 @@
               <el-date-picker clearable
                               v-model="form.incomeDate"
                               type="datetime"
-                              value-format="yyyy-MM-dd HH:mm:ss"
+                              value-format="yyyy-MM-dd"
                               placeholder="请选择进货日期，默认系统当天日期">
               </el-date-picker>
             </el-form-item>
@@ -299,22 +314,22 @@
               <el-date-picker clearable
                               v-model="form.lastPaymentDate"
                               type="datetime"
-                              value-format="yyyy-MM-dd HH:mm:ss"
+                              value-format="yyyy-MM-dd"
                               placeholder="请选择最后付款日期">
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="进货基准价截图" prop="fj">
-              <upload @input="getFileList"/>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
-
+          <el-col :span="12">
+            <el-form-item label="进货基准价截图" prop="fj">
+              <image-upload v-model="form.fj" ></image-upload>
+            </el-form-item>
+          </el-col>
 
         </el-row>
       </el-form>
@@ -343,6 +358,7 @@ export default {
   dicts: ['warehousing_status'],
   data() {
     return {
+      uploadUrl: process.env.VUE_APP_BASE_API+'/warehousing/warehousing/import',
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -534,6 +550,10 @@ export default {
           }
         }
       });
+    },
+    // 跳转到报表页面
+    handleReport(row) {
+      this.$router.push("/warehousing?view=815558720411283456&warehousingCode=" + row.warehousingCode);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

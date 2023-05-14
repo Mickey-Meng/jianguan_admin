@@ -169,44 +169,14 @@
               <el-input v-model="form.address" placeholder="请输入地址"/>
             </el-form-item>
           </el-col>
-          <!--          <el-col :span="12">
-                  <el-form-item label="级别(关联字典)" prop="supplierLevel">
-                    <el-input v-model="form.supplierLevel" placeholder="请输入级别(关联字典)" />
-                  </el-form-item>
-                    </el-col>-->
-<!--          <el-col :span="12">
-            <el-form-item label="发票抬头" prop="invoiceLookedUp">
-              <el-input v-model="form.invoiceLookedUp" placeholder="请输入发票抬头"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="发票税率" prop="invoiceTax">
-              <el-input v-model="form.invoiceTax" placeholder="请输入发票税率"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="总付款金额" prop="payed">
-              <el-input v-model="form.payed" placeholder="请输入总付款金额"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="总欠款金额" prop="unpaid">
-              <el-input v-model="form.unpaid" placeholder="请输入总欠款金额"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="已开发票金额" prop="invoiceAmount">
-              <el-input v-model="form.invoiceAmount" placeholder="请输入已开发票金额"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="欠发票金额" prop="uninvoiceAmount">
-              <el-input v-model="form.uninvoiceAmount" placeholder="请输入欠发票金额"/>
-            </el-form-item>
-          </el-col>-->
           <el-col :span="12">
             <el-form-item label="" label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="营业执照" prop="fj">
+              <image-upload v-model="form.fj" ></image-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -227,6 +197,8 @@ import {
   addBasisSupplier,
   updateBasisSupplier
 } from "@/api/basisSupplier/basisSupplier";
+import {checkFileSize, checkFileType, listOssIdToString} from "@/utils/upload";
+import {delOss} from "@/api/system/oss";
 
 export default {
   name: "BasisSupplier",
@@ -400,17 +372,112 @@ export default {
         this.loading = false;
       });
     },
-    /** 删除按钮操作 */
+    /** 查看合同按钮操作 */
     handleContract(row) {
-
-        this.$modal.msgSuccess("暂未开放");
-
+      // 跳转到报表页面
+      // this.$router.push("/contractInfoPurchase?pageNum=1&pageSize=10&supplierName=" + row.supplierName);
+      this.$router.push({
+        path:'/contractInfoPurchase',
+        query: {
+          supplierName: row.supplierName
+        }
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download('basisSupplier/basisSupplier/export', {
         ...this.queryParams
       }, `basisSupplier_${new Date().getTime()}.xlsx`)
+    },
+    /************************* 上传相关 **************************** */
+    checkFileSuffix(projectPicUrl) {
+      if (projectPicUrl !== undefined) {
+        let fileSuffix = projectPicUrl.substring(projectPicUrl.lastIndexOf('.') + 1 );
+        return this.allowFileTypes.some(type => {
+          return fileSuffix.indexOf(type) > -1;
+        });
+      }
+      return false;
+    },
+    // 上传前校检格式和大小
+    handleBeforeUpload(file) {
+      // 校检文件类型
+      let isTypePass = checkFileType(file, this.allowFileTypes);
+      // 校检文件大小
+      let isSizePass = checkFileSize(file, this.allowMaxFileSize);
+      console.log("isTypePass:" + isTypePass + " | isSizePass:" + isSizePass);
+      if (isTypePass && isSizePass) {
+        this.fileNumber++;
+        this.$modal.loading("正在上传文件，请稍候...");
+      }
+      return isTypePass && isSizePass;
+    },
+
+    // 上传失败
+    handleUploadError(err) {
+      this.$modal.msgError("上传图片失败，请重试");
+      this.$modal.closeLoading();
+    },
+    // 上传成功回调
+    handleUploadSuccess(res, file) {
+      console.log("upload->handleUploadSuccess...");
+      console.log(res);
+      if (res.code === 200) {
+        this.uploadList.push({name: res.data.fileName, url: res.data.url, ossId: res.data.ossId});
+        this.uploadedSuccessfully();
+      } else {
+        this.fileNumber--;
+        this.$modal.closeLoading();
+        this.$modal.msgError(res.msg);
+        this.$refs.fileUpload.handleRemove(file);
+        this.uploadedSuccessfully();
+      }
+    },
+    // 删除文件
+    handleDeleteFile(data) {
+      console.log("upload->handleDeleteFile...");
+      console.log(data);
+      delOss(data.ossId);
+      this.fileList = this.fileList.filter(t => t.uid !== data.uid);
+      let ossIds = listOssIdToString(this.fileList);
+      this.$emit("input", ossIds);
+      this.from.projectPic = ossIds;
+      this.fileNumber--;
+      if (this.fileNumber === 0) {
+        this.isDisabled = false;
+      }
+    },
+    // 上传结束处理
+    uploadedSuccessfully() {
+      console.log("upload->uploadedSuccessfully...");
+      console.log("fileNumber:" + this.fileNumber + " | uploadList.length:" + this.uploadList.length);
+      if (this.fileNumber > 0 && this.uploadList.length === this.fileNumber) {
+        this.fileList = this.fileList.concat(this.uploadList);
+        this.uploadList = [];
+        this.fileNumber = 0;
+        let ossIds = listOssIdToString(this.fileList);
+        this.$emit("input", ossIds);
+        this.form.projectPic = ossIds;
+        this.isDisabled = true;
+        this.$modal.closeLoading();
+      } else {
+        $modal.msgError(`最多上传${this.fileLimit}个文件!`);
+      }
+    },
+
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      this.$download.oss(file.ossId)
+    },
+    handleExceed(files, fileList) {
+      console.log(files);
+      console.log(fileList);
+      this.$message.warning(`当前限制可上传 ${this.fileLimit}个文件，当前已上传 ${files.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
     }
   }
 };

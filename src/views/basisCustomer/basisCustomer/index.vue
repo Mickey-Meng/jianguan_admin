@@ -133,6 +133,7 @@
           v-hasPermi="['basisCustomer:basisCustomer:remove']"
         >删除
         </el-button>
+
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -171,6 +172,13 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['basisCustomer:basisCustomer:remove']"
           >删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleContract(scope.row)"
+          >查看合同
           </el-button>
         </template>
       </el-table-column>
@@ -496,6 +504,16 @@ export default {
         this.open = true;
         this.title = "修改客户资料";
       });
+    },
+    /** 查看合同按钮操作 */
+    handleContract(row) {
+      // 跳转到报表页面
+      this.$router.push({
+        path:'/glycontract/contractInfoSale',
+        query: {
+          customerName: row.customerName
+        }
+      })
     },
     /** 提交按钮 */
     submitForm() {

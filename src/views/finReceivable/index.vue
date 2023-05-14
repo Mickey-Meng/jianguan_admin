@@ -80,11 +80,11 @@
     <el-table v-loading="loading" :data="finReceivableList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
-      <el-table-column label="合同编号" align="center" prop="contractCode"/>
-      <el-table-column label="合同名称" align="center" prop="contractName"/>
-      <el-table-column label="客户id" align="center" prop="customerId" v-if="false"/>
-      <el-table-column label="客户名称" align="center" prop="customerName"/>
+<!--      <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>-->
+<!--      <el-table-column label="合同编号" align="center" prop="contractCode"/>-->
+<!--      <el-table-column label="合同名称" align="center" prop="contractName"/>-->
+<!--      <el-table-column label="客户id" align="center" prop="customerId" v-if="false"/>-->
+<!--      <el-table-column label="客户名称" align="center" prop="customerName"/>-->
       <el-table-column label="本次收款款金额" align="center" prop="receivableAmount" v-if="false"/>
       <el-table-column label="收款日期" align="center" prop="receivableDate" width="180">
         <template slot-scope="scope">
@@ -116,6 +116,13 @@
             v-hasPermi="['ql:finReceivable:remove']"
           >删除
           </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleReport(scope.row)"
+          >报表
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -132,36 +139,36 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="合同编号" prop="contractCode">
-              <el-autocomplete
-                style="width: 100%"
-                v-model="form.contractCode"
-                :fetch-suggestions="queryContractSaleSearchAsync"
-                placeholder="请输入合同编号"
-                @select="handleContractSaleSelect"
-              ></el-autocomplete>
-            </el-form-item>
-            <input v-model="form.contractId" type="hidden"/>
-          </el-col>
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="合同编号" prop="contractCode">-->
+<!--              <el-autocomplete-->
+<!--                style="width: 100%"-->
+<!--                v-model="form.contractCode"-->
+<!--                :fetch-suggestions="queryContractSaleSearchAsync"-->
+<!--                placeholder="请输入合同编号"-->
+<!--                @select="handleContractSaleSelect"-->
+<!--              ></el-autocomplete>-->
+<!--            </el-form-item>-->
+<!--            <input v-model="form.contractId" type="hidden"/>-->
+<!--          </el-col>-->
 
-          <el-col :span="12">
-            <el-form-item label="合同名称" prop="contractName">
-              <el-input v-model="form.contractName" placeholder="请输入合同名称"/>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="合同名称" prop="contractName">-->
+<!--              <el-input v-model="form.contractName" placeholder="请输入合同名称"/>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
 
-          <el-col :span="12">
-            <el-form-item label="客户名称" prop="customerName">
-              <el-input v-model="form.customerName" placeholder="请输入客户名称"/>
-              <input v-model="form.customerId" type="hidden"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="本次收款款金额" prop="receivableAmount">
-              <el-input v-model="form.receivableAmount" placeholder="请输入本次收款款金额"/>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="客户名称" prop="customerName">-->
+<!--              <el-input v-model="form.customerName" placeholder="请输入客户名称"/>-->
+<!--              <input v-model="form.customerId" type="hidden"/>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="12">-->
+<!--            <el-form-item label="本次收款款金额" prop="receivableAmount">-->
+<!--              <el-input v-model="form.receivableAmount" placeholder="请输入本次收款款金额"/>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="12">
             <el-form-item label="收款日期" prop="receivableDate">
               <el-date-picker clearable
@@ -198,10 +205,15 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="银行流水截图" prop="fj">
-              <el-input v-model="form.fj" type="textarea" placeholder="请输入内容"/>
+              <image-upload v-model="form.fj" ></image-upload>
             </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
+                      label-position="right" label-width="140px" child-label-width="120px" :data="form">
+            </wti-form>
           </el-col>
         </el-row>
       </el-form>
@@ -222,8 +234,8 @@ import {
   addFinReceivable,
   updateFinReceivable
 } from "@/api/finReceivable/finReceivable";
-import {listShopGoods} from "@/api/shopGoods/shopGoods";
 import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
+import fields from './fields';
 
 export default {
   name: "FinReceivable",
@@ -267,26 +279,28 @@ export default {
         fj: undefined
       },
       // 表单参数
-      form: {},
+      form: {
+        receivableOutboundRels:[]
+      },
       // 表单校验
       rules: {
         id: [
           {required: true, message: "id不能为空", trigger: "blur"}
         ],
         contractId: [
-          {required: true, message: "合同id不能为空", trigger: "blur"}
-        ],
-        contractCode: [
-          {required: true, message: "合同编号不能为空", trigger: "onchange"}
-        ],
-        contractName: [
-          {required: true, message: "合同名称不能为空", trigger: "blur"}
+        //   {required: true, message: "合同id不能为空", trigger: "blur"}
+        // ],
+        // contractCode: [
+        //   {required: true, message: "合同编号不能为空", trigger: "onchange"}
+        // ],
+        // contractName: [
+        //   {required: true, message: "合同名称不能为空", trigger: "blur"}
         ],
         customerId: [
-          {required: true, message: "客户id不能为空", trigger: "blur"}
-        ],
-        customerName: [
-          {required: true, message: "客户名称不能为空", trigger: "blur"}
+        //   {required: true, message: "客户id不能为空", trigger: "blur"}
+        // ],
+        // customerName: [
+        //   {required: true, message: "客户名称不能为空", trigger: "blur"}
         ],
         receivableAmount: [
           {required: true, message: "本次收款款金额不能为空", trigger: "blur"}
@@ -306,13 +320,17 @@ export default {
         invoiceNo: [
           {required: true, message: "发票编号不能为空", trigger: "blur"}
         ]
-      }
+      },
+      fields
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    updateValue(params) {
+
+    },
     /** 查询收款记录列表 */
     getList() {
       this.loading = true;
@@ -391,6 +409,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.receivableOutboundRels = this.$refs.wtiForm.formData.receivableOutboundRels;
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateFinReceivable(this.form).then(response => {
@@ -411,6 +430,10 @@ export default {
           }
         }
       });
+    },
+    // 跳转到报表页面
+    handleReport(row) {
+      this.$router.push("/receivable?view=816087729222406144&contractCode=" + row.contractCode);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

@@ -103,7 +103,7 @@
       <el-table-column label="合同编码" align="center" prop="contractCode"/>
       <el-table-column label="合同名称" align="center" prop="contractName"/>
       <el-table-column label="供应商名称" align="center" prop="supplierName"/>
-      <el-table-column label="总金额" align="center" prop="amount"/>
+      <el-table-column label="总金额(元)" align="center" prop="amount"/>
       <el-table-column label="合同签订时间" align="center" prop="contactDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contactDate, '{y}-{m}-{d}') }}</span>
@@ -166,10 +166,14 @@
               <input v-model="form.supplierId" type="hidden"/>
             </el-form-item>
           </el-col>
- 
           <el-col :span="12">
-            <el-form-item label="总金额" prop="amount">
-              <el-input v-model="form.amount" :disabled="true" placeholder="请输入总金额"/>
+            <el-form-item label="账期（天）" prop="accountPeriod">
+              <el-input v-model="form.accountPeriod" placeholder="请输入账期" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="总金额（元）" prop="amount">
+              <el-input v-model="form.amount" :disabled="true" placeholder="请输入总金额（元）"/>
             </el-form-item>
           </el-col>
 
@@ -237,14 +241,15 @@
               <el-input v-model="form.rate" placeholder="请输入数字"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="附件地址">
-              <upload @input="getFileList"/>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="附件">
+              <upload @input="getFileList"/>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -374,6 +379,7 @@ export default {
     };
   },
   created() {
+    this.queryParams.supplierName = this.$route.query.supplierName || undefined;
     this.getList();
   },
   methods: {

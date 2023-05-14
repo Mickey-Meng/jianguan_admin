@@ -91,7 +91,7 @@
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.empGender"/>
         </template>
       </el-table-column>
-      <el-table-column label="基础工资" align="center" prop="empBasepay"/>
+      <el-table-column label="基础工资" align="center" prop="empBasepay"  v-if="false"/>
       <el-table-column label="身份证号码" align="center" prop="empId" width="220"/>
       <el-table-column label="手机号" align="center" prop="mobilePhone"/>
       <el-table-column label="紧急联系人" align="center" prop="emergencyContact"/>
@@ -167,11 +167,11 @@
               <el-input v-model="form.deptName" placeholder="请输入部门描述" />
             </el-form-item>
           </el-col>
-        <el-col :span="12">
+<!--        <el-col :span="12">
           <el-form-item label="基础工资" prop="empBasepay">
             <el-input v-model="form.empBasepay" placeholder="请输入基础工资"/>
           </el-form-item>
-        </el-col>
+        </el-col>-->
         <el-col :span="12">
           <el-form-item label="身份证号码" prop="empId">
             <el-input v-model="form.empId" placeholder="请输入身份证号码"/>
@@ -262,9 +262,7 @@ export default {
         empGender: [
           {required: true, message: "性别不能为空", trigger: "change"}
         ],
-        empBasepay: [
-          {required: true, message: "基础工资不能为空", trigger: "blur"}
-        ],
+
         empId: [
           {required: true, message: "身份证号码不能为空", trigger: "blur"}
         ],
@@ -303,7 +301,6 @@ export default {
         empAge: undefined,
         empGender: undefined,
         empRzDate: undefined,
-        empBasepay: undefined,
         deptName: undefined,
         empId: undefined,
         empAddr: undefined,

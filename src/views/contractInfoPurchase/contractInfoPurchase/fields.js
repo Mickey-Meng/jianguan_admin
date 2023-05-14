@@ -57,14 +57,6 @@ const fields = [
                         },
                     },
                     {
-                        'type': 'input',
-                        'key': 'proudctId',
-                        'label': '产品id',
-                        'placeholder': '',
-                        'size': 12,
-                        'disableDefault': true,
-                    },
-                    {
                         'type': 'money-input',
                         'key': 'price', // 1
                         'label': '单价',
@@ -103,6 +95,15 @@ const fields = [
                         ],
                         'size': 12,
                         'disableDefault': true,
+                    },
+                    {
+                    'type': 'input',
+                    'key': 'proudctId',
+                    'label': '产品id',
+                    'placeholder': '',
+                    'size': 12,
+                    'style': {'display': "none"},
+                    'disableDefault': true,
                     },
                 ],
             },

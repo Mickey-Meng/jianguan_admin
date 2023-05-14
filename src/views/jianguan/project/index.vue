@@ -295,9 +295,16 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="显示排序" prop="orderNum">
-              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
-            </el-form-item>
+              <el-form-item label="项目状态">
+                <el-select v-model="form.status" placeholder="请选择项目状态">
+                  <el-option
+                    v-for="dict in dict.type.jg_project_status"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
 
             <el-col :span="12">
@@ -381,17 +388,24 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
+              <el-form-item label="显示排序" prop="orderNum">
+              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+            </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
               <el-form-item label="备注" prop="remark">
                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
               </el-form-item>
             </el-col>
-            
+          </el-row>
+          <el-row>
             <el-col :span="12">
               <el-form-item label="项目照片">
                 <image-upload v-model="form.projectPic"/>
               </el-form-item>
               
-              <el-form-item label="项目照片" v-if="false">
+              <el-form-item label="项目照片" v-if="true">
                 <el-upload
                   multiple
                   class="upload-demo"
@@ -625,7 +639,7 @@ export default {
         parentId: undefined,
         projectArea: undefined,
         groupLevel: undefined,
-        status: 0,
+        status: undefined,
         visible: undefined,
         orderNum: undefined,
         groupId: undefined,
@@ -764,14 +778,19 @@ export default {
     // 更多操作触发
     handleCommand(command, row) {
       this.currentProject = row;
+      console.log("当前数据ID:" + row.id);
       switch (command) {
         case "handleProjectItem":
           // 项目详情操作
-          this.$refs.projectItem.show();
+          setTimeout(() =>{
+            this.$refs.projectItem.show();
+          }, 200);
           break;
         case "handleRelatedDept":
           // 关联部门
-          this.$refs.relatedProjectDept.show();
+          setTimeout(() =>{
+            this.$refs.relatedProjectDept.show();
+          }, 200);
           break;
         default:
           break;

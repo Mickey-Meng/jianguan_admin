@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="开票金额" prop="invoiceAmount">
+      <el-form-item label="含税金额" prop="invoiceAmount">
         <el-input
           v-model="queryParams.invoiceAmount"
           placeholder="请输入本次开票金额"
@@ -76,7 +76,7 @@
     <el-table v-loading="loading" :data="finInvoiceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="本次开票金额" align="center" prop="invoiceAmount"/>
+      <el-table-column label="含税金额" align="center" prop="invoiceAmount"/>
       <el-table-column label="欠开票金额" align="center" prop="uninvoice"  v-if="false"/>
       <el-table-column label="开票时间" align="center" prop="invoiceDate" width="180">
         <template slot-scope="scope">

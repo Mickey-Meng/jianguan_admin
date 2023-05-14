@@ -26,11 +26,15 @@ export default {
   },
   created() {
 // 从路由里动态获取 url地址   具体地址看libs下util.js里的 backendMenuToRoute  方法
-    var queryString =this. getQueryString("view");
+    var view =this.getQueryString("view");
 
-    console.log("=========", queryString)
-    console.log("=========", this.$route.fullPath)
-    this.reportUrl = "http://150.158.139.18:8085/jmreport/view/"+queryString;
+    var params = "?1=1";
+    for (let queryKey in this.$route.query) {
+      if(queryKey != 'view') {
+        params += "&"+queryKey+"="+this.$route.query[queryKey];
+      }
+    }
+    this.reportUrl = "http://150.158.139.18:8088/jmreport/view/"+view+params;
 
   },
   mounted() {

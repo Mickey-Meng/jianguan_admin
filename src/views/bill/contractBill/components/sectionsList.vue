@@ -32,7 +32,7 @@
         {{ dealNumberFormat(Number(scope.row.xzje)) }}
         </template>
       </el-table-column>
-      <el-table-column label="分解总金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
+      <el-table-column label="分解总金额（元）" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
         <template slot-scope="scope">
         {{ dealNumberFormat(Number(scope.row.shje)) }}
         </template>

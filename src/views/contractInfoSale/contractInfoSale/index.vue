@@ -111,7 +111,7 @@
       <el-table-column label="合同编码" align="center" prop="contractCode"/>
       <el-table-column label="合同名称" align="center" prop="contractName"/>
       <el-table-column label="客户名称" align="center" prop="customerName"/>
-      <el-table-column label="总金额" align="center" prop="amount"/>
+      <el-table-column label="总金额（元）" align="center" prop="amount"/>
       <el-table-column label="合同签订时间" align="center" prop="contactDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contactDate, '{y}-{m}-{d}') }}</span>
@@ -178,16 +178,11 @@
                 @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
+            <input v-model="form.customerId" type="hidden"/>
           </el-col>
 
-
           <el-col :span="12">
-            <el-form-item label="客户id" prop="customerId">
-              <el-input v-model="form.customerId" placeholder="请输入客户id"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="总金额" prop="amount">
+            <el-form-item label="总金额（元）" prop="amount">
               <el-input v-model="form.amount" placeholder="请输入总金额"/>
             </el-form-item>
           </el-col>
@@ -229,15 +224,15 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="客户联系人" prop="contactPerson">
-              <el-input v-model="form.contactPerson" placeholder="请输入供应商联系人" />
+              <el-input v-model="form.contactPerson" placeholder="请输入客户联系人" />
             </el-form-item>
           </el-col><el-col :span="12">
           <el-form-item label="客户联系方式" prop="mobilePhone">
-            <el-input v-model="form.mobilePhone" placeholder="请输入供应商联系方式" />
+            <el-input v-model="form.mobilePhone" placeholder="请输入客户联系方式" />
           </el-form-item>
         </el-col><el-col :span="12">
           <el-form-item label="销售人员" prop="purchaser">
-            <el-input v-model="form.purchaser" placeholder="请输入采购人员" />
+            <el-input v-model="form.purchaser" placeholder="请输入销售人员" />
           </el-form-item>
         </el-col><el-col :span="12">
           <el-form-item label="开始时间" prop="startDate">
@@ -273,7 +268,7 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="附件地址">
+            <el-form-item label="附件">
               <el-upload
 
                 multiple
@@ -431,6 +426,7 @@ export default {
     };
   },
   created() {
+    this.queryParams.customerName = this.$route.query.customerName || undefined;
     this.getList();
   },
   methods: {
