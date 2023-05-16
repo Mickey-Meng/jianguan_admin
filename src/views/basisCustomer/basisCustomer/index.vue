@@ -274,7 +274,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="电话" prop="telephoneOne">
+            <el-form-item label="紧急联系人电话" prop="telephoneOne">
               <el-input v-model="form.telephoneOne" placeholder="请输入紧急联系人电话"/>
             </el-form-item>
           </el-col>
@@ -284,7 +284,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="发票税率" prop="invoiceTax">
+            <el-form-item label="发票税率(%)" prop="invoiceTax">
               <el-input v-model="form.invoiceTax" placeholder="请输入发票税率"/>
             </el-form-item>
           </el-col>
@@ -322,6 +322,7 @@ import {
 } from "@/api/basisCustomer/basisCustomer";
 
 import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
+import formValidate from "@/plugins/formValidate/formValidate";
 
 export default {
   name: "BasisCustomer",
@@ -397,6 +398,13 @@ export default {
 
         publicBankNo: [
           { required: true, message: "公户账号不能为空", trigger: "blur" }
+        ],
+        invoiceTax: [
+          {
+            'validator': formValidate.validateRate(),
+            'trigger': ['change', 'blur'],
+          }
+
         ],
 
       }

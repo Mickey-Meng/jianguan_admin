@@ -282,6 +282,8 @@ import {delOss} from "@/api/system/oss";
 import fields from './fields';
 import upload from '@/components/FileUpload';
 import calc from '@/utils/calc.js'
+import formValidate from "@/plugins/formValidate/formValidate";
+
 
 export default {
   name: "ContractInfoPurchase",
@@ -373,6 +375,18 @@ export default {
         ],
         amount: [
           {required: true, message: "总金额不能为空", trigger: "blur"}
+        ],
+        accountPeriod: [
+          {
+            'validator': formValidate.checkNumberIsNotZero(),
+            'trigger': ['change', 'blur'],
+          }
+        ],
+        rate: [
+          {
+            'validator': formValidate.validateRate(),
+            'trigger': ['change', 'blur'],
+          }
         ],
       },
       fields

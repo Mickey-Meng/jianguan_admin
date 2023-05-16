@@ -127,13 +127,9 @@
 
         <el-table v-loading="loading" :data="projectInfoList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="项目名称" align="center" prop="projectName" :show-overflow-tooltip="true" width="100"/>
+          <el-table-column label="项目名称" align="center" prop="projectName" :show-overflow-tooltip="true" width="300"/>
           <el-table-column label="项目编码" align="center" prop="projectCode" />
-          <el-table-column label="项目区域" align="center" prop="projectArea" >
-            <template slot-scope="scope">
-              <dict-tag :options="dict.type.jg_project_area" :value="scope.row.projectArea"/>
-            </template>
-          </el-table-column>
+
           <el-table-column label="状态" align="center" prop="status" >
             <template slot-scope="scope">
               <dict-tag :options="dict.type.jg_project_status" :value="scope.row.status"/>
@@ -144,37 +140,14 @@
               <dict-tag :options="dict.type.sys_show_hide" :value="scope.row.visible"/>
             </template>
           </el-table-column>
-          <el-table-column label="组织机构" align="center" prop="groupId" :show-overflow-tooltip="true"/>
-          <el-table-column label="是否自管" align="center" prop="isAuto" >
-            <template slot-scope="scope">
-              <dict-tag :options="dict.type.jg_yes_no" :value="scope.row.isAuto"/>
-            </template>
-          </el-table-column>
-          <el-table-column label="项目照片" align="center" prop="projectPic" >
-            <template slot-scope="scope">
-              <el-image
-                v-if="checkFileSuffix(scope.row.projectPic)"
-                style="width: 100px; height: 100px;"
-                :src="scope.row.url"
-                :preview-src-list="[scope.row.projectPic]"/>
-              <span v-text="scope.row.projectPic"
-                    v-if="!checkFileSuffix(scope.row.projectPic)"/>
-            </template>
-          </el-table-column>
 
-          <el-table-column label="合同号" align="center" prop="contractNum" />
-          <el-table-column label="坐标" align="center" prop="coordinate" />
+
           <el-table-column label="投资金额" align="center" prop="investment" />
           <el-table-column label="项目类型" align="center" prop="projectType" >
             <template slot-scope="scope">
               <dict-tag :options="dict.type.jg_project_type" :value="scope.row.projectType"/>
             </template>
           </el-table-column>
-          <el-table-column label="项目点" align="center" prop="projectPoint" :show-overflow-tooltip="true"/>
-          <el-table-column label="项目线" align="center" prop="projectLine" />
-          <el-table-column label="项目面" align="center" prop="projectSurface" />
-          <el-table-column label="项目简介" align="center" prop="introduction" :show-overflow-tooltip="true" />
-          <el-table-column label="备注" align="center" prop="remark" />
           <el-table-column label="操作" align="center" width="180" fixed="right">
             <template slot-scope="scope">
               <el-button
@@ -296,7 +269,7 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="项目状态">
-                <el-select v-model="form.status" placeholder="请选择项目状态">
+                <el-select v-model="form.status" placeholder="请选择项目状态" @change="$forceUpdate()">
                   <el-option
                     v-for="dict in dict.type.jg_project_status"
                     :key="dict.value"
@@ -402,10 +375,10 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="项目照片">
-                <image-upload v-model="form.projectPic"/>
+                <image-upload v-model="form.projectPic" :limit="fileLimit" :fileType="allowFileTypes" :isShowTip="true"/>
               </el-form-item>
-              
-              <el-form-item label="项目照片" v-if="true">
+
+              <el-form-item label="项目照片" v-if="false">
                 <el-upload
                   multiple
                   class="upload-demo"
@@ -483,7 +456,7 @@ export default {
       // 允许的文件类型
       allowFileTypes: [ "png", "jpg",  "jpeg"],
       // 运行上传文件大小，单位 M
-      allowMaxFileSize: 1,
+      allowMaxFileSize: 10,
       // 附件数量限制
       fileLimit: 1,
       // 已上传的文件大小

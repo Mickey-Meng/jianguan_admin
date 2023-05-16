@@ -216,6 +216,7 @@
 
 <script>
 import {listFinEmp, getFinEmp, delFinEmp, addFinEmp, updateFinEmp} from "@/api/finEmp/finEmp";
+import formValidate from "@/plugins/formValidate/formValidate";
 
 export default {
   name: "FinEmp",
@@ -262,9 +263,19 @@ export default {
         empGender: [
           {required: true, message: "性别不能为空", trigger: "change"}
         ],
+        empAge: [
+          {
+            'validator': formValidate.checkNumberIsNotZero(),
+            'trigger': ['change', 'blur'],
+          }
+        ],
 
         empId: [
-          {required: true, message: "身份证号码不能为空", trigger: "blur"}
+          {required: true, message: "身份证号码不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.validateIdCard(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         mobilePhone: [
           {required: true, message: "手机号不能为空", trigger: "blur"}

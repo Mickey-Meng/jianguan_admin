@@ -38,7 +38,10 @@ import VueMeta from 'vue-meta'
 // 字典数据组件
 import DictData from '@/components/DictData'
 // 表单组件
-import WtiForm from '@/components/WtiForm' 
+import WtiForm from '@/components/WtiForm'
+
+import dayjs from "dayjs"
+Vue.prototype.$dayjs = dayjs;
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts

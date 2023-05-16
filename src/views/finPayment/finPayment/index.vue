@@ -491,7 +491,7 @@ export default {
     },
     // 跳转到报表页面
     handleReport(row) {
-      this.$router.push("/finPayment?view=816077347061714944&warehousingCode=" + row.warehousingCode);
+      this.$router.push("/finPayment?view=816077347061714944&id=" + row.id);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

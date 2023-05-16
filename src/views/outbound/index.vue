@@ -305,17 +305,17 @@
               <el-input v-model="form.outboundNumber" placeholder="请输入出库数量"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="销售基准价截图" prop="fj">
-              <image-upload v-model="form.fj" ></image-upload>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
-
+          <el-col :span="12">
+            <el-form-item label="销售基准价截图" prop="fj">
+              <image-upload v-model="form.fj" ></image-upload>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
 
@@ -334,6 +334,7 @@ import {listProjectInfo} from "@/api/projectInfo/projectInfo";
 import {getBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
 import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase";
+import formValidate from "@/plugins/formValidate/formValidate";
 
 export default {
   name: "Outbound",
@@ -431,13 +432,25 @@ export default {
           {required: true, message: "商品单位不能为空", trigger: "blur"}
         ],
         basePrice: [
-          {required: true, message: "基准价不能为空", trigger: "blur"}
+          {required: true, message: "基准价不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         incomePrice: [
-          {required: true, message: "进货价不能为空", trigger: "blur"}
+          {required: true, message: "进货价不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         extraPrice: [
-          {required: true, message: "附加价格不能为空", trigger: "blur"}
+          {required: true, message: "附加价格不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         fj: [
           {required: true, message: "附件--销售基准价截图不能为空", trigger: "blur"}
@@ -446,10 +459,18 @@ export default {
           {required: true, message: "销售日期不能为空", trigger: "blur"}
         ],
         saleNumber: [
-          {required: true, message: "销售数量不能为空", trigger: "blur"}
+          {required: true, message: "销售数量不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkOnlyNumber(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         saleAmount: [
-          {required: true, message: "销售金额不能为空", trigger: "blur"}
+          {required: true, message: "销售金额不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         outboundUsername: [
           {required: true, message: "出库对接人不能为空", trigger: "blur"}
@@ -458,7 +479,11 @@ export default {
           {required: true, message: "出库审核人不能为空", trigger: "blur"}
         ],
         outboundNumber: [
-          {required: true, message: "出库数量不能为空", trigger: "blur"}
+          {required: true, message: "出库数量不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkOnlyNumber(),
+            'trigger': ['change', 'blur'],
+          }
         ],
       }
     };

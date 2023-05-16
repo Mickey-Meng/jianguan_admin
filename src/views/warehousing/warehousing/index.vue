@@ -202,12 +202,12 @@
           </el-col>-->
           <el-col :span="12">
             <el-form-item label="采购数量" prop="orderNumber">
-              <el-input v-model="form.orderNumber" placeholder="请输入采购数量"/>
+              <el-input v-model="form.orderNumber" placeholder="请输入采购数量" @blur="sumAmount"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="金额" prop="amount">
-              <el-input v-model="form.amount" />
+              <el-input v-model="form.amount" ref="amount" disabled/>
             </el-form-item>
           </el-col>
 <!--          <el-col :span="12">
@@ -242,7 +242,7 @@
                               v-model="form.arrivalDate"
                               type="datetime"
                               value-format="yyyy-MM-dd HH:mm:ss"
-                              placeholder="请选择到货日期">
+                              placeholder="请选择到货日期" @blur="calLastPaymentDate">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -290,7 +290,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="进货价" prop="incomePrice">
-              <el-input v-model="form.incomePrice" placeholder="请输入进货价"/>
+              <el-input v-model="form.incomePrice" placeholder="请输入进货价" @blur="sumAmount()"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -299,7 +299,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="12" v-show="false">
             <el-form-item label="进货日期" prop="incomeDate">
               <el-date-picker clearable
                               v-model="form.incomeDate"
@@ -312,6 +312,8 @@
           <el-col :span="12">
             <el-form-item label="最后付款日期" prop="lastPaymentDate">
               <el-date-picker clearable
+                              disabled
+                              ref="lastPaymentDate"
                               v-model="form.lastPaymentDate"
                               type="datetime"
                               value-format="yyyy-MM-dd"
@@ -328,6 +330,12 @@
           <el-col :span="12">
             <el-form-item label="进货基准价截图" prop="fj">
               <image-upload v-model="form.fj" ></image-upload>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12" v-show="false">
+            <el-form-item label="账期" prop="accountPeriod">
+              <image-upload v-model="form.accountPeriod" ></image-upload>
             </el-form-item>
           </el-col>
 
@@ -352,6 +360,8 @@ import {
 import {listShopGoods} from "@/api/shopGoods/shopGoods";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase"
+import formValidate from "@/plugins/formValidate/formValidate";
+import dayjs from "dayjs";
 
 export default {
   name: "Warehousing",
@@ -406,7 +416,11 @@ export default {
         ],
 
         orderNumber: [
-          {required: true, message: "入库数量不能为空", trigger: "blur"}
+          {required: true, message: "入库数量不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumber(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         proudctName: [
           {required: true, message: "产品名称不能为空", trigger: "onchange"}
@@ -424,25 +438,41 @@ export default {
           {required: true, message: "采购合同编码不能为空", trigger: "blur,onchange"}
         ],
         basePrice: [
-          {required: true, message: "基准价不能为空", trigger: "blur"}
+          {required: true, message: "基准价不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         incomePrice: [
-          {required: true, message: "进货价不能为空", trigger: "blur"}
+          {required: true, message: "进货价不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         extraPrice: [
-          {required: true, message: "附加价不能为空", trigger: "blur"}
+          {required: true, message: "附加价不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         supplierName: [
           {required: true, message: "供应商名称不能为空", trigger: "blur,onchange"}
         ],
         amount: [
-          {required: true, message: "金额不能为空", trigger: "blur"}
+          {required: true, message: "金额不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         warehousingReleaseuser: [
           {required: true, message: "审核人不能为空", trigger: "blur"}
         ],
         incomeDate: [
-          {required: true, message: "进货日期不能为空", trigger: "blur"}
+          {required: false, message: "进货日期不能为空", trigger: "blur"}
         ]
       }
     };
@@ -451,6 +481,22 @@ export default {
     this.getList();
   },
   methods: {
+    // 计算最后到账日期
+    calLastPaymentDate() {
+      let lastPaymentDate = dayjs(this.form.arrivalDate).add(this.form.accountPeriod, "day").format("YYYY-MM-DD HH:mm:ss");
+      if(lastPaymentDate) {
+        this.form.lastPaymentDate = lastPaymentDate;
+        this.$refs.lastPaymentDate.value = lastPaymentDate;
+      }
+    },
+    // 计算金额
+    sumAmount() {
+      let amount = this.form.orderNumber * this.form.incomePrice;
+      if(amount) {
+        this.form.amount = amount;
+        this.$refs.amount.value = amount;
+      }
+    },
     /** 查询入库管理列表 */
     getList() {
       this.loading = true;
@@ -488,7 +534,8 @@ export default {
         contractCode: undefined,
         supplierName: undefined,
         mobilePhone: undefined,
-        address: undefined
+        address: undefined,
+        accountPeriod: undefined
       };
       this.resetForm("form");
     },
@@ -638,6 +685,7 @@ export default {
                 mobilePhone: item.mobilePhone,
                 contractId: item.id,
                 purchaser: item.purchaser,
+                accountPeriod: item.accountPeriod
               }
             };
           });
@@ -658,6 +706,7 @@ export default {
       this.form.mobilePhone = item.item.mobilePhone;
       this.form.contractId = item.item.contractId;
       this.form.purchaser = item.item.purchaser;
+      this.form.accountPeriod = item.item.accountPeriod;
       console.log(item);
     },
     getFileList(val) {

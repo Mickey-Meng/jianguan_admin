@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '建管3.0',
+      title: '供应链管理系统',
       logo: logoImg
     }
   }

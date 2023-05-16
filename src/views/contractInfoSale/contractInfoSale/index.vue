@@ -314,6 +314,7 @@ import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import { delOss } from "@/api/system/oss";
 import {getToken} from "@/utils/auth";
+import formValidate from "@/plugins/formValidate/formValidate";
 export default {
   name: "ContractInfoSale",
   dicts: ['sys_yes_no'],
@@ -403,7 +404,11 @@ export default {
           {required: true, message: "客户id不能为空", trigger: "blur"}
         ],
         amount: [
-          {required: true, message: "总金额不能为空", trigger: "blur"}
+          {required: true, message: "总金额不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         retentionAmount: [
           {required: true, message: "质保金不能为空", trigger: "blur"}
@@ -413,8 +418,13 @@ export default {
         ],
 
         rate: [
-          {required: true, message: "税率不能为空", trigger: "blur"}
+          {required: true, message: "税率不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.validateRate(),
+            'trigger': ['change', 'blur'],
+          }
         ],
+
         area: [
           {required: true, message: "发货地不能为空", trigger: "blur"}
         ],

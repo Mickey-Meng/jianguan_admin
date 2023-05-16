@@ -353,13 +353,13 @@ export default {
         projectName: [
           {required: true, message: "项目名称不能为空", trigger: "blur"}
         ],
-        projectAmount: [
-          {required: true, message: "项目金额不能为空", trigger: "blur"},
+        projectDays: [
           {
-            'validator': formValidate.numberValidator('15/2', true),
+            'validator': formValidate.checkNumberIsNotZero(),
             'trigger': ['change', 'blur'],
-          },
+          }
         ],
+
         area: [
           {required: true, message: "项目所属地区不能为空", trigger: "change"}
         ]

@@ -208,6 +208,7 @@ import {
 } from "@/api/finInvoice/finInvoice";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase";
+import formValidate from "@/plugins/formValidate/formValidate";
 export default {
   name: "FinInvoice",
   data() {
@@ -250,7 +251,11 @@ export default {
           {required: true, message: "供应商id不能为空", trigger: "blur"}
         ],
         invoiceAmount: [
-          {required: true, message: "本次开票金额不能为空", trigger: "blur"}
+          {required: true, message: "本次开票金额不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberAmount(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         invoiceDate: [
           {required: true, message: "开票时间不能为空", trigger: "blur"}

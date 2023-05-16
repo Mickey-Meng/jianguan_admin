@@ -48,6 +48,17 @@
         <el-button
           type="success"
           plain
+          icon="el-icon-view"
+          size="mini"
+          :disabled="single"
+          @click="handleDetail"
+        >详情
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
@@ -90,6 +101,13 @@
       <el-table-column label="手机" align="center" prop="mobilePhone"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleDetail(scope.row)"
+          >详情
+          </el-button>
           <el-button
             size="mini"
             type="text"
@@ -182,7 +200,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -224,6 +242,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -318,11 +338,13 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.edit = true;
       this.title = "添加供应商管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.loading = true;
+      this.edit = true;
       this.reset();
       const id = row.id || this.ids
       getBasisSupplier(id).then(response => {
@@ -330,6 +352,19 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改供应商管理";
+      });
+    },
+    /** 详情按钮操作 */
+    handleDetail(row) {
+      this.loading = true;
+      this.edit = false;
+      this.reset();
+      const id = row.id || this.ids
+      getBasisSupplier(id).then(response => {
+        this.loading = false;
+        this.form = response.data;
+        this.open = true;
+        this.title = "查看供应商管理";
       });
     },
     /** 提交按钮 */
@@ -377,7 +412,7 @@ export default {
       // 跳转到报表页面
       // this.$router.push("/contractInfoPurchase?pageNum=1&pageSize=10&supplierName=" + row.supplierName);
       this.$router.push({
-        path:'/contractInfoPurchase',
+        path:'/glycontract/contractInfoPurchase',
         query: {
           supplierName: row.supplierName
         }

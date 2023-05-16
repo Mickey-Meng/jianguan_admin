@@ -91,7 +91,14 @@
                     
                     <el-col :span="12">
                         <el-form-item label="审计单位" prop="auditUnit">
-                            <el-input v-model="form.auditUnit" placeholder="请输入审计单位" />
+                            <el-select v-model="form.auditUnit" placeholder="请输入审计单位" @change="$forceUpdate()">
+                                <el-option
+                                    v-for="item in auditUnitOptions"
+                                    :key="item.id"
+                                    :label="item.companyName"
+                                    :value="item.id"
+                                ></el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -183,7 +190,7 @@
                 <el-row :gutter="20"> 
                     <el-col :span="12">
                         <el-form-item label="工程布局图">
-                            <image-upload v-model="form.engineeringLayoutImage"/>
+                            <image-upload v-model="form.engineeringLayoutImage" :limit="fileLimit" :fileType="allowFileTypes" :isShowTip="true"/>
                         </el-form-item>
                     </el-col>          
                 </el-row>
@@ -210,7 +217,27 @@
         // 按钮loading
         buttonLoading: false,
         // 遮罩层
-        loading: true,        
+        loading: true,
+
+        // 管理单位
+        manageDeptOptions: [],
+        // 建造单位
+        buildDeptOptions: [],
+        // 设计单位
+        desginDeptOptions: [],
+        // 施工单位
+        constructDeptOptions: [],
+        // 监理单位
+        supervisorDeptOptions: [],
+        // 审计单位
+        auditUnitOptions: [],
+
+        // 允许的文件类型
+        allowFileTypes: [ "png", "jpg",  "jpeg"],
+        // 运行上传文件大小，单位 M
+        allowMaxFileSize: 10,
+        // 附件数量限制
+        fileLimit: 1,        
         // 弹出层标题
         title: "",
         // 是否显示弹出层
@@ -239,15 +266,18 @@
             getProjectItem(this.project.id).then(response => {
                 this.loading = false;
                 // 项目主键、项目名称、项目编码从项目表带过来
-                const projectData = response.data;
-                projectData.id = this.project.id;
-                projectData.projectName = this.project.projectName;
-                projectData.projectCode = this.project.projectCode;
+                const responseData = response.data;
+                let projectItemData = responseData.projectItem;
+                projectItemData.id = this.project.id;
+                projectItemData.projectName = this.project.projectName;
+                projectItemData.projectCode = this.project.projectCode;
                 console.log("this.project");
                 console.log(this.project);
                 console.log("projectData");
-                console.log(projectData);
-                this.form = projectData;
+                console.log(projectItemData);
+                this.form = projectItemData;
+                this.auditUnitOptions = responseData.auditUnitOptions;
+                console.log(this.auditUnitOptions);
             });
         },
         /** 提交按钮 */
@@ -255,8 +285,14 @@
             this.$refs["form"].validate(valid => {
                 if (valid) {
                     this.buttonLoading = true;
+                    console.log(11111111111111111);
                     console.log(this.form);
-                    if (this.form.id != null) {
+                    this.form.id = this.project.id;
+                    this.form.projectName = this.project.projectName;
+                    this.form.projectCode = this.project.projectCode;
+                    console.log(22222222222222222);
+                    console.log(this.form);
+                    if (this.form.id > 0) {
                         saveProjectItem(this.form).then(response => {
                             this.$modal.msgSuccess("保存成功");
                             this.open = false;

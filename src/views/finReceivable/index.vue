@@ -433,7 +433,7 @@ export default {
     },
     // 跳转到报表页面
     handleReport(row) {
-      this.$router.push("/receivable?view=816087729222406144&contractCode=" + row.contractCode);
+      this.$router.push("/receivable?view=816087729222406144&id=" + row.id);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

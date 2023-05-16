@@ -154,12 +154,13 @@ class Validate {
             callback();
         };
     }
+    //校验金额类型
     checkNumberAmount () {
         return (rule, value, callback) => {
             if (!isEmpty(value)) {
                 const match = /^\d{1,20}(\.\d{1,2})?$/
                 if (!match.test(value)) {
-                    return callback(new Error('请输入正确的金额'))
+                    return callback(new Error('请输入正确的金额,保留两位小数'))
                 }
             }
             callback()
@@ -338,6 +339,10 @@ class Validate {
             }
         }
     }
+
+
+
+
     validate2dot8 = function (rule, value, callback) {
         const reg = /^[\d]{1,2}(\.[\d]{1,8})?$/
         if (!value) {
@@ -361,21 +366,19 @@ class Validate {
             callback()
         }
     }
-
-    // 校验数字、字母、中文、特殊符号 【】（）_-空格
-    checkSpecial2 () {
-        return (rule, value, callback) => {
-            if (value === '') {
-                callback()
-                return
-            }
-            const match = /^[0-9a-zA-Z\u4e00-\u9fa5\s-_[\]()【】·（）]+$/i
-            if (!match.test(value)) {
-                return callback(new Error('只能输入数字、字母、中文、特殊符号【】（）_-空格'))
-            }
-            callback()
+  //校验税率
+    validateRate () {
+      return (rule, value, callback) => {
+        if (!isEmpty(value)) {
+          const match = /^(?:0|[1-9]\d{0,2})(\.\d{1,2})?$/
+          if (!match.test(value)) {
+            return callback(new Error('只能输入三位以内整数,保留两位小数'))
+          }
         }
+        callback()
+      }
     }
+
 
     // 校验数字、字母、中文
     checkChineseCharNumber () {

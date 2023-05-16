@@ -304,6 +304,7 @@ import {
 } from "@/api/shopGoods/shopGoods";
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {listWhStorage} from "@/api/whStorage/whStorage";
+import formValidate from '@/plugins/formValidate/formValidate';
 import {regionData} from "element-china-area-data";
 
 export default {
@@ -368,10 +369,20 @@ export default {
           {required: true, message: "产品品牌不能为空", trigger: "blur"}
         ],
         safetyStock: [
-          {required: true, message: "安全库存不能为空", trigger: "blur"}
+          {required: true, message: "安全库存不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkNumberIsNotZero(),
+            'trigger': ['change', 'blur'],
+          }
         ],
         goodsUnit: [
           {required: true, message: "产品单位不能为空", trigger: "change"}
+        ],
+        costPrice: [
+          {
+            'validator': formValidate.numberValidator('15/2', true),
+            'trigger': ['change', 'blur'],
+          }
         ],
       }
     };
