@@ -25,7 +25,7 @@ const fields = [
                         querySearchAsync (queryString, cb, formItem) {
                             const queryParams = {
                                 productName: queryString,
-                                supplierName: localStorage.getItem("contractInfoPurchase_supplierName") || ''
+                                // supplierName: localStorage.getItem("contractInfoPurchase_supplierName") || ''
                             };
                             let flag = false;
                             listShopGoods(queryParams).then(response => {
@@ -98,11 +98,11 @@ const fields = [
                         'disableDefault': true,
                     },
                     {
-                    'type': 'input',
-                    'key': 'goodsId',
-                    'style': {'display': "none"},
-                    'disableDefault': true,
-                    },
+                      'type': 'input',
+                      'key': 'goodsId',
+                      'style': {'display': "none"},
+                      'disableDefault': true,
+                    }
                 ],
             },
         ],

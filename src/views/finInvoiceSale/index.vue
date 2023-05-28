@@ -120,7 +120,15 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['ql:finInvoiceSale:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['ql:finInvoiceSale:edit']"
           >修改
           </el-button>
@@ -207,7 +215,7 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm"  v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -249,6 +257,9 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -361,11 +372,13 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.edit = true;
       this.title = "添加销售开票";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isedit) {
       this.loading = true;
+      this.edit = isedit;
       this.reset();
       const id = row.id || this.ids
       getFinInvoiceSale(id).then(response => {

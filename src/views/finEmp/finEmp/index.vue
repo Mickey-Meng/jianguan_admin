@@ -84,9 +84,9 @@
     <el-table v-loading="loading" :data="finEmpList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="ID ,主键" align="center" prop="id" v-if="false"/>
-      <el-table-column label="姓名" align="center" prop="empName"/>
-      <el-table-column label="年龄" align="center" prop="empAge"/>
-      <el-table-column label="性别" align="center" prop="empGender">
+      <el-table-column label="姓名" align="center" prop="empName" width="100"/>
+      <el-table-column label="年龄" align="center" prop="empAge" width="100"/>
+      <el-table-column label="性别" align="center" prop="empGender" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.empGender"/>
         </template>
@@ -102,7 +102,15 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['finEmp:finEmp:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['finEmp:finEmp:edit']"
           >修改
           </el-button>
@@ -243,6 +251,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -343,12 +353,14 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加员工信息管理";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getFinEmp(id).then(response => {

@@ -99,7 +99,15 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['projectInfo:projectInfo:query']"
+          >查看
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['projectInfo:projectInfo:edit']"
           >修改
           </el-button>
@@ -246,7 +254,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -334,6 +342,9 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -436,6 +447,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加项目信息";
     },
@@ -445,8 +457,9 @@ export default {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getProjectInfo(id).then(response => {

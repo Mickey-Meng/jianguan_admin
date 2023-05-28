@@ -23,6 +23,7 @@ const fields = [
                         querySearchAsync (queryString, cb) {
                             const queryParams = {
                               warehousingCode: queryString,
+                              supplierName: localStorage.getItem("finPayment_supplierName") || ''
                             };
                             let flag = false;
                           listWarehousing(queryParams).then(response => {
@@ -65,6 +66,7 @@ const fields = [
                         'type': 'input',
                         'key': 'supplierName', // 1
                         'label': '供应商名称',
+                        'style': {'display': "none"},
                         'disableDefault': true,
                     },
                     {

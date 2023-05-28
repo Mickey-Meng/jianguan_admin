@@ -135,11 +135,7 @@
               <dict-tag :options="dict.type.jg_project_status" :value="scope.row.status"/>
             </template>
           </el-table-column>
-          <el-table-column label="是否显示" align="center" prop="visible" >
-            <template slot-scope="scope">
-              <dict-tag :options="dict.type.sys_show_hide" :value="scope.row.visible"/>
-            </template>
-          </el-table-column>
+
 
 
           <el-table-column label="投资金额" align="center" prop="investment" />
@@ -174,6 +170,8 @@
                     v-hasPermi="['jg:project:queryItem']">项目详情</el-dropdown-item>
                   <el-dropdown-item command="handleRelatedDept" icon="el-icon-connection"
                     v-hasPermi="['jg:project:related']">关联部门</el-dropdown-item>
+                    <el-dropdown-item command="handleMonitorDevices" icon="el-icon-connection"
+                    v-hasPermi="['jg:project:monitorDevice']">监控设备</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
 
@@ -252,16 +250,8 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="显示状态" prop="visible">
-                <el-radio-group v-model="form.visible">
-                  <el-radio
-                    v-for="dict in dict.type.sys_show_hide"
-                    :key="dict.value"
-                    :label="dict.value"
-                  >
-                    {{dict.label}}
-                  </el-radio>
-              </el-radio-group>
+              <el-form-item label="项目地图" prop="mapUrl">
+                <el-input v-model="form.mapUrl" placeholder="请输入项目地图" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -413,6 +403,9 @@
     <project-item :project="currentProject" ref="projectItem" @ok="doProjectItem" />
     <!-- 关联部门列表-->
     <related-project-dept :project="currentProject" ref="relatedProjectDept" @ok="doRelatedDept" />
+
+    <!-- 关联监控设备-->
+    <monitor-devices :project="currentProject" ref="monitorDevices" @ok="doRelatedDept" />
   </div>
 </template>
 
@@ -426,10 +419,11 @@ import { getToken } from "@/utils/auth";
 import { checkFileType, checkFileSize, getFileName, listOssIdToString } from "@/utils/upload";
 import projectItem from "./projectItem";
 import relatedProjectDept from "./relatedProjectDept";
+import monitorDevices from "./monitorDevices";
 
 export default {
   name: "jgProject",
-  components: { Treeselect, projectItem, relatedProjectDept },
+  components: { Treeselect, projectItem, relatedProjectDept, monitorDevices },
   dicts: ['sys_show_hide', 'jg_project_status','jg_project_area','jg_project_type', 'jg_yes_no'],
   data() {
     return {
@@ -524,9 +518,6 @@ export default {
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
         ],
-        visible: [
-          { required: true, message: "是否显示不能为空", trigger: "blur" }
-        ],
         isAuto: [
           { required: true, message: "是否自管不能为空", trigger: "blur" }
         ],
@@ -613,7 +604,6 @@ export default {
         projectArea: undefined,
         groupLevel: undefined,
         status: undefined,
-        visible: undefined,
         orderNum: undefined,
         groupId: undefined,
         isAuto: undefined,
@@ -765,6 +755,12 @@ export default {
             this.$refs.relatedProjectDept.show();
           }, 200);
           break;
+        case "handleMonitorDevices":
+        // 监控设备
+        setTimeout(() =>{
+          this.$refs.monitorDevices.show();
+        }, 200);
+        break;
         default:
           break;
       }

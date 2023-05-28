@@ -115,7 +115,7 @@
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="合同id" align="center" prop="contractId" v-if="false"/>
 <!--      <el-table-column label="合同编号" align="center" prop="contractCode"/>-->
-<!--      <el-table-column label="供应商" align="center" width="360" prop="supplierName"/>-->
+      <el-table-column label="供应商" align="center" prop="supplierName"/>
       <el-table-column label="本次付款金额" align="center" prop="payAmount"/>
       <el-table-column prop="payType" label="付款方式" width="80">
         <template slot-scope="scope">
@@ -137,7 +137,15 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['finPayment:finPayment:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['finPayment:finPayment:edit']"
           >修改
           </el-button>
@@ -213,15 +221,15 @@
                       </el-form-item>
                     </el-col>
 
-
+-->
                     <el-col :span="12" v-show="false">
                       <el-form-item label="供应商名称" prop="supplierName"  >
                         <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
                         <input v-model="form.supplierId" type="hidden"/>
                       </el-form-item>
                     </el-col>
-          -->
-                    <!--          <el-col :span="12">
+
+                              <el-col :span="12">
                                 <el-form-item label="供应商名称" prop="supplierName">
                                   <el-autocomplete
                                     style="width: 100%"
@@ -231,7 +239,7 @@
                                     @select="handleSelect"
                                   ></el-autocomplete>
                                 </el-form-item>
-                              </el-col>-->
+                              </el-col>
         <!--
           <el-col :span="12">
             <el-form-item label="本次付款金额" prop="payAmount">
@@ -297,7 +305,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm"  v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -342,6 +350,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -448,12 +458,14 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加供应商付款";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getFinPayment(id).then(response => {
@@ -514,7 +526,7 @@ export default {
         ...this.queryParams
       }, `finPayment_${new Date().getTime()}.xlsx`)
     },
-    /*
+
     querySearchAsync(queryString, cb) {
       const queryParams = {
         supplierName: queryString,
@@ -551,9 +563,11 @@ export default {
       this.form.unpaid = item.item.unpaid;
       this.form.payed = item.item.payed;
       console.log(item);
+      localStorage.setItem("finPayment_supplierId", item.item.supplierId)
+      localStorage.setItem("finPayment_supplierName", item.value)
     },
 
-
+    /*
     queryContractSearchAsync(queryString, cb) {
       const queryParams = {
         contractCode: queryString,

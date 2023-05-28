@@ -10,10 +10,11 @@ export function listRole(query) {
 }
 
 // 查询角色列表
-export function listAllRole() {
+export function listAllRole(query) {
   return request({
     url: '/system/role/allList',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

@@ -242,7 +242,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 是否编辑 true　修改true 查看详情false
+      // 是否编辑 true　修改true 查看详情false  add for detail 20230516
       edit: true,
       // 查询参数
       queryParams: {

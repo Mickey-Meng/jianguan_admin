@@ -129,7 +129,15 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['contractInfoSale:contractInfoSale:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['contractInfoSale:contractInfoSale:edit']"
           >修改
           </el-button>
@@ -268,6 +276,12 @@
           </el-col>
 
           <el-col :span="12">
+            <el-form-item label="账期（天）" prop="accountPeriod">
+              <el-input v-model="form.accountPeriod" placeholder="请输入账期"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
             <el-form-item label="附件">
               <el-upload
 
@@ -297,10 +311,15 @@
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
+                      label-position="right" label-width="140px" child-label-width="120px" :data="form">
+            </wti-form>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -315,6 +334,8 @@ import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import { delOss } from "@/api/system/oss";
 import {getToken} from "@/utils/auth";
 import formValidate from "@/plugins/formValidate/formValidate";
+import fields from './fields';
+import calc from '@/utils/calc.js'
 export default {
   name: "ContractInfoSale",
   dicts: ['sys_yes_no'],
@@ -373,6 +394,9 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -385,7 +409,9 @@ export default {
         retentionDate: undefined,
       },
       // 表单参数
-      form: {},
+      form: {
+        contractGoodsRels: []
+      },
       // 表单校验
       rules: {
         id: [
@@ -430,9 +456,16 @@ export default {
         ],
         contractStatus: [
           {required: true, message: "1已签订 0未签订不能为空", trigger: "blur"}
-        ]
-
-      }
+        ],
+        accountPeriod: [
+          {required: true, message: "账期不能为空", trigger: "blur"},
+          {
+            'validator': formValidate.checkOnlyNumber(),
+            'trigger': ['change', 'blur'],
+          }
+        ],
+      },
+      fields
     };
   },
   created() {
@@ -476,7 +509,8 @@ export default {
         updateBy: undefined,
         updateTime: undefined,
         remark: undefined,
-        deptId: undefined
+        deptId: undefined,
+        accountPeriod: undefined,
       };
       this.resetForm("form");
     },
@@ -499,12 +533,14 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加销售合同管理";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.fileList = [];
       this.reset();
       const id = row.id || this.ids
@@ -523,6 +559,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.contractGoodsRels = this.$refs.wtiForm.formData.contractGoodsRels;
           this.form.fj = JSON.stringify(this.fileList);
           this.buttonLoading = true;
           if (this.form.id != null) {
@@ -605,6 +642,8 @@ export default {
       this.form.contactPerson = item.item.contactPerson;
       this.form.mobilePhone = item.item.mobilePhone;
       console.log(item);
+      localStorage.setItem("contractInfoPurchase_supplierId", item.item.supplierId)
+      localStorage.setItem("contractInfoPurchase_supplierName", item.value)
     },
 
 
@@ -746,8 +785,24 @@ export default {
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    updateValue(params) {
+      if (params) {
+        const key = Object.keys(params)[0];
+        if (key === 'contractGoodsRels') {
+          let num = []
+          params[key].forEach((item, index) => {
+            item.amount = calc.mul(item.goodsNum, item.price)
+            num.push(Number(item.amount))
+          })
+          let sum = num[0];
+          if (num.length > 1) {
+            sum = calc.add(...num)
+          }
+          this.form.amount = sum
+        }
+      }
     }
-    ,
   }
 };
 </script>

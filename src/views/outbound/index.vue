@@ -95,27 +95,37 @@
     <el-table v-loading="loading" :data="outboundList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
+<!--      2、【出库单明细】页面信息显示改为【出库单号】【销售合同号】【客户名称】【销售员】【出库对接人】【操作】-->
       <el-table-column label="出库单号" align="center" prop="outboundCode"/>
-      <el-table-column label="出库日期" align="center" prop="outboundDate" width="180">
+      <el-table-column label="销售合同编号" align="center" prop="saleContractCode"/>
+      <el-table-column label="客户名称" align="center" prop="customerName"/>
+      <el-table-column label="销售员" align="center" prop="salesperson"/>
+      <el-table-column label="出库对接人" align="center" prop="outboundUsername"/>
+      <el-table-column label="出库日期" align="center" prop="outboundDate" width="180" v-if="false">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.outboundDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="销售员" align="center" prop="salesperson"/>
-      <el-table-column label="销售合同编号" align="center" prop="saleContractCode" v-if="false"/>
+      <el-table-column label="供应商名称" align="center" prop="customerName" v-if="false"/>
       <el-table-column label="采购合同编号" align="center" prop="purchaseContractCode" v-if="false"/>
-      <el-table-column label="客户名称" align="center" prop="customerName"/>
-      <el-table-column label="电话" align="center" prop="telephone"/>
+      <el-table-column label="电话" align="center" prop="telephone" v-if="false"/>
       <el-table-column label="产品id" align="center" prop="proudctId" v-if="false"/>
-      <el-table-column label="产品名称" align="center" prop="proudctName"/>
-
+      <el-table-column label="产品名称" align="center" prop="proudctName" v-if="false"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['ql:outbound:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['ql:outbound:edit']"
           >修改
           </el-button>
@@ -152,6 +162,12 @@
         <el-row :gutter="20">
 
           <el-col :span="12">
+            <el-form-item label="单据编号" prop="outboundCode">
+              <el-input v-model="form.outboundCode" placeholder="请输入出库单号"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
             <el-form-item label="项目名称" prop="projectName">
               <el-autocomplete
                 style="width: 100%"
@@ -161,14 +177,10 @@
                 @select="handleProjectInfoSelect"
               ></el-autocomplete>
             </el-form-item>
-            <input v-model="form.projectId" type="hidden" />
+            <input v-model="form.projectId" type="hidden"/>
           </el-col>
 
-          <el-col :span="12">
-            <el-form-item label="单据编号" prop="outboundCode">
-              <el-input v-model="form.outboundCode" placeholder="请输入出库单号"/>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="出货日期" prop="outboundDate">
               <el-date-picker clearable
@@ -198,8 +210,6 @@
           </el-col>
 
 
-
-
           <el-col :span="12">
             <el-form-item label="采购合同编号" prop="purchaseContractCode">
               <el-autocomplete
@@ -211,7 +221,6 @@
               ></el-autocomplete>
             </el-form-item>
           </el-col>
-
 
 
           <el-col :span="12">
@@ -231,44 +240,44 @@
           </el-col>
 
 
-          <el-col :span="12">
-            <el-form-item label="产品名称" prop="proudctName">
-              <el-autocomplete
-                style="width: 100%"
-                v-model="form.proudctName"
-                :fetch-suggestions="queryProductInfoSearchAsync"
-                placeholder="请输入产品名称"
-                @select="handleProductInfoSelect"
-              ></el-autocomplete>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="商品规格" prop="goodsSearchstandard">
-              <el-input v-model="form.goodsSearchstandard" placeholder="请输入商品规格"/>
-              <input v-model="form.proudctId" type="hidden"/>
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="产品名称" prop="proudctName">-->
+          <!--              <el-autocomplete-->
+          <!--                style="width: 100%"-->
+          <!--                v-model="form.proudctName"-->
+          <!--                :fetch-suggestions="queryProductInfoSearchAsync"-->
+          <!--                placeholder="请输入产品名称"-->
+          <!--                @select="handleProductInfoSelect"-->
+          <!--              ></el-autocomplete>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="商品规格" prop="goodsSearchstandard">-->
+          <!--              <el-input v-model="form.goodsSearchstandard" placeholder="请输入商品规格"/>-->
+          <!--              <input v-model="form.proudctId" type="hidden"/>-->
 
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="商品单位" prop="goodsUnit">
-              <el-input v-model="form.goodsUnit" placeholder="请输入商品单位【关联字典管理】"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="基准价" prop="basePrice">
-              <el-input v-model="form.basePrice" placeholder="请输入基准价"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="销售价" prop="salePrice">
-              <el-input v-model="form.salePrice" placeholder="请输入销售价"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="附加价格" prop="extraPrice">
-              <el-input v-model="form.extraPrice" placeholder="请输入附加价格"/>
-            </el-form-item>
-          </el-col>
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="商品单位" prop="goodsUnit">-->
+          <!--              <el-input v-model="form.goodsUnit" placeholder="请输入商品单位【关联字典管理】"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="基准价" prop="basePrice">-->
+          <!--              <el-input v-model="form.basePrice" placeholder="请输入基准价"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="销售价" prop="salePrice">-->
+          <!--              <el-input v-model="form.salePrice" placeholder="请输入销售价"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="附加价格" prop="extraPrice">-->
+          <!--              <el-input v-model="form.extraPrice" placeholder="请输入附加价格"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
 
           <el-col :span="12">
             <el-form-item label="销售日期" prop="saleDate">
@@ -280,14 +289,25 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
-            <el-form-item label="销售数量" prop="saleNumber">
-              <el-input v-model="form.saleNumber" placeholder="请输入销售数量"/>
+            <el-form-item label="最后收款日期" prop="lastReceivableDate">
+              <el-date-picker clearable
+                              v-model="form.lastReceivableDate"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="请选择最后收款日期">
+              </el-date-picker>
             </el-form-item>
           </el-col>
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="销售数量" prop="saleNumber">-->
+          <!--              <el-input v-model="form.saleNumber" placeholder="请输入销售数量"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
           <el-col :span="12">
             <el-form-item label="销售金额" prop="saleAmount">
-              <el-input v-model="form.saleAmount" placeholder="请输入销售金额"/>
+              <el-input v-model="form.saleAmount" ref="saleAmount" placeholder="请输入销售金额" disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -300,11 +320,11 @@
               <el-input v-model="form.outboundReleaseuser" placeholder="请输入出库审核人"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="出库数量" prop="outboundNumber">
-              <el-input v-model="form.outboundNumber" placeholder="请输入出库数量"/>
-            </el-form-item>
-          </el-col>
+          <!--          <el-col :span="12">-->
+          <!--            <el-form-item label="出库数量" prop="outboundNumber">-->
+          <!--              <el-input v-model="form.outboundNumber" placeholder="请输入出库数量"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
 
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
@@ -313,14 +333,20 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="销售基准价截图" prop="fj">
-              <image-upload v-model="form.fj" ></image-upload>
+              <image-upload v-model="form.fj"></image-upload>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
+      <el-col :span="24">
+        <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
+                  label-position="right" label-width="140px" child-label-width="120px" :data="form">
+        </wti-form>
+      </el-col>
+
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -335,12 +361,17 @@ import {getBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
 import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase";
 import formValidate from "@/plugins/formValidate/formValidate";
+import dayjs from "dayjs";
+import fields from './fields';
+import calc from '@/utils/calc.js'
+
 
 export default {
   name: "Outbound",
   data() {
     return {
-      uploadUrl: process.env.VUE_APP_BASE_API+'/ql/outbound/import',
+      fields,
+      uploadUrl: process.env.VUE_APP_BASE_API + '/ql/outbound/import',
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -361,6 +392,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -389,7 +421,9 @@ export default {
         outboundNumber: undefined,
       },
       // 表单参数
-      form: {},
+      form: {
+        warehousingDetails: []
+      },
       // 表单校验
       rules: {
         id: [
@@ -490,6 +524,7 @@ export default {
   },
   created() {
     this.getList();
+    localStorage.setItem("warehousing_contractId", '');
   },
   methods: {
     /** 查询出库管理列表 */
@@ -538,7 +573,7 @@ export default {
         updateBy: undefined,
         updateTime: undefined,
         remark: undefined,
-        deptId: undefined
+        deptId: undefined,
       };
       this.resetForm("form");
     },
@@ -561,6 +596,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加出库管理";
     },
@@ -580,6 +616,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.warehousingDetails = this.$refs.wtiForm.formData.warehousingDetails;
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateOutbound(this.form).then(response => {
@@ -603,7 +640,7 @@ export default {
     },
     // 跳转到报表页面
     handleReport(row) {
-      this.$router.push("/outbound?view=815906967617490944&outboundCode=" + row.outboundCode);
+      this.$router.push("/outbound?view=815906967617490944&inventory_id=" + row.id);
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -666,7 +703,7 @@ export default {
       this.form.goodsSearchstandard = item.item.goodsSearchstandard;
     },
 
-  // 关联销售合同
+    // 关联销售合同
     queryContractSaleSearchAsync(queryString, cb) {
       const queryParams = {
         contractCode: queryString,
@@ -703,14 +740,14 @@ export default {
       this.form.customerId = item.item.customerId;
       let customerId = item.item.customerId;
       this.form.customerName = item.item.customerName;
-      const id = customerId ;
-        getBasisCustomer(id).then(response => {
-          console.log(response);
+      localStorage.setItem("outbound_contractId", item.item.id);
+      const id = customerId;
+      getBasisCustomer(id).then(response => {
+        console.log(response);
         if (response.code == 200) {
           this.form.address = response.data.address;
           this.form.telephone = response.data.telephone;
-
-          };
+        }
       })
     },
     // 关联采购合同
@@ -745,7 +782,7 @@ export default {
     },
 
     handleContractPurchaseSelect(item) {
-      this.form.purchaseContractCode  = item.item.purchaseContractCode;
+      this.form.purchaseContractCode = item.item.purchaseContractCode;
 
     },
 
@@ -788,7 +825,7 @@ export default {
     /************************* 上传相关 **************************** */
     checkFileSuffix(fileName) {
       if (fileName !== undefined) {
-        let fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1 );
+        let fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1);
         return this.allowFileTypes.some(type => {
           return fileSuffix.indexOf(type) > -1;
         });
@@ -874,7 +911,27 @@ export default {
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    updateValue(params) {
+      localStorage.setItem("outbound_contractId", this.form.contractId);
+      if (params) {
+        const key = Object.keys(params)[0];
+        if (key === 'warehousingDetails') {
+          let num = []
+          params[key].forEach((item, index) => {
+            item.amount = calc.mul(item.inventoryNumber, item.salePrice)
+            num.push(Number(item.amount))
+          })
+          let sum = num[0];
+          if (num.length > 1) {
+            sum = calc.add(...num)
+          }
+          this.form.saleAmount = sum;
+          this.$refs.saleAmount.value = sum;
+
+        }
+      }
     }
-    }
+  }
 };
 </script>

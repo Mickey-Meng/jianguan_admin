@@ -105,7 +105,7 @@ export default {
       this.getProjectDeptList();
     },
     clickRow(row) {
-      this.$refs.table.toggleRowSelection(row);
+      this.$refs.deptTreeTable.toggleRowSelection(row, true);
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -123,15 +123,14 @@ export default {
           this.total = response.data.deptPageList.total;
         **/
         this.deptList = response.data.deptAllList;
+        this.pageNum = 1;
+        this.pageNum = 10;
         this.total = this.deptList.length;
         console.log("getProjectDept->getProjectDept...");
         console.log(this.deptList);
         this.$nextTick(() => {
           this.deptList.forEach((row) => {
-            if (row.relatedProject === '1') {
-              console.log(row);
-              this.$refs.deptTreeTable.toggleRowSelection(row);
-            }
+            this.$refs.deptTreeTable.toggleRowSelection(row, row.relatedProject === '1');
           });
         });
         this.loading = false;

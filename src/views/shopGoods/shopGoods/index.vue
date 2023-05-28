@@ -109,20 +109,28 @@
     <el-table v-loading="loading" :data="shopGoodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="产品编码" align="center" prop="goodsCode"/>
-      <el-table-column label="产品名称" align="center" prop="goodsName"/>
-      <el-table-column label="品牌" align="center" prop="goodsBrand"/>
-      <el-table-column label="供应商名称" align="center" prop="supplierName"/>
-      <el-table-column label="规格" align="center" prop="goodsSearchstandard"/>
-      <el-table-column label="单位" align="center" prop="goodsUnit"/>
-      <el-table-column label="预警库存" align="center" prop="safetyStock"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="产品编码" align="center" prop="goodsCode" width="100"/>
+      <el-table-column label="产品名称" align="center" prop="goodsName" width="200" />
+      <el-table-column label="品牌" align="center" prop="goodsBrand" width="100"/>
+      <el-table-column label="供应商名称" align="center" prop="supplierName" width="300"/>
+      <el-table-column label="规格" align="center" prop="goodsSearchstandard" width="100"/>
+      <el-table-column label="单位" align="center" prop="goodsUnit" width="100"/>
+      <el-table-column label="预警库存" align="center" prop="safetyStock" width="100"/>
+      <el-table-column label="操作" align="center"   class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['shopGoods:shopGoods:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['shopGoods:shopGoods:edit']"
           >修改
           </el-button>
@@ -286,7 +294,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -332,6 +340,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -476,12 +486,14 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加产品信息";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getShopGoods(id).then(response => {

@@ -160,8 +160,16 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-view"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['basisCustomer:basisCustomer:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['basisCustomer:basisCustomer:edit']"
           >修改
           </el-button>
@@ -296,7 +304,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm"  v-if="edit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -349,6 +357,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -492,11 +502,13 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.edit = true;
       this.title = "添加客户资料";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getBasisCustomer(id).then(response => {

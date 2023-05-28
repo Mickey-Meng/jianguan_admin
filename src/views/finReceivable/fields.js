@@ -21,10 +21,11 @@ const fields = [
                             },
                         ],
                         querySearchAsync (queryString, cb) {
-                            const queryParams = {
-                              outboundCode: queryString,
-                            };
                             let flag = false;
+                          const queryParams = {
+                            outboundCode: queryString,
+                            customerName: localStorage.getItem("finReceivable_customerName") || ''
+                          };
                           listOutbound(queryParams).then(response => {
                                 flag = true;
                                 if (response.rows.length) {
@@ -63,6 +64,7 @@ const fields = [
                     {
                         'type': 'input',
                         'key': 'customerName', // 1
+                        'style': {'display': "none"},
                         'label': '客户名称',
                         'disableDefault': true,
                     },

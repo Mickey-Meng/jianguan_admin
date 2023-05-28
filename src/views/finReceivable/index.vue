@@ -84,7 +84,7 @@
 <!--      <el-table-column label="合同编号" align="center" prop="contractCode"/>-->
 <!--      <el-table-column label="合同名称" align="center" prop="contractName"/>-->
 <!--      <el-table-column label="客户id" align="center" prop="customerId" v-if="false"/>-->
-<!--      <el-table-column label="客户名称" align="center" prop="customerName"/>-->
+      <el-table-column label="客户名称" align="center" prop="customerName"/>
       <el-table-column label="本次收款款金额" align="center" prop="receivableAmount" v-if="false"/>
       <el-table-column label="收款日期" align="center" prop="receivableDate" width="180">
         <template slot-scope="scope">
@@ -104,7 +104,15 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['ql:finReceivable:query']"
+          >详情
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['ql:finReceivable:edit']"
           >修改
           </el-button>
@@ -169,6 +177,25 @@
 <!--              <el-input v-model="form.receivableAmount" placeholder="请输入本次收款款金额"/>-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
+          <el-col :span="12" v-show="false">
+            <el-form-item label="客户Id" prop="customerId"  >
+              <el-input v-model="form.customerId"/>
+              <input v-model="form.customerId" type="hidden"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="客户名称" prop="customerName">
+              <el-autocomplete
+                style="width: 100%"
+                v-model="form.customerName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入供应商名称"
+                @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="12">
             <el-form-item label="收款日期" prop="receivableDate">
               <el-date-picker clearable
@@ -219,7 +246,7 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm"  v-if="edit" >确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -236,6 +263,9 @@ import {
 } from "@/api/finReceivable/finReceivable";
 import {listContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
 import fields from './fields';
+import {
+  listBasisCustomer,
+} from "@/api/basisCustomer/basisCustomer";
 
 export default {
   name: "FinReceivable",
@@ -261,6 +291,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      edit: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -391,11 +422,13 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.edit = true;
       this.title = "添加收款记录";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getFinReceivable(id).then(response => {
@@ -501,6 +534,41 @@ export default {
       this.form.contractName = item.item.contractName;
     },
 
+    querySearchAsync(queryString, cb) {
+      const queryParams = {
+        customerName: queryString,
+      };
+      let flag = false;
+      listBasisCustomer(queryParams).then(response => {
+        flag = true;
+        if (response.rows.length) {
+          const d = response.rows.map(item => {
+            return {
+              value: item.customerName,
+              label: item.id,
+              item: {
+                customerId: item.id
+              }
+            };
+          });
+          cb(d);
+        } else {
+          cb([]);
+        }
+      }).finally(() => {
+        if (!flag) {
+          cb([]);
+        }
+      });
+
+    },
+
+    handleSelect(item) {
+      this.form.customerId = item.item.customerId;
+      console.log(item);
+      localStorage.setItem("finReceivable_customerId", item.item.customerId)
+      localStorage.setItem("finReceivable_customerName", item.value)
+    },
   }
 };
 </script>

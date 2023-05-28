@@ -115,7 +115,16 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleUpdate(scope.row,false)"
+            v-hasPermi="['contractInfoPurchase:contractInfoPurchase:query']"
+          >详情
+          </el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row,true)"
             v-hasPermi="['contractInfoPurchase:contractInfoPurchase:edit']"
           >修改
           </el-button>
@@ -167,7 +176,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="账期（天）" prop="accountPeriod">
+            <el-form-item label="账期（天）" prop="accountPeriod" :required="true">
               <el-input v-model="form.accountPeriod" placeholder="请输入账期" />
             </el-form-item>
           </el-col>
@@ -249,7 +258,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="附件">
-              <upload @input="getFileList"/>
+              <upload @input="getFileList" :value="reviewFileList"/>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -260,7 +269,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit" >确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -276,6 +285,7 @@ import {
   updateContractInfoPurchase
 } from "@/api/contractInfoPurchase/contractInfoPurchase";
 import {getToken} from "@/utils/auth";
+import {listByIds} from "@/api/system/oss";
 
 import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {delOss} from "@/api/system/oss";
@@ -317,6 +327,7 @@ export default {
   },
   data() {
     return {
+      reviewFileList: [],
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -345,6 +356,9 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否编辑 true　修改true 查看详情false
+      edit: true,
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -357,7 +371,7 @@ export default {
       },
       // 表单参数
       form: {
-        qlWarehousingBos: []
+        contractGoodsRels: []
       },
       // 表单校验
       rules: {
@@ -445,13 +459,15 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.edit = true;
       this.open = true;
       this.title = "添加采购合同 ";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate(row,isEdit) {
       this.fileList = [];
       this.loading = true;
+      this.edit = isEdit;
       this.reset();
       const id = row.id || this.ids
       getContractInfoPurchase(id).then(response => {
@@ -461,7 +477,14 @@ export default {
         this.form = response.data;
         console.log(response.data)
         if (response.data.fj != "" && response.data.fj != undefined) {
-          this.fileList = JSON.parse(response.data.fj);
+          listByIds(response.data.fj).then(res => {
+            this.reviewFileList = res.data.map(item => {
+              return {
+                name:item.fileName,
+                ...item
+              }
+            })
+          })
         }
         this.open = true;
         this.title = "修改采购合同 ";
@@ -471,8 +494,9 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.qlWarehousingBos = this.$refs.wtiForm.formData.qlWarehousingBos;
-          this.form.fj = JSON.stringify(this.fileList);
+          this.form.contractGoodsRels = this.$refs.wtiForm.formData.contractGoodsRels;
+          const ossIds = this.fileList.map(item => item.ossId).join(',');
+          this.form.fj = ossIds;
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateContractInfoPurchase(this.form).then(response => {
@@ -558,14 +582,16 @@ export default {
       this.form.contactPerson = item.item.contactPerson;
       this.form.mobilePhone = item.item.mobilePhone;
       console.log(item);
+      localStorage.setItem("contractInfoPurchase_supplierId", item.item.supplierId)
+      localStorage.setItem("contractInfoPurchase_supplierName", item.value)
     },
     updateValue(params) {
       if (params) {
         const key = Object.keys(params)[0];
-        if (key === 'qlWarehousingBos') {
+        if (key === 'contractGoodsRels') {
           let num = []
           params[key].forEach((item, index) => {
-            item.amount = calc.mul(item.orderNumber, item.price)
+            item.amount = calc.mul(item.goodsNum, item.price)
             num.push(Number(item.amount))
           })
           let sum = num[0];
