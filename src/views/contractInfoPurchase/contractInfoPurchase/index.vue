@@ -427,6 +427,7 @@ export default {
     },
     // 表单重置
     reset() {
+      this.reviewFileList =[]
       this.form = {
         contractCode: undefined,
         contractName: undefined,

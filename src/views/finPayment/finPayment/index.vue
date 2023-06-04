@@ -157,13 +157,7 @@
             v-hasPermi="['finPayment:finPayment:remove']"
           >删除
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-view"
-            @click="handleReport(scope.row)"
-          >报表
-          </el-button>
+
         </template>
       </el-table-column>
     </el-table>

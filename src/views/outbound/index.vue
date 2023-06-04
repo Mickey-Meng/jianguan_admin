@@ -187,7 +187,7 @@
                               v-model="form.outboundDate"
                               type="datetime"
                               value-format="yyyy-MM-dd HH:mm:ss"
-                              placeholder="请选择出库日期">
+                              placeholder="请选择出库日期"  @blur="calLastReceivableDateDate">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -293,7 +293,9 @@
           <el-col :span="12">
             <el-form-item label="最后收款日期" prop="lastReceivableDate">
               <el-date-picker clearable
+                              disabled
                               v-model="form.lastReceivableDate"
+                              ref="lastReceivableDate"
                               type="datetime"
                               value-format="yyyy-MM-dd HH:mm:ss"
                               placeholder="请选择最后收款日期">
@@ -313,6 +315,7 @@
           <el-col :span="12">
             <el-form-item label="出库对接人" prop="outboundUsername">
               <el-input v-model="form.outboundUsername" placeholder="请输入出库对接人"/>
+              <input v-model="form.accountPeriod" type="hidden"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -439,10 +442,10 @@ export default {
           {required: true, message: "销售员不能为空", trigger: "blur"}
         ],
         saleContractCode: [
-          {required: true, message: "销售合同编号不能为空", trigger: "change"}
+          {required: true, message: "销售合同编号不能为空", trigger: "change,onchange"}
         ],
         purchaseContractCode: [
-          {required: true, message: "采购合同编号不能为空", trigger: "blur"}
+          {required: true, message: "采购合同编号不能为空", trigger: "blur,onchange"}
         ],
         customerName: [
           {required: true, message: "客户名称不能为空", trigger: "blur"}
@@ -527,6 +530,16 @@ export default {
     localStorage.setItem("warehousing_contractId", '');
   },
   methods: {
+
+
+    // 计算最后到账日期  yangaogao 20230601
+    calLastReceivableDateDate() {
+      let lastReceivableDate = dayjs(this.form.outboundDate).add(this.form.accountPeriod, "day").format("YYYY-MM-DD HH:mm:ss");
+      if (lastReceivableDate) {
+        this.form.lastReceivableDate = lastReceivableDate;
+        this.$refs.lastReceivableDate.value = lastReceivableDate;
+      }
+    },
     /** 查询出库管理列表 */
     getList() {
       this.loading = true;
@@ -721,6 +734,7 @@ export default {
                 saleContractCode: item.contractCode,
                 customerName: item.customerName,
                 customerId: item.customerId,
+                accountPeriod: item.accountPeriod,
               }
             };
           });
@@ -738,6 +752,7 @@ export default {
 
     handleContractSaleSelect(item) {
       this.form.customerId = item.item.customerId;
+      this.form.accountPeriod = item.item.accountPeriod;
       let customerId = item.item.customerId;
       this.form.customerName = item.item.customerName;
       localStorage.setItem("outbound_contractId", item.item.id);
@@ -783,7 +798,6 @@ export default {
 
     handleContractPurchaseSelect(item) {
       this.form.purchaseContractCode = item.item.purchaseContractCode;
-
     },
 
 

@@ -190,6 +190,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="附件" prop="fj">
+              <image-upload v-model="form.fj" ></image-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>

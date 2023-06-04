@@ -3,42 +3,25 @@ import request from '@/utils/request'
 // 查询设备监控列表
 export function listMonitor(query) {
   return request({
-    url: '/system/monitor/list',
+    url: '/system/jg/project/monitor/page',
     method: 'get',
     params: query
   })
 }
 
 // 查询设备监控详细
-export function getMonitor(id) {
+export function getMonitors(projectId) {
   return request({
-    url: '/system/monitor/' + id,
+    url: '/system/jg/project/monitor/' + projectId,
     method: 'get'
   })
 }
 
-// 新增设备监控
-export function addMonitor(data) {
+// 保存设备监控
+export function saveMonitors(projectId, data) {
   return request({
-    url: '/system/monitor',
+    url: '/system/jg/project/monitor/save/' + projectId,
     method: 'post',
     data: data
-  })
-}
-
-// 修改设备监控
-export function updateMonitor(data) {
-  return request({
-    url: '/system/monitor',
-    method: 'put',
-    data: data
-  })
-}
-
-// 删除设备监控
-export function delMonitor(id) {
-  return request({
-    url: '/system/monitor/' + id,
-    method: 'delete'
   })
 }

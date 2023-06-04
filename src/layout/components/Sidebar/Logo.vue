@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import logoImg from '@/assets/logo/logo.png'
 import variables from '@/assets/styles/variables.scss'
+import {getLogoAndTitle} from "@/api/logo/logo";
 
 export default {
   name: 'SidebarLogo',
@@ -35,9 +35,20 @@ export default {
   },
   data() {
     return {
-      title: '供应链管理系统',
-      logo: logoImg
+      title: '',
+      logo: ''
     }
+  },
+  created() {
+    getLogoAndTitle("1")
+      .then(response => {
+        console.log(response);
+        this.title = response.data.title;
+        this.logo = response.data.logoUrl;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 }
 </script>

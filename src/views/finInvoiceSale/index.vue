@@ -206,7 +206,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="银行流水截图" prop="fj">
+            <el-form-item label="附件" prop="fj">
               <image-upload v-model="form.fj" ></image-upload>
             </el-form-item>
           </el-col>

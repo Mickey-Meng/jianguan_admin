@@ -170,7 +170,7 @@
                     v-hasPermi="['jg:project:queryItem']">项目详情</el-dropdown-item>
                   <el-dropdown-item command="handleRelatedDept" icon="el-icon-connection"
                     v-hasPermi="['jg:project:related']">关联部门</el-dropdown-item>
-                    <el-dropdown-item command="handleMonitorDevices" icon="el-icon-connection"
+                    <el-dropdown-item command="handleMonitorDevices" icon="el-icon-monitor"
                     v-hasPermi="['jg:project:monitorDevice']">监控设备</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -329,12 +329,26 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-                <el-form-item label="项目简介" prop="introduction">
-                  <el-input v-model="form.introduction" type="textarea" placeholder="请输入内容" />
-                </el-form-item>
-              </el-col>
+              <el-form-item label="项目简介" prop="introduction">
+                <el-input v-model="form.introduction" type="textarea" placeholder="请输入内容" />
+              </el-form-item>
+            </el-col>
 
-              <el-col :span="12">
+            <el-col :span="12">
+              <el-form-item label="显示排序" prop="orderNum">
+                <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="备注" prop="remark">
+                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12" v-if="false">
                 <el-form-item label="组织机构" prop="groupId">
                   <treeselect
                     :multiple="false"
@@ -346,20 +360,6 @@
                     placeholder="选择组织机构"
                   />
                 </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="显示排序" prop="orderNum">
-              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
-            </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="备注" prop="remark">
-                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-              </el-form-item>
             </el-col>
           </el-row>
           <el-row>

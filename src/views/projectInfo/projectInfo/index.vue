@@ -1,14 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="客户名称" prop="customerName">
-        <el-input
-          v-model="queryParams.customerName"
-          placeholder="请输入客户名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="项目名称" prop="projectName">
         <el-input
           v-model="queryParams.projectName"

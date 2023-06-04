@@ -97,7 +97,7 @@ const fields = [
             'rules': [
               {
                 'required': true,
-                'message': '请输入总额',
+                'message': '请输入',
                 'trigger': ['blur', 'change'],
               }
             ],
@@ -123,7 +123,7 @@ const fields = [
             'rules': [
               {
                 'required': true,
-                'message': '请输入总额',
+                'message': '请输入附加价格',
                 'trigger': ['blur', 'change'],
               }
             ],
@@ -138,7 +138,6 @@ const fields = [
             'rules': [
               {
                 'required': true,
-                'message': '请输入总额',
                 'trigger': ['blur', 'change'],
               }
             ],

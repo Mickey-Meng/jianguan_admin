@@ -12,7 +12,7 @@
 </template>
 
 <script>
-
+import {getJmreportUrl} from "@/api/logo/logo";
 
 export default {
 
@@ -34,7 +34,14 @@ export default {
         params += "&"+queryKey+"="+this.$route.query[queryKey];
       }
     }
-    this.reportUrl = "http://150.158.139.18:8088/jmreport/view/"+view+params;
+    getJmreportUrl()
+      .then(response => {
+        console.log(response);
+        this.reportUrl = response.data+"jmreport/view/"+view+params;
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
   },
   mounted() {
