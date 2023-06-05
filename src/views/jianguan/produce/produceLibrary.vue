@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="项目id" prop="projectId">
-        <el-input
-          v-model="queryParams.projectId"
-          placeholder="请输入项目id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" >
       <el-form-item label="工序库名称" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -39,40 +31,8 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:produceLibrary:add']"
+          v-hasPermi="['jg:produceLibrary:add']"
         >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-view"
-          size="mini"
-          :disabled="single"
-          @click="handleDetail"
-        >详情</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:produceLibrary:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:produceLibrary:remove']"
-        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -81,74 +41,78 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:produceLibrary:export']"
+          v-hasPermi="['jg:produceLibrary:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="produceLibraryList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="业务主键ID" align="center" prop="id" v-if="true"/>
-      <el-table-column label="项目id" align="center" prop="projectId" />
+    <el-table
+      v-if="refreshTable"
+      v-loading="loading"
+      :data="produceLibraryList"
+      row-key="id"
+      :height="'calc(100vh - 205px)'"
+      :default-expand-all="isExpandAll"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      @row-click="handleClickRow"
+    >
       <el-table-column label="工序库名称" align="center" prop="name" />
       <el-table-column label="工序库编号" align="center" prop="code" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-view"
-            @click="handleDetail(scope.row)"
-          >详情</el-button>
+        <template slot-scope="scope" v-if="scope.row.name !== '顶级'">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:produceLibrary:edit']"
+            v-hasPermi="['jg:produceLibrary:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:produceLibrary:remove']"
+            v-hasPermi="['jg:produceLibrary:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-
     <!-- 添加或修改工序库对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
-          <el-row :gutter="20">
-<el-col :span="12">
-        <el-form-item label="项目id" prop="projectId">
-          <el-input v-model="form.projectId" placeholder="请输入项目id" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="工序库名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入工序库名称" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="工序库编号" prop="code">
-          <el-input v-model="form.code" placeholder="请输入工序库编号" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-</el-col>          </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label="上级工序库" prop="parentId">
+              <treeselect
+                :multiple="false"
+                :searchable="true"
+                v-model="form.parentId"
+                :options="produceLibraryTreeOptions"
+                :normalizer="normalizer"
+                :show-count="true"
+                placeholder="选择上级工序库"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="工序库名称" prop="name">
+              <el-input v-model="form.name" placeholder="请输入工序库名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="工序库编号" prop="code">
+              <el-input v-model="form.code" placeholder="请输入工序库编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>          
+        </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -161,9 +125,13 @@
 
 <script>
 import { listProduceLibrary, getProduceLibrary, delProduceLibrary, addProduceLibrary, updateProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import bus from "@utils/eventBus.js"
 
 export default {
   name: "ProduceLibrary",
+  components: { Treeselect },
   data() {
     return {
       // 按钮loading
@@ -178,8 +146,6 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
-      // 总条数
-      total: 0,
       // 工序库表格数据
       produceLibraryList: [],
       // 弹出层标题
@@ -190,31 +156,30 @@ export default {
       edit: true,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        projectId: undefined,
         name: undefined,
         code: undefined,
       },
+
+      // 是否展开，默认全部折叠
+      isExpandAll: true,
+      // 重新渲染表格状态
+      refreshTable: true,
+      //工序库下拉树
+      produceLibraryTreeOptions: [],
+
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        id: [
-          { required: true, message: "业务主键ID不能为空", trigger: "blur" }
-        ],
-        projectId: [
-          { required: true, message: "项目id不能为空", trigger: "blur" }
+        parentId: [
+          { required: true, message: "上级工序库不能为空", trigger: "blur" }
         ],
         name: [
           { required: true, message: "工序库名称不能为空", trigger: "blur" }
         ],
         code: [
           { required: true, message: "工序库编号不能为空", trigger: "blur" }
-        ],
-        remark: [
-          { required: true, message: "备注不能为空", trigger: "blur" }
-        ],
+        ]
       }
     };
   },
@@ -226,10 +191,28 @@ export default {
     getList() {
       this.loading = true;
       listProduceLibrary(this.queryParams).then(response => {
-        this.produceLibraryList = response.rows;
-        this.total = response.total;
+        this.produceLibraryList = this.handleTree(response.data, "id");
         this.loading = false;
       });
+    },
+    /** 展开/折叠操作 */
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+    },
+    /** 转换项目数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.id,
+        label: node.name,
+        children: node.children
+      };
     },
     // 取消按钮
     cancel() {
@@ -241,8 +224,11 @@ export default {
       this.form = {
         id: undefined,
         projectId: undefined,
+        parentId: undefined,
         name: undefined,
         code: undefined,
+        orderNum: undefined,
+        groupLevel: undefined,
         remark: undefined,
         createBy: undefined,
         createTime: undefined,
@@ -250,16 +236,24 @@ export default {
         updateTime: undefined
       };
       this.resetForm("form");
+      listProduceLibrary().then(response => {
+        this.produceLibraryTreeOptions = this.handleTree(response.data, "id");
+      });
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
+    },
+    // 点击当前行
+    handleClickRow(currentRow){
+      if (currentRow.name === "顶级") {
+        bus.$emit('clickLibraryRow', currentRow);
+      }
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

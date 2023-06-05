@@ -89,11 +89,11 @@
           <treeselect v-model="form.parentId" :options="dataDictionaryOptions" :normalizer="normalizer" placeholder="请选择父id" />
         </el-form-item>
 <!--        <el-form-item label="祖级列表" prop="ancestors">-->
-<!--          <el-input v-model="form.ancestors" placeholder="请输入祖级列表" />-->
-<!--        </el-form-item>
-        <el-form-item label="商品类别编码" prop="goodsTypeCode">
-          <el-input v-model="form.goodsTypeCode" placeholder="请输入商品类别编码" />
+<!--          <el-input v-model="form.ancestors" placeholder="请输入祖级列表" />
         </el-form-item>-->
+        <el-form-item label="编码" prop="code">
+          <el-input v-model="form.code" placeholder="请输入编码" />
+        </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
@@ -254,7 +254,7 @@ export default {
         this.form.parentId = 0;
       }
       this.open = true;
-      this.title = "添加商品类别";
+      this.title = "添加数据字典";
     },
     /** 展开/折叠操作 */
     toggleExpandAll() {
@@ -276,7 +276,7 @@ export default {
 	    this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改商品类别";
+        this.title = "修改数据字典";
       });
     },
     /** 提交按钮 */
@@ -306,7 +306,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.$modal.confirm('是否确认删除商品类别编号为"' + row.id + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认 为"' + row.id + '"的数据项？').then(() => {
         this.loading = true;
         return delDataDictionary(row.id);
       }).then(() => {

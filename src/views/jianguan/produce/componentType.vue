@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工序名称" prop="name">
+      <el-form-item label="构建类型名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入工序名称"
+          placeholder="请输入构建类型名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="是否有效" prop="isvaild">
+      <el-form-item label="构建类型编号" prop="code">
         <el-input
-          v-model="queryParams.isvaild"
-          placeholder="请输入"
+          v-model="queryParams.code"
+          placeholder="请输入构建类型编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -31,9 +31,9 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['jg:produce:add']"
+          v-hasPermi="['jg:componentType:add']"
         >新增</el-button>
-      </el-col>
+      </el-col>      
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -42,7 +42,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['jg:produce:edit']"
+          v-hasPermi="['jg:componentType:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -53,7 +53,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['jg:produce:remove']"
+          v-hasPermi="['jg:componentType:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -63,40 +63,33 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['jg:produce:export']"
+          v-hasPermi="['jg:componentType:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="produceList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="componentTypeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="构建类型" align="center" prop="conponentTypeCode" />
-      <el-table-column label="工序名称" align="center" prop="name" />
-      <el-table-column label="工序顺序" align="center" prop="rangee" />
-      <el-table-column label="是否有效" align="center" prop="isvaild" />
+      <el-table-column label="工序库" align="center" prop="libraryId" />
+      <el-table-column label="构建类型名称" align="center" prop="name" />
+      <el-table-column label="构建类型编号" align="center" prop="code" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-view"
-            @click="handleDetail(scope.row)"
-          >详情</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['jg:produce:edit']"
+            v-hasPermi="['jg:componentType:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['jg:produce:remove']"
+            v-hasPermi="['jg:componentType:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -110,31 +103,39 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改工序信息对话框 -->
+    <!-- 添加或修改构建类型对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
           <el-row :gutter="20">
-<el-col :span="12">
-        <el-form-item label="构建类型编码" prop="conponentTypeCode">
-          <el-input v-model="form.conponentTypeCode" placeholder="请输入构建类型编码" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="工序名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入工序名称" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="" prop="rangee">
-          <el-input v-model="form.rangee" placeholder="请输入" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="" prop="isvaild">
-          <el-input v-model="form.isvaild" placeholder="请输入" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-</el-col>          </el-row>
+            <el-col :span="24">
+              <el-form-item label="所属工序库" prop="libraryId">
+                <treeselect
+                  :multiple="false"
+                  :searchable="true"
+                  v-model="form.libraryId"
+                  :options="produceLibraryTreeOptions"
+                  :normalizer="normalizer"
+                  :show-count="true"
+                  placeholder="选择工序库"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="构建类型名称" prop="name">
+                <el-input v-model="form.name" placeholder="请输入构建类型名称" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="构建类型编号" prop="code">
+                <el-input v-model="form.code" placeholder="请输入构建类型编号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="备注" prop="remark">
+                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              </el-form-item>
+            </el-col>          
+          </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -142,15 +143,22 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+     <!-- 工序详情-->
+     <produce-item :componentType="currentComponentType" ref="produceItem"/>
   </div>
 </template>
 
 <script>
-import { listProduce, getProduce, delProduce, addProduce, updateProduce } from "@/api/jianguan/produce/produce";
+import { listComponentType, getComponentType, delComponentType, addComponentType, updateComponentType } from "@/api/jianguan/produce/componentType";
+import { listProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import produceItem from "./produceItem";
+import bus from "@utils/eventBus.js"
 
 export default {
-  name: "ProduceItem",
-  props: ['componentType'],
+  name: "ComponentType",
+  components: { Treeselect, produceItem},
   data() {
     return {
       // 按钮loading
@@ -167,8 +175,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 工序信息表格数据
-      produceList: [],
+      // 构建类型表格数据
+      componentTypeList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -179,56 +187,56 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        conponentTypeCode: undefined,
+        libraryId: undefined,
         name: undefined,
-        rangee: undefined,
-        isvaild: undefined,
+        code: undefined,
       },
+      //工序库下拉树
+      produceLibraryTreeOptions: [],
+      // 当前操作的工序库
+      currentComponentType: undefined,
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        id: [
-          { required: true, message: "业务主键ID不能为空", trigger: "blur" }
-        ],
-        conponentTypeCode: [
-          { required: true, message: "构建类型编码不能为空", trigger: "blur" }
+        libraryId: [
+          { required: true, message: "工序库不能为空", trigger: "blur" }
         ],
         name: [
-          { required: true, message: "工序名称不能为空", trigger: "blur" }
+          { required: true, message: "构建类型名称不能为空", trigger: "blur" }
         ],
-        rangee: [
-          { required: true, message: "不能为空", trigger: "blur" }
-        ],
-        isvaild: [
-          { required: true, message: "不能为空", trigger: "blur" }
-        ],
-        remark: [
-          { required: true, message: "备注不能为空", trigger: "blur" }
-        ],
+        code: [
+          { required: true, message: "构建类型编号不能为空", trigger: "blur" }
+        ]
       }
     };
   },
   created() {
-    //this.getList();
+    bus.$on("clickLibraryRow", libraryRow =>{
+      this.queryParams.libraryId = data.id;
+      this.getList();
+    });
   },
   methods: {
-    // 显示弹框
-    show() {
-      this.open = true;
-      this.title = "工序明细";
-      this.getList();
-    },
-    /** 查询工序信息列表 */
+    /** 查询构建类型列表 */
     getList() {
       this.loading = true;
-      console.log("获取到的构建类型CODE:" + this.componentType.code);
-      this.queryParams.conponentTypeCode = this.componentType.code;
-      listProduce(this.queryParams).then(response => {
-        this.produceList = response.rows;
+      listComponentType(this.queryParams).then(response => {
+        this.componentTypeList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
+    },
+    /** 转换项目数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.id,
+        label: node.name,
+        children: node.children
+      };
     },
     // 取消按钮
     cancel() {
@@ -239,10 +247,9 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        conponentTypeCode: undefined,
+        libraryId: undefined,
         name: undefined,
-        rangee: undefined,
-        isvaild: undefined,
+        code: undefined,
         remark: undefined,
         createBy: undefined,
         createTime: undefined,
@@ -250,6 +257,9 @@ export default {
         updateTime: undefined
       };
       this.resetForm("form");
+      listProduceLibrary().then(response => {
+        this.produceLibraryTreeOptions = this.handleTree(response.data, "id");
+      });
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -272,7 +282,7 @@ export default {
       this.reset();
       this.open = true;
       this.edit = true;
-      this.title = "添加工序信息";
+      this.title = "添加构建类型";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -280,11 +290,11 @@ export default {
       this.edit = true;
       this.reset();
       const id = row.id || this.ids
-      getProduce(id).then(response => {
+      getComponentType(id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改工序信息";
+        this.title = "修改构建类型";
       });
     },
     
@@ -294,11 +304,11 @@ export default {
       this.edit = false;
       this.reset();
       const id = row.id || this.ids
-      getProduce(id).then(response => {
+      getComponentType(id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "查看工序信息";
+        this.title = "查看构建类型";
       });
     },
     /** 提交按钮 */
@@ -307,7 +317,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateProduce(this.form).then(response => {
+            updateComponentType(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -315,7 +325,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addProduce(this.form).then(response => {
+            addComponentType(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -329,9 +339,9 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除工序信息编号为"' + ids + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除构建类型编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
-        return delProduce(ids);
+        return delComponentType(ids);
       }).then(() => {
         this.loading = false;
         this.getList();
@@ -343,9 +353,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/produce/export', {
+      this.download('system/componentType/export', {
         ...this.queryParams
-      }, `produce_${new Date().getTime()}.xlsx`)
+      }, `componentType_${new Date().getTime()}.xlsx`)
     }
   }
 };
