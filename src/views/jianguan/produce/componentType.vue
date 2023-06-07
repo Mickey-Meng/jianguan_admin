@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
       <el-form-item label="构建类型名称" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -18,7 +18,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery('query')">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -91,6 +91,12 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['jg:componentType:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleProduceItem(scope.row)"
+          >工序维护</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,7 +110,7 @@
     />
 
     <!-- 添加或修改构建类型对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
           <el-row :gutter="20">
             <el-col :span="24">
@@ -125,12 +131,12 @@
                 <el-input v-model="form.name" placeholder="请输入构建类型名称" />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-form-item label="构建类型编号" prop="code">
                 <el-input v-model="form.code" placeholder="请输入构建类型编号" />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-form-item label="备注" prop="remark">
                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
               </el-form-item>
@@ -154,17 +160,17 @@ import { listProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import produceItem from "./produceItem";
-import bus from "@utils/eventBus.js"
+import bus from "@/utils/eventBus";
 
 export default {
   name: "ComponentType",
-  components: { Treeselect, produceItem},
+  components: { Treeselect, produceItem },
   data() {
     return {
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
-      loading: true,
+      loading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -213,7 +219,7 @@ export default {
   },
   created() {
     bus.$on("clickLibraryRow", libraryRow =>{
-      this.queryParams.libraryId = data.id;
+      this.queryParams.libraryId = libraryRow.id;
       this.getList();
     });
   },
@@ -262,8 +268,11 @@ export default {
       });
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery(type) {
       this.queryParams.pageNum = 1;
+      if (type === 'query') {
+        this.queryParams.libraryId = undefined;
+      }
       this.getList();
     },
     /** 重置按钮操作 */
@@ -310,6 +319,14 @@ export default {
         this.open = true;
         this.title = "查看构建类型";
       });
+    },
+    // 维护工序
+    handleProduceItem(row){
+      this.currentComponentType = row;
+      // 维护工序
+      setTimeout(() =>{
+          this.$refs.produceItem.show();
+        }, 200);
     },
     /** 提交按钮 */
     submitForm() {

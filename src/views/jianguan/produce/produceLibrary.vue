@@ -81,7 +81,7 @@
     </el-table>
 
     <!-- 添加或修改工序库对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
           <el-col :span="24">
@@ -127,7 +127,7 @@
 import { listProduceLibrary, getProduceLibrary, delProduceLibrary, addProduceLibrary, updateProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import bus from "@utils/eventBus.js"
+import bus from "@/utils/eventBus";
 
 export default {
   name: "ProduceLibrary",
@@ -251,7 +251,8 @@ export default {
     },
     // 点击当前行
     handleClickRow(currentRow){
-      if (currentRow.name === "顶级") {
+      if (currentRow.name !== "顶级") {
+        console.log("发送数据[handleClickRow]...");
         bus.$emit('clickLibraryRow', currentRow);
       }
     },

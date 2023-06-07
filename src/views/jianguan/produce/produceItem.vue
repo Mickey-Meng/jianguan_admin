@@ -1,140 +1,144 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工序名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入工序名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否有效" prop="isvaild">
-        <el-input
-          v-model="queryParams.isvaild"
-          placeholder="请输入"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <el-dialog :title="title" :visible.sync="tableOpen" width="1100px" append-to-body>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="工序名称" prop="name">
+          <el-input
+            v-model="queryParams.name"
+            placeholder="请输入工序名称"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="是否有效" prop="isvaild">
+          <el-input
+            v-model="queryParams.isvaild"
+            placeholder="请输入"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['jg:produce:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['jg:produce:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['jg:produce:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['jg:produce:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table v-loading="loading" :data="produceList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="构建类型" align="center" prop="conponentTypeCode" />
-      <el-table-column label="工序名称" align="center" prop="name" />
-      <el-table-column label="工序顺序" align="center" prop="rangee" />
-      <el-table-column label="是否有效" align="center" prop="isvaild" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
           <el-button
+            type="primary"
+            plain
+            icon="el-icon-plus"
             size="mini"
-            type="text"
-            icon="el-icon-view"
-            @click="handleDetail(scope.row)"
-          >详情</el-button>
+            @click="handleAdd"
+            v-hasPermi="['jg:produce:add']"
+          >新增</el-button>
+        </el-col>
+        <el-col :span="1.5">
           <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['jg:produce:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
+            type="danger"
+            plain
             icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
             v-hasPermi="['jg:produce:remove']"
           >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            @click="handleExport"
+            v-hasPermi="['jg:produce:export']"
+          >导出</el-button>
+        </el-col>
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      </el-row>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+      <el-table v-loading="loading" :data="produceList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="构建类型" align="center" prop="conponentTypeCode" />
+        <el-table-column label="工序名称" align="center" prop="name" />
+        <el-table-column label="工序顺序" align="center" prop="rangee" />
+        <el-table-column label="是否有效" align="center" prop="isvaild" >
+          <template slot-scope="scope">
+              <dict-tag :options="dict.type.jg_yes_no" :value="scope.row.isvaild"/>
+            </template>
+        </el-table-column>
+
+        <el-table-column label="备注" align="center" prop="remark" />
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-view"
+              @click="handleDetail(scope.row)"
+            >详情</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['jg:produce:edit']"
+            >修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-hasPermi="['jg:produce:remove']"
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="queryParams.pageNum"
+        :limit.sync="queryParams.pageSize"
+        @pagination="getList"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleImportProduce">确 定</el-button>
+        <el-button @click="tableOpen = false">取 消</el-button>
+      </div>
+    </el-dialog>
 
     <!-- 添加或修改工序信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
           <el-row :gutter="20">
-<el-col :span="12">
-        <el-form-item label="构建类型编码" prop="conponentTypeCode">
-          <el-input v-model="form.conponentTypeCode" placeholder="请输入构建类型编码" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="工序名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入工序名称" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="" prop="rangee">
-          <el-input v-model="form.rangee" placeholder="请输入" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="" prop="isvaild">
-          <el-input v-model="form.isvaild" placeholder="请输入" />
-        </el-form-item>
-</el-col><el-col :span="12">
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-</el-col>          </el-row>
+            <el-col :span="24">
+              <el-form-item label="工序名称" prop="name">
+                <el-input v-model="form.name" placeholder="请输入工序名称" />
+              </el-form-item>
+            </el-col><el-col :span="24">
+              <el-form-item label="工序顺序" prop="rangee">
+                <el-input v-model="form.rangee" placeholder="请输入工序顺序" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="是否有效" prop="isvaild">
+                <el-radio-group v-model="form.isvaild">
+                  <el-radio
+                    v-for="dict in dict.type.jg_yes_no"
+                    :key="dict.value"
+                    :label="dict.value"
+                  >{{dict.label}}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="备注" prop="remark">
+                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              </el-form-item>
+            </el-col>          </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -146,10 +150,11 @@
 </template>
 
 <script>
-import { listProduce, getProduce, delProduce, addProduce, updateProduce } from "@/api/jianguan/produce/produce";
+import { listProduce, getProduce, delProduce, addProduce, updateProduce,importProduces } from "@/api/jianguan/produce/produce";
 
 export default {
   name: "ProduceItem",
+  dicts:['jg_yes_no'],
   props: ['componentType'],
   data() {
     return {
@@ -171,6 +176,8 @@ export default {
       produceList: [],
       // 弹出层标题
       title: "",
+      // 是否显示工序明细维护弹出层
+      tableOpen: false,
       // 是否显示弹出层
       open: false,
       // 是否编辑 true　修改true 查看详情false
@@ -188,10 +195,7 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        id: [
-          { required: true, message: "业务主键ID不能为空", trigger: "blur" }
-        ],
-        conponentTypeCode: [
+        componentTypeCode: [
           { required: true, message: "构建类型编码不能为空", trigger: "blur" }
         ],
         name: [
@@ -202,10 +206,7 @@ export default {
         ],
         isvaild: [
           { required: true, message: "不能为空", trigger: "blur" }
-        ],
-        remark: [
-          { required: true, message: "备注不能为空", trigger: "blur" }
-        ],
+        ]
       }
     };
   },
@@ -215,7 +216,7 @@ export default {
   methods: {
     // 显示弹框
     show() {
-      this.open = true;
+      this.tableOpen = true;
       this.title = "工序明细";
       this.getList();
     },
@@ -305,6 +306,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.componentTypeCode = this.componentType.code;
           this.buttonLoading = true;
           if (this.form.id != null) {
             updateProduce(this.form).then(response => {
@@ -346,6 +348,21 @@ export default {
       this.download('system/produce/export', {
         ...this.queryParams
       }, `produce_${new Date().getTime()}.xlsx`)
+    },
+    //导入工序明细
+    handleImportProduce(){
+      const produceIds = this.ids.join(",");
+      if (produceIds === "") {
+        this.$modal.msgError("请选择要维护的工序数据!");
+        return;
+      }
+      importProduces({ produceIds: produceIds, componentTypeCode: this.componentType.code }).then(res => {
+        this.$modal.msgSuccess(res.msg);
+        if (res.code === 200) {
+          this.visible = false;
+          this.$emit("ok");
+        }
+      });
     }
   }
 };

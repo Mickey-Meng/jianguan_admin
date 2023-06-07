@@ -158,7 +158,7 @@
 
     <!-- 添加或修改出库管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px" v-if="open">
         <el-row :gutter="20">
 
           <el-col :span="12">
@@ -339,14 +339,14 @@
               <image-upload v-model="form.fj"></image-upload>
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
+                      label-position="right" label-width="140px" child-label-width="120px" :data="form">
+            </wti-form>
+          </el-col>
         </el-row>
       </el-form>
 
-      <el-col :span="24">
-        <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
-                  label-position="right" label-width="140px" child-label-width="120px" :data="form">
-        </wti-form>
-      </el-col>
 
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm" v-if="edit">确 定</el-button>
@@ -735,6 +735,7 @@ export default {
                 customerName: item.customerName,
                 customerId: item.customerId,
                 accountPeriod: item.accountPeriod,
+                salesperson: item.purchaser,
               }
             };
           });
@@ -753,6 +754,7 @@ export default {
     handleContractSaleSelect(item) {
       this.form.customerId = item.item.customerId;
       this.form.accountPeriod = item.item.accountPeriod;
+      this.form.salesperson = item.item.salesperson;
       let customerId = item.item.customerId;
       this.form.customerName = item.item.customerName;
       localStorage.setItem("outbound_contractId", item.item.id);

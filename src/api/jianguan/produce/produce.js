@@ -42,3 +42,13 @@ export function delProduce(id) {
     method: 'delete'
   })
 }
+
+export function importProduces(data) {
+  console.log("importProduces[/system/jg/produce/importProduces]");
+  console.log(data);
+  return request({
+    url: '/system/jg/produce/importProduces',
+    method: 'post',
+    data: data
+  })
+}

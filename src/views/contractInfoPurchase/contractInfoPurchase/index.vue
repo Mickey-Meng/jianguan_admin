@@ -197,6 +197,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="供应商地址" prop="address">
+              <el-input v-model="form.address" placeholder="请输入地址"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="采购人员" prop="purchaser">
               <el-input v-model="form.purchaser" placeholder="请输入采购人员"/>
             </el-form-item>
@@ -481,7 +486,7 @@ export default {
           listByIds(response.data.fj).then(res => {
             this.reviewFileList = res.data.map(item => {
               return {
-                name:item.fileName,
+                name:item.originalName,
                 ...item
               }
             })
@@ -563,6 +568,7 @@ export default {
                 supplierId: item.id,
                 contactPerson: item.contactPerson,
                 mobilePhone: item.mobilePhone,
+                address: item.address,
               }
             };
           });
@@ -582,6 +588,7 @@ export default {
       this.form.supplierId = item.item.supplierId;
       this.form.contactPerson = item.item.contactPerson;
       this.form.mobilePhone = item.item.mobilePhone;
+      this.form.address = item.item.address;
       console.log(item);
       localStorage.setItem("contractInfoPurchase_supplierId", item.item.supplierId)
       localStorage.setItem("contractInfoPurchase_supplierName", item.value)

@@ -364,12 +364,13 @@ import {
   updateWarehousing
 } from "@/api/warehousing/warehousing";
 import {listShopGoods} from "@/api/shopGoods/shopGoods";
-import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+import {getBasisSupplier, listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
 import {listContractInfoPurchase} from "@/api/contractInfoPurchase/contractInfoPurchase"
 import formValidate from "@/plugins/formValidate/formValidate";
 import dayjs from "dayjs";
 import fields from './fields';
 import calc from '@/utils/calc.js'
+import {getBasisCustomer} from "@/api/basisCustomer/basisCustomer";
 
 export default {
   name: "Warehousing",
@@ -731,6 +732,15 @@ export default {
       console.log(item);
       this.calLastPaymentDate();
       localStorage.setItem("warehousing_contractId", item.item.id);
+
+      let supplierId = item.item.supplierId;
+      const id = supplierId;
+      getBasisSupplier(id).then(response => {
+        console.log(response);
+        if (response.code == 200) {
+          this.form.address = response.data.address;
+        }
+      })
     },
     getFileList(val) {
       this.fileList = [];
