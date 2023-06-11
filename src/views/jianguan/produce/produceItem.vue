@@ -59,7 +59,14 @@
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
-      <el-table v-loading="loading" :data="produceList" @selection-change="handleSelectionChange">
+      <el-table
+        v-if="refreshTable"
+        v-loading="loading"
+        :row-key="row => row.id"
+        @row-click="clickRow"
+        ref="produceListTable"
+        @selection-change="handleSelectionChange"
+        :data="produceList.slice((pageNum-1)*pageSize, pageNum*pageSize)">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="构建类型" align="center" prop="conponentTypeCode" />
         <el-table-column label="工序名称" align="center" prop="name" />
@@ -97,6 +104,7 @@
         </el-table-column>
       </el-table>
 
+      <!-- 分页格式
       <pagination
         v-show="total>0"
         :total="total"
@@ -104,6 +112,9 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
+      -->
+      <pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" />
+
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleImportProduce">确 定</el-button>
         <el-button @click="tableOpen = false">取 消</el-button>
@@ -150,7 +161,7 @@
 </template>
 
 <script>
-import { listProduce, getProduce, delProduce, addProduce, updateProduce,importProduces } from "@/api/jianguan/produce/produce";
+import { listProduceByTypeId, getProduce, delProduce, addProduce, updateProduce,importProduces } from "@/api/jianguan/produce/produce";
 
 export default {
   name: "ProduceItem",
@@ -182,6 +193,12 @@ export default {
       open: false,
       // 是否编辑 true　修改true 查看详情false
       edit: true,
+      // 重新渲染表格状态
+      refreshTable: true,
+      // 分页信息
+      total: 0,
+      pageNum: 1,
+      pageSize: 10,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -217,17 +234,27 @@ export default {
     // 显示弹框
     show() {
       this.tableOpen = true;
-      this.title = "工序明细";
+      this.title = "工序信息";
       this.getList();
+    },
+    clickRow(row) {
+      this.$refs.produceListTable.toggleRowSelection(row, true);
     },
     /** 查询工序信息列表 */
     getList() {
       this.loading = true;
-      console.log("获取到的构建类型CODE:" + this.componentType.code);
-      this.queryParams.conponentTypeCode = this.componentType.code;
-      listProduce(this.queryParams).then(response => {
-        this.produceList = response.rows;
-        this.total = response.total;
+      console.log(this.componentType);
+      console.log("获取到的构建类型ID:" + this.componentType.id);
+      listProduceByTypeId(this.componentType.id, this.queryParams).then(response => {
+        this.produceList = response.data.produceAllList;
+        this.pageNum = 1;
+        this.pageNum = 10;
+        this.total = this.produceList.length;
+        this.$nextTick(() => {
+          this.produceList.forEach((row) => {
+            this.$refs.produceListTable.toggleRowSelection(row, row.relatedComponentType === '1');
+          });
+        });
         this.loading = false;
       });
     },

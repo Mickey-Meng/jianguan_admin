@@ -71,6 +71,7 @@
 
     <el-table v-loading="loading" :data="componentTypeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="ID" align="center" prop="id" v-if="true"/>
       <el-table-column label="工序库" align="center" prop="libraryId" />
       <el-table-column label="构建类型名称" align="center" prop="name" />
       <el-table-column label="构建类型编号" align="center" prop="code" />
@@ -322,6 +323,8 @@ export default {
     },
     // 维护工序
     handleProduceItem(row){
+      console.log("handleProduceItem...");
+      console.log(row);
       this.currentComponentType = row;
       // 维护工序
       setTimeout(() =>{

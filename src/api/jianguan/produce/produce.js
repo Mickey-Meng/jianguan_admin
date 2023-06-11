@@ -9,6 +9,14 @@ export function listProduce(query) {
   })
 }
 
+export function listProduceByTypeId( typeId, queryParams) {
+  return request({
+    url: '/system/jg/produce/allList/' + typeId,
+    method: 'get',
+    params: queryParams
+  })
+}
+
 // 查询工序信息详细
 export function getProduce(id) {
   return request({
