@@ -51,11 +51,11 @@ export function delProduce(id) {
   })
 }
 
-export function importProduces(data) {
+export function importProduces(produceIds, data) {
   console.log("importProduces[/system/jg/produce/importProduces]");
   console.log(data);
   return request({
-    url: '/system/jg/produce/importProduces',
+    url: '/system/jg/produce/importProduces/' + produceIds,
     method: 'post',
     data: data
   })

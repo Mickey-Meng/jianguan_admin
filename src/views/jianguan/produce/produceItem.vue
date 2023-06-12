@@ -89,13 +89,6 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['jg:produce:edit']"
-            >修改</el-button>
-            <el-button
-              size="mini"
-              type="text"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
               v-hasPermi="['jg:produce:remove']"
@@ -248,7 +241,7 @@ export default {
       listProduceByTypeId(this.componentType.id, this.queryParams).then(response => {
         this.produceList = response.data.produceAllList;
         this.pageNum = 1;
-        this.pageNum = 10;
+        this.pageSize = 10;
         this.total = this.produceList.length;
         this.$nextTick(() => {
           this.produceList.forEach((row) => {
@@ -292,8 +285,8 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+     // this.single = selection.length!==1
+     // this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -383,11 +376,11 @@ export default {
         this.$modal.msgError("请选择要维护的工序数据!");
         return;
       }
-      importProduces({ produceIds: produceIds, componentTypeCode: this.componentType.code }).then(res => {
+      importProduces(produceIds, { componentTypeId: this.componentType.id, componentTypeCode: this.componentType.code }).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
-          this.visible = false;
-          this.$emit("ok");
+          this.tableOpen = false;
+          // this.$emit("ok");
         }
       });
     }

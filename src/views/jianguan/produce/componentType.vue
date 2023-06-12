@@ -33,17 +33,6 @@
           @click="handleAdd"
           v-hasPermi="['jg:componentType:add']"
         >新增</el-button>
-      </el-col>      
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['jg:componentType:edit']"
-        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -75,7 +64,6 @@
       <el-table-column label="工序库" align="center" prop="libraryId" />
       <el-table-column label="构建类型名称" align="center" prop="name" />
       <el-table-column label="构建类型编号" align="center" prop="code" />
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
