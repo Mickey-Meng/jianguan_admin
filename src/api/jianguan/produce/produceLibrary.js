@@ -8,6 +8,14 @@ export function listProduceLibrary(query) {
     params: query
   })
 }
+// 分页查询工序库
+export function pageProduceLibrary(query) {
+  return request({
+    url: '/system/jg/produceLibrary/page',
+    method: 'get',
+    params: query
+  })
+}
 
 export function getProduceLibraryTree() {
   return request({
@@ -46,5 +54,14 @@ export function delProduceLibrary(id) {
   return request({
     url: '/system/jg/produceLibrary/' + id,
     method: 'delete'
+  })
+}
+
+// 复制工序库
+export function copyProduceLibrary(data) {
+  return request({
+    url: '/system/jg/produceLibrary/copy',
+    method: 'post',
+    data: data
   })
 }

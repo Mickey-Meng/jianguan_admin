@@ -59,16 +59,17 @@
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
-      <el-table
+      <!--
         v-if="refreshTable"
         v-loading="loading"
         :row-key="row => row.id"
         @row-click="clickRow"
         ref="produceListTable"
         @selection-change="handleSelectionChange"
-        :data="produceList.slice((pageNum-1)*pageSize, pageNum*pageSize)">
+        :data="produceList.slice((pageNum-1)*pageSize, pageNum*pageSize)"
+       -->
+        <el-table v-loading="loading" :data="produceList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="构建类型" align="center" prop="conponentTypeCode" />
         <el-table-column label="工序名称" align="center" prop="name" />
         <el-table-column label="工序顺序" align="center" prop="rangee" />
         <el-table-column label="是否有效" align="center" prop="isvaild" >
@@ -97,7 +98,6 @@
         </el-table-column>
       </el-table>
 
-      <!-- 分页格式
       <pagination
         v-show="total>0"
         :total="total"
@@ -105,8 +105,6 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      -->
-      <pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" />
 
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleImportProduce">确 定</el-button>
@@ -154,7 +152,7 @@
 </template>
 
 <script>
-import { listProduceByTypeId, getProduce, delProduce, addProduce, updateProduce,importProduces } from "@/api/jianguan/produce/produce";
+import { listProduce, listProduceByTypeId, getProduce, delProduce, addProduce, updateProduce,importProduces } from "@/api/jianguan/produce/produce";
 
 export default {
   name: "ProduceItem",
@@ -236,18 +234,12 @@ export default {
     /** 查询工序信息列表 */
     getList() {
       this.loading = true;
-      console.log(this.componentType);
       console.log("获取到的构建类型ID:" + this.componentType.id);
-      listProduceByTypeId(this.componentType.id, this.queryParams).then(response => {
-        this.produceList = response.data.produceAllList;
-        this.pageNum = 1;
-        this.pageSize = 10;
-        this.total = this.produceList.length;
-        this.$nextTick(() => {
-          this.produceList.forEach((row) => {
-            this.$refs.produceListTable.toggleRowSelection(row, row.relatedComponentType === '1');
-          });
-        });
+      this.queryParams.componentTypeId = this.componentType.id;
+      listProduce(this.queryParams).then(response => {
+       // this.produceList = response.data.produceAllList;
+        this.produceList = response.rows;
+        this.total = response.total;
         this.loading = false;
       });
     },
@@ -326,6 +318,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.componentTypeId = this.componentType.id;
           this.form.componentTypeCode = this.componentType.code;
           this.buttonLoading = true;
           if (this.form.id != null) {

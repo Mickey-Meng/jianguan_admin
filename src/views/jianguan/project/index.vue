@@ -343,23 +343,23 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="备注" prop="remark">
-                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12" v-if="false">
-                <el-form-item label="组织机构" prop="groupId">
+                <el-form-item label="工序库" prop="libraryId">
                   <treeselect
                     :multiple="false"
                     :searchable="true"
-                    v-model="form.groupId"
-                    :options="deptTreeOptions"
-                    :normalizer="deptNormalizer"
+                    v-model="form.libraryId"
+                    :options="produceLibraryOptions"
+                    :normalizer="produceLibraryNormalizer"
                     :show-count="true"
-                    placeholder="选择组织机构"
+                    placeholder="选择工序库"
                   />
                 </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item label="备注" prop="remark">
+                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>

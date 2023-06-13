@@ -47,19 +47,20 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
+    <!-- 工序库树配置项
       v-if="refreshTable"
-      v-loading="loading"
-      :data="produceLibraryList"
       row-key="id"
       :height="'calc(100vh - 205px)'"
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    -->
+    <el-table
+      v-loading="loading"
+      :data="produceLibraryList"
       @row-click="handleClickRow"
-    >
+      >
       <el-table-column label="工序库名称" align="center" prop="name" />
       <el-table-column label="工序库编号" align="center" prop="code" />
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope" v-if="scope.row.name !== '顶级'">
           <el-button
@@ -76,16 +77,31 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['jg:produceLibrary:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-copy"
+            @click="handleCopyProduceLibrary(scope.row)"
+            v-hasPermi="['jg:produceLibrary:edit']"
+          >复制工序库</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 添加或修改工序库对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="上级工序库" prop="parentId">
+            <el-form-item label="上级工序库" prop="parentId" v-if="flase">
               <treeselect
                 :multiple="false"
                 :searchable="true"
@@ -124,7 +140,7 @@
 </template>
 
 <script>
-import { listProduceLibrary, getProduceLibrary, delProduceLibrary, addProduceLibrary, updateProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
+import { listProduceLibrary, pageProduceLibrary, getProduceLibrary, delProduceLibrary, addProduceLibrary, updateProduceLibrary, copyProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import bus from "@/utils/eventBus";
@@ -166,14 +182,12 @@ export default {
       refreshTable: true,
       //工序库下拉树
       produceLibraryTreeOptions: [],
-
+      // 是否是复制操作
+      isCopy: false,
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        parentId: [
-          { required: true, message: "上级工序库不能为空", trigger: "blur" }
-        ],
         name: [
           { required: true, message: "工序库名称不能为空", trigger: "blur" }
         ],
@@ -190,8 +204,10 @@ export default {
     /** 查询工序库列表 */
     getList() {
       this.loading = true;
-      listProduceLibrary(this.queryParams).then(response => {
-        this.produceLibraryList = this.handleTree(response.data, "id");
+      pageProduceLibrary(this.queryParams).then(response => {
+        // this.produceLibraryList = this.handleTree(response.data, "id");
+        this.produceLibraryList = response.rows;
+        this.total = response.total;
         this.loading = false;
       });
     },
@@ -236,6 +252,7 @@ export default {
         updateTime: undefined
       };
       this.resetForm("form");
+      this.isCopy = false;
       listProduceLibrary().then(response => {
         this.produceLibraryTreeOptions = this.handleTree(response.data, "id");
       });
@@ -261,6 +278,15 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
+    },
+    // 复制工序库
+    handleCopyProduceLibrary(row){
+      this.reset();
+      this.open = true;
+      this.edit = true;
+      this.isCopy = true;
+      this.form.id = row.id;
+      this.title = "复制工序库";
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -302,13 +328,23 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateProduceLibrary(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
+            if (this.isCopy) {
+              copyProduceLibrary(this.form).then(response => {
+                this.$modal.msgSuccess("复制成功");
+                this.open = false;
+                this.getList();
+              }).finally(() => {
+                this.buttonLoading = false;
+              });
+            } else {
+              updateProduceLibrary(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功");
+                this.open = false;
+                this.getList();
+              }).finally(() => {
+                this.buttonLoading = false;
+              });
+            }
           } else {
             addProduceLibrary(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
