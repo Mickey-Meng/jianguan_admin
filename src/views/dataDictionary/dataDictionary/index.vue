@@ -12,7 +12,7 @@
       </el-form-item>
 
       <el-form-item>
-	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -26,7 +26,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['dataDictionary:dataDictionary:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -35,7 +36,8 @@
           icon="el-icon-sort"
           size="mini"
           @click="toggleExpandAll"
-        >展开/折叠</el-button>
+        >展开/折叠
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -48,13 +50,13 @@
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="父id" prop="parentId"  v-if="false"/>
-      <el-table-column label="祖级列表" align="center" prop="ancestors"  v-if="true"/>
-      <el-table-column label="编码" align="center" prop="code"  v-if="false"/>
-      <el-table-column label="名称" align="center" prop="name" />
-      <el-table-column label="显示顺序" align="center" prop="orderNum"  v-if="false"/>
-      <el-table-column label="备注" align="center" prop="remark"  v-if="false"/>
-      <el-table-column label="部门ID" align="center" prop="deptId"  v-if="false"/>
+      <el-table-column label="父id" prop="parentId" v-if="false"/>
+      <!-- <el-table-column label="祖级列表" align="center" prop="ancestors" v-if="true"/> -->
+      <el-table-column label="编码" align="center" prop="code" v-if="false"/>
+      <el-table-column label="名称" align="left" prop="name"/>
+      <el-table-column label="显示顺序" align="center" prop="orderNum" v-if="false"/>
+      <el-table-column label="备注" align="center" prop="remark" v-if="false"/>
+      <el-table-column label="部门ID" align="center" prop="deptId" v-if="false"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -63,21 +65,24 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['dataDictionary:dataDictionary:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
             v-hasPermi="['dataDictionary:dataDictionary:add']"
-          >新增</el-button>
+          >新增
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['dataDictionary:dataDictionary:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -86,22 +91,23 @@
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="父id" prop="parentId">
-          <treeselect v-model="form.parentId" :options="dataDictionaryOptions" :normalizer="normalizer" placeholder="请选择父id" />
+          <treeselect v-model="form.parentId" :options="dataDictionaryOptions" :normalizer="normalizer"
+                      placeholder="请选择父id"/>
         </el-form-item>
-<!--        <el-form-item label="祖级列表" prop="ancestors">-->
-<!--          <el-input v-model="form.ancestors" placeholder="请输入祖级列表" />
-        </el-form-item>-->
+        <!--        <el-form-item label="祖级列表" prop="ancestors">-->
+        <!--          <el-input v-model="form.ancestors" placeholder="请输入祖级列表" />
+                </el-form-item>-->
         <el-form-item label="编码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入编码" />
+          <el-input v-model="form.code" placeholder="请输入编码" @blur="verifyCode"/>
         </el-form-item>
         <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名称" />
+          <el-input v-model="form.name" placeholder="请输入名称"/>
         </el-form-item>
         <el-form-item label="显示顺序" prop="orderNum">
-          <el-input v-model="form.orderNum" placeholder="请输入显示顺序" />
+          <el-input v-model="form.orderNum" placeholder="请输入显示顺序"/>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
 
       </el-form>
@@ -114,7 +120,14 @@
 </template>
 
 <script>
-import { listDataDictionary, getDataDictionary, delDataDictionary, addDataDictionary, updateDataDictionary } from "@/api/dataDictionary/dataDictionary";
+import {
+  listDataDictionary,
+  getDataDictionary,
+  delDataDictionary,
+  getDataDictionaryByCode,
+  addDataDictionary,
+  updateDataDictionary
+} from "@/api/dataDictionary/dataDictionary";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -156,25 +169,25 @@ export default {
       // 表单校验
       rules: {
         id: [
-          { required: true, message: "id不能为空", trigger: "blur" }
+          {required: true, message: "id不能为空", trigger: "blur"}
         ],
         parentId: [
-          { required: true, message: "父id不能为空", trigger: "blur" }
+          {required: true, message: "父id不能为空", trigger: "blur"}
         ],
         ancestors: [
-          { required: true, message: "祖级列表不能为空", trigger: "blur" }
+          {required: true, message: "祖级列表不能为空", trigger: "blur"}
         ],
         code: [
-          { required: true, message: "编码不能为空", trigger: "blur" }
+          {required: true, message: "编码不能为空", trigger: "blur"}
         ],
         name: [
-          { required: true, message: "名称不能为空", trigger: "blur" }
+          {required: true, message: "名称不能为空", trigger: "blur"}
         ],
         orderNum: [
-          { required: true, message: "显示顺序不能为空", trigger: "blur" }
+          {required: true, message: "显示顺序不能为空", trigger: "blur"}
         ],
         deptId: [
-          { required: true, message: "部门ID不能为空", trigger: "blur" }
+          {required: true, message: "部门ID不能为空", trigger: "blur"}
         ]
       }
     };
@@ -183,6 +196,21 @@ export default {
     this.getList();
   },
   methods: {
+    verifyCode() {
+      console.log(this.form.code)
+      getDataDictionaryByCode(this.form.code).then(response => {
+        debugger
+        const data = response.data;
+        console.log(data)
+        if (data.code) {
+          this.$message.error('该code已存在,请换一个code试试')
+          this.form.code=null
+        }
+      });
+      // 向后端请求接口的操作
+      // 可以在此处使用 axios 或者其他类似的库进行网络请求
+      // 请求的数据可以通过 this.form.code 获取
+    },
     /** 查询商品类别列表 */
     getList() {
       this.loading = true;
@@ -202,11 +230,11 @@ export default {
         children: node.children
       };
     },
-	/** 查询商品类别下拉树结构 */
+    /** 查询商品类别下拉树结构 */
     getTreeselect() {
       listDataDictionary().then(response => {
         this.dataDictionaryOptions = [];
-        const data = { id: 0, name: '顶级节点', children: [] };
+        const data = {id: 0, name: '顶级节点', children: []};
         data.children = this.handleTree(response.data, "id", "parentId");
         this.dataDictionaryOptions.push(data);
       });
@@ -266,14 +294,14 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-	  this.loading = true;
+      this.loading = true;
       this.reset();
       this.getTreeselect();
       if (row != null) {
         this.form.parentId = row.id;
       }
       getDataDictionary(row.id).then(response => {
-	    this.loading = false;
+        this.loading = false;
         this.form = response.data;
         this.open = true;
         this.title = "修改数据字典";
@@ -283,7 +311,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-		  this.buttonLoading = true;
+          this.buttonLoading = true;
           if (this.form.id != null) {
             updateDataDictionary(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

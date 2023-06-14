@@ -17,6 +17,15 @@ export function getDataDictionary(id) {
   })
 }
 
+// 根据code查询
+export function getDataDictionaryByCode(code) {
+  return request({
+    url: '/dataDictionary/dataDictionary/code/' + code,
+    method: 'get'
+  })
+}
+
+
 // 新增
 export function addDataDictionary(data) {
   return request({

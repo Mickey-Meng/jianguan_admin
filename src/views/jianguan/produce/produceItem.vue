@@ -1,28 +1,55 @@
 <template>
   <div class="app-container">
     <el-dialog :title="title" :visible.sync="tableOpen" width="1100px" append-to-body>
-      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="工序名称" prop="name">
-          <el-input
-            v-model="queryParams.name"
-            placeholder="请输入工序名称"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="是否有效" prop="isvaild">
-          <el-input
-            v-model="queryParams.isvaild"
-            placeholder="请输入"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        </el-form-item>
-      </el-form>
+      <h4 class="form-header h4">构建类型信息</h4>
+      <el-row>
+          <el-form :model="componentType" label-width="100px">
+              <el-col :span="8" :offset="2">
+                  <el-form-item label="构建类型名称" prop="name">
+                  <el-input v-model="componentType.name" disabled />
+                  </el-form-item>
+              </el-col>
+              <el-col :span="8" :offset="2">
+                  <el-form-item label="构建类型编码" prop="code">
+                  <el-input  v-model="componentType.code" disabled />
+                  </el-form-item>
+              </el-col>
+          </el-form>
+      </el-row>
+      <el-row>
+        <h4 class="form-header h4">工序信息</h4>
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form-item label="工序名称" prop="name">
+            <el-input
+              v-model="queryParams.name"
+              placeholder="请输入工序名称"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="是否有效" prop="isEffect">
+
+            <el-select
+                v-model="queryParams.isEffect"
+                placeholder="是否有效"
+                clearable
+                @keyup.enter.native="handleQuery"
+                style="width: 240px"
+              >
+                <el-option
+                  v-for="dict in dict.type.jg_yes_no"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
 
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
@@ -71,10 +98,10 @@
         <el-table v-loading="loading" :data="produceList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="工序名称" align="center" prop="name" />
-        <el-table-column label="工序顺序" align="center" prop="rangee" />
-        <el-table-column label="是否有效" align="center" prop="isvaild" >
+        <el-table-column label="工序顺序" align="center" prop="orderNum" />
+        <el-table-column label="是否有效" align="center" prop="isEffect" >
           <template slot-scope="scope">
-              <dict-tag :options="dict.type.jg_yes_no" :value="scope.row.isvaild"/>
+              <dict-tag :options="dict.type.jg_yes_no" :value="scope.row.isEffect"/>
             </template>
         </el-table-column>
 
@@ -87,6 +114,13 @@
               icon="el-icon-view"
               @click="handleDetail(scope.row)"
             >详情</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['jg:produce:edit']"
+            >修改</el-button>
             <el-button
               size="mini"
               type="text"
@@ -121,13 +155,13 @@
                 <el-input v-model="form.name" placeholder="请输入工序名称" />
               </el-form-item>
             </el-col><el-col :span="24">
-              <el-form-item label="工序顺序" prop="rangee">
-                <el-input v-model="form.rangee" placeholder="请输入工序顺序" />
+              <el-form-item label="工序顺序" prop="orderNum">
+                <el-input v-model="form.orderNum" placeholder="请输入工序顺序" />
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="是否有效" prop="isvaild">
-                <el-radio-group v-model="form.isvaild">
+              <el-form-item label="是否有效" prop="isEffect">
+                <el-radio-group v-model="form.isEffect">
                   <el-radio
                     v-for="dict in dict.type.jg_yes_no"
                     :key="dict.value"
@@ -196,8 +230,8 @@ export default {
         pageSize: 10,
         conponentTypeCode: undefined,
         name: undefined,
-        rangee: undefined,
-        isvaild: undefined,
+        orderNum: undefined,
+        isEffect: undefined,
       },
       // 表单参数
       form: {},
@@ -209,10 +243,10 @@ export default {
         name: [
           { required: true, message: "工序名称不能为空", trigger: "blur" }
         ],
-        rangee: [
+        orderNum: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
-        isvaild: [
+        isEffect: [
           { required: true, message: "不能为空", trigger: "blur" }
         ]
       }
@@ -254,8 +288,8 @@ export default {
         id: undefined,
         conponentTypeCode: undefined,
         name: undefined,
-        rangee: undefined,
-        isvaild: undefined,
+        orderNum: undefined,
+        isEffect: undefined,
         remark: undefined,
         createBy: undefined,
         createTime: undefined,

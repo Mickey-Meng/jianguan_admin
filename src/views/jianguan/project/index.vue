@@ -343,17 +343,16 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-                <el-form-item label="工序库" prop="libraryId">
-                  <treeselect
-                    :multiple="false"
-                    :searchable="true"
-                    v-model="form.libraryId"
-                    :options="produceLibraryOptions"
-                    :normalizer="produceLibraryNormalizer"
-                    :show-count="true"
-                    placeholder="选择工序库"
-                  />
-                </el-form-item>
+              <el-form-item label="工序库" prop="libraryId">
+                <el-select v-model="form.libraryId" placeholder="请选择工序库" @change="$forceUpdate()">
+                  <el-option
+                    v-for="item in produceLibraryOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
 
             <el-col :span="12">
@@ -420,6 +419,7 @@ import { checkFileType, checkFileSize, getFileName, listOssIdToString } from "@/
 import projectItem from "./projectItem";
 import relatedProjectDept from "./relatedProjectDept";
 import monitorDevices from "./monitorDevices";
+import { listProduceLibrary } from "@/api/jianguan/produce/produceLibrary";
 
 export default {
   name: "jgProject",
@@ -442,6 +442,8 @@ export default {
       projectTreeOptions: [],
       // 部门下拉树
       deptTreeOptions: [],
+      // 工序库下拉
+      produceLibraryOptions: [],
       // 当前操作的项目ID
       currentProject: undefined,
       /**************************** */
@@ -620,7 +622,8 @@ export default {
         createTime: undefined,
         updateBy: undefined,
         updateTime: undefined,
-        remark: undefined
+        remark: undefined,
+        libraryId: undefined
       };
       this.resetForm("form");
       this.uploadList = [];
@@ -631,6 +634,9 @@ export default {
       });
       listDept().then(response => {
         this.deptTreeOptions = this.handleTree(response.data, "id");
+      });
+      listProduceLibrary().then(response => {
+        this.produceLibraryOptions = response.data, "id";
       });
     },
     /** 搜索按钮操作 */
