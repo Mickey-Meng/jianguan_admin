@@ -477,23 +477,31 @@ export default {
       this.reset();
       const id = row.id || this.ids
       getContractInfoPurchase(id).then(response => {
+        const supplierId = response.data.supplierId
+        listBasisSupplier().then(suppliers => {
+          const supplier = suppliers.rows.filter((item)=>item.id===supplierId)
 
+          const address = supplier[0].address;
+          response.data.address = address;
 
-        this.loading = false;
-        this.form = response.data;
-        console.log(response.data)
-        if (response.data.fj != "" && response.data.fj != undefined) {
-          listByIds(response.data.fj).then(res => {
-            this.reviewFileList = res.data.map(item => {
-              return {
-                name:item.originalName,
-                ...item
-              }
+          this.loading = false;
+          this.form = response.data;
+          console.log(response.data)
+          if (response.data.fj != "" && response.data.fj != undefined) {
+            listByIds(response.data.fj).then(res => {
+              this.reviewFileList = res.data.map(item => {
+                return {
+                  name:item.originalName,
+                  ...item
+                }
+              })
             })
-          })
-        }
-        this.open = true;
-        this.title = "修改采购合同 ";
+          }
+          this.open = true;
+          this.title = "修改采购合同 ";
+        })
+
+        
       });
     },
     /** 提交按钮 */

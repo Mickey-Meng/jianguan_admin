@@ -75,32 +75,32 @@
           {{ dealNumberFormat(scope.row.htdj) }}
         </template>
       </el-table-column>
-      <el-table-column label="新增单价" align="center" min-width="120" prop="xzdj">
+      <el-table-column label="变更单价" align="center" min-width="120" prop="xzdj">
         <template slot-scope="scope">
           {{ dealNumberFormat(scope.row.xzdj) }}
         </template>
       </el-table-column>
       <el-table-column label="合同数量" align="center" min-width="120" prop="htsl" />
-      <el-table-column label="修正数量" align="center" min-width="120" prop="xzsl" />
-      <el-table-column label="审核数量" align="center" min-width="120" prop="shsl" />
+      <el-table-column label="变更数量" align="center" min-width="120" prop="xzsl" />
+      <el-table-column label="计量数量" align="center" min-width="120" prop="shsl" />
       <el-table-column label="合同金额" align="center" min-width="120" prop="htje">
         <template slot-scope="scope">
           {{ dealNumberFormat(scope.row.htje) }}
         </template>
       </el-table-column>
-      <el-table-column label="修正金额" align="center" min-width="120" prop="xzje">
+      <el-table-column label="变更金额" align="center" min-width="120" prop="xzje">
         <template slot-scope="scope">
           {{ dealNumberFormat(scope.row.xzje) }}
         </template>
       </el-table-column>
-      <el-table-column label="审核金额" align="center" min-width="120" prop="shje">
+      <el-table-column label="计量金额" align="center" min-width="120" prop="shje">
         <template slot-scope="scope">
           {{ dealNumberFormat(scope.row.shje) }}
         </template>
       </el-table-column>
       <!-- <el-table-column label="总数量" align="center" prop="zsl" />
       <el-table-column label="总金额" align="center" prop="zje" /> -->
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" v-if="false" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.bil_source" :value="scope.row.isChange"/>
         </template>
@@ -174,8 +174,8 @@
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12">
-            <el-form-item label="新增单价" prop="xzdj">
-              <el-input v-model="form.xzdj" :disabled="action === 'edit'" placeholder="请输入新增单价" />
+            <el-form-item label="变更单价" prop="xzdj">
+              <el-input v-model="form.xzdj" :disabled="action === 'edit'" placeholder="请输入变更单价" />
             </el-form-item>
           </el-col> -->
           <el-col :span="12">
@@ -200,23 +200,23 @@
             </el-form-item>
           </el-col>
 <!--          <el-col :span="12">-->
-<!--            <el-form-item label="审核数量" prop="shsl">-->
-<!--              <el-input v-model="form.shsl" placeholder="请输入审核数量" />-->
+<!--            <el-form-item label="计量数量" prop="shsl">-->
+<!--              <el-input v-model="form.shsl" placeholder="请输入计量数量" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
 <!--          <el-col :span="12">-->
-<!--            <el-form-item label="审核金额" prop="shje">-->
-<!--              <el-input v-model="form.shje" placeholder="请输入审核金额" />-->
+<!--            <el-form-item label="计量金额" prop="shje">-->
+<!--              <el-input v-model="form.shje" placeholder="请输入计量金额" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
 <!--          <el-col :span="12">-->
-<!--            <el-form-item label="修正数量" prop="xzsl">-->
-<!--              <el-input v-model="form.xzsl" placeholder="请输入修正数量" />-->
+<!--            <el-form-item label="变更数量" prop="xzsl">-->
+<!--              <el-input v-model="form.xzsl" placeholder="请输入变更数量" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
 <!--          <el-col :span="12">-->
-<!--            <el-form-item label="修正金额" prop="xzje">-->
-<!--              <el-input v-model="form.xzje" placeholder="请输入修正金额" />-->
+<!--            <el-form-item label="变更金额" prop="xzje">-->
+<!--              <el-input v-model="form.xzje" placeholder="请输入变更金额" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
           <el-col :span="12">
@@ -321,7 +321,7 @@ export default {
           },
         ],
         xzdj: [
-          // { required: true, message: "新增单价不能为空", trigger: "blur" }
+          // { required: true, message: "变更单价不能为空", trigger: "blur" }
           {
             'validator': formValidate.numberValidator('14/2', true),
             'trigger': ['change', 'blur'],
@@ -342,16 +342,16 @@ export default {
           },
         ],
         // shsl: [
-        //   { required: true, message: "审核数量不能为空", trigger: "blur" }
+        //   { required: true, message: "计量数量不能为空", trigger: "blur" }
         // ],
         // shje: [
-        //   { required: true, message: "审核金额不能为空", trigger: "blur" }
+        //   { required: true, message: "计量金额不能为空", trigger: "blur" }
         // ],
         // xzsl: [
-        //   { required: true, message: "修正数量不能为空", trigger: "blur" }
+        //   { required: true, message: "变更数量不能为空", trigger: "blur" }
         // ],
         // xzje: [
-        //   { required: true, message: "修正金额不能为空", trigger: "blur" }
+        //   { required: true, message: "变更金额不能为空", trigger: "blur" }
         // ],
         // zsl: [
         //   { required: true, message: "总数量不能为空", trigger: "blur" }

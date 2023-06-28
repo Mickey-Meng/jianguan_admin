@@ -702,7 +702,12 @@ export default {
           // this.form.reviewCode = '1';
           updateLedgerBreakdownDetail(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
-            this.listLedgerUpBreakdownDetail();
+            // this.listLedgerUpBreakdownDetail(); ///////////////listLedgerUpBreakdownDetail接口方法都被注释了，这里为什么还在调用？？？
+            this.$modal.msgSuccess("修改成功");
+            setTimeout(() => {
+              this.open = false;
+              this.getList();
+            }, 1000)
           }).finally(() => {
             this.buttonLoading = false;
           });

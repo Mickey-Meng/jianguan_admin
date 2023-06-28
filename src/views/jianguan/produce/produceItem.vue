@@ -139,9 +139,7 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleImportProduce">确 定</el-button>
         <el-button @click="tableOpen = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -174,7 +172,8 @@
               <el-form-item label="备注" prop="remark">
                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
               </el-form-item>
-            </el-col>          </el-row>
+            </el-col>          
+          </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -311,8 +310,8 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-     // this.single = selection.length!==1
-     // this.multiple = !selection.length
+      this.single = selection.length!==1
+      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {

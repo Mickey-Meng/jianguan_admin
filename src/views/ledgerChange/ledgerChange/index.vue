@@ -66,8 +66,9 @@
                 @selection-change="handleSelectionChange" @row-click="row_click">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+        <el-table-column fixed="left" type="index" label="序号" width="55" align="center"/>
         <el-table-column label="变更编号" align="center" prop="bgbh" min-width="140" :show-overflow-tooltip="true"/>
-        <el-table-column label="变更编号名称" align="center" prop="bgbhName" />
+        <el-table-column label="变更编号名称" align="center" prop="bgbhName" v-if="false"/>
         <el-table-column label="变更事项" align="center" prop="bgsx" min-width="140" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="150" :show-overflow-tooltip="true"/>
         <!-- <el-table-column label="桩号" align="center" prop="zh" />
@@ -109,46 +110,41 @@
 
       </el-table>
       <el-table v-loading="loading" :height="'calc(100vh - 555px)'" style="margin-top: 24px;" :data="ledgerChangeDetailList">
-        <el-table-column label="标段编号" align="center" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
-        <el-table-column label="变更编号" align="center" prop="bgbhName" min-width="100" :show-overflow-tooltip="true"/>
+<!--        <el-table-column label="标段编号" align="center" prop="bdbh" min-width="140" :show-overflow-tooltip="true"/>
+        <el-table-column label="变更编号" align="center" prop="bgbhName" min-width="100" :show-overflow-tooltip="true"/>-->
         <el-table-column label="子目号" align="center" prop="zmh" v-if="true"/>
         <el-table-column label="子目名称" align="center" prop="zmmc" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="工程部位" align="center" prop="gcbw" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="单位" align="center" prop="dw" />
-        <el-table-column label="合同单价" align="center" prop="htdj" min-width="100" :show-overflow-tooltip="true">
+        <el-table-column label="变更单价" align="center" prop="htdj" min-width="100" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ dealNumberFormat(scope.row.htdj) }}
           </template>
         </el-table-column>
-        <el-table-column label="新增单价" align="center" prop="xzdj" min-width="100" :show-overflow-tooltip="true">
-          <template slot-scope="scope">
-            {{ dealNumberFormat(scope.row.xzdj) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="合同数量" align="center" prop="htsl" min-width="120" :show-overflow-tooltip="true"/>
+<!--        <el-table-column label="合同数量" align="center" prop="htsl" min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="合同金额" align="center" prop="htje" min-width="120" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ dealNumberFormat(scope.row.htje) }}
           </template>
-        </el-table-column>
-        <el-table-column label="审核数量" align="center" prop="shsl" min-width="120" :show-overflow-tooltip="true"/>
-        <el-table-column label="审核金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
+        </el-table-column>-->
+        <el-table-column label="计量数量" align="center" prop="shsl" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="计量金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ dealNumberFormat(scope.row.shje) }}
           </template>
         </el-table-column>
-        <el-table-column label="修正数量" align="center" prop="xzsl" min-width="100" :show-overflow-tooltip="true"/>
-        <el-table-column label="修正金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true">
+        <el-table-column label="变更数量" align="center" prop="xzsl" min-width="100" :show-overflow-tooltip="true"/>
+        <el-table-column label="变更金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ dealNumberFormat(scope.row.xzje) }}
           </template>
         </el-table-column>
-        <el-table-column label="已计量数量" align="center" prop="yjlsl"  min-width="120" :show-overflow-tooltip="true"/>
+<!--        <el-table-column label="已计量数量" align="center" prop="yjlsl"  min-width="120" :show-overflow-tooltip="true"/>
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
           </template>
-        </el-table-column>
+        </el-table-column>-->
 <!--        <el-table-column label="操作" width="180" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button

@@ -163,7 +163,7 @@
 
     <!-- 添加或修改合同管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px" v-if="open">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="合同编码" prop="contractCode">
