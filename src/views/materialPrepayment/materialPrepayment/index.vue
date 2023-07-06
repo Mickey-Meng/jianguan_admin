@@ -253,7 +253,7 @@
         />
       </el-col>
     </el-row>
-  
+
 
     <!-- 添加或修改材料预付款对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
@@ -337,7 +337,7 @@
           <el-input v-model="form.cjbgbh" placeholder="请输入 抽检报告编号" />
         </el-form-item>
         </el-col>
-        <el-col :span="12">
+<!--        <el-col :span="12">
           <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
@@ -347,7 +347,7 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        </el-col>
+        </el-col>-->
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -371,10 +371,10 @@ export default {
       // 中间计量期数管理表格数据
       measurementNoList: [],
        // 遮罩层
-       qsloading: true,     
+       qsloading: true,
        jlqsbhOptions:[],
       //选中期数
-      xzQsId: "", 
+      xzQsId: "",
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -544,12 +544,12 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
-    rowQsClick(record,index){ 
+    rowQsClick(record,index){
       this.xzQsId=record.id;
       this.queryParams.jlqsbh = record.id;
       this.queryParams.pageNum = 1;
       this.getList();
-    }, 
+    },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");

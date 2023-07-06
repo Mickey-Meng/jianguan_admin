@@ -41,54 +41,7 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <!--    <el-form-item label="申请日期" prop="sqsj">
-             <el-date-picker clearable
-               v-model="queryParams.sqsj"
-               type="date"
-               value-format="yyyy-MM-dd"
-               placeholder="请选择申请日期">
-             </el-date-picker>
-           </el-form-item>
-           <el-form-item label="申请类型" prop="sqlx">
-             <el-input
-               v-model="queryParams.sqlx"
-               placeholder="请输入申请类型"
-               clearable
-               @keyup.enter.native="handleQuery"
-             />
-           </el-form-item>
-           <el-form-item label="申请次数" prop="sqcs">
-             <el-input
-               v-model="queryParams.sqcs"
-               placeholder="请输入申请次数"
-               clearable
-               @keyup.enter.native="handleQuery"
-             />
-           </el-form-item>
-           <el-form-item label="预付款金额" prop="yukje">
-             <el-input
-               v-model="queryParams.yukje"
-               placeholder="请输入预付款金额"
-               clearable
-               @keyup.enter.native="handleQuery"
-             />
-           </el-form-item>
-           <el-form-item label="申请依据" prop="sqyj">
-             <el-input
-               v-model="queryParams.sqyj"
-               placeholder="请输入申请依据"
-               clearable
-               @keyup.enter.native="handleQuery"
-             />
-           </el-form-item>
-           <el-form-item label="附件地址" prop="fj">
-             <el-input
-               v-model="queryParams.fj"
-               placeholder="请输入附件地址"
-               clearable
-               @keyup.enter.native="handleQuery"
-             />
-           </el-form-item>-->
+
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -157,7 +110,6 @@
               <span>{{ parseTime(scope.row.sqsj, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="申请类型" align="center" prop="sqlx"/>
           <el-table-column label="申请次数" align="center" prop="sqcs" />
           <el-table-column label="预付款金额" align="center" prop="yukje">
             <template slot-scope="scope">
@@ -201,8 +153,8 @@
     </el-row>
 
     <!-- 添加或修改开工预付款对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号"/>
         </el-form-item>
@@ -228,7 +180,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="申请类型" prop="sqlx">
-          <el-input v-model="form.sqlx" placeholder="请输入申请类型"/>
+          <el-input v-model="form.sqlx" placeholder="请输入申请类型" />
         </el-form-item>
         <el-form-item label="申请次数" prop="sqcs">
           <el-input v-model="form.sqcs" placeholder="请输入申请次数"/>
@@ -262,16 +214,7 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-              :label="dict.value"
-            >{{ dict.label }}
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -366,7 +309,6 @@ export default {
         jlqsbh: undefined,
         sqbh: undefined,
         sqsj: undefined,
-        sqlx: undefined,
         sqcs: undefined,
         yukje: undefined,
         sqyj: undefined,
@@ -374,7 +316,8 @@ export default {
         status: undefined,
       },
       // 表单参数
-      form: {},
+      form: {
+      },
       // 表单校验
       rules: {
         id: [
@@ -432,8 +375,9 @@ export default {
     this.getList();
     this.getPeriodsList();
   },
+
   methods: {
-    /** 查询开工预付款列表 */
+   /** 查询开工预付款列表 */
     getList() {
       this.loading = true;
       listStartupPrepayment(this.queryParams).then(response => {

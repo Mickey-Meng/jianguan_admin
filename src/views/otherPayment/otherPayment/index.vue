@@ -40,56 +40,6 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <!--      <el-form-item label="申请日期" prop="sqsj">
-                  <el-date-picker clearable
-                    v-model="queryParams.sqsj"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="请选择申请日期">
-                  </el-date-picker>
-                </el-form-item>
-                <el-form-item label="所属单位" prop="ssdw">
-                  <el-input
-                    v-model="queryParams.ssdw"
-                    placeholder="请输入所属单位"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="款项类型" prop="kxlx">
-                  <el-input
-                    v-model="queryParams.kxlx"
-                    placeholder="请输入款项类型"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="款项金额" prop="kxje">
-                  <el-input
-                    v-model="queryParams.kxje"
-                    placeholder="请输入款项金额"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="附件" prop="fj">
-                  <el-input
-                    v-model="queryParams.fj"
-                    placeholder="请输入附件"
-                    clearable
-                    @keyup.enter.native="handleQuery"
-                  />
-                </el-form-item>
-                <el-form-item label="状态" prop="status">
-                  <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-                    <el-option
-                      v-for="dict in dict.type.data_status"
-                      :key="dict.value"
-                      :label="dict.label"
-                      :value="dict.value"
-                    />
-                  </el-select>
-                </el-form-item>-->
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -169,12 +119,7 @@
           <el-table-column label="款项金额" align="center" prop="kxje"/>
           <el-table-column label="备注" align="center" prop="remark"/>
 
-          <!-- <el-table-column label="附件" align="center" prop="fj"  v-if="false"/> -->
-          <el-table-column label="状态" align="center" prop="status" v-if="false">
-            <template slot-scope="scope">
-              <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
-            </template>
-          </el-table-column>
+
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
@@ -250,8 +195,6 @@
             </el-form-item>
           </el-col>
 
-
-
           <el-col :span="12">
             <el-form-item label="款项类型" prop="kxlx">
               <el-select v-model="form.kxlx" placeholder="请选择款项类型">
@@ -264,7 +207,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-
 
           <el-col :span="12">
             <el-form-item label="款项金额" prop="kxje">
@@ -301,18 +243,7 @@
               </el-upload>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in dict.type.data_status"
-                  :key="dict.value"
-                  :label="dict.value"
-                >{{ dict.label }}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
+
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">

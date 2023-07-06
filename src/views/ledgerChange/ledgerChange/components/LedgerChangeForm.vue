@@ -117,19 +117,16 @@
       <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="90" :show-overflow-tooltip="true"/>
       <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh"/>
       <el-table-column label="子目名称" align="center" min-width="160" :show-overflow-tooltip="true" prop="zmmc"/>
-      <el-table-column label="工程部位" align="center" prop="gcbw" min-width="100" :show-overflow-tooltip="true"/>
       <el-table-column label="合同单价" align="center" min-width="110" prop="htdj"/>
-      <el-table-column label="审核数量" align="center" min-width="110" prop="shsl"/>
-      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl">
+      <el-table-column label="变更数量" align="center" min-width="110" prop="xzsl">
         <template slot-scope="scope">
           <div>
               <el-input type="number" v-model="scope.row.xzsl" placeholder="请输入"></el-input>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje"/>
+      <el-table-column label="变更金额" align="center" min-width="110" prop="xzje"/>
       <el-table-column label="单位" align="center" min-width="80" prop="dw"/>
-      <el-table-column label="审核金额" align="center" min-width="110" prop="shje"/>
     </el-table>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm">确 定</el-button>

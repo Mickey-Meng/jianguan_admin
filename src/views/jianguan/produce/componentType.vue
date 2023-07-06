@@ -84,6 +84,14 @@
             icon="el-icon-view"
             @click="handleProduceItem(scope.row)"
           >工序维护</el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleOnlineForms(scope.row)"
+          >在线表单</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -138,6 +146,9 @@
     </el-dialog>
      <!-- 工序详情-->
      <produce-item :componentType="currentComponentType" ref="produceItem"/>
+
+      <!-- 在线表单-->
+      <office-example :componentType="currentComponentType" ref="officeExample"/>
   </div>
 </template>
 
@@ -148,10 +159,11 @@ import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import produceItem from "./produceItem";
 import bus from "@/utils/eventBus";
+import officeExample from "@/components/OnlineOffice/officeExample";
 
 export default {
   name: "ComponentType",
-  components: { Treeselect, produceItem },
+  components: { Treeselect, produceItem, officeExample },
   data() {
     return {
       // 按钮loading
@@ -314,8 +326,16 @@ export default {
       this.currentComponentType = row;
       // 维护工序
       setTimeout(() =>{
-          this.$refs.produceItem.show();
-        }, 200);
+        this.$refs.produceItem.show();
+      }, 200);
+    },
+    // 在线表单
+    handleOnlineForms(){
+      this.currentComponentType = row;
+      // 在线表单
+      setTimeout(() =>{
+        this.$refs.officeExample.onDocumentReady();
+      }, 200);
     },
     /** 提交按钮 */
     submitForm() {

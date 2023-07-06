@@ -359,7 +359,7 @@
                       </el-table-column>
                       <el-table-column
                         prop="fhsl"
-                        label="复核数量">
+                        label="可计量数量">
                       </el-table-column>
                       <el-table-column
                         prop="yjlsl"
@@ -386,57 +386,6 @@
             </el-row>
           </el-col>
       </el-row>
-      <!-- <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标段编号" prop="bdbh">
-          <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
-        </el-form-item>
-        <el-form-item label="计量期次编号" prop="jlqsbh">
-          <el-input v-model="form.jlqsbh" placeholder="请输入计量期次编号" />
-        </el-form-item>
-        <el-form-item label="台账分解编号" prop="tzfjbh">
-          <el-input v-model="form.tzfjbh" placeholder="请输入台账分解编号" />
-        </el-form-item>
-        <el-form-item label="凭证编号" prop="pzbh">
-          <el-input v-model="form.pzbh" placeholder="请输入凭证编号" />
-        </el-form-item>
-        <el-form-item label="计量类型" prop="jllx">
-          <el-input v-model="form.jllx" placeholder="请输入计量类型" />
-        </el-form-item>
-        <el-form-item label="计量日期" prop="jlrq">
-          <el-date-picker clearable
-            v-model="form.jlrq"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择计量日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="交工证书/变更令编号" prop="jgzs">
-          <el-input v-model="form.jgzs" placeholder="请输入交工证书/变更令编号" />
-        </el-form-item>
-        <el-form-item label="工程部位" prop="gcbw">
-          <el-input v-model="form.gcbw" placeholder="请输入工程部位" />
-        </el-form-item>
-
-        <el-form-item label="计量比例" prop="jlbl">
-          <el-input v-model="form.jlbl" placeholder="请输入计量比例" />
-        </el-form-item>
-        <el-form-item label="附件地址" prop="fj">
-          <el-input v-model="form.fj" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div> -->
     </el-dialog>
   </div>
 </template>

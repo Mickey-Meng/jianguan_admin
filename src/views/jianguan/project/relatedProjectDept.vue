@@ -124,7 +124,7 @@ export default {
         **/
         this.deptList = response.data.deptAllList;
         this.pageNum = 1;
-        this.pageNum = 10;
+        this.pageSize = 10;
         this.total = this.deptList.length;
         console.log("getProjectDept->getProjectDept...");
         console.log(this.deptList);

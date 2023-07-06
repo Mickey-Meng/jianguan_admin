@@ -127,16 +127,17 @@
             {{ dealNumberFormat(scope.row.htje) }}
           </template>
         </el-table-column>-->
-        <el-table-column label="计量数量" align="center" prop="shsl" min-width="120" :show-overflow-tooltip="true"/>
-        <el-table-column label="计量金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
-          <template slot-scope="scope">
-            {{ dealNumberFormat(scope.row.shje) }}
-          </template>
-        </el-table-column>
+
         <el-table-column label="变更数量" align="center" prop="xzsl" min-width="100" :show-overflow-tooltip="true"/>
         <el-table-column label="变更金额" align="center" prop="xzje" min-width="100" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ dealNumberFormat(scope.row.xzje) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="计量数量" align="center" prop="shsl" min-width="120" :show-overflow-tooltip="true"/>
+        <el-table-column label="计量金额" align="center" prop="shje" min-width="100" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ dealNumberFormat(scope.row.shje) }}
           </template>
         </el-table-column>
 <!--        <el-table-column label="已计量数量" align="center" prop="yjlsl"  min-width="120" :show-overflow-tooltip="true"/>
