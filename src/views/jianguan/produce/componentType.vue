@@ -147,8 +147,9 @@
      <!-- 工序详情-->
      <produce-item :componentType="currentComponentType" ref="produceItem"/>
 
-      <!-- 在线表单-->
-      <office-example :componentType="currentComponentType" ref="officeExample"/>
+      <!-- 在线表单 -->
+      <online-forms :componentType="currentComponentType" ref="onlineForms"/>
+    
   </div>
 </template>
 
@@ -159,11 +160,11 @@ import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import produceItem from "./produceItem";
 import bus from "@/utils/eventBus";
-import officeExample from "@/components/OnlineOffice/officeExample";
+import onlineForms from "./onlineForms";
 
 export default {
   name: "ComponentType",
-  components: { Treeselect, produceItem, officeExample },
+  components: { Treeselect, produceItem, onlineForms },
   data() {
     return {
       // 按钮loading
@@ -330,11 +331,11 @@ export default {
       }, 200);
     },
     // 在线表单
-    handleOnlineForms(){
+    handleOnlineForms(row){
       this.currentComponentType = row;
       // 在线表单
       setTimeout(() =>{
-        this.$refs.officeExample.onDocumentReady();
+        this.$refs.onlineForms.onLuckySheetReady();
       }, 200);
     },
     /** 提交按钮 */

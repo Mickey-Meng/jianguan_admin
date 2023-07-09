@@ -158,6 +158,15 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:oss:remove']"
           >删除</el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleOnlineEditor(scope.row)"
+            v-hasPermi="['system:oss:remove']"
+          >在线文档</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -183,14 +192,19 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <document-editor ref="documentEditor" :documentInfo="documentInfo"></document-editor>
+    
   </div>
 </template>
 
 <script>
 import { listOss, delOss } from "@/api/system/oss";
+import documentEditor from "@/components/OnlineOffice/document-editor";
 
 export default {
   name: "Oss",
+  components: { documentEditor },
   data() {
     return {
       // 按钮loading
@@ -240,7 +254,8 @@ export default {
         file: [
           { required: true, message: "文件不能为空", trigger: "blur" }
         ]
-      }
+      },
+      documentInfo: undefined
     };
   },
   created() {
@@ -339,6 +354,14 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+
+    // 在线编辑
+    handleOnlineEditor(row){
+      this.documentInfo = row;
+      setTimeout(() =>{
+        this.$refs.documentEditor.openOnlineOffice();
+      }, 200);
     },
     // 预览列表图片状态修改
     handlePreviewListResource(previewListResource) {

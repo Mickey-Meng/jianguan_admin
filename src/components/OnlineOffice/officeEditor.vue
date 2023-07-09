@@ -20,8 +20,10 @@ export default {
         }
     },
     mounted() {
-        if (this.option.url)
+        if (this.option.url) {
+           // this.initEditor();
             this.setEditor(this.option)
+        }
     },
     methods: {
         initEditor() {
@@ -31,6 +33,7 @@ export default {
             const script = document.createElement("script");
             const {protocol} = window.location;
 
+            const ONLYOFFICE_DOCUMENT_HOST = process.env.ONLYOFFICE_DOCUMENT_HOST;
             const ONLYOFFICE_DOCUMENT_PORT=process.env.ONLYOFFICE_DOCUMENT_PORT;
             
             const ONLYOFFICE_DOCUMENT_URL=process.env.ONLYOFFICE_DOCUMENT_URL;
@@ -38,7 +41,7 @@ export default {
             script.setAttribute("id", "onlyoffice-document-api");
             script.setAttribute(
                 "src",
-                `${this.documentUrl +
+                `${ONLYOFFICE_DOCUMENT_HOST +
                 ":" +
                 ONLYOFFICE_DOCUMENT_PORT +
                 ONLYOFFICE_DOCUMENT_URL}`
