@@ -1,39 +1,31 @@
 <template>
     <div class="app-container">
-
-        <el-dialog :title="title" :visible.sync="dialogVisible" width="60%" height="90%" append-to-body>
-
+        <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="60%" height="90%" append-to-body>
             <!-- 
                 :fullscreen="fullscreen"
-            :lock-scroll="lockScroll"
-            :close-on-click-modal="closeOnClickModal"
-            :close-on-press-escape="closeOnPressEscape"
-            <luckysheet
-                ref="luckysheetRef"
-                v-on:getLuckySheetData="receive"
-                v-bind:sheetParams="sheetParams"
-            />
--->
-            <div class="excel">
-                <div id="luckysheet" class="luckyexcel" ></div>
+                :lock-scroll="lockScroll"
+                :close-on-click-modal="closeOnClickModal"
+                :close-on-press-escape="closeOnPressEscape"
+            <div class="luckysheet-content">
+                <div id="luckysheet" style="margin: 0px; padding: 0px; position: absolute; width: 100%; height:100%; left: 0px;top: 0px; bottom: 20px;"></div>
             </div>
-
+             -->
+             <lucky-sheet ref="luckysheetRef" v-on:getLuckySheetData = "receiveSheetData" v-bind:luckysheetParams = "luckysheetParams" />
+ 
             <div slot="footer" class="dialog-footer">
                 <el-button :loading="buttonLoading" type="primary" @click="saveSheetData">确 定</el-button>
                 <el-button @click="dialogVisible == false">取 消</el-button>
             </div>
         </el-dialog>
-        
     </div>
 </template>
+
 <script>
-import Luckysheet from "@/components/Luckysheet/luckysheet";
-//引用luckyexcel
-import LuckyExcel from "luckyexcel"
+import LuckySheet from "@/components/Luckysheet/lucky-sheet";
 export default {
     name: "OnlineForms",
     components: {
-        Luckysheet
+        LuckySheet
     },
     props: ['componentType'],
     data() {
@@ -45,54 +37,61 @@ export default {
             closeOnPressEscape: false,
             fullscreen: false,
             lockScroll: false,
-            luckysheetName: "luckysheet数据编辑",
-
-            sheetParams: {
-                excelHeader: [],
-                excelData: {}
-            },
-            luckySheetData: {
-                excelHeader: [],
-                excelData: {},
-            },
-        };
+            dialogTitle: "luckysheet数据编辑",
+            // lucksheet组件参数数据
+            luckysheetParams: {
+                luckySheetData: {
+                    excelHeader: [],
+                    excelData: {},
+                },
+                templateUrl: "",
+                templateName: ""
+            }
+            
+        }
     },
     methods: {
         onLuckySheetReady() {
             this.dialogVisible = true;
-            this.luckyexcelName = "在线填写-" + this.componentType.name
+            this.dialogTitle = "在线填写-" + this.componentType.name
             this.onGetLuckySheetData();
         },
         onGetLuckySheetData(){
-            console.log("加载数据...");
-            this.sheetParams.excelHeader = ["姓名", "年龄", "性别"];
-            this.sheetParams.excelData = {
-                姓名: ["张三", "赵兰", "李四"],
-                年龄: ["18", "17", "20"],
-                性别: ["男", "女", "男"],
+            this.luckysheetParams.luckySheetData = {
+                excelHeader : ["姓名", "年龄", "性别"],
+                excelData : {
+                    姓名: ["张三", "赵兰", "李四"],
+                    年龄: ["18", "17", "20"],
+                    性别: ["男", "女", "男"]
+                }
             };
+           // this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/10/b09c3e514fa04d4e812d6baf8941c118.xlsx";
+           this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/07/32ecb5092de444b59f302f8c2d342e6a.xlsx";
 
-
-            LuckyExcel.transformExcelToLuckyByUrl("http://112.30.143.209:9002/hefei/2023/07/07/32ecb5092de444b59f302f8c2d342e6a.xlsx", 
-            '【请反馈 】驻场名单模板_流水到款.xlsx', function (exportJson, luckysheetfile) {
+            this.luckysheetParams.templateName = '【表单填写】请填写相关内容';
+            /**
+             * 
+             
+            // 根据文件地址生成对用的sheet数据进行渲染
+            LuckyExcel.transformExcelToLuckyByUrl(this.luckysheetParams.templateUrl, this.luckysheetParams.templateName, 
+              function (exportJson, luckysheetfile) {
                 if (exportJson.sheets == null || exportJson.sheets.length == 0) {
                     alert('Failed to read the content of the excel file, currently does not support xls files!')
-                    return
+                    return;
                 }
-                //LuckyExcel.destroy();
-                luckysheet.create({
-                    container: 'luckysheet',
-                    data: exportJson.sheets,
-                    title: exportJson.info.name,
-                    userInfo: exportJson.info.name.creator,
-                    lang: 'zh',
-                    showinfobar: false,
-                    showtoolbar: false,
-                    allowEdit: false,
-                    allowCopy: false,
-                    editMode: true
-                })
+                console.log(exportJson);
+                // 生成sheet对象
+                window.luckysheet.destroy();
+                window.luckysheet.create({
+                    container: "luckysheet", // 设定DOM容器的id
+                    title: "Luckysheet Demo", // 设定表格名称
+                    lang: "zh", // 设定表格语言
+                    data:  exportJson.sheets,
+                    title: exportJson.info.name
+                });
             })
+            * 
+             */
         },
         saveSheetData() {
             this.buttonLoading = true;
@@ -104,7 +103,7 @@ export default {
             // _this.dialogFormVisible = false; //关闭对话框
         },
         //luckySheet数据接收
-        receive: function (sheetTitle, commonData) {
+        receiveSheetData: function (sheetTitle, commonData) {
             var _this = this;
             _this.luckySheetData.excelHeader = sheetTitle;
             _this.luckySheetData.excelData = commonData;
@@ -113,10 +112,21 @@ export default {
             this.centerDialogVisible = false;
         }
     },
-};
+}
 </script>
  
 <style scoped>
+
+.luckysheet-content {
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    width: 100%;
+    height: 500px;
+    left: 0px;
+    top: 0px;
+    bottom: 10px;
+  }
     .excel {
         width: 100%;
         height: 60vh;
