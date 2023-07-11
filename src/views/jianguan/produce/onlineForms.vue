@@ -14,7 +14,7 @@
  
             <div slot="footer" class="dialog-footer">
                 <el-button :loading="buttonLoading" type="primary" @click="saveSheetData">确 定</el-button>
-                <el-button @click="dialogVisible == false">取 消</el-button>
+                <el-button @click="handleToClose">取 消</el-button>
             </div>
         </el-dialog>
     </div>
@@ -22,12 +22,14 @@
 
 <script>
 import LuckySheet from "@/components/Luckysheet/lucky-sheet";
+import { getFillDataTemplate } from "@/api/jianguan/produce/produce";
+
 export default {
     name: "OnlineForms",
     components: {
         LuckySheet
     },
-    props: ['componentType'],
+    props: ['produceItem'],
     data() {
         return {
             buttonLoading: false,
@@ -44,8 +46,9 @@ export default {
                     excelHeader: [],
                     excelData: {},
                 },
-                templateUrl: "",
-                templateName: ""
+                templateUrl : "http://112.30.143.209:9002/hefei/2023/07/11/3fa3f6d2806340f399436c1fc273760e.xlsx",
+                templateName: "1"
+                //templatePath: "D:\\TemporaryFile\\template\\8ef0033366ad42778d7a3f21ba5d912d_混凝土排水管安装浙路(JS)101施工放样现场记录(监抽).zip"
             }
             
         }
@@ -53,8 +56,8 @@ export default {
     methods: {
         onLuckySheetReady() {
             this.dialogVisible = true;
-            this.dialogTitle = "在线填写-" + this.componentType.name
-            this.onGetLuckySheetData();
+            this.dialogTitle = "在线填写-" + this.produceItem.name
+            //this.onGetLuckySheetData();
         },
         onGetLuckySheetData(){
             this.luckysheetParams.luckySheetData = {
@@ -65,13 +68,17 @@ export default {
                     性别: ["男", "女", "男"]
                 }
             };
-           // this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/10/b09c3e514fa04d4e812d6baf8941c118.xlsx";
-           this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/07/32ecb5092de444b59f302f8c2d342e6a.xlsx";
-
-            this.luckysheetParams.templateName = '【表单填写】请填写相关内容';
+            this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/11/3fa3f6d2806340f399436c1fc273760e.xlsx";
+            //this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/10/b09c3e514fa04d4e812d6baf8941c118.xlsx";
+            // this.luckysheetParams.templateName = '【表单填写】请填写相关内容';
+            
+            // 获取待填写的模板
+            getFillDataTemplate(this.componentType.id).then(response => {
+                this.luckysheetParams.templatePath = response.data.templatePath;
+                this.luckysheetParams.templateName = response.data.templateName;
+            });
             /**
              * 
-             
             // 根据文件地址生成对用的sheet数据进行渲染
             LuckyExcel.transformExcelToLuckyByUrl(this.luckysheetParams.templateUrl, this.luckysheetParams.templateName, 
               function (exportJson, luckysheetfile) {
@@ -109,7 +116,7 @@ export default {
             _this.luckySheetData.excelData = commonData;
         },
         handleToClose() {
-            this.centerDialogVisible = false;
+            this.dialogVisible = false;
         }
     },
 }

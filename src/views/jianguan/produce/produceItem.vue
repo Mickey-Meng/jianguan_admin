@@ -111,12 +111,6 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-view"
-              @click="handleDetail(scope.row)"
-            >详情</el-button>
-            <el-button
-              size="mini"
-              type="text"
               icon="el-icon-edit"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['jg:produce:edit']"
@@ -128,6 +122,14 @@
               @click="handleDelete(scope.row)"
               v-hasPermi="['jg:produce:remove']"
             >删除</el-button>
+
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-view"
+              @click="handleOnlineForms(scope.row)"
+            >在线表单</el-button>
+
           </template>
         </el-table-column>
       </el-table>
@@ -181,14 +183,18 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+      <!-- 在线表单 -->
+      <online-forms :produceItem="currentProduceItem" ref="onlineForms"/>
   </div>
 </template>
 
 <script>
 import { listProduce, listProduceByTypeId, getProduce, delProduce, addProduce, updateProduce,importProduces } from "@/api/jianguan/produce/produce";
+import onlineForms from "./onlineForms";
 
 export default {
   name: "ProduceItem",
+  components: { onlineForms },
   dicts:['jg_yes_no'],
   props: ['componentType'],
   data() {
@@ -232,6 +238,7 @@ export default {
         orderNum: undefined,
         isEffect: undefined,
       },
+      currentProduceItem: undefined,
       // 表单参数
       form: {},
       // 表单校验
@@ -347,6 +354,16 @@ export default {
         this.title = "查看工序信息";
       });
     },
+
+    // 在线表单
+    handleOnlineForms(row){
+      this.currentProduceItem = row;
+      // 在线表单
+      setTimeout(() =>{
+        this.$refs.onlineForms.onLuckySheetReady();
+      }, 200);
+    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {

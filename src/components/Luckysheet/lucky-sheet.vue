@@ -116,7 +116,7 @@
             },
             sheetFormulaBar: false, //是否显示公式栏
             allowCopy: false, //是否允许拷贝
-            enableAddRow: true, //允许添加行
+            enableAddRow: false, //允许添加行
           }
       };
     },
@@ -129,23 +129,48 @@
         var _this = this;//注意这里要重新指定下this对象。
         // this.$nextTick(() => { // In some cases, you need to use $nextTick
         $(function () {
-          if (paramsData.templateUrl !== "") {
+          if ( paramsData.templatePath !== undefined ) {
+            console.log("transformExcelToLucky...|" + paramsData.templatePath);
+            // 根据文件生成对用的sheet数据进行渲染
+            // read a zip file
+            const nodeFs = require("fs");
+            console.log(nodeFs);
+            nodeFs.readFileSync(paramsData.templatePath, function(err, data) {
+                if (err) throw err;
+                LuckyExcel.transformExcelToLucky(data, function(exportJson, luckysheetfile) {
+                  if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+                      alert('Failed to read the content of the excel file, currently does not support xls files!')
+                      return;
+                  }
+                  console.log(exportJson);
+                  // sheet相关参数重新赋值
+                  _this.luckysheetOption.data = exportJson.sheets;
+                  _this.luckysheetOption.title = exportJson.info.name;
+                  _this.luckysheetOption.userInfo = exportJson.info.name.creator;
+                  // 生成sheet对象
+                  window.luckysheet.destroy();
+                  window.luckysheet.create(_this.luckysheetOption);
+                });
+                //JSZip.loadAsync(data).then(function (zip) { });
+            });
+            
+          } else if ( paramsData.templateUrl !== "" && paramsData.templateName !== "" ) {
+            console.log("transformExcelToLuckyByUrl...|" + paramsData.templateUrl);
             // 根据文件地址生成对用的sheet数据进行渲染
-            LuckyExcel.transformExcelToLuckyByUrl(_this.luckysheetParams.templateUrl, _this.luckysheetParams.templateName, 
-              function (exportJson, luckysheetfile) {
-                if (exportJson.sheets == null || exportJson.sheets.length == 0) {
-                    alert('Failed to read the content of the excel file, currently does not support xls files!')
-                    return;
-                }
-                console.log(exportJson);
-                // sheet相关参数重新赋值
-                _this.luckysheetOption.data = exportJson.sheets;
-                _this.luckysheetOption.title = exportJson.info.name;
-                _this.luckysheetOption.userInfo = exportJson.info.name.creator;
-                // 生成sheet对象
-                window.luckysheet.destroy();
-                window.luckysheet.create(_this.luckysheetOption);
-            })
+            LuckyExcel.transformExcelToLuckyByUrl(_this.luckysheetParams.templateUrl, _this.luckysheetParams.templateName, function(exportJson, luckysheetfile) {
+              if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+                  alert('Failed to read the content of the excel file, currently does not support xls files!')
+                  return;
+              }
+              console.log(exportJson);
+              // sheet相关参数重新赋值
+              _this.luckysheetOption.data = exportJson.sheets;
+              _this.luckysheetOption.title = exportJson.info.name;
+              _this.luckysheetOption.userInfo = exportJson.info.name.creator;
+              // 生成sheet对象
+              window.luckysheet.destroy();
+              window.luckysheet.create(_this.luckysheetOption);
+            });
             // 根据传递的sheet数据渲染
           } else if (paramsData.luckySheetData.excelHeader.length != 0 && JSON.stringify(paramsData.luckySheetData.excelData) != "{}") {
             _this.luckysheetOption.hook = {
@@ -159,6 +184,21 @@
           }
         });
         // });
+      },
+
+      rendLuckyExcel(exportJson, luckysheetfile) {
+        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+            alert('Failed to read the content of the excel file, currently does not support xls files!')
+            return;
+        }
+        console.log(exportJson);
+        // sheet相关参数重新赋值
+        _this.luckysheetOption.data = exportJson.sheets;
+        _this.luckysheetOption.title = exportJson.info.name;
+        _this.luckysheetOption.userInfo = exportJson.info.name.creator;
+        // 生成sheet对象
+        window.luckysheet.destroy();
+        window.luckysheet.create(_this.luckysheetOption);
       },
 
       /**接口数据回显 */

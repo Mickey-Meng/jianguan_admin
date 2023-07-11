@@ -60,3 +60,11 @@ export function importProduces(produceIds, data) {
     data: data
   })
 }
+
+// 获取填充数据后的模板
+export function getFillDataTemplate(id) {
+  return request({
+    url: '/system/jg/produce/getFillDataTemplate/' + id,
+    method: 'get'
+  })
+}
