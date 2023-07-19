@@ -25,7 +25,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+<!--      <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.data_status"
@@ -34,7 +34,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
 	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -115,9 +115,9 @@
         <!-- <el-form-item label="标段编号" prop="bdbh">
           <el-input v-model="form.bdbh" placeholder="请输入标段编号" />
         </el-form-item> -->
-        <el-form-item label="台账分解编号" prop="tzfjbh">
+<!--        <el-form-item label="台账分解编号" prop="tzfjbh">
           <el-input v-model="form.tzfjbh" placeholder="请输入台账分解编号" />
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="父节点" prop="tzfjbhParent">
           <treeselect v-model="form.tzfjbhParent" :options="ledgerBreakdownOptions" :normalizer="normalizer" placeholder="请选择台账分解编号父节点" />
         </el-form-item>
@@ -130,7 +130,7 @@
         <!-- <el-form-item label="分解类型" prop="fjlx">
           <el-input v-model="form.fjlx" placeholder="请输入分解类型" />
         </el-form-item> -->
-        <el-form-item label="状态">
+<!--        <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.data_status"
@@ -141,7 +141,7 @@
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+        </el-form-item>-->
         <!-- <el-form-item label="树id" prop="parentId">
           <el-input v-model="form.parentId" placeholder="请输入树id" />
         </el-form-item> -->

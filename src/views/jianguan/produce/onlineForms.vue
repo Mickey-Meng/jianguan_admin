@@ -24,6 +24,10 @@
 import LuckySheet from "@/components/Luckysheet/lucky-sheet";
 import { getFillDataTemplate } from "@/api/jianguan/produce/produce";
 
+//引用luckyexcel
+import LuckyExcel from "luckyexcel";
+import { blobValidate } from "@/utils/ruoyi";
+
 export default {
     name: "OnlineForms",
     components: {
@@ -46,9 +50,10 @@ export default {
                     excelHeader: [],
                     excelData: {},
                 },
+                templateZipFile: undefined,
                 templateUrl : "http://112.30.143.209:9002/hefei/2023/07/11/3fa3f6d2806340f399436c1fc273760e.xlsx",
-                templateName: "1"
-                //templatePath: "D:\\TemporaryFile\\template\\8ef0033366ad42778d7a3f21ba5d912d_混凝土排水管安装浙路(JS)101施工放样现场记录(监抽).zip"
+                templateName: "",
+                templatePath: undefined
             }
             
         }
@@ -57,7 +62,7 @@ export default {
         onLuckySheetReady() {
             this.dialogVisible = true;
             this.dialogTitle = "在线填写-" + this.produceItem.name
-            //this.onGetLuckySheetData();
+            this.onGetLuckySheetData();
         },
         onGetLuckySheetData(){
             this.luckysheetParams.luckySheetData = {
@@ -68,15 +73,41 @@ export default {
                     性别: ["男", "女", "男"]
                 }
             };
-            this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/11/3fa3f6d2806340f399436c1fc273760e.xlsx";
-            //this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/10/b09c3e514fa04d4e812d6baf8941c118.xlsx";
-            // this.luckysheetParams.templateName = '【表单填写】请填写相关内容';
+            this.luckysheetParams.templateUrl = "http://112.30.143.209:9002/hefei/2023/07/19/da05f12b61d64a62a3e895b56ac159f0.xlsx";
             
             // 获取待填写的模板
-            getFillDataTemplate(this.componentType.id).then(response => {
-                this.luckysheetParams.templatePath = response.data.templatePath;
-                this.luckysheetParams.templateName = response.data.templateName;
-            });
+            getFillDataTemplate(this.produceItem.id, { templateUrl : this.luckysheetParams.templateUrl })
+                .then(async (resData) => {
+                    const isBlob = await blobValidate(resData);
+                    if (isBlob) {
+                        const blobData = new Blob([resData]);
+                        // 根据文件生成对用的sheet数据进行渲染
+                        LuckyExcel.transformExcelToLucky(blobData, function(exportJson, luckysheetfile) {
+                            if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+                                alert('Failed to read the content of the excel file, currently does not support xls files!')
+                                return;
+                            }
+                            console.log(exportJson);
+                            // sheet相关参数重新赋值
+                           // this.luckysheetOption.data = exportJson.sheets;
+                           // this.luckysheetOption.title = exportJson.info.name;
+                           // this.luckysheetOption.userInfo = exportJson.info.name.creator;
+                            // 生成sheet对象
+                            window.luckysheet.destroy();
+                            window.luckysheet.create({
+                                container: "luckysheet", // 设定DOM容器的id
+                                title: "Luckysheet Demo", // 设定表格名称
+                                lang: "zh", // 设定表格语言
+                                data:  exportJson.sheets,
+                                title: exportJson.info.name
+                            });
+                        });
+                    }
+                }).catch((r) => {
+                    console.error(r)
+                    Message.error('下载文件出现错误，请联系管理员！')
+                    downloadLoadingInstance.close();
+                })
             /**
              * 
             // 根据文件地址生成对用的sheet数据进行渲染

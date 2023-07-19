@@ -3,13 +3,13 @@
     <el-row :gutter="10">
       <el-col :span="6" :xs="24">
         <div class="left-tree">
-          <el-table ref="table" :header-cell-style="headercellStyle"
-            :cell-style="cellStyle" highlight-current-row v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
-            <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+          <el-table ref="table" :header-cell-style="headercellStyle" :cell-style="cellStyle" highlight-current-row
+            v-loading="qsloading" :data="measurementNoList" @row-click="rowQsClick">
+            <el-table-column label="ID" align="center" prop="id" v-if="false" />
             <el-table-column label="期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true" />
             <el-table-column label="状态" align="center" prop="status" min-width="30">
               <template slot-scope="scope">
-                <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+                <dict-tag :options="dict.type.data_status" :value="scope.row.status" />
               </template>
             </el-table-column>
           </el-table>
@@ -18,12 +18,7 @@
       <el-col :span="18" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="凭证编号" prop="pzbh">
-            <el-input
-              v-model="queryParams.pzbh"
-              placeholder="请输入凭证编号"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
+            <el-input v-model="queryParams.pzbh" placeholder="请输入凭证编号" clearable @keyup.enter.native="handleQuery" />
           </el-form-item>
           <!-- <el-form-item label="标段编号" prop="bdbh">
             <el-input
@@ -41,7 +36,7 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item> -->
-    <!--      <el-form-item label="台账分解编号" prop="tzfjbh">
+          <!--      <el-form-item label="台账分解编号" prop="tzfjbh">
             <el-input
               v-model="queryParams.tzfjbh"
               placeholder="请输入台账分解编号"
@@ -131,37 +126,18 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd('0')"
+            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd('0')"
               :disabled="lockStatus === '1'"
-              v-hasPermi="['measurementDocuments:measurementDocuments:add']"
-            >设计计量</el-button>
+              v-hasPermi="['measurementDocuments:measurementDocuments:add']">设计计量</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd('1')"
+            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd('1')"
               :disabled="lockStatus === '1'"
-              v-hasPermi="['measurementDocuments:measurementDocuments:add']"
-            >变更计量</el-button>
+              v-hasPermi="['measurementDocuments:measurementDocuments:add']">变更计量</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="success"
-              plain
-              icon="el-icon-lock"
-              size="mini"
-              @click="handleLock"
-              :disabled="lockStatus === '1'"
-              v-hasPermi="['measurementDocuments:measurementDocuments:add']"
-            >锁定</el-button>
+            <el-button type="success" plain icon="el-icon-lock" size="mini" @click="handleLock"
+              :disabled="lockStatus === '1'" v-hasPermi="['measurementDocuments:measurementDocuments:add']">锁定</el-button>
           </el-col>
           <!-- <el-col :span="1.5">
             <el-button
@@ -200,12 +176,13 @@
         <div class="table-list">
           <div class="table1">
             <el-table :height="'calc(100vh - 570px)'" v-loading="loading" :header-cell-style="headercellStyle"
-              :cell-style="cellStyle" highlight-current-row :data="measurementDocumentsList" @selection-change="handleSelectionChange" @row-click="queryMeasureAbout">
+              :cell-style="cellStyle" highlight-current-row :data="measurementDocumentsList"
+              @selection-change="handleSelectionChange" @row-click="queryMeasureAbout">
               <!-- <el-table-column type="selection" width="55" align="center" /> -->
-              <el-table-column label="ID" align="center" prop="id" v-if="false"/>
+              <el-table-column label="ID" align="center" prop="id" v-if="false" />
               <!-- <el-table-column label="标段编号" align="center" prop="bdbh" /> -->
               <!-- <el-table-column label="计量期次编号" align="center" prop="jlqsbh" /> -->
-              <el-table-column label="台账分解编号" align="center" min-width="110" prop="tzfjbh" v-if="false"/>
+              <el-table-column label="台账分解编号" align="center" min-width="110" prop="tzfjbh" v-if="false" />
               <el-table-column label="凭证编号" align="center" min-width="100" prop="pzbh" />
               <el-table-column label="计量类型" align="center" min-width="100" prop="jllx" />
               <el-table-column label="计量日期" align="center" min-width="140" prop="jlrq" width="180" v-if="false">
@@ -215,12 +192,12 @@
               </el-table-column>
               <el-table-column label="交工证书" align="center" min-width="100" prop="jgzs" v-if="false" />
               <el-table-column label="工程部位" align="center" min-width="100" prop="gcbw" />
-              <el-table-column label="计算式" align="center" min-width="140" prop="jss" v-if="false"/>
-              <el-table-column label="计量比例" align="center" min-width="140" prop="jlbl" v-if="false"/>
-              <el-table-column label="附件地址" align="center" min-width="140" prop="fj" v-if="false"/>
+              <el-table-column label="计算式" align="center" min-width="140" prop="jss" v-if="false" />
+              <el-table-column label="计量比例" align="center" min-width="140" prop="jlbl" v-if="false" />
+              <el-table-column label="附件地址" align="center" min-width="140" prop="fj" v-if="false" />
               <el-table-column label="审批状态" align="center" min-width="100" prop="reviewCode">
                 <template slot-scope="scope">
-                  <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode"/>
+                  <dict-tag :options="dict.type.review_code" :value="scope.row.reviewCode" />
                 </template>
               </el-table-column>
               <el-table-column label="计量前置条件" align="center">
@@ -264,18 +241,13 @@
                 </template>
               </el-table-column> -->
             </el-table>
-            <pagination
-              v-show="total>0"
-              :total="total"
-              :page.sync="queryParams.pageNum"
-              :limit.sync="queryParams.pageSize"
-              @pagination="getList"
-            />
+            <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize" @pagination="getList" />
           </div>
           <div class="table2">
             <el-tabs type="card" v-model="activeName">
               <el-tab-pane label="计量相关" name="first">
-                <measure-about ref="measureAbout"/>
+                <measure-about ref="measureAbout" />
               </el-tab-pane>
               <el-tab-pane label="附件相关" name="second">
               </el-tab-pane>
@@ -297,23 +269,19 @@
 
     <el-dialog :title="title" :visible.sync="open" width="1500px" append-to-body>
       <el-row class="rows" v-if="open" :gutter="24">
-          <el-col :span="6">
-          <el-tree
-            :data="ledgerBreakdownList"
-            :props="treeProps"
-            accordion
-            @node-click="handleNodeClick">
+        <el-col :span="6">
+          <el-tree :data="ledgerBreakdownList" :props="treeProps" accordion @node-click="handleNodeClick">
           </el-tree>
-          </el-col>
-          <el-col :span="18">
-            <el-row :gutter="24">
-              <el-col :span="24">
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                  <el-col :span="12">
+        </el-col>
+        <el-col :span="18">
+          <el-row :gutter="24">
+            <el-col :span="24">
+              <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-col :span="12">
                   <el-form-item label="凭证编号" prop="pzbh">
                     <el-input v-model="form.pzbh" placeholder="请输入凭证编号" />
-                    </el-form-item>
-                  </el-col>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="12">
                   <el-form-item label="交工证书" prop="jgzs">
                     <el-input v-model="form.jgzs" placeholder="请输入交工证书/变更令编号" />
@@ -331,60 +299,42 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="附件地址">
-                      <upload @input="getFileList"/>
-                   </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="凭证时间 " prop="pzsj"> {{nowDate}}
+                    <upload @input="getFileList" />
                   </el-form-item>
                 </el-col>
-                </el-form>
-                <el-col :span="24">
-                  <el-table
-                      :data="ledgerBreakdownDetailList"
-                      height="250"
-                      border
-                      style="width: 100%">
-                      <el-table-column
-                        prop="zmh"
-                        label="子目号"
-                        width="180">
-                      </el-table-column>
-                      <el-table-column
-                        prop="zmmc"
-                        label="子目名称"
-                        min-width="160"
-                        :show-overflow-tooltip="true"
-                        >
-                      </el-table-column>
-                      <el-table-column
-                        prop="fhsl"
-                        label="可计量数量">
-                      </el-table-column>
-                      <el-table-column
-                        prop="yjlsl"
-                        label="已计量数量">
-                      </el-table-column>
-                      <el-table-column
-                        prop="bqjlsl"
-                        label="本期计量数量">
-                        <template slot-scope="scope">
-                          <div>
-                            <el-input type="number" v-model="scope.row.bqjlsl" placeholder="请输入"></el-input>
-                          </div>
-                        </template>
-                      </el-table-column>
-                  </el-table>
+                <el-col :span="12">
+                  <el-form-item label="凭证时间 " prop="pzsj"> {{ nowDate }}
+                  </el-form-item>
                 </el-col>
+              </el-form>
+              <el-col :span="24">
+                <el-table :data="ledgerBreakdownDetailList" height="250" border style="width: 100%">
+                  <el-table-column prop="zmh" label="子目号" width="180">
+                  </el-table-column>
+                  <el-table-column prop="zmmc" label="子目名称" min-width="160" :show-overflow-tooltip="true">
+                  </el-table-column>
+                  <el-table-column prop="fhsl" label="可计量数量">
+                  </el-table-column>
+                  <el-table-column prop="yjlsl" label="已计量数量">
+                  </el-table-column>
+                  <el-table-column prop="bqjlsl" label="本期计量数量">
+                    <template slot-scope="scope">
+                      <div>
+                        <el-input type="number" v-model="scope.row.bqjlsl" placeholder="请输入"></el-input>
+                      </div>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
               <el-col :span="24">
                 <div style="margin-top: 10px;margin-left: 30px;">
                   <el-button :loading="buttonLoading" type="primary" @click="submitForm">保 存</el-button>
                   <el-button @click="cancel">取 消</el-button>
                 </div>
               </el-col>
-              </el-col>
-            </el-row>
-          </el-col>
+            </el-col>
+          </el-row>
+        </el-col>
       </el-row>
     </el-dialog>
   </div>
@@ -396,7 +346,7 @@ import { listMeasurementListNo, lockingMeaMeasurementNo } from "@/api/measuremen
 import { listLedgerBreakdown } from "@/api/ledger/ledgerBreakdown";
 import upload from '@/components/FileUpload';
 import measureAbout from '@/views/measurementDocuments/measurementDocuments/components/measureAbout';
-
+import { getNowTime } from "@/utils/utils.js";
 export default {
   name: "MeasurementDocuments",
   dicts: ['review_code'],
@@ -408,16 +358,16 @@ export default {
       nowDate: "123",
       treeloading: false,
       fileList: [],
-      ledgerBreakdownDetailList:[],
+      ledgerBreakdownDetailList: [],
       // 中间计量期数管理表格数据
       measurementNoList: [],
       // 遮罩层
       qsloading: true,
-      jlqsbhOptions:[],
+      jlqsbhOptions: [],
       //选中期数
       xzQsId: "",
       ledgerBreakdownList: [],
-      InfoTableData:[],
+      InfoTableData: [],
       treeProps: {
         id: 'id',
         label: 'tzfjmc',
@@ -528,20 +478,6 @@ export default {
     this.getPeriodsList();
   },
   methods: {
-    getNowDate() {
-      const timeOne = new Date()
-      const year = timeOne.getFullYear()
-      let month = timeOne.getMonth() + 1
-      let day = timeOne.getDate()
-      let hour=timeOne.getHours()
-      let min=timeOne.getMinutes()
-      let se=timeOne.getSeconds()
-      month = month < 10 ? '0' + month : month
-      day = day < 10 ? '0' + day : day
-      const NOW_MONTHS_AGO = `${year}-${month}-${day} ${hour}:${min}:${se}`
-      console.log(NOW_MONTHS_AGO);
-      this.nowDate=NOW_MONTHS_AGO
-    },
     /** 查询计量凭证，设计计量、变更计量共用一张凭证，明细分开。列表 */
     getList() {
       this.loading = true;
@@ -551,14 +487,17 @@ export default {
         this.loading = false;
       });
     },
-    getTreeInfoList(tzfjbh){
+    getTreeInfoList(tzfjbh) {
+
       const params = {
         tzfjbh,
         queryType: 'e',
         reviewCode: 2,
         isChange: this.isChange
       }
+
       listLedgerBreakdownDetail(params).then(response => {
+        this.ledgerBreakdownDetailList = []
         if (response.rows.length) {
           this.ledgerBreakdownDetailList = response.rows.map(item => {
             item.meaLedgerBreakdownDetailId = item.id;// add by yangaogao  将查询出来的台账分解明细数据的编号，赋值给中间计量明细表中的外键
@@ -577,12 +516,12 @@ export default {
       this.queryParams.tzfjbh = data.tzfjbh;
       this.getTreeInfoList(data.tzfjbh);
     },
-    selectTree (row) {
+    selectTree(row) {
       console.error('选中的数据', row);
       this.queryParams.tzfjbh = row.tzfjbh;
     },
-     /** 查询台账分解列表 */
-     getLeftTree() {
+    /** 查询台账分解列表 */
+    getLeftTree() {
       this.loading = true;
       const params = {
         // fjlx: this.fjlx
@@ -591,7 +530,7 @@ export default {
       }
       listLedgerBreakdown(params).then(response => {
         this.ledgerBreakdownList = this.handleTree(response.data, "tzfjbh", "tzfjbhParent");
-        console.log("tree",this.ledgerBreakdownList);
+        console.log("tree", this.ledgerBreakdownList);
       }).finally(() => {
         // TODO
         // if (this.ledgerBreakdownList.length) {
@@ -652,7 +591,7 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
-    rowQsClick(record,index){
+    rowQsClick(record, index) {
       this.currentRow = record;
       this.queryParams.jlqsbh = record.jlqsbh;
       this.lockStatus = record.status;
@@ -667,7 +606,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -681,15 +620,15 @@ export default {
       }
       this.isChange = isChange;
       this.getLeftTree()
-      this.getNowDate()
+      this.nowDate = getNowTime()
     },
-    handleLock () {
+    handleLock() {
       const params = {
         meaMeasurementNo: this.queryParams.jlqsbh
       }
       lockingMeaMeasurementNo(params).then(res => {
         console.error('res', res);
-        if (res.msg ==='1') {
+        if (res.msg === '1') {
           this.$message.success('锁定成功！')
           this.$tab.refreshPage()
         } else {
@@ -702,7 +641,7 @@ export default {
       this.loading = true;
       this.reset();
       const id = row.id || this.ids
-      this.getNowDate()
+      this.nowDate = getNowTime()
       getMeasurementDocuments(id).then(response => {
         this.loading = false;
         this.form = response.data;
@@ -755,7 +694,7 @@ export default {
         }
       });
     },
-    getFileList (val) {
+    getFileList(val) {
       console.error('val', val);
       this.fileList = [];
       this.fileList = val;
@@ -793,9 +732,9 @@ export default {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+      return this.$confirm(`确定移除 ${file.name}？`);
     },
-    queryMeasureAbout (row) {
+    queryMeasureAbout(row) {
       this.$refs.measureAbout.measurementAboutList(row.id);
     }
   }
@@ -804,13 +743,16 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   height: 100%;
+
   .table-list {
     .table1 {
       height: calc(100vh - 510px);
       min-height: 150px;
-      > .el-table {
+
+      >.el-table {
         min-height: 100px;
       }
+
       .circle {
         display: inline-block;
         width: 16px;
@@ -820,20 +762,24 @@ export default {
         box-shadow: 0 0 3px 0 #ccc;
       }
     }
+
     .table2 {
       height: 310px;
     }
   }
 }
+
 .left-tree {
   width: 100%;
   height: calc(100vh - 115px);
   background: rgb(247, 248, 251);
   padding: 0 10px;
+
   .el-table {
     height: 100%;
   }
 }
+
 .rows {
   .el-tree {
     overflow: auto;

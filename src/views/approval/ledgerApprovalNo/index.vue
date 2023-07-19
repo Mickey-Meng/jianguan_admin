@@ -156,18 +156,7 @@
             placeholder="请选择申报日期">
           </el-date-picker>
         </el-form-item>
-<!--        <el-form-item label="申报状态" prop="spzt">
-          <el-input v-model="form.spzt" placeholder="请输入申报状态" />
-        </el-form-item>-->
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.data_status"
-              :key="dict.value"
-:label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

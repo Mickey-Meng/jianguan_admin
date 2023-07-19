@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { tansParams } from "@/utils/ruoyi";
 
 // 查询工序信息列表
 export function listProduce(query) {
@@ -62,9 +63,13 @@ export function importProduces(produceIds, data) {
 }
 
 // 获取填充数据后的模板
-export function getFillDataTemplate(id) {
+export function getFillDataTemplate(id, params) {
   return request({
     url: '/system/jg/produce/getFillDataTemplate/' + id,
-    method: 'get'
+    method: 'get',
+    params: params,
+   // transformRequest: [(params) => { return tansParams(params) }],
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    responseType: 'blob'
   })
 }

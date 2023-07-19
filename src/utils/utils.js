@@ -9,6 +9,7 @@ export const dealNumberFormat = num => {
         return res;
     }
 };
+//传入一个值判断是否为空
 export const isEmpty = value => {
     let type = ''
     if (!value || value === '' || value === null) {
@@ -32,4 +33,18 @@ export const getParamType = param => {
     paramType = paramType.substring(1, paramType.length - 1)
     paramType = paramType.split(' ')
     return paramType[1].toLowerCase()
+}
+//获得当前的时间
+export const getNowTime = () => {
+    const timeOne = new Date()
+    const year = timeOne.getFullYear()
+    let month = timeOne.getMonth() + 1
+    let day = timeOne.getDate()
+    let hour=timeOne.getHours()
+    let min=timeOne.getMinutes()
+    let se=timeOne.getSeconds()
+    month = month < 10 ? '0' + month : month
+    day = day < 10 ? '0' + day : day
+    const NOW_MONTHS_AGO = `${year}-${month}-${day} ${hour}:${min}:${se}`
+    return NOW_MONTHS_AGO
 }

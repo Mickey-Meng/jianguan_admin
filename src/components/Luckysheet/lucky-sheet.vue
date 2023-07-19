@@ -6,7 +6,7 @@
    
 <script>
   //引用luckyexcel
-  import LuckyExcel from "luckyexcel"
+  import LuckyExcel from "luckyexcel";
 
   export default {
     name: "Luckysheets",
@@ -129,29 +129,22 @@
         var _this = this;//注意这里要重新指定下this对象。
         // this.$nextTick(() => { // In some cases, you need to use $nextTick
         $(function () {
-          if ( paramsData.templatePath !== undefined ) {
-            console.log("transformExcelToLucky...|" + paramsData.templatePath);
+          if ( paramsData.templateZipFile !== undefined ) {
+            console.log("transformExcelToLucky...|" + paramsData.templateZipFile);
             // 根据文件生成对用的sheet数据进行渲染
-            // read a zip file
-            const nodeFs = require("fs");
-            console.log(nodeFs);
-            nodeFs.readFileSync(paramsData.templatePath, function(err, data) {
-                if (err) throw err;
-                LuckyExcel.transformExcelToLucky(data, function(exportJson, luckysheetfile) {
-                  if (exportJson.sheets == null || exportJson.sheets.length == 0) {
-                      alert('Failed to read the content of the excel file, currently does not support xls files!')
-                      return;
-                  }
-                  console.log(exportJson);
-                  // sheet相关参数重新赋值
-                  _this.luckysheetOption.data = exportJson.sheets;
-                  _this.luckysheetOption.title = exportJson.info.name;
-                  _this.luckysheetOption.userInfo = exportJson.info.name.creator;
-                  // 生成sheet对象
-                  window.luckysheet.destroy();
-                  window.luckysheet.create(_this.luckysheetOption);
-                });
-                //JSZip.loadAsync(data).then(function (zip) { });
+            LuckyExcel.transformExcelToLucky(templateZipFile, function(exportJson, luckysheetfile) {
+              if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+                  alert('Failed to read the content of the excel file, currently does not support xls files!')
+                  return;
+              }
+              console.log(exportJson);
+              // sheet相关参数重新赋值
+              _this.luckysheetOption.data = exportJson.sheets;
+              _this.luckysheetOption.title = exportJson.info.name;
+              _this.luckysheetOption.userInfo = exportJson.info.name.creator;
+              // 生成sheet对象
+              window.luckysheet.destroy();
+              window.luckysheet.create(_this.luckysheetOption);
             });
             
           } else if ( paramsData.templateUrl !== "" && paramsData.templateName !== "" ) {

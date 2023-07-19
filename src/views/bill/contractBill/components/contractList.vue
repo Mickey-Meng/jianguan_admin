@@ -33,14 +33,14 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
+<!--        <el-button
           type="primary"
           plain
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
           v-hasPermi="['bill:contractBill:add']"
-        >新增</el-button>
+        >新增</el-button>-->
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -116,13 +116,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['bill:contractBill:edit']"
           >修改</el-button>
-          <el-button
+<!--          <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
             v-hasPermi="['bill:contractBill:add']"
-          >新增</el-button>
+          >新增</el-button>-->
           <el-button
             size="mini"
             type="text"
