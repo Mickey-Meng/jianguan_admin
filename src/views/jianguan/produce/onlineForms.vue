@@ -1,6 +1,7 @@
 <template>
     <div class="app-container">
         <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="60%" height="90%" append-to-body>
+            <el-button :loading="exportLoading" type="primary" @click="exportLuckySheet">导 出</el-button>
             <!-- 
                 :fullscreen="fullscreen"
                 :lock-scroll="lockScroll"
@@ -10,7 +11,7 @@
                 <div id="luckysheet" style="margin: 0px; padding: 0px; position: absolute; width: 100%; height:100%; left: 0px;top: 0px; bottom: 20px;"></div>
             </div>
              -->
-             <lucky-sheet ref="luckysheetRef" v-on:getLuckySheetData = "receiveSheetData" v-bind:luckysheetParams = "luckysheetParams" />
+             <lucky-sheet ref="luckysheetRef" v-bind:luckysheetParams = "luckysheetParams" />
  
             <div slot="footer" class="dialog-footer">
                 <el-button :loading="buttonLoading" type="primary" @click="saveSheetData">确 定</el-button>
@@ -22,11 +23,10 @@
 
 <script>
 import LuckySheet from "@/components/Luckysheet/lucky-sheet";
-import { getFillDataTemplate } from "@/api/jianguan/produce/produce";
+import { getFillDataTemplate, saveFillDataTemplate } from "@/api/jianguan/produce/produce";
 
-//引用luckyexcel
-import LuckyExcel from "luckyexcel";
 import { blobValidate } from "@/utils/ruoyi";
+import { exportLuckyExcel } from "@/utils/exportLuckyExcel";
 
 export default {
     name: "OnlineForms",
@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             buttonLoading: false,
-
+            exportLoading: false,
             dialogVisible: false,
             closeOnClickModal: false,
             closeOnPressEscape: false,
@@ -81,71 +81,36 @@ export default {
                     const isBlob = await blobValidate(resData);
                     if (isBlob) {
                         const blobData = new Blob([resData]);
-                        // 根据文件生成对用的sheet数据进行渲染
-                        LuckyExcel.transformExcelToLucky(blobData, function(exportJson, luckysheetfile) {
-                            if (exportJson.sheets == null || exportJson.sheets.length == 0) {
-                                alert('Failed to read the content of the excel file, currently does not support xls files!')
-                                return;
-                            }
-                            console.log(exportJson);
-                            // sheet相关参数重新赋值
-                           // this.luckysheetOption.data = exportJson.sheets;
-                           // this.luckysheetOption.title = exportJson.info.name;
-                           // this.luckysheetOption.userInfo = exportJson.info.name.creator;
-                            // 生成sheet对象
-                            window.luckysheet.destroy();
-                            window.luckysheet.create({
-                                container: "luckysheet", // 设定DOM容器的id
-                                title: "Luckysheet Demo", // 设定表格名称
-                                lang: "zh", // 设定表格语言
-                                data:  exportJson.sheets,
-                                title: exportJson.info.name
-                            });
-                        });
+                        this.$refs.luckysheetRef.rendLuckyExcel(blobData);
                     }
                 }).catch((r) => {
                     console.error(r)
-                    Message.error('下载文件出现错误，请联系管理员！')
-                    downloadLoadingInstance.close();
+                    this.$message.error('加载文件出现错误，请联系管理员！')
                 })
-            /**
-             * 
-            // 根据文件地址生成对用的sheet数据进行渲染
-            LuckyExcel.transformExcelToLuckyByUrl(this.luckysheetParams.templateUrl, this.luckysheetParams.templateName, 
-              function (exportJson, luckysheetfile) {
-                if (exportJson.sheets == null || exportJson.sheets.length == 0) {
-                    alert('Failed to read the content of the excel file, currently does not support xls files!')
-                    return;
-                }
-                console.log(exportJson);
-                // 生成sheet对象
-                window.luckysheet.destroy();
-                window.luckysheet.create({
-                    container: "luckysheet", // 设定DOM容器的id
-                    title: "Luckysheet Demo", // 设定表格名称
-                    lang: "zh", // 设定表格语言
-                    data:  exportJson.sheets,
-                    title: exportJson.info.name
-                });
-            })
-            * 
-             */
         },
         saveSheetData() {
             this.buttonLoading = true;
-            var _this = this;
-            _this.$refs.luckyexcelRef.getSheetData(); //调用子组件获取sheet数据
-            console.log(JSON.stringify(_this.luckySheetData));
-            // document.getElementById("luckysheet-input-box").style.zIndex = "-1";
-            // document.getElementsByClassName("luckysheet-cell-input").innerHTML = "";
-            // _this.dialogFormVisible = false; //关闭对话框
+           // var allSheetsData = window.luckysheet.getAllSheets();//获取sheet数据
+            var luckyExcelData = window.luckysheet.toJson(); //获取Workbook数据
+            console.log(JSON.stringify(luckyExcelData));
+            saveFillDataTemplate(this.produceItem.id, JSON.stringify(luckyExcelData))
+                .then(async (res) => {
+                    if (res.code === 200) {
+                        this.buttonLoading = false;
+                        this.dialogVisible = false;
+                        this.$message.success("保存模板数据成功");
+                    }
+                }).catch((r) => {
+                    console.error(r)
+                    this.$message.error('加载文件出现错误，请联系管理员！')
+                })
         },
-        //luckySheet数据接收
-        receiveSheetData: function (sheetTitle, commonData) {
-            var _this = this;
-            _this.luckySheetData.excelHeader = sheetTitle;
-            _this.luckySheetData.excelData = commonData;
+        exportLuckySheet() {
+            this.exportLoading = true;
+            var luckysheetFile = window.luckysheet.getluckysheetfile();
+            exportLuckyExcel(luckysheetFile, "文件下载");
         },
+
         handleToClose() {
             this.dialogVisible = false;
         }

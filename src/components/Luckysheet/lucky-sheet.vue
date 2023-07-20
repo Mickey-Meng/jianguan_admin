@@ -122,7 +122,7 @@
     },
     created() {},
     mounted() {
-      this.initLuckysheet(this.luckysheetParams);
+      // this.initLuckysheet(this.luckysheetParams);
     },
     methods: {
       initLuckysheet(paramsData) {
@@ -179,19 +179,27 @@
         // });
       },
 
-      rendLuckyExcel(exportJson, luckysheetfile) {
-        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
-            alert('Failed to read the content of the excel file, currently does not support xls files!')
-            return;
-        }
-        console.log(exportJson);
-        // sheet相关参数重新赋值
-        _this.luckysheetOption.data = exportJson.sheets;
-        _this.luckysheetOption.title = exportJson.info.name;
-        _this.luckysheetOption.userInfo = exportJson.info.name.creator;
-        // 生成sheet对象
-        window.luckysheet.destroy();
-        window.luckysheet.create(_this.luckysheetOption);
+      /**
+       * 根据模板文件渲染luckysheet
+       * @param {*} luckysheetBlobData 
+       */
+      rendLuckyExcel(luckysheetBlobData) {
+        var _this = this;//注意这里要重新指定下this对象。
+        // 根据文件生成对用的sheet数据进行渲染
+        LuckyExcel.transformExcelToLucky(luckysheetBlobData, function(exportJson, luckysheetfile) {
+          if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+              alert('Failed to read the content of the excel file, currently does not support xls files!')
+              return;
+          }
+          console.log(exportJson);
+          // sheet相关参数重新赋值
+          _this.luckysheetOption.data = exportJson.sheets;
+          _this.luckysheetOption.title = exportJson.info.name;
+          _this.luckysheetOption.userInfo = exportJson.info.creator;
+          // 生成sheet对象
+          window.luckysheet.destroy();
+          window.luckysheet.create(_this.luckysheetOption);
+        });
       },
 
       /**接口数据回显 */

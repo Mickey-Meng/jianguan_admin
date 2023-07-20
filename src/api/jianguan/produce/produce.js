@@ -73,3 +73,12 @@ export function getFillDataTemplate(id, params) {
     responseType: 'blob'
   })
 }
+
+export function saveFillDataTemplate(id, data) {
+  return request({
+    url: '/system/jg/produce/saveFillDataTemplate/' + id,
+    method: 'post',
+    data: data
+  })
+}
+
