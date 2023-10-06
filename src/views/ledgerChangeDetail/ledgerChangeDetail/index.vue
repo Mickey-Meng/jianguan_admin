@@ -89,17 +89,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="修正数量" prop="xzsl">
+      <el-form-item label="修正数量" prop="bgsl">
         <el-input
-          v-model="queryParams.xzsl"
+          v-model="queryParams.bgsl"
           placeholder="请输入修正数量"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="修正金额" prop="xzje">
+      <el-form-item label="修正金额" prop="bgje">
         <el-input
-          v-model="queryParams.xzje"
+          v-model="queryParams.bgje"
           placeholder="请输入修正金额"
           clearable
           @keyup.enter.native="handleQuery"
@@ -189,8 +189,8 @@
       <el-table-column label="合同金额" align="center" prop="htje" />
       <el-table-column label="审核数量" align="center" prop="shsl" />
       <el-table-column label="审核金额" align="center" prop="shje" />
-      <el-table-column label="修正数量" align="center" prop="xzsl" />
-      <el-table-column label="修正金额" align="center" prop="xzje" />
+      <el-table-column label="修正数量" align="center" prop="bgsl" />
+      <el-table-column label="修正金额" align="center" prop="bgje" />
       <el-table-column label="已计量数量" align="center" prop="yjlsl" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
@@ -264,11 +264,11 @@
         <el-form-item label="审核金额" prop="shje">
           <el-input v-model="form.shje" placeholder="请输入审核金额" />
         </el-form-item>
-        <el-form-item label="修正数量" prop="xzsl">
-          <el-input v-model="form.xzsl" placeholder="请输入修正数量" />
+        <el-form-item label="修正数量" prop="bgsl">
+          <el-input v-model="form.bgsl" placeholder="请输入修正数量" />
         </el-form-item>
-        <el-form-item label="修正金额" prop="xzje">
-          <el-input v-model="form.xzje" placeholder="请输入修正金额" />
+        <el-form-item label="修正金额" prop="bgje">
+          <el-input v-model="form.bgje" placeholder="请输入修正金额" />
         </el-form-item>
         <el-form-item label="已计量数量" prop="yjlsl">
           <el-input v-model="form.yjlsl" placeholder="请输入已计量数量" />
@@ -334,8 +334,8 @@ export default {
         htje: undefined,
         shsl: undefined,
         shje: undefined,
-        xzsl: undefined,
-        xzje: undefined,
+        bgsl: undefined,
+        bgje: undefined,
         yjlsl: undefined,
         status: undefined,
       },
@@ -382,10 +382,10 @@ export default {
         shje: [
           { required: true, message: "审核金额不能为空", trigger: "blur" }
         ],
-        xzsl: [
+        bgsl: [
           { required: true, message: "修正数量不能为空", trigger: "blur" }
         ],
-        xzje: [
+        bgje: [
           { required: true, message: "修正金额不能为空", trigger: "blur" }
         ],
         yjlsl: [
@@ -431,8 +431,8 @@ export default {
         htje: undefined,
         shsl: undefined,
         shje: undefined,
-        xzsl: undefined,
-        xzje: undefined,
+        bgsl: undefined,
+        bgje: undefined,
         yjlsl: undefined,
         status: "0",
         createBy: undefined,

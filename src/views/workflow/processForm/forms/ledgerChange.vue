@@ -3,13 +3,13 @@
     <wti-form :fields="fields" :all-disabled="disabled" :border-form="false" label-position="right" label-width="110px" :data="originData">
       <template #file>
         <file v-if="!disabled"/>
-        <div v-else class="history-file"> 
+        <div v-else class="history-file">
             <div class="history-list">
                 <div class="history-value-list" v-if="fileList && fileList.length > 0">
                     <div class="history-value-item" v-for="(file, i) in fileList" :key="i">
                         <a :href="file.url" target="_blank">
                             <div class="history-value-icon">
-                                <i class="el-icon-paperclip"></i> 
+                                <i class="el-icon-paperclip"></i>
                             </div>
                             <div class="history-value-text">
                                 {{ file.name }}
@@ -125,14 +125,14 @@ export default {
               tooltip: false
           },
           {
-              key: 'xzsl',
+              key: 'bgsl',
               label: '修正数量',
               align: 'center',
               minWidth: '110',
               tooltip: false
           },
           {
-              key: 'xzje',
+              key: 'bgje',
               label: '修正金额',
               format: 'money',
               align: 'center',

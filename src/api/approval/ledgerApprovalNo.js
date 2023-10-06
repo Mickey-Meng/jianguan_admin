@@ -42,3 +42,10 @@ export function delLedgerApprovalNo(id) {
     method: 'delete'
   })
 }
+// 查询期数管理详细
+export function getMaxInfo() {
+  return request({
+    url: '/approval/ledgerApprovalNo/getMaxInfo',
+    method: 'get'
+  })
+}

@@ -3,49 +3,29 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">供应链管理系统</h3>
       <el-form-item prop="username">
-        <el-input
-          v-model="loginForm.username"
-          type="text"
-          auto-complete="off"
-          placeholder="账号"
-        >
+        <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input
-          v-model="loginForm.password"
-          type="password"
-          auto-complete="off"
-          placeholder="密码"
-          @keyup.enter.native="handleLogin"
-        >
+        <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码"
+          @keyup.enter.native="handleLogin">
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
       <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
-          v-model="loginForm.code"
-          auto-complete="off"
-          placeholder="验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleLogin"
-        >
+        <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" style="width: 63%"
+          @keyup.enter.native="handleLogin">
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </el-input>
         <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img"/>
+          <img :src="codeUrl" @click="getCode" class="login-code-img" />
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
-        <el-button
-          :loading="loading"
-          size="medium"
-          type="primary"
-          style="width:100%;"
-          @click.native.prevent="handleLogin"
-        >
+        <el-button :loading="loading" size="medium" type="primary" style="width:100%;"
+          @click.native.prevent="handleLogin">
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
@@ -56,7 +36,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2021-2022 konbai.work All Rights Reserved.</span>
+      <span>Copyright © 2021-2024 konbai.work All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -80,7 +60,7 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" }
+          { required: true, trigger: "blur", message: "请输入您的账号呀" }
         ],
         password: [
           { required: true, trigger: "blur", message: "请输入您的密码" }
@@ -89,7 +69,7 @@ export default {
       },
       loading: false,
       // 验证码开关
-      captchaEnabled: true,
+      captchaEnabled: false,
       // 注册开关
       register: false,
       redirect: undefined
@@ -97,7 +77,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
@@ -110,11 +90,14 @@ export default {
   methods: {
     getCode() {
       getCodeImg().then(res => {
-        this.captchaEnabled = res.data.captchaEnabled === undefined ? true : res.data.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.data.img;
-          this.loginForm.uuid = res.data.uuid;
+        if (res.data) {
+          this.captchaEnabled = res.data.captchaEnabled === undefined ? true : res.data.captchaEnabled;
+          if (this.captchaEnabled) {
+            this.codeUrl = "data:image/gif;base64," + res.data.img;
+            this.loginForm.uuid = res.data.uuid;
+          }
         }
+
       });
     },
     getCookie() {
@@ -141,7 +124,7 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+            this.$router.push({ path: this.redirect || "/" }).catch(() => { });
           }).catch(() => {
             this.loading = false;
             if (this.captchaEnabled) {
@@ -164,6 +147,7 @@ export default {
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
 }
+
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
@@ -175,32 +159,39 @@ export default {
   background: #ffffff;
   width: 400px;
   padding: 25px 25px 5px 25px;
+
   .el-input {
     height: 38px;
+
     input {
       height: 38px;
     }
   }
+
   .input-icon {
     height: 39px;
     width: 14px;
     margin-left: 2px;
   }
 }
+
 .login-tip {
   font-size: 13px;
   text-align: center;
   color: #bfbfbf;
 }
+
 .login-code {
   width: 33%;
   height: 38px;
   float: right;
+
   img {
     cursor: pointer;
     vertical-align: middle;
   }
 }
+
 .el-login-footer {
   height: 40px;
   line-height: 40px;
@@ -213,6 +204,7 @@ export default {
   font-size: 12px;
   letter-spacing: 1px;
 }
+
 .login-code-img {
   height: 38px;
 }

@@ -16,7 +16,13 @@ export function listMeasurementListNo() {
     method: 'get'
   })
 }
-
+// 获取最大的期数
+export function getMaxInfo() {
+  return request({
+    url: '/measurementNo/measurementNo/getMaxInfo',
+    method: 'get'
+  })
+}
 // 查询中间计量期数管理详细
 export function getMeasurementNo(id) {
   return request({

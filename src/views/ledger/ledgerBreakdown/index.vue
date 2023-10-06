@@ -77,11 +77,7 @@
     >
       <el-table-column label="台账分解编号" align="left" prop="tzfjbh" />
       <el-table-column label="台账分解名称" align="center" prop="tzfjmc" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

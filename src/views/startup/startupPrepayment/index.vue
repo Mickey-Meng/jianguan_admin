@@ -9,7 +9,7 @@
           <el-table-column label="期数" align="center" prop="name" min-width="120" :show-overflow-tooltip="true"/>
           <el-table-column label="状态" align="center" prop="status" min-width="30">
             <template slot-scope="scope">
-              <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+              <dict-tag :options="dict.type.jg_measurement_status" :value="scope.row.status"/>
             </template>
           </el-table-column>
         </el-table>
@@ -262,7 +262,7 @@ export default {
       default: true
     }
   },
-  dicts: ['data_status'],
+  dicts: ['data_status','jg_measurement_status'],
   data() {
     return {
       // 按钮loading
@@ -398,6 +398,8 @@ export default {
       this.xzQsId = record.id;
       this.queryParams.jlqsbh = record.id;
       this.queryParams.pageNum = 1;
+      this.lockStatus = record.status;
+
       this.getList();
     },
     handleRemove(file, fileList) {

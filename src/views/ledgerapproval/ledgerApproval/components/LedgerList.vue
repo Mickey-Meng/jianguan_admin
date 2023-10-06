@@ -10,23 +10,13 @@
         />
       </el-form-item> -->
       <el-form-item label="子目号" prop="zmh">
-        <el-input
-          v-model="queryParams.zmh"
-          placeholder="请输入子目号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.zmh" placeholder="请输入子目号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="子目名称" prop="zmmc">
-        <el-input
-          v-model="queryParams.zmmc"
-          placeholder="请输入子目名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.zmmc" placeholder="请输入子目名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
-	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -35,33 +25,28 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="ledgerBreakdownDetailList"
-      :height="'calc(100vh - 455px)'"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" align="left"/>
-      <el-table-column label="工程部位" fixed="left" align="center" prop="fjmulu" min-width="280" :show-overflow-tooltip="true"/>
-      <el-table-column label="子目号"  align="left" prop="zmh" min-width="120" :show-overflow-tooltip="true"/>
-      <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true"/>
-      <el-table-column label="单位" align="center" prop="dw" min-width="100" :show-overflow-tooltip="true"/>
-      <el-table-column label="合同单价" align="center" prop="htdj" min-width="140"/>
-      <el-table-column label="设计数量" align="center" prop="sjsl" min-width="140"/>
-      <el-table-column label="分解数量" align="center" prop="fjsl" min-width="140"/>
-      <el-table-column label="变更数量" align="center" prop="bgsl" min-width="140"/>
-      <el-table-column label="复核数量" align="center" prop="fhsl" min-width="140"/>
-      <el-table-column label="已计量数量" align="center" prop="yjlsl" min-width="120"/>
-      <el-table-column label="复核金额" align="center" prop="fhje" min-width="140"/>
-      <el-table-column label="分解类型" align="center" prop="fjlx" min-width="120">
+    <el-table v-if="refreshTable" v-loading="loading" :data="ledgerBreakdownDetailList" :height="'calc(100vh - 455px)'"
+      @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="left" />
+      <el-table-column label="工程部位" fixed="left" align="center" prop="fjmulu" min-width="280"
+        :show-overflow-tooltip="true" />
+      <el-table-column label="子目号" align="left" prop="zmh" min-width="120" :show-overflow-tooltip="true" />
+      <el-table-column label="子目名称" align="center" prop="zmmc" min-width="140" :show-overflow-tooltip="true" />
+      <el-table-column label="单位" align="center" prop="dw" min-width="100" :show-overflow-tooltip="true" />
+      <el-table-column label="合同单价" align="center" prop="htdj" min-width="140" />
+      <el-table-column label="设计数量" align="center" prop="sjsl" min-width="140" />
+      <el-table-column label="分解数量" align="center" prop="fjsl" min-width="140" />
+      <el-table-column label="变更数量" align="center" prop="bgsl" min-width="140" />
+      <el-table-column label="变更分解数量" align="center" prop="bgfjsl" min-width="140" />
+      <el-table-column label="已计量数量" align="center" prop="yjlsl" min-width="120" />
+<!--      <el-table-column label="分解类型" align="center" prop="fjlx" min-width="120">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.change_status" :value="scope.row.fjlx"/>
+          <dict-tag :options="dict.type.change_status" :value="scope.row.fjlx" />
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="状态" align="center" prop="status" min-width="80">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.data_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.data_status" :value="scope.row.status" />
         </template>
       </el-table-column>
     </el-table>
@@ -93,7 +78,7 @@ export default {
   props: {
     close: {
       type: Function,
-      default: () => {}
+      default: () => { }
     }
   },
   data() {
@@ -127,14 +112,15 @@ export default {
         htje: undefined,
         shsl: undefined,
         shje: undefined,
-        xzsl: undefined,
-        xzje: undefined,
+        bgsl: undefined,
+        bgje: undefined,
         zsl: undefined,
         zje: undefined,
         status: undefined,
         parentId: undefined,
+        yjlsl: 0,
         // 台账分解流程取消，台账分解不再查询状态为2的数据，改为查询状态为0的数据
-        reviewCode: '0'
+        // reviewCode: '2'  20230803 ,查询为0的数据
       },
       // 选中的数据集合
       selectionList: []
@@ -147,7 +133,7 @@ export default {
     /** 查询台账分解明细清单列表 */
     getList() {
       this.loading = true;
-      listLedgerBreakdownLeaf(this.queryParams).then(response => {
+        listLedgerBreakdownLeaf(this.queryParams).then(response => {
         this.ledgerBreakdownDetailList = response.data;
         // this.total = response.total;
         this.loading = false;
@@ -173,8 +159,8 @@ export default {
         htje: null,
         shsl: null,
         shje: null,
-        xzsl: null,
-        xzje: null,
+        bgsl: null,
+        bgje: null,
         zsl: null,
         zje: null,
         status: "0",
@@ -222,7 +208,7 @@ export default {
       //   }
       // })
     },
-    submitForm () {
+    submitForm() {
       if (!this.selectionList.length) {
         this.$message.warning('请选择台账分解清单数据后点击确定！');
         return;
@@ -234,11 +220,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .app-container {
-    height: 100%;
-    .dialog-footer {
-      text-align: right;
-      margin-top: 36px;
-    }
+.app-container {
+  height: 100%;
+
+  .dialog-footer {
+    text-align: right;
+    margin-top: 36px;
   }
+}
 </style>

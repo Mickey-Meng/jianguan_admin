@@ -94,6 +94,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/ledgerDetail',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'detail',
+        component: () => import('@/views/ledgerDetail/ledgerBreakdownDetail/DirectoryDetails'),
+        name: 'detail',
+        meta: { title: '子目录详情', icon: '' }
+      },
+    ]
+  },
+  {
     path: '/tool',
     component: Layout,
     hidden: true,

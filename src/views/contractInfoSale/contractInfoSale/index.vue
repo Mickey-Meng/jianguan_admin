@@ -2,28 +2,13 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="合同编码" prop="contractCode">
-        <el-input
-          v-model="queryParams.contractCode"
-          placeholder="请输入合同编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.contractCode" placeholder="请输入合同编码" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="合同名称" prop="contractName">
-        <el-input
-          v-model="queryParams.contractName"
-          placeholder="请输入合同名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.contractName" placeholder="请输入合同名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="客户名称" prop="customerName">
-        <el-input
-          v-model="queryParams.customerName"
-          placeholder="请输入客户名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.customerName" placeholder="请输入客户名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <!--      <el-form-item label="总金额" prop="amount">
               <el-input
@@ -57,61 +42,35 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['contractInfoSale:contractInfoSale:add']"
-        >新增
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['contractInfoSale:contractInfoSale:add']">新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['contractInfoSale:contractInfoSale:edit']"
-        >修改
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['contractInfoSale:contractInfoSale:edit']">修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['contractInfoSale:contractInfoSale:remove']"
-        >删除
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['contractInfoSale:contractInfoSale:remove']">删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['contractInfoSale:contractInfoSale:export']"
-        >导出
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['contractInfoSale:contractInfoSale:export']">导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="contractInfoSaleList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="合同id" align="center" prop="id" v-if="false"/>
-      <el-table-column label="合同编码" align="center" prop="contractCode"/>
-      <el-table-column label="合同名称" align="center" prop="contractName"/>
-      <el-table-column label="客户名称" align="center" prop="customerName"/>
-      <el-table-column label="总金额（元）" align="center" prop="amount"/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="合同id" align="center" prop="id" v-if="false" />
+      <el-table-column label="合同编码" align="center" prop="contractCode" />
+      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="客户名称" align="center" prop="customerName" />
+      <el-table-column label="总金额（元）" align="center" prop="amount" />
       <el-table-column label="合同签订时间" align="center" prop="contactDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contactDate, '{y}-{m}-{d}') }}</span>
@@ -120,46 +79,26 @@
 
       <el-table-column label="是否已签合同" align="center" prop="contractStatus">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.contractStatus"/>
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.contractStatus" />
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row,false)"
-            v-hasPermi="['contractInfoSale:contractInfoSale:query']"
-          >详情
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row, false)"
+            v-hasPermi="['contractInfoSale:contractInfoSale:query']">详情
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row,true)"
-            v-hasPermi="['contractInfoSale:contractInfoSale:edit']"
-          >修改
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row, true)"
+            v-hasPermi="['contractInfoSale:contractInfoSale:edit']">修改
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['contractInfoSale:contractInfoSale:remove']"
-          >删除
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['contractInfoSale:contractInfoSale:remove']">删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改合同管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
@@ -167,67 +106,56 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="合同编码" prop="contractCode">
-              <el-input v-model="form.contractCode" placeholder="请输入合同编码"/>
+              <el-input v-model="form.contractCode" placeholder="请输入合同编码" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同名称" prop="contractName">
-              <el-input v-model="form.contractName" placeholder="请输入合同名称"/>
+              <el-input v-model="form.contractName" placeholder="请输入合同名称" />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="客户名称" prop="customerName">
-              <el-autocomplete
-                style="width: 100%"
-                v-model="form.customerName"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="请输入客户名称"
-                @select="handleSelect"
-              ></el-autocomplete>
+              <el-autocomplete style="width: 100%" v-model="form.customerName" :fetch-suggestions="querySearchAsync"
+                placeholder="请输入客户名称" @select="handleSelect"></el-autocomplete>
             </el-form-item>
-            <input v-model="form.customerId" type="hidden"/>
+            <input v-model="form.customerId" type="hidden" />
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="总金额（元）" prop="amount">
-              <el-input v-model="form.amount" placeholder="请输入总金额"/>
+              <el-input v-model="form.amount" placeholder="请输入总金额" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="质保金" prop="retentionAmount">
-              <el-input v-model="form.retentionAmount" placeholder="请输入质保金"/>
+              <el-input v-model="form.retentionAmount" placeholder="请输入质保金" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="合同签订时间" prop="contactDate">
-              <el-date-picker clearable
-                              v-model="form.contactDate"
-                              type="datetime"
-                              value-format="yyyy-MM-dd HH:mm:ss"
-                              placeholder="请选择合同签订时间">
+              <el-date-picker clearable v-model="form.contactDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择合同签订时间">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="质保金到期时间" prop="retentionDate">
-              <el-date-picker clearable
-                              v-model="form.retentionDate"
-                              type="datetime"
-                              value-format="yyyy-MM-dd HH:mm:ss"
-                              placeholder="请选择质保金到期时间">
+              <el-date-picker clearable v-model="form.retentionDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择质保金到期时间">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="税率" prop="rate">
-              <el-input v-model="form.rate" placeholder="请输入税率"/>
+              <el-input v-model="form.rate" placeholder="请输入税率" />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="发货地" prop="area">
-              <el-input v-model="form.area" placeholder="请输入发货地"/>
+              <el-input v-model="form.area" placeholder="请输入发货地" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -235,72 +163,48 @@
               <el-input v-model="form.contactPerson" placeholder="请输入客户联系人" />
             </el-form-item>
           </el-col><el-col :span="12">
-          <el-form-item label="客户联系方式" prop="mobilePhone">
-            <el-input v-model="form.mobilePhone" placeholder="请输入客户联系方式" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="销售人员" prop="purchaser">
-            <el-input v-model="form.purchaser" placeholder="请输入销售人员" />
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="开始时间" prop="startDate">
-            <el-date-picker clearable
-                            v-model="form.startDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择开始时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col><el-col :span="12">
-          <el-form-item label="结束时间" prop="endDate">
-            <el-date-picker clearable
-                            v-model="form.endDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择结束时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
+            <el-form-item label="客户联系方式" prop="mobilePhone">
+              <el-input v-model="form.mobilePhone" placeholder="请输入客户联系方式" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+            <el-form-item label="销售人员" prop="purchaser">
+              <el-input v-model="form.purchaser" placeholder="请输入销售人员" />
+            </el-form-item>
+          </el-col><el-col :span="12">
+            <el-form-item label="开始时间" prop="startDate">
+              <el-date-picker clearable v-model="form.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择开始时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col><el-col :span="12">
+            <el-form-item label="结束时间" prop="endDate">
+              <el-date-picker clearable v-model="form.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择结束时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
 
           <el-col :span="12">
             <el-form-item label="合同是否已签订" prop="contractStatus">
               <el-select v-model="form.contractStatus" placeholder="请选择合同是否已签订">
-                <el-option
-                  v-for="dict in dict.type.sys_yes_no"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+                <el-option v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.label"
+                  :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="账期（天）" prop="accountPeriod">
-              <el-input v-model="form.accountPeriod" placeholder="请输入账期"/>
+              <el-input v-model="form.accountPeriod" placeholder="请输入账期" />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="附件">
-              <el-upload
-
-                multiple
-                class="upload-demo"
-                :action="uploadFileUrl"
-                :before-upload="handleBeforeUpload"
-                :file-list="fileList"
-                :limit="limit"
-                :on-error="handleUploadError"
-                :on-exceed="handleExceed"
-                :on-success="handleUploadSuccess"
-                :on-preview="handlePreview"
-                :show-file-list="true"
-                :on-remove="handleDeleteFile"
-                :before-remove="beforeRemove"
-                :headers="headers"
-                ref="fileUpload"
-              >
+              <el-upload multiple class="upload-demo" :action="uploadFileUrl" :before-upload="handleBeforeUpload"
+                :file-list="fileList" :limit="limit" :on-error="handleUploadError" :on-exceed="handleExceed"
+                :on-success="handleUploadSuccess" :on-preview="handlePreview" :show-file-list="true"
+                :on-remove="handleDeleteFile" :before-remove="beforeRemove" :headers="headers" ref="fileUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png/excel/word文件，且不超过500kb</div>
               </el-upload>
@@ -308,12 +212,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <wti-form ref="wtiForm" :fields="fields" :border-form="false" @updateValue="updateValue"
-                      label-position="right" label-width="140px" child-label-width="120px" :data="form">
+              label-position="right" label-width="140px" child-label-width="120px" :data="form">
             </wti-form>
           </el-col>
         </el-row>
@@ -328,11 +232,12 @@
 
 <script>
 import {
-  listContractInfoSale,  getContractInfoSale,  delContractInfoSale,  addContractInfoSale,  updateContractInfoSale} from "@/api/contractInfoSale/contractInfoSale";
-import {listBasisCustomer} from "@/api/basisCustomer/basisCustomer";
-import {listBasisSupplier} from "@/api/basisSupplier/basisSupplier";
+  listContractInfoSale, getContractInfoSale, delContractInfoSale, addContractInfoSale, updateContractInfoSale
+} from "@/api/contractInfoSale/contractInfoSale";
+import { listBasisCustomer } from "@/api/basisCustomer/basisCustomer";
+import { listBasisSupplier } from "@/api/basisSupplier/basisSupplier";
 import { delOss } from "@/api/system/oss";
-import {getToken} from "@/utils/auth";
+import { getToken } from "@/utils/auth";
 import formValidate from "@/plugins/formValidate/formValidate";
 import fields from './fields';
 import calc from '@/utils/calc.js'
@@ -356,7 +261,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
+      default: () => ["doc", "docx", "xls", "ppt", "txt", "pdf", "png", "jpg", "jpeg", "xlsx"],
     },
     // 是否显示提示
     isShowTip: {
@@ -415,36 +320,36 @@ export default {
       // 表单校验
       rules: {
         id: [
-          {required: true, message: "合同id不能为空", trigger: "blur"}
+          { required: true, message: "合同id不能为空", trigger: "blur" }
         ],
         contractCode: [
-          {required: true, message: "合同编码不能为空", trigger: "blur"}
+          { required: true, message: "合同编码不能为空", trigger: "blur" }
         ],
         contractName: [
-          {required: true, message: "合同名称不能为空", trigger: "blur"}
+          { required: true, message: "合同名称不能为空", trigger: "blur" }
         ],
         customerName: [
-          {required: true, message: "客户名称不能为空", trigger: "blur,change"}
+          { required: true, message: "客户名称不能为空", trigger: "blur,change" }
         ],
         customerId: [
-          {required: true, message: "客户id不能为空", trigger: "blur"}
+          { required: true, message: "客户id不能为空", trigger: "blur" }
         ],
         amount: [
-          {required: true, message: "总金额不能为空", trigger: "blur"},
+          { required: true, message: "总金额不能为空", trigger: "blur" },
           {
             'validator': formValidate.checkNumberAmount(),
             'trigger': ['change', 'blur'],
           }
         ],
         retentionAmount: [
-          {required: true, message: "质保金不能为空", trigger: "blur"}
+          { required: true, message: "质保金不能为空", trigger: "blur" }
         ],
         contactDate: [
-          {required: true, message: "合同签订时间不能为空", trigger: "blur"}
+          { required: true, message: "合同签订时间不能为空", trigger: "blur" }
         ],
 
         rate: [
-          {required: true, message: "税率不能为空", trigger: "blur"},
+          { required: true, message: "税率不能为空", trigger: "blur" },
           {
             'validator': formValidate.validateRate(),
             'trigger': ['change', 'blur'],
@@ -452,13 +357,13 @@ export default {
         ],
 
         area: [
-          {required: true, message: "发货地不能为空", trigger: "blur"}
+          { required: true, message: "发货地不能为空", trigger: "blur" }
         ],
         contractStatus: [
-          {required: true, message: "1已签订 0未签订不能为空", trigger: "blur"}
+          { required: true, message: "1已签订 0未签订不能为空", trigger: "blur" }
         ],
         accountPeriod: [
-          {required: true, message: "账期不能为空", trigger: "blur"},
+          { required: true, message: "账期不能为空", trigger: "blur" },
           {
             'validator': formValidate.checkOnlyNumber(),
             'trigger': ['change', 'blur'],
@@ -538,7 +443,7 @@ export default {
       this.title = "添加销售合同管理";
     },
     /** 修改按钮操作 */
-    handleUpdate(row,isEdit) {
+    handleUpdate(row, isEdit) {
       this.loading = true;
       this.edit = isEdit;
       this.fileList = [];
@@ -548,7 +453,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         console.log(response.data)
-        if (response.data.fj != ""&&response.data.fj != undefined) {
+        if (response.data.fj != "" && response.data.fj != undefined) {
           this.fileList = JSON.parse(response.data.fj);
         }
         this.open = true;
@@ -686,7 +591,7 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
-        this.uploadList.push({name: res.data.fileName, url: res.data.url, ossId: res.data.ossId});
+        this.uploadList.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId });
         this.uploadedSuccessfully();
       } else {
         this.number--;

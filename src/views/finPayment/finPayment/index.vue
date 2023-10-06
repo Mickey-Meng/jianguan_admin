@@ -1,16 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <!--      <el-form-item label="合同id" prop="contractId">
-              <el-input
-                v-model="queryParams.contractId"
-                placeholder="请输入合同id"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>-->
-
-      <el-form-item label="合同编号" prop="contractCode">
+       <el-form-item label="合同编号" prop="contractCode">
         <el-input
           v-model="queryParams.contractCode"
           placeholder="请输入合同编号"
@@ -18,9 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
-
-
       <el-form-item label="供应商" prop="supplierName">
         <el-input
           v-model="queryParams.supplierName"
@@ -29,22 +17,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!--      <el-form-item label="本次付款金额" prop="payAmount">
-              <el-input
-                v-model="queryParams.payAmount"
-                placeholder="请输入本次付款金额"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="欠付款金额" prop="unpaid">
-              <el-input
-                v-model="queryParams.unpaid"
-                placeholder="请输入欠付款金额"
-                clearable
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>-->
       <el-form-item label="付款时间" prop="paymentDate">
         <el-date-picker clearable
                         v-model="queryParams.paymentDate"
@@ -174,48 +146,6 @@
     <el-dialog :title="title" :visible.sync="open" width="1100px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row :gutter="20">
-<!--          <el-col :span="12">
-            <el-form-item label="合同id" prop="contractId">
-              <el-input v-model="form.contractId" placeholder="请输入合同id"/>
-            </el-form-item>
-          </el-col>-->
-          <!--
-                    <el-col :span="12" v-show="false">
-                      <el-form-item label="采购合同编码" prop="contractCode">
-                        <el-input v-model="form.contractCode" placeholder="通过入库单 带出合同编码" readonly="readonly"/>
-                        <input v-model="form.contractId" placeholder="请输入合同id" type="hidden"/>
-
-                      </el-form-item>
-                    </el-col>
-                    -->
-          <!--
-
-                    <el-col :span="12">
-                      <el-form-item label="采购合同编码" prop="contractCode">
-                        <el-autocomplete
-                          style="width: 100%"
-                          v-model="form.contractCode"
-                          :fetch-suggestions="queryContractSearchAsync"
-                          placeholder="请输入合同编号"
-                          @select="handleContractSelect"
-                        ></el-autocomplete>
-                      </el-form-item>
-                    </el-col>
-          -->
-          <!--
-                    <el-col :span="12" v-show="false">
-                      <el-form-item label="入库单号" prop="warehousingCode">
-                        <el-autocomplete
-                          style="width: 100%"
-                          v-model="form.warehousingCode"
-                          :fetch-suggestions="queryWarehousingSearchAsync"
-                          placeholder="请输入入库单号"
-                          @select="handleWarehousingSelect"
-                        ></el-autocomplete>
-                      </el-form-item>
-                    </el-col>
-
--->
                     <el-col :span="12" v-show="false">
                       <el-form-item label="供应商名称" prop="supplierName"  >
                         <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
@@ -560,103 +490,6 @@ export default {
       localStorage.setItem("finPayment_supplierId", item.item.supplierId)
       localStorage.setItem("finPayment_supplierName", item.value)
     },
-
-    /*
-    queryContractSearchAsync(queryString, cb) {
-      const queryParams = {
-        contractCode: queryString,
-      };
-      let flag = false;
-      listContractInfoPurchase(queryParams).then(response => {
-        flag = true;
-        if (response.rows.length) {
-          const d = response.rows.map(item => {
-            return {
-              value: item.contractCode,
-              label: item.id,
-              item: {
-                id: item.id,
-                contractCode: item.contractCode,
-                contractName: item.contractName,
-                supplierName: item.supplierName,
-                supplierId: item.supplierId,
-                mobilePhone: item.mobilePhone,
-                contractId: item.id,
-                purchaser: item.purchaser,
-              }
-            };
-          });
-          cb(d);
-        } else {
-          cb([]);
-        }
-      }).finally(() => {
-        if (!flag) {
-          cb([]);
-        }
-      });
-
-    },
-    handleContractSelect(item) {
-      this.form.contractCode = item.item.contractCode;
-      this.form.contractName = item.item.contractName;
-      this.form.supplierName = item.item.supplierName;
-      this.form.supplierId = item.item.supplierId;
-      this.form.mobilePhone = item.item.mobilePhone;
-      this.form.contractId = item.item.contractId;
-      this.form.purchaser = item.item.purchaser;
-      console.log(item);
-    },
-    */
-
-    /*
-   * 根据入库单编号进行关联
-   * **/
-    /*
-    queryWarehousingSearchAsync(queryString, cb) {
-      const queryParams = {
-        warehousingCode: queryString,
-      };
-      let flag = false;
-      listWarehousing(queryParams).then(response => {
-        flag = true;
-        if (response.rows.length) {
-          const d = response.rows.map(item => {
-            return {
-              value: item.warehousingCode,
-              label: item.id,
-              item: {
-                id: item.id,
-                contractCode: item.contractCode,
-                supplierName: item.supplierName,
-                supplierId: item.supplierId,
-                mobilePhone: item.mobilePhone,
-                contractId: item.id,
-                purchaser: item.purchaser,
-              }
-            };
-          });
-          cb(d);
-        } else {
-          cb([]);
-        }
-      }).finally(() => {
-        if (!flag) {
-          cb([]);
-        }
-      });
-
-    },
-    handleWarehousingSelect(item) {
-      this.form.contractCode = item.item.contractCode;
-      this.form.supplierName = item.item.supplierName;
-      this.form.supplierId = item.item.supplierId;
-      this.form.mobilePhone = item.item.mobilePhone;
-      this.form.contractId = item.item.contractId;
-      this.form.purchaser = item.item.purchaser;
-      console.log(item);
-    }
-  */
   }
 };
 </script>

@@ -532,8 +532,6 @@ export default {
   methods: {
     // 计算最后到账日期  yangaogao 20230601
     calLastReceivableDateDate() {
-      alert(this.form.outboundDate)
-      alert(this.form.accountPeriod)
       let lastReceivableDate = dayjs(this.form.outboundDate).add(this.form.accountPeriod, "day").format("YYYY-MM-DD HH:mm:ss");
       if (lastReceivableDate) {
         this.form.lastReceivableDate = lastReceivableDate;

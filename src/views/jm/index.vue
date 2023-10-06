@@ -42,6 +42,14 @@ export default {
       .catch(error => {
         console.error(error);
       });
+    //
+    // // this.reportUrl = "http://150.158.139.18:8088/jmreport/view/"+view+params;
+    // console.log("process.env.VUE_APP_REPORT_PATH"+process.env.VUE_APP_REPORT_PATH+"/jmreport/view/"+view+params);
+    // console.log("process.env.VUE_APP_SERVER_ADDRESS:"+process.env.VUE_APP_SERVER_ADDRESS+"/jmreport/view/"+view+params);
+    // console.log("process.env.VUE_APP_SERVER_PATH:"+process.env.VUE_APP_SERVER_PATH+"/jmreport/view/"+view+params);
+    //
+    // this.reportUrl = process.env.VUE_APP_SERVER_PATH+"jmreport/view/"+view+params;
+
 
   },
   mounted() {

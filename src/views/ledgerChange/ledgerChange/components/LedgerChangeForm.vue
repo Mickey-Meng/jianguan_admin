@@ -118,14 +118,14 @@
       <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh"/>
       <el-table-column label="子目名称" align="center" min-width="160" :show-overflow-tooltip="true" prop="zmmc"/>
       <el-table-column label="合同单价" align="center" min-width="110" prop="htdj"/>
-      <el-table-column label="变更数量" align="center" min-width="110" prop="xzsl">
+      <el-table-column label="变更数量" align="center" min-width="110" prop="bgsl">
         <template slot-scope="scope">
           <div>
-              <el-input type="number" v-model="scope.row.xzsl" placeholder="请输入"></el-input>
+              <el-input type="number" v-model="scope.row.bgsl" placeholder="请输入"></el-input>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="变更金额" align="center" min-width="110" prop="xzje"/>
+      <el-table-column label="变更金额" align="center" min-width="110" prop="bgje"/>
       <el-table-column label="单位" align="center" min-width="80" prop="dw"/>
     </el-table>
     <div slot="footer" class="dialog-footer">
@@ -193,8 +193,8 @@ export default {
         htje: undefined,
         shsl: undefined,
         shje: undefined,
-        xzsl: undefined,
-        xzje: undefined,
+        bgsl: undefined,
+        bgje: undefined,
         zsl: undefined,
         zje: undefined,
         status: undefined,
@@ -258,9 +258,9 @@ export default {
   //     handler (val) {
   //       const amount = [];
   //       this.contractBillList = val.map(item => {
-  //         if (item.xzsl) {
-  //           item.xzje = calc.mul(Number(item.xzsl) * Number(dw));
-  //           amount.push(item.xzje)
+  //         if (item.bgsl) {
+  //           item.bgje = calc.mul(Number(item.bgsl) * Number(dw));
+  //           amount.push(item.bgje)
   //         }
   //         return item;
   //       })
@@ -274,8 +274,8 @@ export default {
       const amount = [];
       if (this.contractBillList.length) {
         this.contractBillList.forEach(item => {
-          item.xzje = calc.mul(Number(item.xzsl || 0), Number(item.htdj));
-          amount.push(item.xzje)
+          item.bgje = calc.mul(Number(item.bgsl || 0), Number(item.htdj));
+          amount.push(item.bgje)
         })
       }
       this.form.bgje = calc.add(...amount);
@@ -312,8 +312,8 @@ export default {
         htje: null,
         shsl: null,
         shje: null,
-        xzsl: null,
-        xzje: null,
+        bgsl: null,
+        bgje: null,
         zsl: null,
         zje: null,
         status: "0",
@@ -376,7 +376,7 @@ export default {
             }
             let flag = false;
             this.contractBillList.forEach(item => {
-              if (!(Number(item.xzsl) > 0)) {
+              if (!(Number(item.bgsl) > 0)) {
                 flag = true;
               }
             })

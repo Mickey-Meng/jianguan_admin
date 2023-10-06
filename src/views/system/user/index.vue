@@ -20,6 +20,10 @@
             <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 240px"
               @keyup.enter.native="handleQuery" />
           </el-form-item>
+          <el-form-item label="用户昵称" prop="nickName">
+            <el-input v-model="queryParams.nickName" placeholder="请输入用户昵称" clearable style="width: 240px"
+                      @keyup.enter.native="handleQuery" />
+          </el-form-item>
           <el-form-item label="手机号码" prop="phonenumber">
             <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable style="width: 240px"
               @keyup.enter.native="handleQuery" />
@@ -326,7 +330,7 @@ export default {
         ],
         password: [
           { required: true, message: "用户密码不能为空", trigger: "blur" },
-          { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
+          { min: 5, max: 20, pattern: /^.*(?=.{6,16})(?=.*\d)(?=.*[A-Z]{1,})(?=.*[a-z]{1,})(?=.*[!@#$%^&*?\(\)]).*$/, message: '用户密码长度必须介于 6 和 16 之间，且同时包含数字、大小写字母和特殊字符.', trigger: 'blur' }
         ],
         email: [
           {
@@ -489,8 +493,8 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         closeOnClickModal: false,
-        inputPattern: /^.{5,20}$/,
-        inputErrorMessage: "用户密码长度必须介于 5 和 20 之间"
+        inputPattern: /^.*(?=.{6,16})(?=.*\d)(?=.*[A-Z]{1,})(?=.*[a-z]{1,})(?=.*[!@#$%^&*?\(\)]).*$/,
+        inputErrorMessage: "用户密码长度必须介于 6 和 16 之间，且同时包含数字、大小写字母和特殊字符."
       }).then(({ value }) => {
         resetUserPwd(row.userId, value).then(response => {
           this.$modal.msgSuccess("修改成功，新密码是：" + value);

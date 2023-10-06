@@ -1,37 +1,30 @@
 <template>
   <div class="upload-file">
-    <el-upload
-      multiple
-      :action="uploadFileUrl"
-      :before-upload="handleBeforeUpload"
-      :file-list="fileList"
-      :limit="limit"
-      :on-error="handleUploadError"
-      :on-exceed="handleExceed"
-      :on-success="handleUploadSuccess"
-      :show-file-list="false"
-      :headers="headers"
-      class="upload-file-uploader"
-      ref="fileUpload"
-    >
-      <!-- 上传按钮 -->
-      <el-button size="mini" type="primary">选取文件</el-button>
-      <!-- 上传提示 -->
-      <div class="el-upload__tip" style="display: inline-block; margin-left: 12px;" slot="tip" v-if="showTip">
-        请上传
-        <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-        <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
-        的文件
-      </div>
+    <el-upload multiple :action="uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :limit="limit"
+      :on-error="handleUploadError" :on-exceed="handleExceed" :on-success="handleUploadSuccess" :show-file-list="false"
+      :headers="headers" class="upload-file-uploader" ref="fileUpload">
+      <template v-if="handleType !== 'read'">
+        <!-- 上传按钮 -->
+        <el-button size="mini" type="primary">选取文件</el-button>
+        <!-- 上传提示 -->
+        <div class="el-upload__tip" style="display: inline-block; margin-left: 12px;" slot="tip" v-if="showTip">
+          请上传
+          <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
+          <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
+          的文件
+        </div>
+      </template>
+
     </el-upload>
 
     <!-- 文件列表 -->
+
     <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
       <li :key="file.url" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
         <el-link :href="`${file.url}`" :underline="false" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
         </el-link>
-        <div class="ele-upload-list__item-content-action">
+        <div class="ele-upload-list__item-content-action" v-if="handleType !== 'read'">
           <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
         </div>
       </li>
@@ -46,6 +39,10 @@ import { listByIds, delOss } from "@/api/system/oss";
 export default {
   name: "FileUpload",
   props: {
+    handleType: {
+      type: String,
+      default: 'edit',
+    },
     // 值
     value: [String, Object, Array],
     // 数量限制
@@ -61,7 +58,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc","docx", "xls", "ppt", "txt", "pdf","png","jpg","jpeg","xlsx"],
+      default: () => ["doc", "docx", "xls", "ppt", "txt", "pdf", "png", "jpg", "jpeg", "xlsx"],
     },
     // 是否显示提示
     isShowTip: {
@@ -117,7 +114,7 @@ export default {
       immediate: true
     },
     fileData: {
-      handler (val) {
+      handler(val) {
         this.fileList = val;
       },
       deep: true
@@ -225,18 +222,21 @@ export default {
 .upload-file-uploader {
   margin-bottom: 5px;
 }
+
 .upload-file-list .el-upload-list__item {
   border: 1px solid #e4e7ed;
   line-height: 2;
   margin-bottom: 10px;
   position: relative;
 }
+
 .upload-file-list .ele-upload-list__item-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: inherit;
 }
+
 .ele-upload-list__item-content-action .el-link {
   margin-right: 10px;
 }

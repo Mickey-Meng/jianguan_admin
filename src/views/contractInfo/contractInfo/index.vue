@@ -648,9 +648,6 @@ export default {
         ],
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
-        ],
-        remark: [
-          { required: true, message: "备注不能为空", trigger: "blur" }
         ]
       },
       headercellStyle: {

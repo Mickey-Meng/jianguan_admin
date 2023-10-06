@@ -2,28 +2,13 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="标段编号" prop="bdbh">
-        <el-input
-          v-model="queryParams.bdbh"
-          placeholder="请输入标段编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.bdbh" placeholder="请输入标段编号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="子目号" prop="zmh">
-        <el-input
-          v-model="queryParams.zmh"
-          placeholder="请输入子目号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.zmh" placeholder="请输入子目号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="子目名称" prop="zmmc">
-        <el-input
-          v-model="queryParams.zmmc"
-          placeholder="请输入子目名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.zmmc" placeholder="请输入子目名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -35,29 +20,24 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="contractBillList"
-      :height="'calc(100vh - 455px)'"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" align="left"/>
-      <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="90" :show-overflow-tooltip="true"/>
-      <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh"/>
-      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc"/>
-      <el-table-column label="单位" align="center" min-width="80" prop="dw"/>
-      <el-table-column label="合同单价" align="center" min-width="110" prop="htdj"/>
-      <el-table-column label="新增单价" align="center" min-width="110" prop="xzdj"/>
-      <el-table-column label="合同数量" align="center" min-width="110" prop="htsl"/>
-      <el-table-column label="修正数量" align="center" min-width="110" prop="xzsl"/>
-      <el-table-column label="审核数量" align="center" min-width="110" prop="shsl"/>
-      <el-table-column label="合同金额" align="center" min-width="110" prop="htje"/>
-      <el-table-column label="修正金额" align="center" min-width="110" prop="xzje"/>
-      <el-table-column label="审核金额" align="center" min-width="110" prop="shje"/>
+    <el-table v-if="refreshTable" v-loading="loading" :data="contractBillList" :height="'calc(100vh - 455px)'"
+      @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="left" />
+      <el-table-column fixed="left" label="标段编号" prop="bdbh" min-width="90" :show-overflow-tooltip="true" />
+      <el-table-column label="子目号" align="center" min-width="120" :show-overflow-tooltip="true" prop="zmh" />
+      <el-table-column label="子目名称" align="center" min-width="180" :show-overflow-tooltip="true" prop="zmmc" />
+      <el-table-column label="单位" align="center" min-width="80" prop="dw" />
+      <el-table-column label="合同单价" align="center" min-width="110" prop="htdj" />
+<!--      <el-table-column label="变更单价" align="center" min-width="110" prop="xzdj" />-->
+      <el-table-column label="合同数量" align="center" min-width="110" prop="htsl" />
+      <el-table-column label="计量数量" align="center" min-width="110" prop="shsl" />
+      <el-table-column label="合同金额" align="center" min-width="110" prop="htje" />
+      <el-table-column label="变更数量"align="center" min-width="110" prop="bgsl" />
+      <el-table-column label="变更金额" align="center" min-width="110" prop="bgje" />
+      <el-table-column label="计量金额" align="center" min-width="110" prop="shje" />
       <el-table-column label="清单来源" align="center" prop="isChange">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.bil_source" :value="scope.row.isChange"/>
+          <dict-tag :options="dict.type.bil_source" :value="scope.row.isChange" />
         </template>
       </el-table-column>
     </el-table>
@@ -133,8 +113,8 @@ export default {
         htje: undefined,
         shsl: undefined,
         shje: undefined,
-        xzsl: undefined,
-        xzje: undefined,
+        bgsl: undefined,
+        bgje: undefined,
         zsl: undefined,
         zje: undefined,
         status: undefined,
@@ -178,8 +158,8 @@ export default {
         htje: null,
         shsl: null,
         shje: null,
-        xzsl: null,
-        xzje: null,
+        bgsl: null,
+        bgje: null,
         zsl: null,
         zje: null,
         status: "0",

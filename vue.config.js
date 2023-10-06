@@ -16,6 +16,21 @@ const port = process.env.port || process.env.npm_config_port || 80 // 端口
 //官方vue.config.js 参考文档 https://cli.vuejs.org/zh/config/#css-loaderoptions
 // 这里只列一部分，具体配置参考文档
 
+// 解析指令参数
+// npm指令需要读取 process.env.npm_config_argv
+// const argv = JSON.parse(process.env.npm_config_argv);
+//
+// const config = {};
+// // 获取自定义参数
+// let idx = 2;
+// const cooked = argv.cooked;
+// const length = argv.cooked.length;
+// while ((idx += 2) <= length) {
+//   config[cooked[idx - 2]] = cooked[idx - 1];
+// }
+//
+// process.env.VUE_APP_REPORT_PATH = config['--reportPath']
+// console.log("report_path：" + process.env.VUE_APP_REPORT_PATH)
 
 module.exports = {
   // 部署生产环境和开发环境下的URL。
@@ -55,6 +70,7 @@ module.exports = {
   },
   configureWebpack: {
     name: name,
+
     resolve: {
       alias: {
         '@': resolve('src')

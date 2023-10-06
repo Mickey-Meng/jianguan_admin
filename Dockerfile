@@ -1,4 +1,5 @@
-FROM nginx
-COPY dist/ dist/
-RUN rm /etc/nginx/conf.d/default.conf
-COPY default.conf /etc/nginx/conf.d/
+FROM nginx:latest
+COPY ./dist /usr/share/nginx/html
+COPY ./default.conf /etc/nginx/conf.d/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

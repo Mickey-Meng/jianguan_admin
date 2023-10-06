@@ -33,14 +33,14 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-<!--        <el-button
+        <el-button
           type="primary"
           plain
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
           v-hasPermi="['bill:contractBill:add']"
-        >新增</el-button>-->
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -81,23 +81,23 @@
         </template>
       </el-table-column>
       <el-table-column label="合同数量" align="center" min-width="120" prop="htsl" />
-      <el-table-column label="变更数量" align="center" min-width="120" prop="xzsl" />
-      <el-table-column label="计量数量" align="center" min-width="120" prop="shsl" />
+      <el-table-column label="变更数量" align="center" min-width="120" prop="bgsl" />
+<!--      <el-table-column label="计量数量" align="center" min-width="120" prop="shsl" />-->
       <el-table-column label="合同金额" align="center" min-width="120" prop="htje">
         <template slot-scope="scope">
           {{ dealNumberFormat(scope.row.htje) }}
         </template>
       </el-table-column>
-      <el-table-column label="变更金额" align="center" min-width="120" prop="xzje">
+      <el-table-column label="变更金额" align="center" min-width="120" prop="bgje">
         <template slot-scope="scope">
-          {{ dealNumberFormat(scope.row.xzje) }}
+          {{ dealNumberFormat(scope.row.bgje) }}
         </template>
       </el-table-column>
-      <el-table-column label="计量金额" align="center" min-width="120" prop="shje">
+<!--      <el-table-column label="计量金额" align="center" min-width="120" prop="shje">
         <template slot-scope="scope">
           {{ dealNumberFormat(scope.row.shje) }}
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <!-- <el-table-column label="总数量" align="center" prop="zsl" />
       <el-table-column label="总金额" align="center" prop="zje" /> -->
       <el-table-column label="状态" align="center" v-if="false" prop="status">
@@ -116,13 +116,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['bill:contractBill:edit']"
           >修改</el-button>
-<!--          <el-button
+          <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
             v-hasPermi="['bill:contractBill:add']"
-          >新增</el-button>-->
+          >新增</el-button>
           <el-button
             size="mini"
             type="text"
@@ -210,13 +210,13 @@
 <!--            </el-form-item>-->
 <!--          </el-col>-->
 <!--          <el-col :span="12">-->
-<!--            <el-form-item label="变更数量" prop="xzsl">-->
-<!--              <el-input v-model="form.xzsl" placeholder="请输入变更数量" />-->
+<!--            <el-form-item label="变更数量" prop="bgsl">-->
+<!--              <el-input v-model="form.bgsl" placeholder="请输入变更数量" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
 <!--          <el-col :span="12">-->
-<!--            <el-form-item label="变更金额" prop="xzje">-->
-<!--              <el-input v-model="form.xzje" placeholder="请输入变更金额" />-->
+<!--            <el-form-item label="变更金额" prop="bgje">-->
+<!--              <el-input v-model="form.bgje" placeholder="请输入变更金额" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
           <el-col :span="12">
@@ -282,8 +282,8 @@ export default {
         htje: '',
         shsl: '',
         shje: '',
-        xzsl: '',
-        xzje: '',
+        bgsl: '',
+        bgje: '',
         zsl: '',
         zje: '',
         status: '',
@@ -347,10 +347,10 @@ export default {
         // shje: [
         //   { required: true, message: "计量金额不能为空", trigger: "blur" }
         // ],
-        // xzsl: [
+        // bgsl: [
         //   { required: true, message: "变更数量不能为空", trigger: "blur" }
         // ],
-        // xzje: [
+        // bgje: [
         //   { required: true, message: "变更金额不能为空", trigger: "blur" }
         // ],
         // zsl: [
@@ -490,8 +490,8 @@ export default {
         htje: '',
         shsl: '',
         shje: '',
-        xzsl: '',
-        xzje: '',
+        bgsl: '',
+        bgje: '',
         zsl: '',
         zje: '',
         status: "0",
